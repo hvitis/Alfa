@@ -1,0 +1,32 @@
+{
+  "display": {
+    "dc_pin": 25,
+    "reset_pin": 27,
+    "backlight_pin": 24,
+    "spi_bus": 0,
+    "spi_device": 0,
+    "spi_hz": 10000000,
+    "rotation": 0,
+    "bgr": false,
+    "invert": true
+  },
+  "adc": {
+    "model": "ads1115",
+    "bus": 1,
+    "address": "0x48",
+    "debounce_ms": 80
+  },
+  "images": {
+    "input": "imgs",
+    "prepared": "media/images",
+    "fit": "contain",
+    "background": "#ffffff"
+  },
+  "audio": {
+    "input": "sounds",
+    "prepared": "media/sounds",
+    "device": "auto",
+    "volume": 0.2,
+    "clip_seconds": 5.0
+  }
+}

@@ -1,0 +1,11 @@
+.DS_Store
+.venv/
+.state/
+__pycache__/
+*.py[cod]
+.coverage
+config.local.json
+
+
+photos
+imgs

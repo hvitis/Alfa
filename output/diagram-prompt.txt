@@ -1,0 +1,43 @@
+Use case: infographic-diagram
+Primary request: A precise realistic 3D isometric wiring diagram of the user's photographed Raspberry Pi electronics, showing the entire working setup at once with individual colored jumper cables and exact connection tables. Landscape high resolution, professional electronics assembly manual, crisp typography, white/off-white studio background, physically dimensional PCBs, gold header pins, silver connectors, soft shadows. Title: "Raspberry Pi — complete wiring". Subtitle: "All Pi numbers are PHYSICAL header pins".
+Reference images are identity references for parts, not edit targets. Photo 002 is the overview: Raspberry Pi 3 Model B in blue acrylic case; blue Waveshare 2-inch SPI LCD; black AD-Key board with exactly five large yellow buttons; purple MAX98357A mono I2S amplifier; narrow purple ADS1115/ADS1015 ADC breakout; black square passive speaker; green PAM8403 amplifier with blue volume potentiometer. Photo 006 gives LCD backside and pin labels. Photo 003 gives keypad. Photo 004 gives amplifier and ADC shapes. Photo 005 gives speaker rear.
+Composition: one large central 3D connected assembly occupying upper 65%: Raspberry Pi middle, LCD above left with backside header visibly accessible, five yellow button board lower left, ADC between keypad and Pi, two 10k resistors on a tiny breadboard clearly accessible between keypad OUT and ADC A0, purple MAX98357A above right, speaker far right with two separate terminal cables. Use one and only one Raspberry Pi in entire diagram. Pi should be viewed from above obliquely with GPIO header accessible, USB/Ethernet ports at near/right edge. Physically accurate 2 rows x20 pins. Clearly mark pin 1 at header end away from USB ports. Individual cables must visibly connect terminals, routing in spaced graceful 3D arches without tangles. Red=5V power, orange=3.3V power, black=ground, signal wires varied green/blue/violet/yellow. Do not use ground symbols instead of real ground cables.
+Display all necessary cable endpoints using these exact nets:
+LCD: VCC to Pi1 (3.3V), GND to Pi6, DIN to Pi19 (GPIO10), CLK to Pi23 (GPIO11), CS to Pi24 (GPIO8), DC to Pi22 (GPIO25), RST to Pi13 (GPIO27), BL to Pi18 (GPIO24).
+MAX98357A: VIN to Pi2 (5V), GND to Pi9, BCLK to Pi12 (GPIO18), LRC to Pi35 (GPIO19), DIN to Pi40 (GPIO21). OUT+ to speaker+ using red wire. OUT- to speaker- using black wire. Speaker OUT- MUST NOT connect to ground. GAIN and SD left unconnected with note "SD: default pull-up required".
+ADC ADS1115/ADS1015: VDD to Pi17 (3.3V), GND to Pi20, SDA to Pi3 (GPIO2), SCL to Pi5 (GPIO3), ADDR short jumper to ADC GND. A0 connects to resistor divider junction. ALERT and A1/A2/A3 unused. ADC layout schematic by labels; do not imply unseen actual ADC pin ordering has been verified.
+AD-Key: VCC to Pi4 (5V), GND to Pi14, OUT to resistor R1. R1 is 10 kΩ from OUT to junction J. J connects ADC A0 and upper end of R2. R2 is 10 kΩ from J to ADC GND. Draw exactly two resistors, visible branching node, all 4 net segments, no direct OUT-to-Pi cable, no direct OUT-to-A0 cable bypassing R1.
+Also show one 5V microUSB power supply cable to Pi microUSB POWER port, explicitly labeled "Connect power last". No USB data cables or display ribbon to Pi.
+Green knob amplifier shown in small separate bordered inset at far corner with no cables. Exact label: "PAM8403 — alternative; unused here". Do not connect the two amplifiers in series or both to one speaker.
+Bottom 35% clean readable tables with exact text (four compact columns, use no invented values):
+"LCD → Pi pin"
+"VCC → 1"
+"GND → 6"
+"DIN → 19"
+"CLK → 23"
+"CS → 24"
+"DC → 22"
+"RST → 13"
+"BL → 18"
+"MAX98357A → Pi pin"
+"VIN → 2"
+"GND → 9"
+"BCLK → 12"
+"LRC → 35"
+"DIN → 40"
+"OUT+ / OUT− → speaker"
+"ADC → Pi pin"
+"VDD → 17"
+"GND → 20"
+"SDA → 3"
+"SCL → 5"
+"ADDR → GND"
+"A0 → divider junction"
+"AD-Key"
+"VCC → Pi 4"
+"GND → Pi 14"
+"OUT → R1 (10 kΩ)"
+"R1 → A0 junction"
+"R2 (10 kΩ): A0 → GND"
+Footer text: "LCD software: BL = GPIO24 (BCM). GPIO18 is used for audio." and "Solder headers where needed. Match printed terminal labels."
+Legible precision over ornamental details. Draw all working devices simultaneously. Do not repeat Pi in subdiagrams. No logos beyond reference printed part names. No missing cables. No guessed high-risk pin assignments. No extra components except two resistors, tiny breadboard, supply and cables required for this wiring.

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raspberry Pi — complete 3D wiring</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f8;color:#152b43;font:15px system-ui,sans-serif}main{max-width:2100px;margin:auto;padding:26px}h1{font-size:32px;margin:0 0 8px}p{margin:6px 0;line-height:1.5}.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 8px}button,select{font:inherit;background:white;border:1px solid #b8c5d4;border-radius:6px;padding:7px 12px;color:#152b43;cursor:pointer}.scene{background:#fff;border:1px solid #d5dce5;border-radius:12px;overflow:hidden;position:relative}canvas{display:block;width:100%;height:1000px;touch-action:none;cursor:grab}#detail{min-height:38px;background:#e7eef7;padding:9px 16px;font-weight:600}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}.card{background:white;border:1px solid #d5dce5;border-radius:8px;padding:16px}h2{font-size:17px;margin:0 0 10px}table{width:100%;border-collapse:collapse;font-size:14px}td{padding:7px 4px;border-bottom:1px solid #edf0f4}tr[data-wire]{cursor:pointer}tr.active{background:#e1edf9}.swatch{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;border:1px solid #0002}.note{font-size:13px;color:#486078;margin-top:12px}.important{background:#fff6dc;border:1px solid #ead59f;padding:12px 16px;border-radius:8px;margin-top:16px}a{color:#1264a4}.legend{font-size:13px}footer{padding-top:16px;font-size:13px;color:#486078}@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}canvas{height:740px}main{padding:14px}}@media(max-width:520px){.cards{grid-template-columns:1fr}canvas{height:570px}h1{font-size:25px}}
+</style>
+<main>
+<h1>Raspberry Pi — complete 3D wiring</h1>
+<p>One Pi, LCD, five-button keypad, ADC, amplifier and speaker connected together. <strong>Pi pin numbers are physical header positions.</strong></p>
+<div class="toolbar"><button id="reset">Reset view</button><button id="top">View from above</button><select id="group" aria-label="Show cables"><option value="all">All cables</option><option value="LCD">LCD cables</option><option value="Audio">Audio cables</option><option value="ADC">ADC cables</option><option value="Keypad">Keypad & divider</option><option value="Power">Pi power cable</option></select><button id="clear">Show all cables</button><button id="labels">Cable labels: on</button><span class="legend">Drag to rotate · Scroll to zoom · Click a cable or table row to show that cable alone</span></div>
+<div class="scene"><canvas id="view" aria-label="Rotatable three dimensional wiring diagram"></canvas><div id="detail">Numbered cables follow separate lanes. Click a cable or row to see only that connection.</div></div>
+<div class="cards" id="cards"></div>
+<div class="important"><strong>Add two 10 kΩ resistors:</strong> keypad OUT → R1 → junction → ADC A0; junction → R2 → ADC GND. The keypad uses 5 V; the ADC uses 3.3 V. Both speaker wires go to the amplifier output terminals.</div>
+<p class="note">The green PAM8403 knob board is an alternative amplifier and is left disconnected here. The photographed ADC says ADS1115/ADS1015; confirm its chip for the software driver. ADC and amplifier terminal layouts are schematic because their front-side labels are not visible in the photos: match the actual printed labels. The Pi and its header are enlarged for readability. Each cable number matches the connection table.</p>
+<p class="note">LCD software: set BL to <strong>BCM GPIO24</strong> (physical pin 18); BCM GPIO18 (physical pin 12) is used for audio. MAX98357A GAIN and SD are left open only with the breakout's default SD pull-up present. Solder headers or wires to bare pads. Connect Pi micro-USB power last.</p>
+<footer><a href="wiring-notes.md">Complete wiring notes</a> · Sources: <a href="https://www.waveshare.com/wiki/2inch_LCD_Module">Waveshare LCD</a>, <a href="https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp/raspberry-pi-wiring">Adafruit I²S wiring</a>, <a href="https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/assembly-and-wiring">ADC wiring</a>. Models are dimensionally illustrative.</footer>
+</main>
+<script>
+const cv=document.querySelector('canvas'),ctx=cv.getContext('2d');let yaw=0,pitch=1.10,zoom=1,selected=-1,filter='all',showCableLabels=true,W,H,scale;let hitPaths=[];
+const points={},labels=[],boxes=[],rings=[],wires=[];
+const colors={power:'#d43235',v33:'#dc8119',ground:'#293440',green:'#229a69',blue:'#247cc4',purple:'#8850c7',yellow:'#b79510',cyan:'#0b9dba'};
+function box(x,y,z,w,h,d,color){boxes.push({x,y,z,w,h,d,color});}
+function label(text,x,y,z,size=12,color='#193a57',bg=false){labels.push({text,p:[x,y,z],size,color,bg});}
+function port(key,x,z,name,side=1){points[key]=[x,11,z];box(x,4,z,3,6,3,'#b89a4e');label(name,x,13,z+side*9,8);labels.at(-1).angle=-.45;}
+function board(x,z,w,d,color,title){box(x,0,z,w,3,d,color);label(title,x,4,z-d/2-29,14,'#193a57',true);for(const sx of [-1,1])for(const sz of [-1,1])rings.push({p:[x+sx*(w/2-5),3,z+sz*(d/2-5)],r:2.5,c:'#e4b654'});}
+
+let mark;
+function startGroup(){mark={b:boxes.length,l:labels.length,r:rings.length,keys:new Set(Object.keys(points))};}
+function moveGroup(cx,cz,f,nx,nz){
+ const move=p=>[nx+(p[0]-cx)*f,p[1]*f,nz+(p[2]-cz)*f];
+ for(const b of boxes.slice(mark.b)){const p=move([b.x,b.y,b.z]);[b.x,b.y,b.z]=p;b.w*=f;b.h*=f;b.d*=f;}
+ for(const l of labels.slice(mark.l)){l.p=move(l.p);l.size=Math.max(l.size,10);}
+ for(const r of rings.slice(mark.r)){r.p=move(r.p);r.r*=f;}
+ for(const k of Object.keys(points))if(!mark.keys.has(k))points[k]=move(points[k]);
+}
+startGroup();
+board(0,0,125,82,'#287557','Raspberry Pi · 40-pin GPIO');
+box(0,-4,0,137,4,94,'#a4c8e8');
+for(let i=1;i<=40;i++){let x=-48+Math.floor((i-1)/2)*5,z=i%2?-27:-36;points['P'+i]=[x,16,z];box(x,5,z,3,4,3,'#222b32');box(x,10,z,1.3,7,1.3,'#d8b55e');label(String(i),x,17,z+(i%2?9:-9),8,'#304454');}
+labels.find(l=>l.text==='Raspberry Pi · 40-pin GPIO').p=[0,4,68];
+label('PIN 1 / 3.3 V',-60,18,-60,11,'#b04910',true);
+for(const z of [-12,13,35])box(58,9,z,25,17,18,'#b6c1c9');
+box(0,7,9,24,10,24,'#84929b');for(let i=-8;i<11;i+=4)box(i,13,9,1,2,24,'#c3cbd1');
+box(-44,7,38,13,10,9,'#b6c1c9');points.USB=[-44,10,44];
+box(-28,8,35,20,10,10,'#b6c1c9');label('USB / Ethernet end',66,5,63,10);
+moveGroup(0,0,2.8,0,45);
+startGroup();
+board(-210,-118,111,64,'#1e6094','Waveshare 2-inch LCD · back');
+const lcdOrder=['VCC','GND','DIN','CLK','CS','DC','RST','BL'];
+lcdOrder.forEach((s,i)=>port('L'+s,-250+i*11,-91,s,1));
+box(-210,6,-129,68,8,14,'#e5d9b8');label('8-pin cable or soldered header',-210,14,-129,9);
+moveGroup(-210,-118,1.5,-440,-180);
+startGroup();
+board(-218,119,110,61,'#282c36','AD-Key · 5 yellow buttons');
+for(const [x,z]of [[-252,109],[-222,109],[-188,109],[-234,130],[-202,130]]){box(x,5,z,17,4,17,'#bbc0c4');rings.push({p:[x,12,z],r:8.5,c:'#f0c823'});}
+['GND','VCC','OUT'].forEach((s,i)=>port('K'+s,-251+i*13,88,s,-1));
+moveGroup(-218,119,1.5,-440,220);
+startGroup();
+board(-74,124,74,56,'#655096','ADS1115 / ADS1015 ADC');
+['VDD','GND','SCL','SDA','ADDR','A0'].forEach((s,i)=>port('A'+s,-104+i*12,96,s,-1));
+box(-74,5,133,16,4,12,'#242832');label('ALERT, A1–A3: open',-74,8,151,9);
+moveGroup(-74,124,1.6,350,220);
+startGroup();
+board(171,-102,100,62,'#684b95','MAX98357A · I²S amplifier');
+['VIN','GND','BCLK','LRC','DIN'].forEach((s,i)=>port('M'+s,130+i*18,-75,s,1));
+port('M+',207,-111,'OUT+',1);port('M-',207,-129,'OUT-',-1);label('SD / GAIN: open*',168,5,-103,9);
+moveGroup(171,-102,1.5,350,-185);
+startGroup();
+board(290,-88,73,73,'#2e3540','Passive speaker');
+rings.push({p:[290,15,-88],r:27,c:'#131d27'});rings.push({p:[290,22,-88],r:18,c:'#29313b'});
+port('S+',261,-76,'+',1);port('S-',261,-98,'-',-1);
+moveGroup(290,-88,1.25,535,-180);
+startGroup();
+board(248,124,85,55,'#409084','PAM8403 · unused alternative');
+box(231,10,119,25,20,21,'#2398b4');box(214,14,119,15,8,6,'#56626a');box(264,6,132,13,4,17,'#26343b');label('Leave disconnected',248,6,157,11,'#446876');
+moveGroup(248,124,1.15,540,235);
+startGroup();
+// Actual resistor leads, with both components terminating at the same junction.
+board(-169,51,73,47,'#e6e4d8','Divider · add 2 × 10 kΩ');
+points.RIN=[-197,9,43];points.J=[-169,9,43];points.RGND=[-169,9,69];
+function resistor(a,b,name){let p=points[a],q=points[b];box((p[0]+q[0])/2,9,(p[2]+q[2])/2,Math.abs(q[0]-p[0])>0?16:5,5,Math.abs(q[2]-p[2])>0?16:5,'#cfae82');label(name,(p[0]+q[0])/2,16,(p[2]+q[2])/2-8,9);for(let t=0;t<=1;t+=.1)rings.push({p:[p[0]+(q[0]-p[0])*t,9,p[2]+(q[2]-p[2])*t],r:.7,c:'#777d83'});}
+resistor('RIN','J','R1 10 kΩ');resistor('J','RGND','R2 10 kΩ');label('J → A0',-162,13,47,9);
+moveGroup(-169,51,1.5,-260,250);
+function wire(group,from,to,color,title){if(!points[from]||!points[to])throw Error('Missing endpoint');wires.push({group,from,to,color:colors[color],title});}
+const lcdPins=[1,6,19,23,24,22,13,18],lcdColors=['v33','ground','green','blue','yellow','cyan','purple','green'];
+lcdOrder.forEach((s,i)=>wire('LCD','P'+lcdPins[i],'L'+s,lcdColors[i],s+' → Pi '+lcdPins[i]));
+[['VIN',2,'power'],['GND',9,'ground'],['BCLK',12,'blue'],['LRC',35,'green'],['DIN',40,'purple']].forEach(([s,n,c])=>wire('Audio','P'+n,'M'+s,c,s+' → Pi '+n));
+wire('Audio','M+','S+','power','OUT+ → speaker +');wire('Audio','M-','S-','ground','OUT- → speaker - (not GND)');
+[['VDD',17,'v33'],['GND',20,'ground'],['SDA',3,'blue'],['SCL',5,'green']].forEach(([s,n,c])=>wire('ADC','P'+n,'A'+s,c,s+' → Pi '+n));
+wire('ADC','AADDR','AGND','ground','ADDR → ADC GND (0x48)');
+wire('Keypad','P4','KVCC','power','VCC → Pi 4 (5 V)');wire('Keypad','P14','KGND','ground','GND → Pi 14');
+wire('Keypad','KOUT','RIN','yellow','OUT → R1 input');
+wire('Keypad','J','AA0','purple','R1/R2 junction → ADC A0');
+wire('Keypad','RGND','AGND','ground','R2 lower lead → ADC GND');
+points.POWER=[5,12,310];wire('Power','POWER','USB','ground','5 V micro-USB power → Pi power socket');
+label('5 V supply · connect last',5,12,325,13,'#193a57',true);
+
+const piCaption=labels.find(l=>l.text==='Raspberry Pi · 40-pin GPIO');piCaption.text='Raspberry Pi';piCaption.p=[50,20,118];
+label('40-pin header enlarged',50,20,136,11,'#486078',true);
+const dividerCaption=labels.find(l=>l.text==='Divider · add 2 × 10 kΩ');labels.splice(labels.indexOf(dividerCaption),1);
+labels.find(l=>l.text==='R1 10 kΩ').p=[-328,15,236];labels.find(l=>l.text==='R2 10 kΩ').p=[-225,15,259];
+const junctionLabel=labels.find(l=>l.text==='J → A0');junctionLabel.text='A0 junction';junctionLabel.p=[-228,30,233];
+const prefixes={LCD:'L',Audio:'S',ADC:'A',Keypad:'K',Power:'USB'},counts={};
+wires.forEach(w=>{w.local=counts[w.group]||0;counts[w.group]=w.local+1;w.id=w.group==='Power'?'USB':prefixes[w.group]+(w.local+1);});
+function project(p){const [x,y,z]=p;let a=x*Math.cos(yaw)-z*Math.sin(yaw),b=x*Math.sin(yaw)+z*Math.cos(yaw);return [W/2+a*scale,H*.44+(b*Math.sin(pitch)-y*Math.cos(pitch))*scale,b*Math.cos(pitch)+y*Math.sin(pitch)];}
+function poly(pts,color){ctx.beginPath();pts.forEach((p,i)=>{const s=project(p);i?ctx.lineTo(s[0],s[1]):ctx.moveTo(s[0],s[1]);});ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='#17334930';ctx.lineWidth=.6;ctx.stroke();}
+function drawBox(b){let {x,y,z,w,h,d,color}=b;let p=[[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1],[-1,1,-1],[1,1,-1],[1,1,1],[-1,1,1]].map(([a,c,e])=>[x+a*w/2,y+c*h/2,z+e*d/2]);poly([p[0],p[1],p[5],p[4]],color);poly([p[1],p[2],p[6],p[5]],color);poly([p[2],p[3],p[7],p[6]],color);poly([p[4],p[5],p[6],p[7]],color);}
+function ring(r){const arr=[];for(let i=0;i<40;i++)arr.push([r.p[0]+Math.cos(i*Math.PI/20)*r.r,r.p[1],r.p[2]+Math.sin(i*Math.PI/20)*r.r]);poly(arr,r.c);}
+function route(w){
+ const p=points[w.from],q=points[w.to],j=w.local,h=60+j*3;let via=[],badge;
+ if(w.group==='LCD'){
+  const z=-106-j*21;
+  via=[[p[0],h,z],[-265-j*13,h,z],[q[0],h,q[2]]];badge=[-245,h,z];
+ }else if(w.group==='Audio'&&j<5){
+  const z=-108-j*23;
+  via=[[p[0],h+22,z],[210+j*13,h+22,z],[q[0],h+22,q[2]]];badge=[195,h+22,z];
+ }else if(w.group==='Audio'){
+  const x=476+(j-5)*16;
+  via=[[x,46,p[2]],[x,46,q[2]]];badge=[x,46,(p[2]+q[2])/2];
+ }else if(w.group==='ADC'&&j<4){
+  const z=202+j*25;
+  via=[[p[0],h,z],[230+j*16,h,z],[q[0],h,q[2]]];badge=[190,h,z];
+ }else if(w.group==='ADC'){
+  const z=310;
+  via=[[p[0],40,z],[q[0],40,z]];badge=[(p[0]+q[0])/2,40,z];
+ }else if(w.group==='Keypad'&&j<2){
+  const z=202+j*28;
+  via=[[p[0],h,z],[-220-j*20,h,z],[q[0],h,q[2]]];badge=[-200,h,z];
+ }else if(w.group==='Keypad'&&j===2){
+  via=[[p[0],34,302],[q[0],34,302]];badge=[-390,34,302];
+ }else if(w.group==='Keypad'){
+  const z=352+(j-3)*26;
+  via=[[p[0],38,z],[q[0],38,z]];badge=[-130+(j-3)*85,38,z];
+ }else{
+  via=[[p[0],22,300],[q[0],22,300]];badge=[q[0],22,300];
+ }
+ return {path:[p,[p[0],h,p[2]],...via,[q[0],h,q[2]],q],badge};
+}
+function strokePath(path,color,width){ctx.beginPath();path.forEach((p,j)=>{const s=project(p);j?ctx.lineTo(s[0],s[1]):ctx.moveTo(s[0],s[1]);});ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();}
+function badge(text,p,color,small=false){const s=project(p),font=small?11:13;ctx.font='bold '+font+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';const w=ctx.measureText(text).width+12,h=font+10;ctx.fillStyle='#fff';ctx.strokeStyle=color;ctx.lineWidth=1.7;ctx.beginPath();ctx.roundRect(s[0]-w/2,s[1]-h/2,w,h,5);ctx.fill();ctx.stroke();ctx.fillStyle=color;ctx.fillText(text,s[0],s[1]);}
+function visible(w,i){return selected>=0?i===selected:(filter==='all'||w.group===filter);}
+function drawWire(w,i){
+ const r=route(w);strokePath(r.path,'#fff',selected===i?10:8);strokePath(r.path,w.color,selected===i?5:3.6);
+ hitPaths.push({i,path:r.path.map(project)});
+ for(const key of [w.from,w.to]){const s=project(points[key]);ctx.fillStyle=w.color;ctx.strokeStyle='#fff';ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(s[0],s[1],4,0,Math.PI*2);ctx.fill();ctx.stroke();}
+ if(showCableLabels)badge(w.id,r.badge,w.color);
+}
+function endpointName(key){if(/^P\d+$/.test(key))return 'Pi pin '+key.slice(1);const names={'RIN':'R1 input','J':'R1/R2 junction','RGND':'R2 ground end','USB':'Pi micro-USB','POWER':'5 V supply','S+':'Speaker +','S-':'Speaker -'};if(names[key])return names[key];return {L:'LCD ',M:'MAX98357A ',A:'ADC ',K:'Keypad '}[key[0]]+key.slice(1);}
+function draw(){
+ const dpr=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.scale(dpr,dpr);scale=Math.min(W/1300,H/700)*zoom;ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+ boxes.slice().sort((a,b)=>project([a.x,a.y,a.z])[2]-project([b.x,b.y,b.z])[2]).forEach(drawBox);rings.forEach(ring);hitPaths=[];
+ wires.forEach((w,i)=>{if(visible(w,i))drawWire(w,i)});
+ labels.forEach(l=>{const p=project(l.p);let size=Math.max(9,l.size*Math.min(1.5,scale));ctx.font=(l.bg?'600 ':'')+size+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';let width=ctx.measureText(l.text).width;ctx.save();ctx.translate(p[0],p[1]);if(l.angle)ctx.rotate(l.angle);ctx.fillStyle=l.bg?'#fffffff5':'#ffffffd9';ctx.fillRect(-width/2-3,-size/2-2,width+6,size+4);ctx.fillStyle=l.color;ctx.fillText(l.text,0,0);ctx.restore();});
+ // Redraw lane markers after labels so every cable identifier remains legible.
+ if(showCableLabels)wires.forEach((w,i)=>{if(visible(w,i))badge(w.id,route(w).badge,w.color)});
+ if(selected>=0){const w=wires[selected];for(const key of [w.from,w.to]){const p=points[key];badge(w.id+' · '+endpointName(key),[p[0],p[1]+25,p[2]-12],w.color);}}
+ // Explicit solder junction. Unmarked cable crossings do not join.
+ const jp=project(points.J);ctx.fillStyle='#fff';ctx.strokeStyle='#8850c7';ctx.lineWidth=2;ctx.beginPath();ctx.arc(jp[0],jp[1],6,0,7);ctx.fill();ctx.stroke();
+}
+function select(i){
+ selected=i;if(i>=0){filter=wires[i].group;document.querySelector('#group').value=filter;}
+ document.querySelectorAll('tr[data-wire]').forEach(r=>r.classList.toggle('active',Number(r.dataset.wire)===i));
+ document.querySelector('#detail').textContent=i>=0?wires[i].id+' — '+endpointName(wires[i].from)+' ↔ '+endpointName(wires[i].to)+' · only this cable is visible':filter==='all'?'All 26 cables shown. Numbers match the tables; white gaps at crossings keep cables separate.':filter+' cables only. Click any row or cable to trace one connection.';
+ draw();
+}
+for(const [g,title] of [['LCD','LCD · L1–L8'],['Audio','Amplifier & speaker · S1–S7'],['ADC','ADC · A1–A5'],['Keypad','Keypad & divider · K1–K5']]){
+ const div=document.createElement('section');div.className='card';const h=document.createElement('h2');h.textContent=title;div.append(h);
+ const focus=document.createElement('button');focus.textContent='Show these cables only';focus.style.marginBottom='8px';focus.onclick=()=>{filter=g;document.querySelector('#group').value=g;select(-1);cv.scrollIntoView({behavior:'smooth',block:'center'});};div.append(focus);const download=document.createElement('a');download.href={LCD:'wiring-lcd.png',Audio:'wiring-audio.png',ADC:'wiring-adc.png',Keypad:'wiring-keypad.png'}[g];download.textContent='Open PNG';download.style.marginLeft='10px';div.append(download);
+ const t=document.createElement('table');wires.forEach((w,i)=>{if(w.group!==g)return;const tr=document.createElement('tr');tr.dataset.wire=i;tr.tabIndex=0;tr.innerHTML='<td><strong style="color:'+w.color+'">'+w.id+'</strong></td><td>'+w.title+'</td>';tr.onclick=()=>{select(i);cv.scrollIntoView({behavior:'smooth',block:'center'});};tr.onkeydown=e=>{if(e.key==='Enter')tr.click()};t.append(tr)});div.append(t);document.querySelector('#cards').append(div);
+}
+let drag;
+cv.onpointerdown=e=>{drag=[e.clientX,e.clientY,yaw,pitch];cv.setPointerCapture(e.pointerId)};
+cv.onpointermove=e=>{if(!drag)return;yaw=drag[2]+(e.clientX-drag[0])*.003;pitch=Math.max(.35,Math.min(1.54,drag[3]+(e.clientY-drag[1])*.003));draw()};
+cv.onpointerup=e=>{
+ if(drag&&Math.hypot(e.clientX-drag[0],e.clientY-drag[1])<5){const bounds=cv.getBoundingClientRect(),x=e.clientX-bounds.left,y=e.clientY-bounds.top;let found=-1,best=10;
+  for(const hit of hitPaths)for(let j=1;j<hit.path.length;j++){const a=hit.path[j-1],b=hit.path[j],dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy||1))),d=Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy);if(d<best){best=d;found=hit.i;}}
+  if(found>=0)select(found);
+ }drag=null;
+};cv.onpointercancel=()=>drag=null;
+cv.onwheel=e=>{e.preventDefault();zoom=Math.max(.55,Math.min(2.4,zoom*Math.exp(-e.deltaY*.001)));draw()};
+document.querySelector('#reset').onclick=()=>{yaw=0;pitch=1.10;zoom=1;filter='all';document.querySelector('#group').value='all';select(-1)};
+document.querySelector('#top').onclick=()=>{yaw=0;pitch=1.54;zoom=1;draw()};
+document.querySelector('#clear').onclick=()=>{filter='all';document.querySelector('#group').value='all';select(-1)};
+document.querySelector('#labels').onclick=e=>{showCableLabels=!showCableLabels;e.target.textContent='Cable labels: '+(showCableLabels?'on':'off');draw()};
+document.querySelector('#group').onchange=e=>{filter=e.target.value;select(-1)};
+window.addEventListener('resize',draw);
+window.wiringData={points,wires,lcdPins,route,getVisibleCableCount:()=>hitPaths.length};window.setWiringView=(group='all',index=-1)=>{filter=group;document.querySelector('#group').value=group;select(index)};draw();
+</script></html>
