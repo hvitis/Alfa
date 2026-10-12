@@ -13,11 +13,12 @@ function boot() {
   const viewport=document.getElementById('viewport');
   const world=createScene(viewport),rig=new CameraRig(world.camera,world.renderer.domElement);
   let view='divider',group='all',selectedCable=null,selectedModule=null,assemblyMode='wiring',selectedAmpPin=null,adcMode='labels',selectedAdcPin=null;
-  const activeScene=()=>world[view];
+  const activeScene=()=>world[view==='case'?'boxCase':view];
   const activeSetup=()=>view==='pico'?world.pico:world.setup;
   const labelsVisible=visible=>{world.labels.domElement.style.display=visible?'':'none';};
   const opacity=(object,value)=>object.traverse(child=>{if(child.isMesh){child.material.transparent=value<1;child.material.opacity=value;child.material.depthWrite=value>=1;}});
   function updateAmpGuide(){
+    if(view==='case')return;
     const show=view!=='divider'&&(selectedModule==='amp'||group==='Audio');
     activeSetup().amplifier.setDetailed(show);activeSetup().root.traverse(object=>{if(object.userData.amplifierOverview)object.visible=assemblyMode!=='underside';});
     ui.amplifier(show,assemblyMode);ui.amplifierPin(selectedAmpPin);
@@ -26,18 +27,49 @@ function boot() {
     ui.adc(selectedModule==='adc'||group==='ADC',adcMode,selectedAdcPin);
   }
   function updateCables(){
+    if(view==='case'){
+      world.boxCase.setFilter(group);
+      return;
+    }
     const setup=activeSetup();
     const unused=selectedModule==='amp'&&['MGAIN','MSD'].includes(selectedAmpPin);
     for(const cable of setup.cables)cable.group.visible=(group==='all'||cable.circuitGroup===group||group==='ADC'&&isAdcWire(cable))&&(!selectedCable||selectedCable===cable.id)&&(!selectedAdcPin||!isAdcWire(cable)||ADC.pins.find(p=>p.key===selectedAdcPin)?.cables.includes(cable.id))&&(adcMode==='labels'||!isAdcWire(cable))&&(assemblyMode==='wiring'||cable.circuitGroup!=='Audio')&&(!unused||cable.circuitGroup!=='Audio');
     setup.setVisibleLabels(selectedCable,group,selectedAdcPin);
   }
-  function refreshWireList(){ui.wires(activeSetup().cables.filter(c=>group==='all'||c.circuitGroup===group||group==='ADC'&&isAdcWire(c)),selectCable);}
+  function refreshWireList(){
+    if(view==='case')return;
+    ui.wires(activeSetup().cables.filter(c=>group==='all'||c.circuitGroup===group||group==='ADC'&&isAdcWire(c)),selectCable);
+  }
   function clear(){
+    if(view==='case'){
+      selectedCable=null;selectedModule=null;
+      world.boxCase.selectWire('');world.boxCase.selectModule(null);
+      ui.selectCaseWire('');ui.module(null,'case');
+      ui.detail('27 electrical connections match the project wiring atlas. Click a cable or component to inspect it.');
+      return;
+    }
     activeScene().keypad.selectPin(null);
     selectedCable=null;group='all';selectedAmpPin=null;selectedAdcPin=null;activeScene().adc.selectPin(null);document.getElementById('cable-group').value='all';refreshWireList();activeSetup().amplifier.selectPin(null);
     for(const part of Object.values(world.divider.parts))opacity(part,1);ui.step(null);updateCables();updateAmpGuide();
     ui.detail(view==='divider'?'Purple join = R1 leg B + R2 leg A + the ADC A0 wire.':view==='pico'?'PICO VIEW · Amber marks the replaced controller and changed pins. Click a module for its purpose, or a cable to trace it.':'Click a module for its purpose. Click a cable to trace its endpoints.');
   }
+  function selectCaseWire(id){
+    selectedCable=id;
+    world.boxCase.selectWire(id);
+    ui.selectCaseWire(id);
+    const wire=world.boxCase.data.wires.find(w=>w.id===id);
+    if(wire){
+      ui.detail(`${wire.id} · ${wire.group}\n${wire.title}\n${wire.from} → ${wire.to}\nPlanned route: ${wire.route_length_mm} mm. Suggested lead: ${wire.suggested_length_mm} mm, including service allowance. Check the actual cable before cutting.`);
+      if(group!=='all'&&group!==wire.group){
+        group=wire.group;
+        document.getElementById('cable-group').value=group;
+        world.boxCase.setFilter(group);
+      }
+    }else{
+      clear();
+    }
+  }
+
   function selectModule(id){
     if(!activeScene().modules[id])id=null;
     if(id!=='keypad')activeScene().keypad.selectPin(null);
@@ -66,11 +98,22 @@ function boot() {
     }
   }
   function setView(next){
-    view=next;for(const name of ['divider','setup','pico'])world[name].root.visible=name===view;
+    view=next;for(const name of ['divider','setup','pico','boxCase'])world[name].root.visible=(name==='boxCase'?'case':name)===view;
+    if(view==='case'){
+      ui.setView('case',world.boxCase.modules);
+      ui.caseWires(world.boxCase.data.wires);
+      ui.caseMode(world.boxCase.getMode());
+      ui.caseWood(world.boxCase.getWood());
+      ui.caseLabels(world.boxCase.getLabels());
+      rig.focus('case');
+      clear();
+      return;
+    }
     activeSetup().amplifier.setMode(assemblyMode);activeScene().adc.setMode(adcMode);
     for(const id of ['a0','ground','ground-links','address','gnd-pin'])world.divider.parts[id].visible=adcMode==='labels';
     ui.setView(view,activeScene().modules);rig.focus(view);selectModule(null);clear();
   }
+
   function setGroup(next){
     group=next;selectedCable=null;selectedAdcPin=null;activeScene().adc.selectPin(null);document.getElementById('cable-group').value=group;updateCables();rig.focusGroup(group);refreshWireList();updateAmpGuide();
   }
@@ -129,14 +172,43 @@ function boot() {
     if(pin&&!pin.cable){selectedCable=null;updateCables();}
     if(pin)ui.detail(pin.name+' · '+pin.purpose+' · '+amplifierConnection(pin,view)+(assemblyMode==='wiring'?'':' · Solder this header pin even if it has no jumper.'));
   }
+  async function setCaseMode(mode){
+    await world.boxCase.setMode(mode);
+    ui.caseMode(mode);
+    setCaseCamera('iso');
+  }
+  function setCaseCamera(preset){
+    const cam=world.boxCase.getCameraPreset(preset);
+    rig.camera.position.copy(cam.position);
+    rig.orbit.target.copy(cam.target);
+    rig.camera.lookAt(rig.orbit.target);
+    rig.camera.updateMatrixWorld();
+    rig.orbit.update();
+  }
+  function setCaseWood(val){world.boxCase.setWood(val);ui.caseWood(val);}
+  function setCaseLabels(val){world.boxCase.setLabels(val);ui.caseLabels(val);}
+
+  function focusDivider(){
+    setView('divider');
+  }
+
   const ui=createInterface({
     setView,selectModule,setGroup,focusKeypad,selectKeypadPin,focusAdc,adcCloseUp,setAdcMode,selectAdcPin,focusAmplifier,amplifierCloseUp,setAssemblyMode,selectAmpPin,
-    focusModule(){const object=activeScene().modules[selectedModule];if(selectedModule==='keypad')rig.inspectKeypad(activeScene().keypad);else if(selectedModule==='adc')rig.inspectAdc(activeScene().adc);else if(selectedModule==='amp')rig.inspectAmplifier(activeSetup().amplifier,assemblyMode);else if(object)rig.focusModule(object);},
-    focusJoin:()=>rig.focusJoin(),resetCamera:()=>rig.focus(view),top:()=>rig.top(),
+    setCaseMode,setCaseCamera,setCaseWood,setCaseLabels,selectCaseWire,
+    focusDivider,
+    focusModule(){
+      if(view==='case'){
+        const object=world.boxCase.modules[selectedModule];
+        if(object)rig.focusModule(object);
+        return;
+      }
+      const object=activeScene().modules[selectedModule];if(selectedModule==='keypad')rig.inspectKeypad(activeScene().keypad);else if(selectedModule==='adc')rig.inspectAdc(activeScene().adc);else if(selectedModule==='amp')rig.inspectAmplifier(activeSetup().amplifier,assemblyMode);else if(object)rig.focusModule(object);
+    },
+    focusJoin:()=>rig.focusJoin(),resetCamera:()=>{if(view==='case')setCaseCamera('iso');else rig.focus(view);},top:()=>rig.top(),
     setCameraMode(mode){rig.setMode(mode);ui.camera(mode);},showLabels:labelsVisible,
     move(direction,on){on?rig.moving.add(direction):rig.moving.delete(direction);},clear,selectStep,
   });
-  ui.comparison(world.pico.cables,world.pico.data);setView('divider');
+  ui.comparison(world.pico.cables,world.pico.data);setView('setup');
   const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let pointerStart;
   function hitAt(e){
     const rect=world.renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);
@@ -148,6 +220,11 @@ function boot() {
   world.renderer.domElement.addEventListener('pointerup',e=>{
     if(e.button!==0||!pointerStart||Math.hypot(e.clientX-pointerStart[0],e.clientY-pointerStart[1])>5)return;
     const hit=hitAt(e);pointerStart=null;if(!hit)return;
+    if(view==='case'){
+      if(hit.userData.wire){selectCaseWire(hit.userData.wire.id);return;}
+      if(hit.userData.moduleId){selectModule(hit.userData.moduleId);return;}
+      return;
+    }
     if(hit.userData.keypadPin){selectKeypadPin(hit.userData.keypadPin);return;}
     if(hit.userData.adcPin){selectAdcPin(hit.userData.adcPin);return;}
     if(hit.userData.amplifierPin){selectAmpPin(hit.userData.amplifierPin);return;}
@@ -158,14 +235,20 @@ function boot() {
   });
   let previous=performance.now();
   function frame(time){const delta=(time-previous)/1000;previous=time;rig.update(delta);world.render();requestAnimationFrame(frame);}requestAnimationFrame(frame);
-  window.hardwareViewer={world,rig,setView,selectModule,selectCable,selectStep,clear,focusKeypad,selectKeypadPin,focusAdc,setAdcMode,selectAdcPin,focusAmplifier,setAssemblyMode,selectAmpPin,getState:()=>({view,group,selectedModule,selectedCable,assemblyMode,selectedAmpPin,adcMode,selectedAdcPin})};
+  window.hardwareViewer={world,rig,setView,selectModule,selectCable,selectStep,clear,focusKeypad,selectKeypadPin,focusAdc,setAdcMode,selectAdcPin,focusAmplifier,setAssemblyMode,selectAmpPin,setCaseMode,setCaseCamera,setCaseWood,setCaseLabels,selectCaseWire,getState:()=>({view,group,selectedModule,selectedCable,assemblyMode,selectedAmpPin,adcMode,selectedAdcPin,caseMode:world.boxCase.getMode(),caseWood:world.boxCase.getWood(),caseLabels:world.boxCase.getLabels(),selectedCaseWire:world.boxCase.getSelectedWire()})};
   installLiveReload({
     getState:()=>({...window.hardwareViewer.getState(),mode:rig.mode,position:world.camera.position.toArray(),quaternion:world.camera.quaternion.toArray(),target:rig.orbit.target.toArray(),labels:document.getElementById('show-labels').checked}),
     restoreState(state){
-      if(!state||!['divider','setup','pico'].includes(state.view))return;
+      if(!state||!['divider','setup','pico','case'].includes(state.view))return;
       if(['labels','components'].includes(state.adcMode))adcMode=state.adcMode;
       if(['wiring','before','underside'].includes(state.assemblyMode))assemblyMode=state.assemblyMode;
       setView(state.view);
+      if(state.view==='case'){
+        if(state.caseMode)setCaseMode(state.caseMode);
+        if(state.caseWood!==undefined)setCaseWood(state.caseWood);
+        if(state.caseLabels!==undefined)setCaseLabels(state.caseLabels);
+        if(state.selectedCaseWire)selectCaseWire(state.selectedCaseWire);
+      }
       if(state.mode==='free'){document.getElementById('camera-mode').value='free';rig.setMode('free');ui.camera('free');}
       if(Array.isArray(state.position)&&state.position.length===3)world.camera.position.fromArray(state.position);
       if(Array.isArray(state.quaternion)&&state.quaternion.length===4)world.camera.quaternion.fromArray(state.quaternion);
@@ -173,14 +256,15 @@ function boot() {
       if(state.labels===false){document.getElementById('show-labels').checked=false;labelsVisible(false);}
       if(['all','LCD','Audio','ADC','Keypad','Power'].includes(state.group)){group=state.group;document.getElementById('cable-group').value=group;updateCables();refreshWireList();}
       if(state.selectedModule)selectModule(state.selectedModule);
-      if(state.selectedCable&&activeSetup().cables.some(c=>c.id===state.selectedCable))selectCable(state.selectedCable);
+      if(state.view!=='case'&&state.selectedCable&&activeSetup().cables.some(c=>c.id===state.selectedCable))selectCable(state.selectedCable);
       if(state.selectedAmpPin){selectedAmpPin=state.selectedAmpPin;activeSetup().amplifier.selectPin(selectedAmpPin);}
       if(state.selectedAdcPin&&!state.selectedCable)selectAdcPin(state.selectedAdcPin);
-      for(const id of ['a0','ground','ground-links','address','gnd-pin'])world.divider.parts[id].visible=adcMode==='labels';
+      if(state.view!=='case')for(const id of ['a0','ground','ground-links','address','gnd-pin'])world.divider.parts[id].visible=adcMode==='labels';
       updateCables();updateAmpGuide();
       world.camera.updateMatrixWorld();if(rig.mode==='inspect')rig.orbit.update();
     },
   });
+
 }
 try{boot();}catch(error){
   console.error(error);const box=document.getElementById('graphics-error');box.hidden=false;

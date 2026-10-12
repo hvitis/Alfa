@@ -66,6 +66,7 @@ app.mount("/src", StaticFiles(directory=ROOT / "src"), name="source")
 app.mount("/vendor/three", StaticFiles(directory=(ROOT / "node_modules" / "three").resolve(), check_dir=False), name="three")
 app.mount("/output", StaticFiles(directory=PROJECT / "output"), name="diagrams")
 app.mount("/reference", StaticFiles(directory=PROJECT / "photos"), name="reference")
+app.mount("/design", StaticFiles(directory=PROJECT / "design"), name="design")
 
 
 if __name__ == "__main__":

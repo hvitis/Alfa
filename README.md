@@ -2,8 +2,7 @@
 
 For offline startup at power-on and automatic recovery, read [the Raspberry Pi standalone guide](docs/raspberry-pi-standalone.md).
 On the configured Pi, install the service with `bash scripts/install-service.sh`.
-The player shuts down Raspberry Pi OS after five minutes without input or audio playback.
-Use `--idle-shutdown-seconds 0` to disable the timer during interactive hardware tests.
+The app keeps running when idle. It does not shut down the Pi after inactivity.
 The [Pico requirements](docs/pico-requirements.md) record future firmware research. The active implementation targets Raspberry Pi 3.
 
 This Python app tests the hardware in your photos over SSH. It runs without a graphical desktop.
@@ -34,9 +33,14 @@ Press TOP (UP) for Moominmamma's listening animation.
 Press BOTTOM (DOWN) for Mała Mi's speaking animation.
 Each animation uses four frames at 5 FPS and returns to the selected card after two cycles (1.6 seconds).
 LEFT and RIGHT stop the animation and change the letter.
-Add `--keyboard` for SSH keyboard control (A/D for letters, W/S for animations).
+Press CENTER (the fifth button) to draw the selected letter, stroke by stroke, with a moving pencil tip.
+The completed letter stays visible during success fireworks, then the original card returns.
+Each of the 32 letters has an optional recording slot. Missing recordings act as silent placeholders.
+LEFT, RIGHT, UP, and DOWN interrupt the drawing lesson and stop its recording.
+Add `--keyboard` for SSH keyboard control (A/D for letters, W/S for character animations, Space for drawing).
 For a preview without hardware, add `--simulate` before `gallery` and `--once` after it.
 The [animation assets and previews](assets/animations/README.md) include PNG frames, RGB565 files, and GIF previews.
+The [drawing lesson guide](assets/letter-drawing/README.md) includes a GIF preview, all letter paths, component details, and recording instructions.
 
 The app starts at **20% digital audio volume**.
 It uses **BCM GPIO24** for the backlight, so the display does not share GPIO18 with the amplifier.

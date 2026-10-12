@@ -24,8 +24,8 @@ Toddler-proofing
 17. Bedtime mode. Add a 10–15 minute sleep timer that ends with a character saying goodnight. For a dimmable screen, switch the backlight (GPIO24) from OutputDevice to PWMOutputDevice.
 18. Start at boot. Run the player as a service that starts on power-on and restarts after a crash, with a splash screen within seconds.
 19. [ ] Configure the Raspberry Pi 3 SD card for read-only operation (chosen power-switch approach). Complete dependency installation, media preparation, service setup, and button calibration before enabling the RAM-backed overlay filesystem. Protect the boot partition from writes and keep temporary files and logs in RAM; do not add a writable activity-log partition for normal use. Verify offline startup, buttons, audio, and repeated power-off/power-on cycles on the actual Pi. Document how to enter writable maintenance mode for program updates and persistent calibration changes. This greatly reduces corruption risk when using a physical power switch. See [the standalone guide](raspberry-pi-standalone.md#power-switch-operation).
-    - [x] Add safe shutdown of Raspberry Pi OS after five minutes of inactivity. Button input resets the timer, and audio playback keeps the device awake.
-    - [ ] Install the updated service on the Pi and verify inactivity shutdown with the LCD, buttons, speaker, and chosen 5000 mAh power bank.
+    - [x] Remove inactivity shutdown. The app stays running without input.
+    - [ ] Install the updated service on the Pi and verify idle operation with the LCD, buttons, speaker, and chosen 5000 mAh power bank.
 20. Parent page. A tiny web page served by the Pi would let you, from your phone, pick today's letter, set the time limit, see what he played and upload clips.
 
 5 hardware add-ons

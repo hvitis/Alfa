@@ -41,8 +41,6 @@ unit_path="$unit_dir/moomin.service"
 trap 'rm -f -- "$unit_path"; rmdir -- "$unit_dir"' EXIT
 "$python_bin" -m moomin.service --project "$project_dir" --user "$service_user" --python "$python_bin" ${audio_args[@]+"${audio_args[@]}"} > "$unit_path"
 systemd-analyze verify "$unit_path"
-sudo install -d -o root -g root -m 0755 /usr/local/lib/moomin
-sudo install -o root -g root -m 0755 scripts/poweroff-on-idle.sh /usr/local/lib/moomin/poweroff-on-idle.sh
 sudo install -m 0644 "$unit_path" /etc/systemd/system/moomin.service
 sudo systemctl daemon-reload
 sudo systemctl enable moomin.service

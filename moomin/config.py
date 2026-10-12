@@ -17,6 +17,9 @@ class Settings:
         if path and Path(path).resolve() != (root / "config.json").resolve():
             custom = json.loads(Path(path).read_text())
             for section, values in custom.items():
+                # Old Pi overrides can retain this removed feature's section.
+                if section == "power":
+                    continue
                 if section not in data or not isinstance(values, dict):
                     raise ValueError(f"Unknown configuration section: {section}")
                 data[section].update(values)
@@ -26,9 +29,6 @@ class Settings:
 
     def validate(self):
         display, adc, audio = (self.data[k] for k in ("display", "adc", "audio"))
-        idle_seconds = self.data.get("power", {}).get("idle_shutdown_seconds", 300)
-        if type(idle_seconds) not in (int, float) or not math.isfinite(idle_seconds) or idle_seconds < 0:
-            raise ValueError("Idle shutdown seconds must be a finite non-negative number; 0 disables shutdown.")
         pins = [display[k] for k in ("dc_pin", "reset_pin", "backlight_pin")]
         if any(type(pin) is not int or not 0 <= pin <= 27 for pin in pins):
             raise ValueError("Display pins must be BCM GPIO numbers from 0 to 27.")
@@ -57,6 +57,17 @@ class Settings:
             if self.path(section, "input") == self.path(section, "prepared"):
                 raise ValueError("Prepared media must use a different directory from the originals.")
         animations = self.data.get("animations", {})
+        drawing = self.data.get("letter_drawing", {})
+        if drawing.get("enabled"):
+            if self.size != (240, 320):
+                raise ValueError("Letter drawing needs portrait rotation 0 or 180.")
+            limits = {"fps": (4, 30), "draw_seconds": (3, 10), "stroke_pause": (.1, 1),
+                      "intro_seconds": (.1, 2), "hold_seconds": (.3, 3),
+                      "celebration_seconds": (1, 4)}
+            for key, (low, high) in limits.items():
+                value = drawing[key]
+                if type(value) not in (int, float) or not math.isfinite(value) or not low <= value <= high:
+                    raise ValueError(f"Letter drawing {key} must be between {low} and {high}.")
         if animations.get("enabled"):
             if self.size != (240, 320):
                 raise ValueError("Alphabet animations need portrait rotation 0 or 180.")

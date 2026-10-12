@@ -10,7 +10,9 @@ const modules={
   R2:{title:'R2 — 10 kΩ resistor',purpose:'R2 completes the voltage divider by connecting the shared join to ground.',details:['One leg connects to the same join as R1 and ADC A0. The other connects to ADC GND.','Together with R1, it keeps the keypad signal within the 3.3 V ADC supply range.','Its value and connections stay the same in the Pico view.']},
   join:{title:'Shared R1 / R2 / A0 join',purpose:'This purple point is one electrical connection between three ends.',details:['Join R1 leg B, R2 leg A, and the ADC A0 wire together.','Use solder or one connected breadboard row. This join is separate from ground.']},
   supply:{title:'Pico shared supply joins — new',purpose:'These two separate joins let two modules share each available supply pin.',details:['3.3 V join: Pico physical pin 36 → LCD VCC and ADC VDD.','USB 5 V join: Pico physical pin 40 (VBUS) → MAX98357A VIN and keypad VCC. USB must supply power.','Use separate breadboard rows or suitable split connections. Never join the 3.3 V and 5 V rows together. VSYS is not a regulated 5 V output.'],changes:'New in the Pico setup: two supply joins. The Pi 3 has separate header pins for each of these supply wires.'},
-  power:{title:'5 V USB power',purpose:'This connection supplies power to the controller and the attached modules.',details:['The controller supplies 3.3 V for the LCD and ADC, and 5 V for the keypad and digital amplifier.','Connect power after you finish the signal wiring. Use a supply suitable for the controller and amplifier load.']},
+  divider:{title:'Divider perfboard — 2 × 10 kΩ',purpose:'This small board holds the two 10 kΩ resistors R1 and R2 and the shared join.',details:['It reduces the 5 V keypad output to ~2.5 V for safe measurement by the 3.3 V ADC.','One leg connects to keypad OUT, one to ground, and the shared join goes to ADC A0.']},
+  battery:{title:'Baseus 5000 mAh power bank',purpose:'Internal portable battery powering the Raspberry Pi and all peripheral boards.',details:['69 × 106 × 14 mm battery pack mounted with foam/Velcro and retaining bands.','Provides 5 V power to the system through the inline USB power switch.']},
+  switch:{title:'Inline USB power switch',purpose:'Side panel power switch for turning the player on and off.',details:['Mounts in the side window with an outer plywood cover and inside clamp.','Allows switching battery power to the Raspberry Pi without opening the rear cover.']},
 };
 export function moduleInfo(id,view){
   const info=modules[id==='pi'&&view==='pico'?'pico':id];if(!info)return null;
@@ -18,4 +20,5 @@ export function moduleInfo(id,view){
   if(view==='pico'&&['lcd','adc','keypad'].includes(id))return {...info,changes:'The module stays the same. Its controller pins and supply source change; see the Pi 3 → Pico comparison.'};
   return info;
 }
-export const MODULE_IDS=['pi','lcd','keypad','adc','amp','speaker','R1','R2','join','power'];
+export const MODULE_IDS=['pi','lcd','keypad','adc','amp','speaker','R1','R2','join','power','battery','divider','switch'];
+

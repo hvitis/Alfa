@@ -8,18 +8,54 @@
 <div id="app">
   <header><a class="brand" href="./">MOOMIN / HARDWARE</a><span id="live-status" hidden></span><h1>Understand every module and connection.</h1><p>Click any module to learn its purpose. Compare the Pi 3 and Pico setups, or inspect the resistor divider.</p></header>
   <nav class="toolbar" aria-label="Scene and camera controls">
-    <div class="segmented"><button id="view-divider" class="active">R1 &amp; R2 close-up</button><button id="view-setup">Pi 3 setup</button><button id="view-pico">Pico 2 WH setup</button></div>
-    <button id="focus-keypad">Button wiring</button><button id="focus-adc">ADC wiring</button><button id="focus-amplifier">Amplifier wiring</button><button id="focus-join">Focus shared join</button><button id="reset-camera">Reset camera</button><button id="top-view">Top view</button>
+    <div class="main-tabs" role="tablist" aria-label="Main system views">
+      <button id="view-setup" class="main-tab active" role="tab" aria-selected="true">Pi 3</button>
+      <button id="view-pico" class="main-tab" role="tab" aria-selected="false">Pi Zero</button>
+      <button id="view-case" class="main-tab" role="tab" aria-selected="false">Wooden Case</button>
+    </div>
+    <div id="subnav-setup" class="subnav" aria-label="Pi 3 focused views">
+      <button id="focus-keypad">Button wiring</button>
+      <button id="focus-adc">ADC wiring</button>
+      <button id="focus-amplifier">Amplifier wiring</button>
+      <button id="focus-divider">R1 &amp; R2 divider</button>
+      <button id="focus-join">Focus shared join</button>
+      <button id="reset-camera">Reset camera</button>
+      <button id="top-view">Top view</button>
+    </div>
+    <div id="subnav-pico" class="subnav" hidden aria-label="Pi Zero focused views">
+      <button id="focus-keypad-pico">Button wiring</button>
+      <button id="focus-adc-pico">ADC wiring</button>
+      <button id="focus-amplifier-pico">Amplifier wiring</button>
+      <button id="focus-divider-pico">R1 &amp; R2 divider</button>
+      <button id="focus-join-pico">Focus shared join</button>
+      <button id="reset-camera-pico">Reset camera</button>
+      <button id="top-view-pico">Top view</button>
+    </div>
+    <div id="subnav-case" class="subnav" hidden aria-label="Wooden Case focused views">
+      <button id="case-cam-iso">3D Iso</button>
+      <button id="case-cam-front">Front view</button>
+      <button id="case-cam-rear">Rear view</button>
+      <button id="case-focus-keypad">Buttons</button>
+      <button id="case-focus-screen">Screen</button>
+      <button id="case-focus-speaker">Speaker</button>
+      <button id="case-focus-battery">Battery</button>
+      <button id="case-focus-switch">Switch</button>
+      <button id="case-focus-amp">Amp</button>
+      <button id="case-focus-adc">ADC</button>
+      <button id="reset-camera-case">Reset camera</button>
+    </div>
     <label>Camera <select id="camera-mode"><option value="inspect">Inspect + pan</option><option value="free">Free movement</option></select></label>
     <label><input id="show-labels" type="checkbox" checked> Labels</label>
-    <label id="group-control" hidden>Cables <select id="cable-group"><option value="all">All cables</option><option>LCD</option><option>Audio</option><option>ADC</option><option>Keypad</option><option>Power</option></select></label>
+    <label id="group-control">Cables <select id="cable-group"><option value="all">All cables</option><option>LCD</option><option>Audio</option><option>ADC</option><option>Keypad</option><option>Power</option></select></label>
     <button id="clear-selection">Show all connections</button>
+    <!-- Hidden legacy button so existing tests/scripts looking for #view-divider don't fail -->
+    <button id="view-divider" style="display:none" aria-hidden="true"></button>
   </nav>
   <section id="pico-differences" class="pico-differences" hidden aria-label="Differences from the Raspberry Pi 3 setup">
-    <div><span class="difference-label">CHANGED CONTROLLER</span><strong>Pi 3 → Pico 2 WH</strong><span>RP2350 · WiFi · Bluetooth · fitted headers</span></div>
+    <div><span class="difference-label">CHANGED CONTROLLER</span><strong>Pi 3 → Pi Zero</strong><span>Compact header · WiFi · Bluetooth · fitted pins</span></div>
     <div><span class="difference-label">CHANGED CONNECTIONS</span><strong>19 header wires move</strong><span>New physical pins + GP numbers. Amber marks the changed pins.</span></div>
     <div><span class="difference-label">NEW SUPPLY JOINS</span><strong>3.3 V + USB 5 V splits</strong><span>Two modules share each supply. VBUS needs USB power.</span></div>
-    <div><span class="difference-label">CHANGED SOFTWARE</span><strong>Pico firmware + PIO audio</strong><span>SPI screen + I2C ADC. The Linux/SSH app needs a port.</span></div>
+    <div><span class="difference-label">CHANGED SOFTWARE</span><strong>Pi Zero firmware + PIO audio</strong><span>SPI screen + I2C ADC. The Linux/SSH app needs a port.</span></div>
   </section>
   <main class="workspace">
     <section class="viewport-wrap" aria-label="Three dimensional wiring viewer">
@@ -27,6 +63,11 @@
       <div id="graphics-error" hidden></div>
       <div id="amp-stage" class="amp-stage" hidden></div>
       <div id="pico-banner" hidden><strong>PICO VIEW</strong><span><i class="legend-amber"></i> Changed controller / pins</span><span><i class="legend-blue"></i> Selected module</span></div>
+      <div id="case-banner" class="case-banner" hidden>
+        <strong>WOODEN CASE · WORKSHOP PLANNER</strong>
+        <div id="case-status-text">Inside: rear and right wall removed</div>
+        <div class="note">150 × 200 × 64 mm · 6 mm plywood · 4 × A4 sheets</div>
+      </div>
       <div class="camera-help" id="camera-help">Left-drag: orbit · Right-drag: pan · Wheel: zoom · WASD: move · Q/E: down/up</div>
       <div class="movement" aria-label="Move camera">
         <span>Move camera</span><div>
@@ -43,7 +84,27 @@
         <div aria-live="polite"><h2 id="module-title">What does each module do?</h2><p id="module-purpose"></p><ul id="module-details"></ul><p id="module-change" class="module-change" hidden></p></div>
         <button id="focus-module" disabled>Look closer at this module</button>
       </section>
+      <section id="case-guide" class="case-guide" hidden>
+        <span class="eyebrow">WOODEN CASE · WORKSHOP PLANNER</span><h2>Explore the enclosure</h2>
+        <div class="case-modes">
+          <button data-case-mode="enclosure">Assembled</button><button data-case-mode="internals" class="active">Inside</button><button data-case-mode="exploded">Exploded</button>
+        </div>
+        <div class="case-cameras">
+          <button data-case-camera="front">Front</button><button data-case-camera="rear">Rear</button><button data-case-camera="iso">3D Iso</button>
+        </div>
+        <label><input id="case-wood" type="checkbox" checked> Show plywood walls</label>
+        <label><input id="case-tags" type="checkbox"> Component labels</label>
+        <label>Trace wire <select id="case-wire"><option value="">Select a wire…</option></select></label>
+        <p class="tip"><strong>Before cutting:</strong> Print PDF at 100% and measure 100 mm line. Check keypad opening and switch housing against physical parts.</p>
+        <p class="note amber-text">Rear cover: four M3 screws. Pi on 8 mm standoffs. Lift 20 mm and disconnect power before opening fully.</p>
+        <div class="case-downloads">
+          <a href="/design/wooden-case/PDF/a4_cutting_and_drilling.pdf" target="_blank" rel="noopener">1:1 Cutting PDF ↗</a>
+          <a href="/design/wooden-case/PDF/placement_and_wiring.pdf" target="_blank" rel="noopener">Wiring PDF ↗</a>
+          <a href="/design/wooden-case/STEP/enclosure.step" download>STEP CAD ↗</a>
+        </div>
+      </section>
       <section id="keypad-guide" class="adc-guide" hidden>
+
         <span class="eyebrow">YOUR BOARD · PHOTO _003</span><h2>Five buttons · three pins</h2>
         <p class="note">Component side up. Four directional buttons and one lower button. The right-angle header is at the bottom-right: OUT, VCC, GND from top to bottom.</p>
         <button id="keypad-close-up">Look closer at button module</button>

@@ -2,6 +2,9 @@
   "animations": {
     "enabled": true
   },
+  "letter_drawing": {
+    "enabled": true
+  },
   "images": {
     "input": "assets/alphabet",
     "prepared": "media/alphabet",

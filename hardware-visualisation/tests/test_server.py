@@ -21,13 +21,24 @@ class ServerTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(page.status_code, 200)
             self.assertIn("window.MOOMIN_LIVE_RELOAD=true", page.text)
             self.assertIn('type="importmap"', page.text)
+            self.assertIn('id="view-case"', page.text)
             self.assertEqual(page.headers["cache-control"], "no-store")
-            for url in ["/src/main.js", "/src/styles.css", "/src/data/setup.json", "/vendor/three/build/three.module.js"]:
+            for url in [
+                "/src/main.js",
+                "/src/styles.css",
+                "/src/data/setup.json",
+                "/src/scene/caseScene.js",
+                "/src/data/case-routing.json",
+                "/src/data/case-glb/internals.glb",
+                "/design/wooden-case/PDF/a4_cutting_and_drilling.pdf",
+                "/vendor/three/build/three.module.js",
+            ]:
                 response = await client.get(url)
                 self.assertEqual(response.status_code, 200, url)
             health = (await client.get("/api/health")).json()
             self.assertTrue(health["live_reload"])
             self.assertEqual(health["revision"], server.source_revision())
+
 
     async def test_change_stream_sends_ready_and_actual_changes(self):
         class Request:

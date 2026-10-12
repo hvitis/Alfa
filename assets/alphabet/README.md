@@ -30,9 +30,13 @@ Press TOP (UP) for Moominmamma listening with her hand at her ear.
 Press BOTTOM (DOWN) for Mała Mi speaking.
 Each animation plays two four-frame cycles at 5 FPS, then restores the selected card.
 LEFT and RIGHT stop the animation and change the letter.
+Tap CENTER to draw the selected letter with a moving pencil tip.
+The finished letter stays visible during fireworks, then the selected card returns.
+LEFT, RIGHT, UP, and DOWN interrupt the drawing lesson and stop its recording.
+The [drawing lesson guide](../letter-drawing/README.md) includes all 32 stroke definitions and recording slots.
 Hold CENTER for two seconds to exit the current gallery viewer.
 The physical buttons require the existing button calibration.
-For SSH keyboard control, add `--keyboard` and use A/D for letters or W/S for animations.
+For SSH keyboard control, add `--keyboard` and use A/D for letters, W/S for character animations, or Space for drawing.
 
 ## Preview without hardware
 
@@ -117,6 +121,7 @@ The [Polish dubbing credits](https://dubbingpedia.pl/wiki/Muminki) record animat
 These cards use the complete screen in the current gallery viewer.
 The TOP/BOTTOM character animations work in the gallery with `config.alphabet.json`.
 The [animation documentation](../animations/README.md) describes playback and file formats.
-Activity indicators, a letter dial, and recordings for each letter remain planned.
+The CENTER drawing lesson uses lightweight stroke data and optional recordings for each letter.
+Activity indicators and a letter dial remain planned.
 Their future interface must fit the artwork into its safe area before it adds these controls.
 The full-screen cards must not receive overlays that hide letter strokes or diacritics.

@@ -28,8 +28,15 @@
     "fps": 5,
     "cycles": 2
   },
-  "power": {
-    "idle_shutdown_seconds": 300
+  "letter_drawing": {
+    "enabled": false,
+    "data": "assets/letter-drawing/letters.json",
+    "fps": 20,
+    "draw_seconds": 5,
+    "stroke_pause": 0.22,
+    "intro_seconds": 0.5,
+    "hold_seconds": 0.7,
+    "celebration_seconds": 1.8
   },
   "audio": {
     "input": "sounds",

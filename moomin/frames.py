@@ -2,10 +2,29 @@
 import json
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageChops
 
 from .hardware import rgb565
 from .media import atomic_json, image_sources
+
+
+class AnimationPresenter:
+    """Retain one RGB frame and send only changed pixels when the LCD supports it."""
+    def __init__(self, display):
+        self.display = display
+        self.previous = None
+
+    def reset(self):
+        self.previous = None
+
+    def show(self, frame):
+        if self.previous is None or not hasattr(self.display, "show_region"):
+            self.display.show(frame)
+        else:
+            box = ImageChops.difference(frame, self.previous).getbbox()
+            if box:
+                self.display.show_region(frame.crop(box), box)
+        self.previous = frame
 
 
 def prepare_wire_images(settings):

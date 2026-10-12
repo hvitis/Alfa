@@ -100,6 +100,28 @@ class ST7789:
         self.dc.on()
         self.spi.writebytes2(payload)
 
+    def show_region(self, frame, box):
+        """Transfer an exclusive logical rectangle, including display rotation."""
+        left, top, right, bottom = box
+        width, height = self.size
+        if not (0 <= left < right <= width and 0 <= top < bottom <= height):
+            raise ValueError("Display region must be inside the logical screen.")
+        if frame.size != (right - left, bottom - top):
+            raise ValueError("Cropped frame must match the display region.")
+        rotation = self.cfg["rotation"]
+        if rotation == 180:
+            left, top, right, bottom = width - right, height - bottom, width - left, height - top
+        elif rotation == 90:
+            left, top, right, bottom = top, width - right, bottom, width - left
+        elif rotation == 270:
+            left, top, right, bottom = height - bottom, left, height - top, right
+        payload = rgb565(frame.rotate(rotation, expand=True))
+        self.command(0x2A, [left >> 8, left & 255, (right - 1) >> 8, (right - 1) & 255])
+        self.command(0x2B, [top >> 8, top & 255, (bottom - 1) >> 8, (bottom - 1) & 255])
+        self.command(0x2C)
+        self.dc.on()
+        self.spi.writebytes2(payload)
+
     def close(self):
         if self.backlight:
             self.backlight.off()

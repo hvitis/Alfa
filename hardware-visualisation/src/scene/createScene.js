@@ -3,6 +3,7 @@ import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { SVGRenderer } from 'three/addons/renderers/SVGRenderer.js';
 import { createDividerScene } from './dividerScene.js';
 import { createSetupScene } from './setupScene.js';
+import { createCaseScene } from './caseScene.js';
 
 export function createScene(container) {
   const scene=new THREE.Scene();scene.background=new THREE.Color('#f9fbfc');
@@ -22,10 +23,11 @@ export function createScene(container) {
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(6000,6000),new THREE.MeshStandardMaterial({color:'#f8fafb',roughness:1}));
   floor.rotation.x=-Math.PI/2;floor.position.y=-17;floor.receiveShadow=true;scene.add(floor);
   const grid=new THREE.GridHelper(3000,100,'#dde6ed','#edf1f5');grid.position.y=-16.9;scene.add(grid);
-  const divider=createDividerScene(),setup=createSetupScene(),pico=createSetupScene('pico');
-  scene.add(divider.root,setup.root,pico.root);setup.root.visible=false;pico.root.visible=false;
+  const divider=createDividerScene(),setup=createSetupScene(),pico=createSetupScene('pico'),boxCase=createCaseScene();
+  scene.add(divider.root,setup.root,pico.root,boxCase.root);setup.root.visible=false;pico.root.visible=false;boxCase.root.visible=false;
   function resize(){const width=container.clientWidth,height=container.clientHeight;camera.aspect=width/height;camera.updateProjectionMatrix();renderer.setSize(width,height);labels.setSize(width,height);}
   const observer=new ResizeObserver(resize);observer.observe(container);resize();
   function render(){renderer.render(scene,camera);labels.render(scene,camera);}
-  return {scene,camera,renderer,labels,divider,setup,pico,render,dispose:()=>{observer.disconnect();renderer.dispose?.();}};
+  return {scene,camera,renderer,labels,divider,setup,pico,boxCase,render,dispose:()=>{observer.disconnect();renderer.dispose?.();}};
 }
+

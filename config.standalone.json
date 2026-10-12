@@ -9,5 +9,8 @@
     "enabled": true,
     "fps": 4,
     "cycles": 2
+  },
+  "letter_drawing": {
+    "enabled": true
   }
 }

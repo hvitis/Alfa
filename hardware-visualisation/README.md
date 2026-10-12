@@ -24,13 +24,20 @@ The green “Live” indicator confirms the file-change connection.
 
 ## Views and module explanations
 
-The viewer has three views: **R1 & R2 close-up**, **Pi 3 setup**, and **Pico 2 WH setup**.
+The viewer has four views: **R1 & R2 close-up**, **Pi 3 setup**, **Pico 2 WH setup**, and **Wooden case 3D**.
 
 1. Select a view from the toolbar.
-2. Click a module in 3D to display its purpose and connections.
-3. Alternatively, select the module from the sidebar list.
-4. Click **Look closer at this module** to move the camera toward it.
-5. Click a cable to display its endpoint labels.
+2. In the **Wooden case 3D** view:
+   - Toggle assembly state: **Assembled**, **Inside** (default), or **Exploded**.
+   - Jump to camera presets: **Front**, **Rear**, or **3D Iso**.
+   - Toggle plywood walls visibility and component 3D labels.
+   - Trace any of the 27 wires from the routing atlas or filter by wire group.
+   - Click any workshop component (battery, switch, ADC, amplifier, divider, Pi, speaker, etc.) in 3D to inspect its dimensions and role.
+   - Access direct links to 1:1 cutting & drilling PDF, placement/wiring PDF, and STEP CAD model.
+3. Click a module in 3D to display its purpose and connections.
+4. Alternatively, select the module from the sidebar list.
+5. Click **Look closer at this module** to move the camera toward it.
+6. Click a cable to display its endpoint labels.
 
 The blue outline marks the selected module.
 The Pico view uses amber outlines and pin markers for changes from the Pi 3 setup.

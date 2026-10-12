@@ -51,11 +51,13 @@ export class CameraRig {
     this.keys.clear();this.orbit.update();
   }
   focus(view='divider') {
-    this.view=view;this.speed=view!=='divider'?440:140;
-    if(view!=='divider'){this.camera.position.set(0,800,1010);this.orbit.target.set(0,12,45);}
-    else {this.camera.position.set(175,390,540);this.orbit.target.set(35,22,25);}
+    this.view=view;this.speed=view==='divider'?140:view==='boxCase'||view==='case'?200:440;
+    if(view==='divider'){this.camera.position.set(175,390,540);this.orbit.target.set(35,22,25);}
+    else if(view==='boxCase'||view==='case'){this.camera.position.set(264,216,-325);this.orbit.target.set(72,83,-29);}
+    else {this.camera.position.set(0,800,1010);this.orbit.target.set(0,12,45);}
     this.camera.lookAt(this.orbit.target);this.camera.updateMatrixWorld();this.orbit.update();
   }
+
   focusModule(object){
     const bounds=new THREE.Box3().setFromObject(object),center=bounds.getCenter(new THREE.Vector3()),size=bounds.getSize(new THREE.Vector3());
     const distance=Math.max(size.x,size.y,size.z,65)*1.65;

@@ -6,9 +6,45 @@ import { PICO_DIFFERENCES } from '../data/picoSetup.js';
 import { AMPLIFIER, amplifierConnection } from '../data/amplifier.js';
 
 export function createInterface(actions) {
-  const q=id=>document.getElementById(id);let currentView='divider';
-  for(const view of ['divider','setup','pico'])q('view-'+view).onclick=()=>actions.setView(view);
-  q('focus-keypad').onclick=()=>actions.focusKeypad();
+  const q=id=>document.getElementById(id);let currentView='setup';
+    for(const view of ['divider','setup','pico','case'])if(q('view-'+view))q('view-'+view).onclick=()=>actions.setView(view==='divider'?'setup':view);
+    for(const button of document.querySelectorAll('[data-case-mode]'))button.onclick=()=>actions.setCaseMode(button.dataset.caseMode);
+    for(const button of document.querySelectorAll('[data-case-camera]'))button.onclick=()=>actions.setCaseCamera(button.dataset.caseCamera);
+    q('case-wood').onchange=e=>actions.setCaseWood(e.target.checked);
+    q('case-tags').onchange=e=>actions.setCaseLabels(e.target.checked);
+    q('case-wire').onchange=e=>actions.selectCaseWire(e.target.value);
+    
+    // Pi 3 subnav
+    q('focus-keypad').onclick=()=>actions.focusKeypad();
+    q('focus-adc').onclick=()=>actions.focusAdc();
+    q('focus-amplifier').onclick=()=>actions.focusAmplifier();
+    if(q('focus-divider'))q('focus-divider').onclick=()=>actions.focusDivider();
+    q('focus-join').onclick=()=>actions.focusJoin();
+    q('reset-camera').onclick=()=>actions.resetCamera();
+    q('top-view').onclick=()=>actions.top();
+
+    // Pi Zero subnav
+    if(q('focus-keypad-pico'))q('focus-keypad-pico').onclick=()=>actions.focusKeypad();
+    if(q('focus-adc-pico'))q('focus-adc-pico').onclick=()=>actions.focusAdc();
+    if(q('focus-amplifier-pico'))q('focus-amplifier-pico').onclick=()=>actions.focusAmplifier();
+    if(q('focus-divider-pico'))q('focus-divider-pico').onclick=()=>actions.focusDivider();
+    if(q('focus-join-pico'))q('focus-join-pico').onclick=()=>actions.focusJoin();
+    if(q('reset-camera-pico'))q('reset-camera-pico').onclick=()=>actions.resetCamera();
+    if(q('top-view-pico'))q('top-view-pico').onclick=()=>actions.top();
+
+    // Wooden Case subnav
+    if(q('case-cam-iso'))q('case-cam-iso').onclick=()=>actions.setCaseCamera('iso');
+    if(q('case-cam-front'))q('case-cam-front').onclick=()=>actions.setCaseCamera('front');
+    if(q('case-cam-rear'))q('case-cam-rear').onclick=()=>actions.setCaseCamera('rear');
+    if(q('case-focus-keypad'))q('case-focus-keypad').onclick=()=>actions.selectModule('keypad');
+    if(q('case-focus-screen'))q('case-focus-screen').onclick=()=>actions.selectModule('lcd');
+    if(q('case-focus-speaker'))q('case-focus-speaker').onclick=()=>actions.selectModule('speaker');
+    if(q('case-focus-battery'))q('case-focus-battery').onclick=()=>actions.selectModule('battery');
+    if(q('case-focus-switch'))q('case-focus-switch').onclick=()=>actions.selectModule('switch');
+    if(q('case-focus-amp'))q('case-focus-amp').onclick=()=>actions.selectModule('amp');
+    if(q('case-focus-adc'))q('case-focus-adc').onclick=()=>actions.selectModule('adc');
+    if(q('reset-camera-case'))q('reset-camera-case').onclick=()=>actions.resetCamera();
+
   q('keypad-close-up').onclick=()=>actions.focusModule();
   for(const pin of KEYPAD.pins)q('keypad-pin-'+pin.key).onclick=()=>actions.selectKeypadPin(pin.key);
   const keypadPhoto=q('keypad-photo'),photoPath=(window.MOOMIN_LIVE_RELOAD?'/reference/':'../photos/')+KEYPAD.reference;keypadPhoto.src=photoPath;keypadPhoto.parentElement.href=photoPath;
@@ -65,15 +101,39 @@ export function createInterface(actions) {
         button.textContent=pin.name;button.dataset.ampPin=pin.key;button.style.borderLeft='4px solid '+pin.color;button.onclick=()=>actions.selectAmpPin(pin.key);name.append(button);
         destination.textContent=amplifierConnection(pin,view);row.classList.toggle('unused-pin',!pin.cable);row.append(name,destination);q('amp-pin-table').append(row);
       }
-      for(const name of ['divider','setup','pico']){q('view-'+name).classList.toggle('active',view===name);q('view-'+name).setAttribute('aria-pressed',String(view===name));}
-      q('divider-guide').hidden=view!=='divider';q('setup-guide').hidden=view==='divider';q('group-control').hidden=view==='divider';
+      for(const name of ['setup','pico','case']){
+        const btn=q('view-'+name);
+        if(btn){
+          const isActive=(view==='divider'&&name==='setup')||view===name;
+          btn.classList.toggle('active',isActive);
+          btn.setAttribute('aria-pressed',String(isActive));
+          btn.setAttribute('aria-selected',String(isActive));
+        }
+      }
+      if(q('subnav-setup'))q('subnav-setup').hidden=view!=='setup'&&view!=='divider';
+      if(q('subnav-pico'))q('subnav-pico').hidden=view!=='pico';
+      if(q('subnav-case'))q('subnav-case').hidden=view!=='case';
+      q('divider-guide').hidden=view!=='divider';q('setup-guide').hidden=view==='divider'||view==='case';q('group-control').hidden=view==='case';
       for(const id of ['pico-differences','pico-banner','pico-guide'])q(id).hidden=view!=='pico';
-      q('pin-convention').textContent=view==='pico'?'Pico numbers are physical pins; GP numbers name the GPIO. USB is at the top, pin 1 is top-left, pin 40 is top-right.': 'Pi numbers are physical header pins.';
+      q('case-banner').hidden=view!=='case';q('case-guide').hidden=view!=='case';
+      q('pin-convention').textContent=view==='pico'?'Pi Zero / Pico numbers are physical pins; GP numbers name the GPIO. USB is at the top, pin 1 is top-left, pin 40 is top-right.': 'Pi numbers are physical header pins.';
       q('module-picker').replaceChildren();const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Choose a module…';q('module-picker').append(placeholder);
       for(const id of Object.keys(modules)){const option=document.createElement('option');option.value=id;option.textContent=moduleInfo(id,view)?.title??id;q('module-picker').append(option);}
       showModule(null,view);
     },
     module:showModule,
+    caseMode(mode){
+      for(const button of document.querySelectorAll('[data-case-mode]')){button.classList.toggle('active',button.dataset.caseMode===mode);button.setAttribute('aria-pressed',String(button.dataset.caseMode===mode));}
+      const descriptions={internals:'Inside: rear and right wall removed',enclosure:'Assembled · front facing you',exploded:'Exploded: 65 mm separation · cable lengths are schematic'};
+      q('case-status-text').textContent=descriptions[mode]||mode;
+    },
+    caseWood(wood){q('case-wood').checked=wood;},
+    caseLabels(labels){q('case-tags').checked=labels;},
+    caseWires(wires){
+      const sel=q('case-wire');sel.replaceChildren();const opt=document.createElement('option');opt.value='';opt.textContent='Select a wire…';sel.append(opt);
+      for(const w of wires){const o=document.createElement('option');o.value=w.id;o.textContent=`${w.id}: ${w.from} → ${w.to}`;sel.append(o);}
+    },
+    selectCaseWire(id){q('case-wire').value=id||'';},
     keypad(show,view){
       q('keypad-guide').hidden=!show;
       for(const pin of KEYPAD.pins)q('keypad-connection-'+pin.key).textContent=keypadConnection(pin,view);
@@ -108,3 +168,4 @@ export function createInterface(actions) {
     },
   };
 }
+

@@ -8,6 +8,20 @@ import time
 from .media import run_tool
 
 
+class LetterRecordings:
+    """Optional per-letter PCM recordings; absent files are silent placeholders."""
+    def __init__(self, catalog, root, player, enabled=True):
+        self.catalog, self.root, self.player, self.enabled = catalog, root, player, enabled
+
+    def play(self, letter):
+        path = self.catalog.audio_path(self.root, letter)
+        if not self.enabled or not path.is_file():
+            return 0
+        # StreamingAudioPlayer validates the format and plays the complete file.
+        self.player.play(path)
+        return self.player.duration
+
+
 def audio_device(configured="auto", listing=None):
     if configured != "auto":
         return configured

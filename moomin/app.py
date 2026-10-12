@@ -1,6 +1,5 @@
 import argparse
 import importlib.util
-import math
 import os
 import select
 import shutil
@@ -12,17 +11,18 @@ import wave
 from contextlib import ExitStack
 from pathlib import Path
 
-from .audio import StreamingAudioPlayer, audio_device
+from .audio import LetterRecordings, StreamingAudioPlayer, audio_device
 from .buttons import Debouncer, calibrate, classify, load_calibration
 from .config import Settings
 from .hardware import ADS1x15, PreviewDisplay, ST7789
 from .media import image_sources, prepare_audio, prepare_images, prepared_audio
-from .frames import WireFrames, prepare_wire_images
+from .frames import AnimationPresenter, WireFrames, prepare_wire_images
 from .service import ServiceWatchdog
-from .power import IDLE_POWEROFF_STATUS, IdleTimer, request_poweroff
 from .ui import screen_patterns
 from .player import PlayerSession
 from .animation import CharacterAnimation
+from .letter_lesson import LetterLesson
+from .letter_paths import LetterCatalog
 from .speaker_test import run_speaker_test
 
 
@@ -148,13 +148,13 @@ def monitor_buttons(settings, seconds=0):
 
 
 def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_audio=False, fullscreen=False,
-                standalone=False, prepared_only=False, autoplay=False, idle_shutdown_seconds=None):
-    idle_seconds = (settings.data.get("power", {}).get("idle_shutdown_seconds", 300)
-                    if idle_shutdown_seconds is None else idle_shutdown_seconds)
-    if type(idle_seconds) not in (int, float) or not math.isfinite(idle_seconds) or idle_seconds < 0:
-        raise ValueError("Idle shutdown seconds must be a finite non-negative number; 0 disables shutdown.")
+                standalone=False, prepared_only=False, autoplay=False):
     images = image_sources(settings, prepared_only=True)[0] if prepared_only else prepare_images(settings)
-    sounds = [] if no_audio else prepared_audio(settings) if prepared_only else prepare_audio(settings, full=True)
+    drawing_cfg = settings.data.get("letter_drawing", {})
+    if no_audio or drawing_cfg.get("enabled"):
+        sounds = []
+    else:
+        sounds = prepared_audio(settings) if prepared_only else prepare_audio(settings, full=True)
     with ExitStack() as stack:
         display = display_resource(stack, settings, simulate)
         audio = StreamingAudioPlayer(settings, simulate)
@@ -166,8 +166,25 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
             session.animation = CharacterAnimation(
                 settings.path("animations", "prepared"), animation_cfg["fps"],
                 animation_cfg["cycles"], settings.data["display"]["rotation"])
+        if drawing_cfg.get("enabled"):
+            catalog = LetterCatalog(settings.path("letter_drawing", "data"))
+            session.fullscreen = True
+            session.drawing = LetterLesson(catalog, size=settings.size,
+                **{key: drawing_cfg[key] for key in ("fps", "draw_seconds", "stroke_pause",
+                   "intro_seconds", "hold_seconds", "celebration_seconds")})
+            session.letter_recordings = LetterRecordings(catalog, settings.root, audio, enabled=not no_audio)
+            print(f"Letter drawing enabled: {len(catalog.letters)} letters from {settings.path('letter_drawing', 'data')}", flush=True)
+        elif session.animation:
+            print("Letter drawing disabled: enable letter_drawing.enabled in the active configuration.", flush=True)
+        presenter = AnimationPresenter(display)
         wire_images = WireFrames(settings) if session.fullscreen and hasattr(display, "show_rgb565") else None
         def show_frame():
+            if session.drawing:
+                frame = session.drawing.frame()
+                if frame is not None:
+                    presenter.show(frame)
+                    return
+            presenter.reset()
             payload = session.animation.wire_frame() if session.animation else None
             if payload is None and wire_images is not None:
                 payload = wire_images.frame(session.gallery.paths[session.gallery.index])
@@ -194,8 +211,14 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         center_since = None
         previous_frame = session.render_key()
         next_frame_at = 0
+        def perform_action(button):
+            nonlocal next_frame_at
+            session.action(button)
+            next_frame_at = 0
+            if button == "center":
+                print(f"CENTER: {session.last_action}; card={session.gallery.paths[session.gallery.index].name}", flush=True)
         if session.animation:
-            print("Alphabet: LEFT/RIGHT (A/D) = letter; TOP (W/UP) = listening; BOTTOM (S/DOWN) = speaking.")
+            print("Alphabet: LEFT/RIGHT (A/D) = letter; TOP (W/UP) = listening; BOTTOM (S/DOWN) = repeating; CENTER (Space) = draw letter.")
         else:
             print("Player: LEFT/RIGHT (A/D) = photos; UP/DOWN (W/S) = volume; CENTER (Space) = play/stop.")
         print("Standalone mode: CENTER hold cannot exit; stop with systemctl." if standalone else
@@ -204,53 +227,46 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
             print(f"Simulation saves frames to {settings.state / 'preview/current.png'}; it produces no sound.")
         watchdog = ServiceWatchdog()
         watchdog.ready()
-        idle_timer = IdleTimer(idle_seconds, time.monotonic())
-        if idle_seconds:
-            print(f"Automatic shutdown after {idle_seconds:g} seconds without input or audio playback.")
         while True:
             watchdog.tick()
             # Detect ALSA worker failures even when a full-screen card has no progress UI.
             _ = audio.playing
-            activity = False
             for key in keyboard.read().lower():
                 if key in ("q", "\x03"):
                     if not standalone:
                         return
                 if key in {"a", "d", "w", "s", " "}:
-                    activity = True
-                    session.action({"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key])
+                    perform_action({"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key])
             if adc:
                 name = classify(adc.read_voltage(), states)
                 now = time.monotonic()
                 event = debounce.update(name, now)
                 if event:
-                    activity = True
                     kind, button = event
                     if kind == "press":
                         if button == "center":
                             center_since = now
+                            # Begin a letter lesson on press, including a held button.
+                            if session.drawing:
+                                perform_action("center")
                         else:
-                            session.action(button)
+                            perform_action(button)
                     elif button == "center" and center_since is not None:
-                        if now - center_since < 2:
-                            session.action("center")
+                        if not session.drawing and now - center_since < 2:
+                            perform_action("center")
                         center_since = None
                 if not standalone and center_since is not None and name == "center" and now - center_since >= 2:
                     print("Center held: stopping the player.")
                     return
-                # Debounced held buttons count as use, without extra actions.
-                activity |= debounce.state in ("left", "right", "up", "down", "center")
-            if idle_timer.expired(time.monotonic(), activity=activity, busy=audio.playing):
-                print("Inactivity timeout reached: closing audio and display before system shutdown.", flush=True)
-                return IDLE_POWEROFF_STATUS
             key = session.render_key()
             if key != previous_frame and time.monotonic() >= next_frame_at:
                 frame_started = time.monotonic()
                 show_frame()
                 previous_frame = key
-                if session.animation:
+                fps = session.animation_fps
+                if fps:
                     # Include SPI transfer time in the budget; never queue late frames.
-                    next_frame_at = max(time.monotonic(), frame_started + 1 / animation_cfg["fps"])
+                    next_frame_at = max(time.monotonic(), frame_started + 1 / fps)
             time.sleep(.04 if standalone else .01)
 
 
@@ -289,7 +305,6 @@ def parser():
     gallery.add_argument("--standalone", action="store_true", help="Keep running under a service; disable button and keyboard quit actions.")
     gallery.add_argument("--prepared-only", action="store_true", help="Use deployed media without hashing originals or running ffmpeg.")
     gallery.add_argument("--autoplay", action="store_true", help="Start the first prepared recording on launch, when audio is enabled.")
-    gallery.add_argument("--idle-shutdown-seconds", type=float, help="Power off Raspberry Pi OS after inactivity (default: 300 seconds; 0 disables). Audio playback keeps it awake.")
     return result
 
 
@@ -333,10 +348,8 @@ def main(argv=None):
                 raise ValueError("Monitoring duration cannot be negative.")
             monitor_buttons(settings, args.seconds)
         elif args.command in ("player", "gallery"):
-            status = run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio, args.fullscreen,
-                                 args.standalone, args.prepared_only, args.autoplay, args.idle_shutdown_seconds)
-            if status == IDLE_POWEROFF_STATUS:
-                return request_poweroff(args.simulate)
+            run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio, args.fullscreen,
+                        args.standalone, args.prepared_only, args.autoplay)
         return 0
     except KeyboardInterrupt:
         print("\nStopped. Audio and display resources released.")
