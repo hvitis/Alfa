@@ -16,6 +16,7 @@ from .config import Settings
 from .hardware import ADS1x15, PreviewDisplay, ST7789
 from .media import prepare_audio, prepare_images
 from .ui import Gallery, screen_patterns
+from .speaker_test import run_speaker_test
 
 
 class Keyboard:
@@ -211,6 +212,12 @@ def parser():
     speaker.add_argument("--track", type=int, default=0)
     speaker.add_argument("--volume", type=float)
     speaker.add_argument("--device", help="ALSA device, for example plughw:CARD=MAX98357A,DEV=0.")
+    speaker.add_argument("--with-screen", action="store_true", help="Show speaker test status on the LCD; no buttons or ADC required.")
+    speaker.add_argument("--verbose", action="store_true", help="Print wiring, signal levels, commands, progress, and ALSA details.")
+    speaker.add_argument("--repeat", type=int, default=1, help="Number of playbacks (default: 1).")
+    speaker.add_argument("--pause", type=float, default=1, help="Seconds between playbacks (default: 1).")
+    speaker.add_argument("--hold", type=float, default=3, help="Seconds to keep the final LCD status visible (default: 3).")
+    speaker.add_argument("--tone", action="store_true", help="Use a known 2-second 440 Hz tone instead of sounds/. No original files change.")
     commands.add_parser("calibrate-buttons", help="Measure idle plus all five buttons.")
     buttons = commands.add_parser("buttons", help="Print raw A0 voltage and calibrated button events.")
     buttons.add_argument("--seconds", type=float, default=0, help="0 means run until Ctrl+C.")
@@ -245,16 +252,10 @@ def main(argv=None):
                     print(f"Screen pattern: {name}")
                     time.sleep(args.seconds)
         elif args.command == "speaker-test":
-            sounds = prepare_audio(settings)
-            if not 0 <= args.track < len(sounds):
-                raise ValueError(f"Track must be between 0 and {len(sounds) - 1}.")
-            player = AudioPlayer(settings, args.simulate, args.volume, args.device)
-            try:
-                player.play(sounds[args.track])
-                while player.playing:
-                    time.sleep(0.05)
-            finally:
-                player.close()
+            return run_speaker_test(settings, simulate=args.simulate, volume=args.volume,
+                                    device=args.device, track=args.track, with_screen=args.with_screen,
+                                    verbose=args.verbose, repeat=args.repeat, pause=args.pause,
+                                    hold=args.hold, tone=args.tone, debug=args.debug)
         elif args.command == "calibrate-buttons":
             with ExitStack() as stack:
                 calibrate(adc_resource(stack, settings), settings)

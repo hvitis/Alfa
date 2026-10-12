@@ -1,6 +1,7 @@
 import os
 import re
 import shutil
+import shlex
 import subprocess
 import time
 
@@ -28,8 +29,10 @@ def audio_device(configured="auto", listing=None):
 
 
 class AudioPlayer:
-    def __init__(self, settings, simulate=False, volume=None, device=None):
+    def __init__(self, settings, simulate=False, volume=None, device=None, verbose=False, report=None):
         self.settings, self.simulate = settings, simulate
+        self.verbose, self.report = verbose, report or print
+        self.selected_device, self.last_returncode = None, None
         self.volume = settings.data["audio"]["volume"] if volume is None else volume
         if not 0 <= self.volume <= 1:
             raise ValueError("Volume must be between 0.0 and 1.0.")
@@ -41,17 +44,26 @@ class AudioPlayer:
 
     def play(self, path):
         self.stop()
+        self.last_returncode = None
         if self.simulate:
-            print(f"[simulation] Would play {path.name} at {self.volume:.0%} digital volume.")
+            self.report(f"[simulation] Would play {path.name} at {self.volume:.0%} digital volume.")
             self.simulated_until = time.monotonic() + 0.1
             return
         device = audio_device(self.configured_device)
+        self.selected_device = device
         self.settings.state.mkdir(parents=True, exist_ok=True)
-        run_tool(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(path), "-af", f"volume={self.volume}", "-c:a", "pcm_s16le", str(self.temp)])
-        print(f"Playing {path.name} through {device} at {self.volume:.0%}.")
+        conversion = ["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(path), "-af", f"volume={self.volume}", "-c:a", "pcm_s16le", str(self.temp)]
+        if self.verbose:
+            self.report("Volume conversion: " + shlex.join(conversion))
+        run_tool(conversion)
+        self.report(f"Playing {path.name} through {device} at {self.volume:.0%} digital volume.")
         self.log = self.log_path.open("w")
         try:
-            self.process = subprocess.Popen(["aplay", "-q", "-D", device, str(self.temp)], stdout=subprocess.DEVNULL, stderr=self.log)
+            command = ["aplay", "-v" if self.verbose else "-q", "-D", device, str(self.temp)]
+            if self.verbose:
+                self.report("Playback command: " + shlex.join(command))
+                self.report("ALSA details: " + str(self.log_path))
+            self.process = subprocess.Popen(command, stdout=self.log if self.verbose else subprocess.DEVNULL, stderr=self.log)
         except BaseException:
             self.log.close()
             self.log = None
@@ -66,13 +78,14 @@ class AudioPlayer:
         code = self.process.poll()
         if code is None:
             return True
+        self.last_returncode = code
         if self.log:
             self.log.close()
             self.log = None
         self.process = None
         if code:
             message = self.log_path.read_text()[-2000:].strip()
-            raise RuntimeError(f"Audio playback failed: {message}. Run aplay -l and check audio.device.")
+            raise RuntimeError(f"Audio playback failed (aplay exit {code}): {message}. Run aplay -l and check audio.device.")
         return False
 
     def stop(self):

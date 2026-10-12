@@ -199,6 +199,27 @@ Press `Q` to stop.
 
 ## 6. Test the speaker with your sound
 
+For the speaker test with LCD status and detailed diagnostics, read [Speaker testing instructions](docs/speaker-testing.md).
+The guide uses the corrected **LRC-first, BCLK-second** header order from `photos/max4.jpg`.
+
+```bash
+.venv/bin/python -m moomin speaker-test --with-screen --verbose --repeat 3 --volume 0.1
+```
+
+The LCD displays playback status. The terminal prints the file format, signal levels, device, commands, progress, and ALSA details.
+The test saves logs and JSON reports in `.state/diagnostics/`.
+It checks software playback; you must confirm that you hear sound.
+
+For a known 440 Hz tone, add `--tone`:
+
+```bash
+.venv/bin/python -m moomin speaker-test --with-screen --verbose --tone --volume 0.1
+```
+
+The speaker-focused test needs the amplifier and speaker, with the LCD optional.
+It does not need the ADC or buttons.
+
+
 Run the speaker test at a low starting volume.
 
 ```bash
@@ -451,6 +472,7 @@ Audio logs are saved in `.state/audio-*.log`.
 | `media/images/` / `media/sounds/` | Prepared PNGs and WAVs |
 | `.state/` | Button calibration, previews, and audio logs; ignored by Git |
 | `scripts/setup-pi.sh` | Pi package installation |
+| `moomin/speaker_test.py` | Speaker diagnostics, optional LCD status, and saved reports |
 | `tests/` | Tests that do not need Pi hardware |
 | [docs/wiring.md](docs/wiring.md) | Full wiring tables and hardware references |
 | [output/wiring-3d.html](output/wiring-3d.html) | Rotatable wiring diagram with isolated cables |

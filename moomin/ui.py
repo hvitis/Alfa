@@ -56,3 +56,36 @@ class Gallery:
         draw.text((7, height - 26), "LEFT / RIGHT: photo", font=font(11), fill="white")
         draw.text((7, height - 13), "CENTER: sound | hold: quit", font=font(10), fill="white")
         return frame
+
+
+def speaker_status_frame(size, status, lines=(), progress=None, error=False):
+    """Readable playback status; progress is elapsed time, not an acoustic measurement."""
+    width, height = size
+    frame = Image.new("RGB", size, "#101f2c")
+    draw = ImageDraw.Draw(frame)
+    accent = "#ef6b69" if error else "#63c6ad"
+    draw.rectangle((0, 0, width, 42), fill=accent)
+    draw.text((12, 12), "SPEAKER TEST", font=font(18), fill="#101f2c")
+    draw.text((12, 56), status, font=font(18), fill="white")
+    y = 88
+    body = font(12)
+    for line in lines:
+        chunk = ""
+        for character in str(line):
+            if chunk and draw.textlength(chunk + character, font=body) > width - 24:
+                draw.text((12, y), chunk, font=body, fill="#d2dee7")
+                y += 17
+                chunk = ""
+            chunk += character
+            if y > height - 57:
+                break
+        if y > height - 57:
+            break
+        draw.text((12, y), chunk, font=body, fill="#d2dee7")
+        y += 21
+    if progress is not None:
+        fraction = max(0, min(1, progress))
+        draw.rectangle((12, height - 42, width - 13, height - 31), fill="#304758")
+        draw.rectangle((12, height - 42, 12 + int((width - 25) * fraction), height - 31), fill=accent)
+    draw.text((12, height - 23), "Details in SSH / Ctrl+C stops", font=font(10), fill="#91aabb")
+    return frame
