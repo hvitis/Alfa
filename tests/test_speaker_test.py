@@ -112,6 +112,33 @@ class SpeakerTestTests(unittest.TestCase):
                 display.assert_not_called()
         self.assertFalse(self.settings.state.exists())
 
+    def test_truncated_wav_is_rejected_before_playback(self):
+        path = make_test_tone(self.settings, seconds=.2)
+        path.write_bytes(path.read_bytes()[:-100])
+        with self.assertRaisesRegex(ValueError, "truncated"):
+            inspect_wav(path)
+
+    def test_playback_timeout_stops_the_player_and_returns_failure(self):
+        class Clock:
+            current = 0
+            def now(self): return self.current
+            def sleep(self, seconds): self.current += seconds
+        class Player:
+            stopped = closed = False
+            def __init__(self, *args, **kwargs): pass
+            def play(self, path): pass
+            @property
+            def playing(self): return True
+            def stop(self): type(self).stopped = True
+            def close(self): type(self).closed = True
+        clock = Clock()
+        with patch("moomin.speaker_test.AudioPlayer", Player), patch("moomin.speaker_test.audio_device", return_value="plughw:CARD=max98357a,DEV=0"), patch("moomin.speaker_test.shutil.which", return_value="/tool"), patch("moomin.speaker_test.time.monotonic", clock.now), patch("moomin.speaker_test.time.sleep", clock.sleep):
+            code = run_speaker_test(self.settings, tone=True, hold=0)
+        self.assertEqual(code, 1)
+        self.assertTrue(Player.stopped)
+        self.assertTrue(Player.closed)
+        self.assertIn("timed out", self.report()["error"])
+
     def test_cli_passes_options_and_propagates_playback_failure(self):
         with patch("moomin.app.run_speaker_test", return_value=1) as runner:
             code = main(["speaker-test", "--with-screen", "--verbose", "--repeat", "3", "--volume", "0.1", "--tone"])
