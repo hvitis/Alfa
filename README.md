@@ -3,6 +3,20 @@
 For offline startup at power-on and automatic recovery, read [the Raspberry Pi standalone guide](docs/raspberry-pi-standalone.md).
 On the configured Pi, install the service with `bash scripts/install-service.sh`.
 The app keeps running when idle. It does not shut down the Pi after inactivity.
+To pull and load the newest changes on the Pi, run:
+
+```bash
+cd /home/pi/Code/moomin
+make update
+```
+
+This command stops the service, pulls Git updates, updates Python dependencies, compiles display frames, reloads systemd, and restarts the app.
+`make reset` performs the same complete update.
+Use `make restart` to reinstall and restart the current checkout without pulling.
+Use `make run` for a manual test. It stops the service first and restores it when the test ends.
+`make logs` follows the service log, and `make help` lists all commands.
+The [maintenance guide](docs/raspberry-pi-standalone.md#check-and-maintain-the-service) explains the update steps and recovery behavior.
+
 The [Pico requirements](docs/pico-requirements.md) record future firmware research. The active implementation targets Raspberry Pi 3.
 
 This Python app tests the hardware in your photos over SSH. It runs without a graphical desktop.
@@ -33,7 +47,8 @@ Press TOP (UP) for Moominmamma's listening animation.
 Press BOTTOM (DOWN) for Mała Mi's speaking animation.
 Each animation uses four frames at 5 FPS and returns to the selected card after two cycles (1.6 seconds).
 LEFT and RIGHT stop the animation and change the letter.
-Press CENTER (the fifth button) to draw the selected letter, stroke by stroke, with a moving pencil tip.
+Press CENTER (the fifth button) to draw the selected letter, stroke by stroke, with a moving pencil.
+The thicker strokes use the navy color sampled from the selected letter card.
 The completed letter stays visible during success fireworks, then the original card returns.
 Each of the 32 letters has an optional recording slot. Missing recordings act as silent placeholders.
 LEFT, RIGHT, UP, and DOWN interrupt the drawing lesson and stop its recording.

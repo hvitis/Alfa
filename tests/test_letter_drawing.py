@@ -7,7 +7,7 @@ import wave
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageColor
 
 from moomin.animation import CharacterAnimation
 from moomin.app import run_gallery
@@ -77,6 +77,41 @@ class LetterDrawingTests(unittest.TestCase):
             self.assertEqual(strokes[:-1], original)
             self.assertEqual(len(strokes), len(original) + 1)
         self.assertEqual(self.catalog.strokes("Ż")[-1].length, 0)
+
+    def test_traced_ink_matches_each_bundled_card_and_pencil_disappears_at_completion(self):
+        for index, letter in enumerate(self.catalog.letters):
+            self.lesson.start(letter)
+            ink = ImageColor.getrgb(self.catalog.ink(letter))
+            card = ROOT / "media/alphabet" / f"{index:03d}-{index:02d}-{letter}.png"
+            with Image.open(card) as image:
+                self.assertIn(ink, set(image.convert("RGB").getdata()))
+            self.now = self.lesson.started + self.lesson.timeline[0][0] + .1
+            drawing = self.lesson.frame()
+            self.assertIn(ImageColor.getrgb("#efbc42"), set(drawing.getdata()), "The pencil body must be visible")
+            self.now = self.lesson.started + self.lesson.draw_end + .01
+            completed = self.lesson.frame()
+            self.assertNotIn(ImageColor.getrgb("#efbc42"), set(completed.getdata()))
+            x, y = self.lesson.renderer.point(self.catalog.strokes(letter)[0].prefix(.5)[-1])
+            self.assertEqual(completed.getpixel((round(x), round(y))), ink)
+
+    def test_pen_lift_moves_pencil_between_strokes_without_drawing_a_connector(self):
+        self.lesson.start("A")
+        origin = self.lesson.started
+        previous_end = self.lesson.timeline[0][1]
+        following_start = self.lesson.timeline[1][0]
+        self.now = origin + previous_end + .02
+        first = self.lesson.frame()
+        key = self.lesson.render_key()
+        self.now = origin + (previous_end + following_start) / 2
+        state = self.lesson.state()
+        self.assertEqual(state[:3], ("pause", 1, 1))
+        self.assertAlmostEqual(state[3], .5)
+        self.assertNotEqual(self.lesson.render_key(), key)
+        self.assertIsNotNone(ImageChops.difference(first, self.lesson.frame()).getbbox())
+        # The second leg is still entirely a guide, despite a half-finished pen lift.
+        point = self.catalog.strokes("A")[1].prefix(.5)[-1]
+        x, y = self.lesson.renderer.point(point)
+        self.assertEqual(self.lesson.frame().getpixel((round(x), round(y))), ImageColor.getrgb("#dce3ee"))
 
     def test_interpolation_uses_distance_and_curves_keep_exact_endpoints(self):
         stroke = Stroke.from_commands([["M", 0, 0], ["L", 10, 0], ["L", 10, 30]])

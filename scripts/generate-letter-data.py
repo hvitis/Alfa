@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Author the complete Polish uppercase tracing catalog as compact vector data."""
 import json
+from collections import Counter
 from pathlib import Path
+
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 ALPHABET = "AĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ"
@@ -69,10 +72,25 @@ VARIANTS = {"Ą": ("A", "ogonek"), "Ć": ("C", "acute"), "Ę": ("E", "ogonek"),
             "Ś": ("S", "acute"), "Ź": ("Z", "acute"), "Ż": ("Z", "dot")}
 
 
+def card_ink(index, letter):
+    """Sample the dominant solid navy in the actual prepared card, at authoring time."""
+    path = ROOT / "media/alphabet" / f"{index:03d}-{index:02d}-{letter}.png"
+    if not path.is_file():
+        path = ROOT / "assets/alphabet" / f"{index:02d}-{letter}.png"
+    with Image.open(path) as source:
+        colors = Counter(pixel for pixel in source.convert("RGB").getdata()
+                         if pixel[0] < 45 and pixel[1] < 85 and 40 < pixel[2] < 140
+                         and pixel[2] > pixel[0] * 1.4 and pixel[2] > pixel[1] * 1.05)
+    if not colors:
+        raise ValueError(f"No navy letter ink found in {path}")
+    color = colors.most_common(1)[0][0]
+    return "#" + "".join(f"{channel:02x}" for channel in color)
+
+
 def generate(destination):
     letters = {}
     for index, letter in enumerate(ALPHABET):
-        item = {"audio": f"media/letter-sounds/{index:02d}-{letter}.wav"}
+        item = {"audio": f"media/letter-sounds/{index:02d}-{letter}.wav", "ink": card_ink(index, letter)}
         if letter in VARIANTS:
             item["base"], item["mark"] = VARIANTS[letter]
         else:

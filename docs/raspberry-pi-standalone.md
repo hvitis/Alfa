@@ -97,35 +97,61 @@ The Pi can still retain SSH access through its separate system services.
 
 ## Check and maintain the service
 
-Run:
+To pull and load the newest committed code, run as your normal Pi user:
 
 ```bash
-systemctl status moomin.service
-journalctl -u moomin.service -n 50 --no-pager
-systemctl show moomin.service -p NRestarts -p MemoryCurrent -p CPUUsageNSec
+cd /home/pi/Code/moomin
+make update
 ```
 
-For maintenance, run:
+The Makefile calls [update-app.sh](../scripts/update-app.sh).
+The script performs these steps in order:
+
+1. Stop `moomin.service` to release the display pins.
+2. Pull the current branch with `git pull --ff-only`.
+3. Update Python dependencies in the existing virtual environment.
+4. Reset the service failure state.
+5. Compile display frames and validate the service unit with the installer.
+6. Reload systemd, enable the service, and restart the app.
+7. Verify that the service is active and print the loaded Git revision.
+
+If an update fails, the script tries to restart a service that was running before the update.
+It reports the failure and preserves local code edits, configuration, recordings, and button calibration.
+It does not discard local edits or roll back a completed Git pull.
+
+| Command | Action |
+|---|---|
+| `make update` or `make reset` | Pull and perform the complete update |
+| `make restart` | Reinstall and restart the current checkout without a pull or dependency download |
+| `make stop` | Stop the service and release its GPIO pins |
+| `make start` | Reset the failure state and start the service |
+| `make status` | Show service status |
+| `make logs` | Follow recent service logs |
+| `make run` | Stop the service, run the alphabet manually, then restore the service |
+| `make preview` | Regenerate the lesson GIF and completed-letter contact sheet |
+| `make test` | Run the hardware-free tests |
+
+To update a silent service, run:
 
 ```bash
-sudo systemctl stop moomin.service
+make update INSTALL_ARGS=--no-audio
 ```
 
-After updates, run:
+To use another service user, run:
 
 ```bash
-.venv/bin/python -m moomin --config config.standalone.json prepare --wire-only
-sudo systemctl restart moomin.service
+make update INSTALL_ARGS='--user pi'
 ```
 
-If original media changed, run normal preparation before compilation:
+After copying files without Git, run `make restart`.
+The first installation still requires [setup-pi.sh](../scripts/setup-pi.sh), hardware configuration, and button calibration.
+Git updates need a connection. Restarting a local checkout works offline.
 
-```bash
-.venv/bin/python -m moomin --config config.standalone.json prepare --full-audio
-.venv/bin/python -m moomin --config config.standalone.json prepare --wire-only
-```
+The manual test uses both physical buttons and keyboard input.
+Press Q or Ctrl+C to finish the test.
+If the service was running, the script starts it again after the test, including after a test failure.
 
-For configuration changes, edit `config.standalone.json` and restart the service.
+For configuration changes, edit `config.standalone.json` and run `make restart`.
 That file overrides `config.json`. The service does not also read `config.local.json`.
 Add an `audio` section there if the amplifier needs an explicit ALSA device or a different volume.
 
@@ -141,7 +167,7 @@ After copying the updated files, reinstall the service on the Pi:
 
 ```bash
 cd ~/Code/moomin
-bash scripts/install-service.sh
+make restart
 ```
 
 The installer replaces the service unit and restarts the app.

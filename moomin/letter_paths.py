@@ -4,6 +4,7 @@ import json
 import math
 from dataclasses import dataclass
 from pathlib import Path
+import re
 
 
 @dataclass(frozen=True)
@@ -78,6 +79,8 @@ class LetterCatalog:
         # Validate definitions once without retaining flattened paths for all letters.
         for letter in self.letters:
             self.strokes(letter)
+            if not re.fullmatch(r"#[0-9a-fA-F]{6}", self.ink(letter)):
+                raise ValueError("Letter ink must be a six-digit hex color.")
             audio = Path(self.letters[letter]["audio"])
             if audio.is_absolute() or ".." in audio.parts or audio.suffix != ".wav":
                 raise ValueError("Letter audio must be a relative WAV path inside the project.")
@@ -103,3 +106,6 @@ class LetterCatalog:
 
     def audio_path(self, root, letter):
         return Path(root) / self.letters[letter]["audio"]
+
+    def ink(self, letter):
+        return self.letters[letter].get("ink", "#012a5f")

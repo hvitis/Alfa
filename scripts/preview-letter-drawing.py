@@ -39,7 +39,7 @@ def preview(letter, destination, contact_sheet):
         frame = lesson.frame().resize((132, 176), Image.Resampling.LANCZOS)
         x, y = (index % 8) * 144 + 6, (index // 8) * 205 + 6
         sheet.paste(frame, (x, y))
-        ImageDraw.Draw(sheet).text((x + 56, y + 179), glyph, fill="#235b56", font=font(16))
+        ImageDraw.Draw(sheet).text((x + 56, y + 179), glyph, fill=catalog.ink(glyph), font=font(16))
     contact_sheet.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(contact_sheet)
     print(f"Saved {destination} and {contact_sheet}")

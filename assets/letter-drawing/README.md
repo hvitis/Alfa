@@ -5,7 +5,10 @@ The lesson starts on the button press. Release does not start another lesson.
 Space starts the same lesson from an SSH keyboard.
 The alphabet and standalone presets enable this feature.
 
-The lesson shows a pale guide and a moving pencil tip.
+The lesson shows a pale guide and a tilted yellow pencil with a graphite tip and pink eraser.
+The pencil follows the stroke endpoint and moves smoothly between strokes without adding connecting lines.
+The strokes are 16 pixels thick on the 240 × 320 display, compared with the previous 10 pixels.
+Each letter uses the navy color sampled from its still-image card.
 It draws each stroke in order, with a short pause between strokes.
 It draws Polish accents and ogoneks after the main letter.
 The finished letter stays visible during the success fireworks.
@@ -41,10 +44,10 @@ The actual frame rate depends on the Pi and the display connection.
 
 | Component | Responsibility |
 |---|---|
-| [letters.json](letters.json) | All 32 Polish uppercase letters, stroke order, shared marks, and recording paths |
+| [letters.json](letters.json) | All 32 Polish uppercase letters, stroke order, shared marks, card colors, and recording paths |
 | [LetterCatalog and Stroke](../../moomin/letter_paths.py) | Resolve a card filename, expand shared geometry, and measure stroke paths |
 | [LetterLesson](../../moomin/letter_lesson.py) | Control introduction, tracing, pen lifts, the completed letter, and fireworks |
-| `LetterRenderer` in that module | Draw the guide, completed strokes, current pencil tip, and fireworks |
+| `LetterRenderer` and `Pencil` in that module | Draw the guide, completed strokes, pencil, and fireworks |
 | [LetterRecordings](../../moomin/audio.py) | Play the selected letter recording, or use a silent placeholder |
 | [PlayerSession](../../moomin/player.py) | Connect button actions to lessons, audio, navigation, and character animations |
 | [AnimationPresenter](../../moomin/frames.py) | Retain one frame and transfer only changed pixels |
@@ -62,6 +65,9 @@ These commands mean move, line, quadratic curve, and cubic curve.
 Each stroke is one pen movement without a lift.
 The renderer advances by path distance for a consistent speed through curves.
 Letters such as Ą and Ę reuse the base letter and the shared ogonek.
+The generator samples the dominant navy from each prepared card and stores it as the letter's `ink` color.
+Playback reads this color from the catalog. It does not sample card pixels during each lesson.
+The pencil uses two small sprites generated once, with a separate orientation for accents near the top.
 
 These are simple printed uppercase forms with one consistent teaching sequence.
 They do not trace the character artwork or teach cursive handwriting.
@@ -102,9 +108,14 @@ The existing speaker-test command remains available for speaker diagnostics.
 
 ## Run on the Pi
 
+From the Pi project directory, run:
+
 ```bash
-python3 -m moomin --config config.alphabet.json gallery --fullscreen --keyboard
+make update
 ```
+
+For a manual hardware test, use `make run`.
+This command stops the service to release its GPIO pins, then restores the service after the test ends.
 
 For a silent preview without hardware, run:
 
