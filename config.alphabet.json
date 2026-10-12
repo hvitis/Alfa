@@ -1,0 +1,8 @@
+{
+  "images": {
+    "input": "assets/alphabet",
+    "prepared": "media/alphabet",
+    "fit": "contain",
+    "background": "#fffdf5"
+  }
+}

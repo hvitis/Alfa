@@ -201,6 +201,25 @@ class PlayerTests(unittest.TestCase):
         self.assertTrue(display.closed)
         self.assertGreaterEqual(len(frames), 5)
 
+    def test_fullscreen_preserves_complete_image_during_navigation(self):
+        for size in ((240, 320), (320, 240)):
+            audio = StreamingAudioPlayer(self.settings, simulate=True)
+            session = PlayerSession(self.photos(size), [], audio, fullscreen=True)
+            for color in ("red", "blue"):
+                expected = Image.new("RGB", size, color)
+                frame = session.frame()
+                self.assertEqual(frame.size, size)
+                self.assertEqual(frame.mode, "RGB")
+                self.assertEqual(frame.tobytes(), expected.tobytes())
+                session.action("right")
+            audio.close()
+
+    def test_fullscreen_cli_option_reaches_the_gallery(self):
+        with patch("moomin.app.run_gallery") as run:
+            self.assertEqual(main(["--simulate", "gallery", "--fullscreen", "--once", "--no-audio"]), 0)
+            self.assertTrue(run.call_args.args[4])
+            self.assertTrue(run.call_args.args[5])
+
     def test_player_and_gallery_cli_names_use_the_same_player(self):
         for command in ("player", "gallery"):
             with patch("moomin.app.run_gallery") as run:

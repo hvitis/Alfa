@@ -142,14 +142,14 @@ def monitor_buttons(settings, seconds=0):
             time.sleep(0.01)
 
 
-def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_audio=False):
+def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_audio=False, fullscreen=False):
     images = prepare_images(settings)
     sounds = [] if no_audio else prepare_audio(settings, full=True)
     with ExitStack() as stack:
         display = display_resource(stack, settings, simulate)
         audio = StreamingAudioPlayer(settings, simulate)
         stack.callback(audio.close)
-        session = PlayerSession(images, sounds, audio)
+        session = PlayerSession(images, sounds, audio, fullscreen)
         if sounds:
             import wave
             with wave.open(str(sounds[0]), "rb") as recording:
@@ -231,6 +231,7 @@ def parser():
     gallery.add_argument("--keyboard", action="store_true", help="Skip ADC and calibration; use keyboard controls.")
     gallery.add_argument("--once", action="store_true", help="Display the first photo and exit.")
     gallery.add_argument("--no-audio", action="store_true", help="Run without preparing or playing audio.")
+    gallery.add_argument("--fullscreen", action="store_true", help="Display the complete image without player panels or text overlays.")
     return result
 
 
@@ -270,7 +271,7 @@ def main(argv=None):
                 raise ValueError("Monitoring duration cannot be negative.")
             monitor_buttons(settings, args.seconds)
         elif args.command in ("player", "gallery"):
-            run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio)
+            run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio, args.fullscreen)
         return 0
     except KeyboardInterrupt:
         print("\nStopped. Audio and display resources released.")

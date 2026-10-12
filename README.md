@@ -15,6 +15,17 @@ The original `imgs` folder is excluded from Git.
 A Git checkout uses the included `media/images` photos when originals are absent.
 Prepared photos must match the configured display size.
 
+The [Polish alphabet artwork](assets/alphabet/README.md) contains 32 cards with different Moomin characters.
+The source PNGs are in `assets/alphabet`, and the 240 × 320 LCD PNGs are in `media/alphabet`.
+To display the complete cards on the Pi, run:
+
+```bash
+python3 -m moomin --config config.alphabet.json gallery --fullscreen --no-audio
+```
+
+Use LEFT and RIGHT to change the card. Add `--keyboard` for SSH keyboard control.
+For a preview without hardware, add `--simulate` before `gallery` and `--once` after it.
+
 The app starts at **20% digital audio volume**.
 It uses **BCM GPIO24** for the backlight, so the display does not share GPIO18 with the amplifier.
 

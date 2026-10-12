@@ -3,11 +3,12 @@ from .ui import Gallery, player_frame
 
 class PlayerSession:
     """Actions shared by physical buttons, SSH keys, and hardware-free tests."""
-    def __init__(self, images, sounds, audio):
+    def __init__(self, images, sounds, audio, fullscreen=False):
         self.gallery = Gallery(images)
         self.sounds = sounds
         self.audio = audio
         self.last_action = "Ready"
+        self.fullscreen = fullscreen
 
     def action(self, button):
         if button in ("left", "right"):
@@ -28,6 +29,10 @@ class PlayerSession:
                 self.last_action = "Playing"
 
     def frame(self):
+        if self.fullscreen:
+            from PIL import Image
+            with Image.open(self.gallery.paths[self.gallery.index]) as image:
+                return image.convert("RGB")
         return player_frame(self.gallery, self.audio,
                             self.sounds[0].name if self.sounds else "Audio disabled", self.last_action)
 

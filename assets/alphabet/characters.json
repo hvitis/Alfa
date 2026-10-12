@@ -1,0 +1,309 @@
+{
+  "alphabet": [
+    "A",
+    "Ą",
+    "B",
+    "C",
+    "Ć",
+    "D",
+    "E",
+    "Ę",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "Ł",
+    "M",
+    "N",
+    "Ń",
+    "O",
+    "Ó",
+    "P",
+    "R",
+    "S",
+    "Ś",
+    "T",
+    "U",
+    "W",
+    "Y",
+    "Z",
+    "Ź",
+    "Ż"
+  ],
+  "size": [
+    240,
+    320
+  ],
+  "masterSize": [
+    960,
+    1280
+  ],
+  "typography": "Generated bold literacy sans-serif lettering inspired by Andika Bold; not a rasterization of an embedded font file.",
+  "characters": [
+    {
+      "letter": "A",
+      "character": "Alicia (Alice) from the 1990 Moomin animated series",
+      "characterPolish": "Alicja",
+      "initialMatches": true,
+      "master": "00-A.png",
+      "prepared": "000-00-A.png"
+    },
+    {
+      "letter": "Ą",
+      "character": "Moomintroll",
+      "characterPolish": "Muminek",
+      "initialMatches": false,
+      "master": "01-Ą.png",
+      "prepared": "001-01-Ą.png"
+    },
+    {
+      "letter": "B",
+      "character": "Stinky",
+      "characterPolish": "Bobek",
+      "initialMatches": true,
+      "master": "02-B.png",
+      "prepared": "002-02-B.png"
+    },
+    {
+      "letter": "C",
+      "character": "The Hobgoblin",
+      "characterPolish": "Czarodziej",
+      "initialMatches": true,
+      "master": "03-C.png",
+      "prepared": "003-03-C.png"
+    },
+    {
+      "letter": "Ć",
+      "character": "Little My",
+      "characterPolish": "Mała Mi",
+      "initialMatches": false,
+      "master": "04-Ć.png",
+      "prepared": "004-04-Ć.png"
+    },
+    {
+      "letter": "D",
+      "character": "The Island Ghost",
+      "characterPolish": "Duch",
+      "initialMatches": true,
+      "master": "05-D.png",
+      "prepared": "005-05-D.png"
+    },
+    {
+      "letter": "E",
+      "character": "Emma",
+      "characterPolish": "Emma",
+      "initialMatches": true,
+      "master": "06-E.png",
+      "prepared": "006-06-E.png"
+    },
+    {
+      "letter": "Ę",
+      "character": "Moominmamma",
+      "characterPolish": "Mama Muminka",
+      "initialMatches": false,
+      "master": "07-Ę.png",
+      "prepared": "007-07-Ę.png"
+    },
+    {
+      "letter": "F",
+      "character": "Fillyjonk",
+      "characterPolish": "Filifionka",
+      "initialMatches": true,
+      "master": "08-F.png",
+      "prepared": "008-08-F.png"
+    },
+    {
+      "letter": "G",
+      "character": "Gaffsie",
+      "characterPolish": "Gapsa",
+      "initialMatches": true,
+      "master": "09-G.png",
+      "prepared": "009-09-G.png"
+    },
+    {
+      "letter": "H",
+      "character": "Hattifattener",
+      "characterPolish": "Hatifnat",
+      "initialMatches": true,
+      "master": "10-H.png",
+      "prepared": "010-10-H.png"
+    },
+    {
+      "letter": "I",
+      "character": "The Police Inspector",
+      "characterPolish": "Inspektor",
+      "initialMatches": true,
+      "master": "11-I.png",
+      "prepared": "011-11-I.png"
+    },
+    {
+      "letter": "J",
+      "character": "The Joxter",
+      "characterPolish": "Jok",
+      "initialMatches": true,
+      "master": "12-J.png",
+      "prepared": "012-12-J.png"
+    },
+    {
+      "letter": "K",
+      "character": "The Primadonna's Horse",
+      "characterPolish": "Koń Primadonny",
+      "initialMatches": true,
+      "master": "13-K.png",
+      "prepared": "013-13-K.png"
+    },
+    {
+      "letter": "L",
+      "character": "The Lighthouse Keeper",
+      "characterPolish": "Latarnik",
+      "initialMatches": true,
+      "master": "14-L.png",
+      "prepared": "014-14-L.png"
+    },
+    {
+      "letter": "Ł",
+      "character": "Thingumy",
+      "characterPolish": "Topik",
+      "initialMatches": false,
+      "master": "15-Ł.png",
+      "prepared": "015-15-Ł.png"
+    },
+    {
+      "letter": "M",
+      "character": "Snorkmaiden",
+      "characterPolish": "Migotka",
+      "initialMatches": true,
+      "master": "16-M.png",
+      "prepared": "016-16-M.png"
+    },
+    {
+      "letter": "N",
+      "character": "Ninny",
+      "characterPolish": "Nini",
+      "initialMatches": true,
+      "master": "17-N.png",
+      "prepared": "017-17-N.png"
+    },
+    {
+      "letter": "Ń",
+      "character": "Bob",
+      "characterPolish": "Topcia",
+      "initialMatches": false,
+      "master": "18-Ń.png",
+      "prepared": "018-18-Ń.png"
+    },
+    {
+      "letter": "O",
+      "character": "Edward the Booble",
+      "characterPolish": "Olbrzym Edward",
+      "initialMatches": true,
+      "master": "19-O.png",
+      "prepared": "019-19-O.png"
+    },
+    {
+      "letter": "Ó",
+      "character": "Mymble's daughter",
+      "characterPolish": "Mimbla",
+      "initialMatches": false,
+      "master": "20-Ó.png",
+      "prepared": "020-20-Ó.png"
+    },
+    {
+      "letter": "P",
+      "character": "Hemulen",
+      "characterPolish": "Paszczak",
+      "initialMatches": true,
+      "master": "21-P.png",
+      "prepared": "021-21-P.png"
+    },
+    {
+      "letter": "R",
+      "character": "Sniff",
+      "characterPolish": "Ryjek",
+      "initialMatches": true,
+      "master": "22-R.png",
+      "prepared": "022-22-R.png"
+    },
+    {
+      "letter": "S",
+      "character": "The Last Dragon from Tales from Moominvalley",
+      "characterPolish": "Smok",
+      "initialMatches": true,
+      "master": "23-S.png",
+      "prepared": "023-23-S.png"
+    },
+    {
+      "letter": "Ś",
+      "character": "Too-ticky",
+      "characterPolish": "Too-tiki",
+      "initialMatches": false,
+      "master": "24-Ś.png",
+      "prepared": "024-24-Ś.png"
+    },
+    {
+      "letter": "T",
+      "character": "Moominpappa",
+      "characterPolish": "Tata Muminka",
+      "initialMatches": true,
+      "master": "25-T.png",
+      "prepared": "025-25-T.png"
+    },
+    {
+      "letter": "U",
+      "character": "The Muskrat",
+      "characterPolish": "Piżmowiec",
+      "initialMatches": false,
+      "master": "26-U.png",
+      "prepared": "026-26-U.png"
+    },
+    {
+      "letter": "W",
+      "character": "Snufkin",
+      "characterPolish": "Włóczykij",
+      "initialMatches": true,
+      "master": "27-W.png",
+      "prepared": "027-27-W.png"
+    },
+    {
+      "letter": "Y",
+      "character": "Sorry-oo the dog",
+      "characterPolish": "Ynk",
+      "initialMatches": true,
+      "master": "28-Y.png",
+      "prepared": "028-28-Y.png"
+    },
+    {
+      "letter": "Z",
+      "character": "The Groke",
+      "characterPolish": "Buka",
+      "initialMatches": false,
+      "master": "29-Z.png",
+      "prepared": "029-29-Z.png"
+    },
+    {
+      "letter": "Ź",
+      "character": "The Ancestor",
+      "characterPolish": "Przodek",
+      "initialMatches": false,
+      "master": "30-Ź.png",
+      "prepared": "030-30-Ź.png"
+    },
+    {
+      "letter": "Ż",
+      "character": "Snork",
+      "characterPolish": "Migotek",
+      "initialMatches": false,
+      "master": "31-Ż.png",
+      "prepared": "031-31-Ż.png"
+    }
+  ],
+  "sources": [
+    "https://moomin.pl/blogs/news/poznaj-postacie-z-muminkow",
+    "https://www.moomin.co.jp/moomins/characters",
+    "https://dubbingpedia.pl/wiki/Muminki",
+    "https://software.sil.org/andika/"
+  ]
+}
