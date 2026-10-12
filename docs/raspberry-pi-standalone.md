@@ -27,7 +27,8 @@ bash scripts/install-service.sh
 The installer uses `.venv/bin/python` when available, or the installed `python3`.
 It requires the existing Pi dependencies, SPI/I2C/audio setup, and button calibration.
 It does not download dependencies or change the wiring.
-It compiles the deployed cards into RGB565 frames, does a simulated startup check, and enables `moomin.service`.
+It compiles the deployed cards into RGB565 frames and does a simulated startup check.
+It validates the generated unit with `systemd-analyze verify` before installation, then enables `moomin.service`.
 It also starts the service immediately.
 
 If the buttons need calibration, run:

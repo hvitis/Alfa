@@ -35,6 +35,12 @@ class ServiceWatchdog:
 def render_unit(project, user, python, no_audio=False):
     if not re.fullmatch(r"[a-z_][a-z0-9_-]*\$?", user) or user == "root":
         raise ValueError("Choose a non-root Linux user, such as pi.")
+    project = str(project)
+    if not Path(project).is_absolute() or any(character in project for character in ("\n", "\r", "\0")) or project != project.strip():
+        raise ValueError("Choose an absolute project path without surrounding whitespace or control characters.")
+    # WorkingDirectory parses one complete path, not an ExecStart argument list.
+    # Literal surrounding quotes make that path non-absolute in systemd.
+    working_directory = project.replace("%", "%%")
     def quote(value):
         value = str(value)
         if "\n" in value or "\r" in value:
@@ -52,7 +58,7 @@ StartLimitIntervalSec=0
 Type=notify
 NotifyAccess=main
 User={user}
-WorkingDirectory={quote(project)}
+WorkingDirectory={working_directory}
 ExecStart={command}
 Restart=always
 RestartSec=5

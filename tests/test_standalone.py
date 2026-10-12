@@ -2,9 +2,11 @@ import copy
 from contextlib import redirect_stdout
 import io
 import os
+import pwd
 from pathlib import Path
 import shutil
 import socket
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
@@ -121,10 +123,27 @@ class StandaloneTests(unittest.TestCase):
         self.assertIn("Restart=always", unit)
         self.assertIn("WatchdogSec=30", unit)
         self.assertIn("--standalone --prepared-only --autoplay", unit)
-        self.assertIn('WorkingDirectory="/home/pi/Code/my project%%"', unit)
+        self.assertIn('WorkingDirectory=/home/pi/Code/my project%%\n', unit)
+        working_directory = next(line.split("=", 1)[1] for line in unit.splitlines() if line.startswith("WorkingDirectory="))
+        self.assertTrue(Path(working_directory).is_absolute(), "systemd checks the literal path, including any quotes")
+        self.assertIn('ExecStart="/home/pi/Code/my project%%/.venv/bin/python"', unit)
         self.assertNotIn("network-online", unit)
         with self.assertRaises(ValueError): render_unit("/path", "root", "/python")
         with self.assertRaises(ValueError): render_unit("/path\ninjected", "pi", "/python")
+        with self.assertRaises(ValueError): render_unit("relative/path", "pi", "/python")
+        with self.assertRaises(ValueError): render_unit("/path\0injected", "pi", "/python")
+
+    @unittest.skipUnless(shutil.which("systemd-analyze"), "systemd validation requires a Linux host")
+    def test_rendered_unit_passes_the_real_systemd_parser(self):
+        user = pwd.getpwuid(os.getuid()).pw_name
+        if user == "root":
+            user = "nobody"
+        project = self.root / 'project with spaces%'
+        project.mkdir()
+        unit = self.root / "moomin.service"
+        unit.write_text(render_unit(project, user, "/bin/true"))
+        result = subprocess.run(["systemd-analyze", "verify", str(unit)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__ == "__main__":

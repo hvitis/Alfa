@@ -36,9 +36,11 @@ fi
 "$python_bin" -m moomin --config config.standalone.json prepare --wire-only
 "$python_bin" -m moomin --config config.standalone.json --simulate player --fullscreen --prepared-only --once ${audio_args[@]+"${audio_args[@]}"}
 
-unit_path="$(mktemp)"
-trap 'rm -f -- "$unit_path"' EXIT
+unit_dir="$(mktemp -d)"
+unit_path="$unit_dir/moomin.service"
+trap 'rm -f -- "$unit_path"; rmdir -- "$unit_dir"' EXIT
 "$python_bin" -m moomin.service --project "$project_dir" --user "$service_user" --python "$python_bin" ${audio_args[@]+"${audio_args[@]}"} > "$unit_path"
+systemd-analyze verify "$unit_path"
 sudo install -m 0644 "$unit_path" /etc/systemd/system/moomin.service
 sudo systemctl daemon-reload
 sudo systemctl enable moomin.service
