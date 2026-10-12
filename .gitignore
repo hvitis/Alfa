@@ -9,3 +9,4 @@ config.local.json
 
 photos
 imgs
+output/*.png

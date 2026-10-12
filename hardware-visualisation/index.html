@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Moomin hardware — 3D wiring</title>
+<link rel="stylesheet" href="/src/styles.css">
+<script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="app">
+  <header><a class="brand" href="./">MOOMIN / HARDWARE</a><span id="live-status" hidden></span><h1>Understand every module and connection.</h1><p>Click any module to learn its purpose. Compare the Pi 3 and Pico setups, or inspect the resistor divider.</p></header>
+  <nav class="toolbar" aria-label="Scene and camera controls">
+    <div class="segmented"><button id="view-divider" class="active">R1 &amp; R2 close-up</button><button id="view-setup">Pi 3 setup</button><button id="view-pico">Pico 2 WH setup</button></div>
+    <button id="focus-amplifier">Amplifier wiring</button><button id="focus-join">Focus shared join</button><button id="reset-camera">Reset camera</button><button id="top-view">Top view</button>
+    <label>Camera <select id="camera-mode"><option value="inspect">Inspect + pan</option><option value="free">Free movement</option></select></label>
+    <label><input id="show-labels" type="checkbox" checked> Labels</label>
+    <label id="group-control" hidden>Cables <select id="cable-group"><option value="all">All cables</option><option>LCD</option><option>Audio</option><option>ADC</option><option>Keypad</option><option>Power</option></select></label>
+    <button id="clear-selection">Show all connections</button>
+  </nav>
+  <section id="pico-differences" class="pico-differences" hidden aria-label="Differences from the Raspberry Pi 3 setup">
+    <div><span class="difference-label">CHANGED CONTROLLER</span><strong>Pi 3 → Pico 2 WH</strong><span>RP2350 · WiFi · Bluetooth · fitted headers</span></div>
+    <div><span class="difference-label">CHANGED CONNECTIONS</span><strong>19 header wires move</strong><span>New physical pins + GP numbers. Amber marks the changed pins.</span></div>
+    <div><span class="difference-label">NEW SUPPLY JOINS</span><strong>3.3 V + USB 5 V splits</strong><span>Two modules share each supply. VBUS needs USB power.</span></div>
+    <div><span class="difference-label">CHANGED SOFTWARE</span><strong>Pico firmware + PIO audio</strong><span>SPI screen + I2C ADC. The Linux/SSH app needs a port.</span></div>
+  </section>
+  <main class="workspace">
+    <section class="viewport-wrap" aria-label="Three dimensional wiring viewer">
+      <div id="viewport"></div>
+      <div id="graphics-error" hidden></div>
+      <div id="amp-stage" class="amp-stage" hidden></div>
+      <div id="pico-banner" hidden><strong>PICO VIEW</strong><span><i class="legend-amber"></i> Changed controller / pins</span><span><i class="legend-blue"></i> Selected module</span></div>
+      <div class="camera-help" id="camera-help">Left-drag: orbit · Right-drag: pan · Wheel: zoom · WASD: move · Q/E: down/up</div>
+      <div class="movement" aria-label="Move camera">
+        <span>Move camera</span><div>
+          <button data-move="up" aria-label="Move up">Up</button><button data-move="forward" aria-label="Move forward">Forward</button><button data-move="down" aria-label="Move down">Down</button>
+          <button data-move="left" aria-label="Move left">Left</button><button data-move="backward" aria-label="Move backward">Back</button><button data-move="right" aria-label="Move right">Right</button>
+        </div>
+      </div>
+      <div id="selection-detail" role="status">Purple join = R1 leg B + R2 leg A + ADC A0 wire.</div>
+    </section>
+    <aside>
+      <section class="module-info" aria-label="Module purpose">
+        <label for="module-picker" class="eyebrow">CLICK A MODULE IN 3D OR CHOOSE ONE</label>
+        <select id="module-picker"><option value="">Choose a module…</option></select>
+        <div aria-live="polite"><h2 id="module-title">What does each module do?</h2><p id="module-purpose"></p><ul id="module-details"></ul><p id="module-change" class="module-change" hidden></p></div>
+        <button id="focus-module" disabled>Look closer at this module</button>
+      </section>
+      <section id="amplifier-guide" class="amplifier-guide" hidden>
+        <span class="eyebrow">YOUR BOARD · HEADER ORDER VERIFIED IN MAX4</span><h2>Amplifier assembly &amp; wiring</h2>
+        <p class="note">Component side up. Green speaker block at the top; yellow seven-pin header at the bottom. Board enlarged for clarity.</p>
+        <div class="amp-modes" aria-label="Amplifier assembly view">
+          <button data-amp-mode="wiring" class="active">Connect cables</button><button data-amp-mode="before">Before soldering</button><button data-amp-mode="underside">Solder underside</button>
+        </div>
+        <p id="amp-instructions" class="amp-instructions"></p>
+        <button id="amp-close-up">Look closer at amplifier</button>
+        <table class="amp-pin-table"><thead><tr><th>Header label</th><th id="amp-controller-heading">Pi 3 connection</th></tr></thead><tbody id="amp-pin-table"></tbody></table>
+        <p class="tip"><strong>Seven solder joints, five jumper wires.</strong> Solder all seven header pins. Leave GAIN and SD without external wires.</p>
+        <div class="speaker-connections"><strong>Green screw terminal</strong><button data-amp-pin="M-">Left − → speaker −</button><button data-amp-pin="M+">Right + → speaker +</button><p>Loosen each screw, insert the stripped speaker wire into its wire entry opening, then tighten. Neither speaker wire connects to GND.</p></div>
+        <p class="note">Disconnect Pi power before soldering or moving wires. The long header pins face upward; solder the short legs on the back.</p>
+        <div id="amp-photos" class="amp-photos" aria-label="Original module photos"></div>
+      </section>
+      <section id="pico-guide" hidden>
+        <span class="eyebrow">PI 3 → PICO · WHAT CHANGES</span><h2>Same modules. New controller.</h2>
+        <div id="pico-difference-list"></div>
+        <details class="pin-comparison"><summary>Compare all 19 header connections</summary><table><thead><tr><th>Terminal</th><th>Pi 3 pin</th><th>Pico physical pin / GP</th></tr></thead><tbody id="pin-comparison-body"></tbody></table></details>
+        <p class="note">Pico wiring is a proposed firmware pin assignment. The Linux app in <code>moomin/</code> is for the Pi 3. The Pico needs separate firmware.</p>
+      </section>
+      <div id="divider-guide">
+        <span class="eyebrow">TWO RESISTORS · BOTH 10 kΩ</span><h2>One shared join. Three connections.</h2>
+        <p class="lead">Join these three ends together: <strong>R1 leg B</strong>, <strong>R2 leg A</strong>, and the <strong>ADC A0 wire</strong>.</p>
+        <div class="join-card"><span class="join-dot"></span><div><strong>Shared join</strong><p>This is one electrical connection. It is not a third component.</p></div></div>
+        <ol id="connection-steps"></ol>
+        <p class="tip"><strong>Resistors have no + or −.</strong> Either end can be leg A. The labels only help you follow this drawing.</p>
+        <p class="tip">Make the join with solder, or use one connected breadboard row. Separate breadboard rows do not connect automatically.</p>
+        <p class="note">R1 reduces the signal together with R2. With two equal resistors, 5 V at OUT becomes about 2.5 V at A0.</p>
+      </div>
+      <div id="setup-guide" hidden><span class="eyebrow">ALL DEVICES TOGETHER</span><h2>Trace one cable at a time.</h2><p><strong id="pin-convention">Pi numbers are physical header pins.</strong> Click a cable or a row below to display both endpoint labels.</p><p>The group selector moves the camera closer and hides the other cables.</p><div id="wire-list"></div></div>
+    </aside>
+  </main>
+  <section class="connection-summary">
+    <div><h2>The complete resistor connection</h2><p><strong>Keypad OUT → R1 → shared join → ADC A0</strong></p><p><strong>Shared join → R2 → GND</strong></p></div>
+    <div><p>Keypad: <strong>5 V</strong>. ADC: <strong>3.3 V</strong>. All GND connections share Pi ground.</p><p class="note">The ADC terminal layout is illustrative. Match the actual printed labels. Disconnect Pi power before changing wires.</p></div>
+  </section>
+  <footer>Three.js 3D viewer · The Pi test software stays in <code>moomin/</code>. <a href="../output/resistor-divider-clear.png">Open the resistor image</a></footer>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body></html>

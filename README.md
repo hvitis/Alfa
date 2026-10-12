@@ -14,13 +14,33 @@ The original files stay in `imgs` and `sounds`.
 The app starts at **20% digital audio volume**.
 It uses **BCM GPIO24** for the backlight, so the display does not share GPIO18 with the amplifier.
 
+## Interactive hardware visualisation
+
+[Open the 3D viewer](hardware-visualisation/viewer.html) for clickable module explanations, the R1/R2 close-up, and free camera movement.
+The **Pi 3 setup** and **Pico 2 WH setup** views show the same modules with different controller connections.
+The Pico view marks changed pins in amber and compares all 19 header connections.
+It also marks the two shared supply joins and explains the separate Pico firmware requirement.
+The modular Three.js viewer and FastAPI server are in [hardware-visualisation](hardware-visualisation/README.md).
+The screen cable colors match `photos/colors.jpg`.
+
+For live updates, start the server from that folder:
+
+```bash
+cd hardware-visualisation
+.venv/bin/python server.py
+```
+
+Open `http://127.0.0.1:8000`.
+The browser refreshes after source changes and keeps its camera position.
+Read the visualisation README for first-time installation.
+
 ## 1. Copy this folder to the Pi
 
 Run this command on your computer, from this folder.
 Replace `PI_USER` and `PI_HOST` with your SSH username and address.
 
 ```bash
-rsync -av --exclude='.venv' --exclude='.state' --exclude='.git' ./ PI_USER@PI_HOST:~/moomin/
+rsync -av --exclude='.venv' --exclude='.state' --exclude='.git' --exclude='node_modules' --exclude='dist' ./ PI_USER@PI_HOST:~/moomin/
 ssh PI_USER@PI_HOST
 ```
 

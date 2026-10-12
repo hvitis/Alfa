@@ -91,6 +91,17 @@ The backlight reassignment is specific to this combined wiring.
 
 ## Amplifier and speaker connections
 
+The updated 3D model follows [max1](../photos/max1.jpg), [max2](../photos/max2.jpg), [max3](../photos/max3.jpg), and [max4](../photos/max4.jpg).
+Use **Amplifier wiring** in the viewer to inspect the header, speaker openings, and solder joints.
+
+With the component side up, the green speaker block is at the top and the yellow header is at the bottom.
+**max4 confirms that LRC is first and BCLK is second.**
+The header order from left to right is **LRC, BCLK, DIN, GAIN, SD, GND, VIN**.
+Solder all seven header pins underneath. Only BCLK, LRC, DIN, GND, and VIN need jumper wires.
+The green block has speaker minus on the left and speaker plus on the right in this orientation.
+The board's printed labels remain the reference before connecting wires.
+
+
 | MAX98357A label | Pi signal | Physical Pi pin |
 |---|---|---:|
 | `VIN` | 5 V | **2** |
