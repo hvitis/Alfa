@@ -11,6 +11,9 @@ The six supplied photos are prepared in `media/images` as **240 × 320 RGB PNGs*
 The speaker test uses a **5-second, 48 kHz, stereo, 16-bit WAV** in `media/sounds`.
 The player prepares the complete recording separately in `media/sounds/full`.
 The original files stay in `imgs` and `sounds`.
+The original `imgs` folder is excluded from Git.
+A Git checkout uses the included `media/images` photos when originals are absent.
+Prepared photos must match the configured display size.
 
 The app starts at **20% digital audio volume**.
 It uses **BCM GPIO24** for the backlight, so the display does not share GPIO18 with the amplifier.
@@ -118,6 +121,17 @@ Run the app as your normal user.
 
 Sources: [Raspberry Pi overlay settings](https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README),
 [Adafruit MAX98357A setup](https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp/raspberry-pi-usage).
+
+If `/dev/i2c-1` is missing, enable I2C and restart:
+
+```bash
+sudo raspi-config nonint do_i2c 0
+sudo reboot
+```
+
+After reconnecting, run `ls -l /dev/i2c-1`.
+A missing device file means that the OS interface is unavailable.
+The ADC wiring becomes testable after the device file appears.
 
 ## 4. Select the ADC and check the setup
 
@@ -454,6 +468,8 @@ Physical display and audio behavior still require the Pi tests above.
 | Symptom | Action |
 |---|---|
 | Device permission error | Restart the Pi after installation. Reconnect over SSH. Run `id` and confirm the device groups. |
+| `imgs` is absent after a Git checkout | Use the latest app with included `media/images`, or copy those PNGs into a new `imgs` folder. |
+| `/dev/i2c-1` is absent | Run `sudo raspi-config nonint do_i2c 0`, then restart the Pi. |
 | `/dev/spidev0.0` is absent | Enable SPI in the boot configuration. Restart the Pi. |
 | No ADC at `0x48` | Check 3.3 V, GND, SDA, SCL, ADDR, and solder joints. Match the chip model in the configuration. |
 | `UU` appears in `i2cdetect` | Remove the ADC kernel overlay. This app needs direct access to the I²C address. Restart the Pi. |

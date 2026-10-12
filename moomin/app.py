@@ -15,7 +15,7 @@ from .audio import StreamingAudioPlayer, audio_device
 from .buttons import Debouncer, calibrate, classify, load_calibration
 from .config import Settings
 from .hardware import ADS1x15, PreviewDisplay, ST7789
-from .media import prepare_audio, prepare_images
+from .media import image_sources, prepare_audio, prepare_images
 from .ui import screen_patterns
 from .player import PlayerSession
 from .speaker_test import run_speaker_test
@@ -76,7 +76,12 @@ def doctor(settings, simulate=False):
         print(f"{'OK' if good else 'FAIL'}  {name}: {detail}")
         if not good:
             errors.append(name)
-    report("images", settings.path("images", "input").is_dir(), str(settings.path("images", "input")))
+    try:
+        images, prepared_only = image_sources(settings)
+        directory = settings.path("images", "prepared" if prepared_only else "input")
+        report("images", True, f"{len(images)} {'prepared photos' if prepared_only else 'original photos'} in {directory}")
+    except (OSError, ValueError) as error:
+        report("images", False, str(error))
     report("sounds", settings.path("audio", "input").is_dir(), str(settings.path("audio", "input")))
     for program in ("ffmpeg", "ffprobe"):
         report(program, bool(shutil.which(program)), shutil.which(program) or "Install ffmpeg.")
@@ -86,7 +91,11 @@ def doctor(settings, simulate=False):
     for module in ("gpiozero", "lgpio", "spidev", "smbus2"):
         report(module, importlib.util.find_spec(module) is not None, "Python dependency")
     for device in ("/dev/spidev0.0", f"/dev/i2c-{settings.data['adc']['bus']}"):
-        report(device, os.access(device, os.R_OK | os.W_OK), "Read/write access; enable interfaces and join spi/i2c groups.")
+        if not Path(device).exists():
+            detail = "Missing device. Enable I2C: sudo raspi-config nonint do_i2c 0, then reboot." if "/i2c-" in device else "Missing device. Enable SPI in raspi-config, then reboot."
+        else:
+            detail = "Read/write access; join spi/i2c groups and log in again if access fails."
+        report(device, os.access(device, os.R_OK | os.W_OK), detail)
     gpio = list(Path("/dev").glob("gpiochip*"))
     report("GPIO", any(os.access(p, os.R_OK | os.W_OK) for p in gpio), "Join the gpio group and log in again.")
     try:
@@ -94,10 +103,12 @@ def doctor(settings, simulate=False):
         report("audio card", True, device)
     except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as error:
         report("audio card", False, str(error))
+    adc_ready = False
     try:
         with ExitStack() as stack:
             adc = adc_resource(stack, settings)
             voltage = adc.read_voltage()
+        adc_ready = True
         report("ADC A0", True, f"{voltage:.3f} V, {settings.data['adc']['model']}, address {settings.address:#04x}")
     except (ImportError, OSError, RuntimeError) as error:
         report("ADC A0", False, str(error))
@@ -108,7 +119,7 @@ def doctor(settings, simulate=False):
         except ValueError as error:
             report("buttons", False, str(error))
     else:
-        print("NEXT  Run calibrate-buttons before starting the button-controlled gallery.")
+        print("NEXT  Run calibrate-buttons before starting the player." if adc_ready else "NEXT  Fix the ADC / I2C failures, then run calibrate-buttons.")
     return 1 if errors else 0
 
 

@@ -58,11 +58,41 @@ def cached_manifest(directory, signature):
     return None
 
 
+def image_sources(settings):
+    """A Git checkout includes prepared photos, while original imgs is optional."""
+    source = settings.path("images", "input")
+    files = source_files(source, IMAGE_TYPES) if source.is_dir() else []
+    if files:
+        return files, False
+    directory = settings.path("images", "prepared")
+    manifest = directory / "manifest.json"
+    if not manifest.is_file():
+        raise ValueError(f"No photos found. Copy originals to {source}, or restore {directory} with its manifest.")
+    try:
+        items = json.loads(manifest.read_text())["items"]
+        if not isinstance(items, list) or not items:
+            raise ValueError("The prepared photo list is empty.")
+        prepared = []
+        for item in items:
+            name = item["file"]
+            if not isinstance(name, str) or Path(name).name != name:
+                raise ValueError("Invalid prepared photo filename.")
+            path = directory / name
+            with Image.open(path) as image:
+                if image.size != settings.size:
+                    raise ValueError(f"Prepared photo {name} is {image.size}, but this display needs {settings.size}. Copy originals to {source} and run prepare.")
+                image.verify()
+            prepared.append(path)
+    except (OSError, KeyError, TypeError, ValueError) as error:
+        raise ValueError(f"Cannot use prepared photos in {directory}: {error}") from error
+    return prepared, True
+
+
 def prepare_images(settings, force=False):
     cfg = settings.data["images"]
-    files = source_files(settings.path("images", "input"), IMAGE_TYPES)
-    if not files:
-        raise ValueError("No supported images in imgs. Add PNG, JPEG, WebP or BMP files.")
+    files, prepared_only = image_sources(settings)
+    if prepared_only:
+        return files
     directory = settings.path("images", "prepared")
     signature = fingerprint(files, {"version": 1, "size": settings.size, "fit": cfg["fit"], "background": cfg["background"]})
     cached = None if force else cached_manifest(directory, signature)
