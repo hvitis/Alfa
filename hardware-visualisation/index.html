@@ -9,7 +9,7 @@
   <header><a class="brand" href="./">MOOMIN / HARDWARE</a><span id="live-status" hidden></span><h1>Understand every module and connection.</h1><p>Click any module to learn its purpose. Compare the Pi 3 and Pico setups, or inspect the resistor divider.</p></header>
   <nav class="toolbar" aria-label="Scene and camera controls">
     <div class="segmented"><button id="view-divider" class="active">R1 &amp; R2 close-up</button><button id="view-setup">Pi 3 setup</button><button id="view-pico">Pico 2 WH setup</button></div>
-    <button id="focus-amplifier">Amplifier wiring</button><button id="focus-join">Focus shared join</button><button id="reset-camera">Reset camera</button><button id="top-view">Top view</button>
+    <button id="focus-keypad">Button wiring</button><button id="focus-adc">ADC wiring</button><button id="focus-amplifier">Amplifier wiring</button><button id="focus-join">Focus shared join</button><button id="reset-camera">Reset camera</button><button id="top-view">Top view</button>
     <label>Camera <select id="camera-mode"><option value="inspect">Inspect + pan</option><option value="free">Free movement</option></select></label>
     <label><input id="show-labels" type="checkbox" checked> Labels</label>
     <label id="group-control" hidden>Cables <select id="cable-group"><option value="all">All cables</option><option>LCD</option><option>Audio</option><option>ADC</option><option>Keypad</option><option>Power</option></select></label>
@@ -42,6 +42,29 @@
         <select id="module-picker"><option value="">Choose a module…</option></select>
         <div aria-live="polite"><h2 id="module-title">What does each module do?</h2><p id="module-purpose"></p><ul id="module-details"></ul><p id="module-change" class="module-change" hidden></p></div>
         <button id="focus-module" disabled>Look closer at this module</button>
+      </section>
+      <section id="keypad-guide" class="adc-guide" hidden>
+        <span class="eyebrow">YOUR BOARD · PHOTO _003</span><h2>Five buttons · three pins</h2>
+        <p class="note">Component side up. Four directional buttons and one lower button. The right-angle header is at the bottom-right: OUT, VCC, GND from top to bottom.</p>
+        <button id="keypad-close-up">Look closer at button module</button>
+        <table class="amp-pin-table"><thead><tr><th>Printed pin</th><th>Connection</th></tr></thead><tbody>
+          <tr><td><button id="keypad-pin-KOUT">OUT</button></td><td id="keypad-connection-KOUT"></td></tr>
+          <tr><td><button id="keypad-pin-KVCC">VCC</button></td><td id="keypad-connection-KVCC"></td></tr>
+          <tr><td><button id="keypad-pin-KGND">GND</button></td><td id="keypad-connection-KGND"></td></tr>
+        </tbody></table>
+        <p class="tip">OUT connects to R1. VCC receives 5 V. GND shares controller and ADC ground. The three sockets fit the long horizontal header pins.</p>
+        <div class="amp-photos"><a target="_blank" rel="noopener"><img id="keypad-photo" alt="Photo _003: five yellow buttons and OUT/VCC/GND right-angle header" loading="lazy"></a></div>
+      </section>
+      <section id="adc-guide" class="adc-guide" hidden>
+        <span class="eyebrow">YOUR BOARD · BUT1 / BUT2</span><h2>ADC pins &amp; connections</h2>
+        <p class="note">Label side up, header on the right: V, G, SCL, SDA, ADDR, ALERT, A0, A1, A2, A3. The black spacer and long pins are on the component side. Board enlarged for clarity.</p>
+        <div class="adc-modes"><button data-adc-mode="labels" class="active">Labels &amp; wiring</button><button data-adc-mode="components">Component side</button></div>
+        <p id="adc-instructions" class="amp-instructions"></p><button id="adc-close-up">Look closer at ADC</button>
+        <table class="amp-pin-table"><thead><tr><th>Printed pin</th><th>Connection</th></tr></thead><tbody id="adc-pin-table"></tbody></table>
+        <p class="tip"><strong>V means VDD; G means GND.</strong> A0 connects to the R1/R2 join. ADDR connects to G. ALERT and A1–A3 stay unwired.</p>
+        <p class="note">G is a shared connection: the marked ground join connects controller ground, R2 and ADDR. One yellow lead runs from that join to G. Wire colors identify connections in this diagram.</p>
+        <div class="adc-color-key" aria-label="ADC wire colors"><span><i style="background:#e3b51f"></i>Yellow · all ground branches: controller, R2, ADDR and G</span><span><i style="background:#8850c7"></i>Purple · join → A0</span></div>
+        <div id="adc-photos" class="amp-photos" aria-label="Original ADC photos"></div>
       </section>
       <section id="amplifier-guide" class="amplifier-guide" hidden>
         <span class="eyebrow">YOUR BOARD · HEADER ORDER VERIFIED IN MAX4</span><h2>Amplifier assembly &amp; wiring</h2>
@@ -77,7 +100,7 @@
   </main>
   <section class="connection-summary">
     <div><h2>The complete resistor connection</h2><p><strong>Keypad OUT → R1 → shared join → ADC A0</strong></p><p><strong>Shared join → R2 → GND</strong></p></div>
-    <div><p>Keypad: <strong>5 V</strong>. ADC: <strong>3.3 V</strong>. All GND connections share Pi ground.</p><p class="note">The ADC terminal layout is illustrative. Match the actual printed labels. Disconnect Pi power before changing wires.</p></div>
+    <div><p>Keypad: <strong>5 V</strong>. ADC: <strong>3.3 V</strong>. All GND connections share Pi ground.</p><p class="note">The ADC header order follows but2.jpg. V = VDD, G = GND. Disconnect Pi power before changing wires.</p></div>
   </section>
   <footer>Three.js 3D viewer · The Pi test software stays in <code>moomin/</code>. <a href="../output/resistor-divider-clear.png">Open the resistor image</a></footer>
 </div>

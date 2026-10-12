@@ -15,13 +15,13 @@ test('shared join contains exactly R1, R2 and A0; GND is a separate net',()=>{
   assert(DIVIDER.netMembers.ground.includes('ADC_GND'));
   assert(DIVIDER.resistors.every(r=>r.ohms===10000));
 });
-test('all 26 setup cables retain exact endpoint assignments',()=>{
-  assert.equal(setup.wires.length,26);
-  const expected={LVCC:1,LGND:6,LDIN:19,LCLK:23,LCS:24,LDC:22,LRST:13,LBL:18,MVIN:2,MGND:9,MBCLK:12,MLRC:35,MDIN:40,AVDD:17,AGND:20,ASDA:3,ASCL:5,KVCC:4,KGND:14};
+test('all 27 setup cables retain exact endpoint assignments',()=>{
+  assert.equal(setup.wires.length,27);
+  const expected={LVCC:1,LGND:6,LDIN:19,LCLK:23,LCS:24,LDC:22,LRST:13,LBL:18,MVIN:2,MGND:9,MBCLK:12,MLRC:35,MDIN:40,AVDD:17,GND_JOIN:20,ASDA:3,ASCL:5,KVCC:4,KGND:14};
   for(const [key,pin]of Object.entries(expected))assert(setup.wires.some(w=>w.from==='P'+pin&&w.to===key),key);
   for(const wire of setup.wires){assert.deepEqual(wire.path[0],setup.points[wire.from]);assert.deepEqual(wire.path.at(-1),setup.points[wire.to]);}
   assert(setup.wires.some(w=>w.from==='J'&&w.to==='AA0'));
-  assert(setup.wires.some(w=>w.from==='RGND'&&w.to==='AGND'));
+  assert(setup.wires.some(w=>w.from==='RGND'&&w.to==='GND_JOIN'));
   assert.deepEqual(setup.wires.filter(w=>w.from==='M-').map(w=>w.to),['S-']);
 });
 test('LCD cable colors match photos/colors.jpg, including white ground',()=>{

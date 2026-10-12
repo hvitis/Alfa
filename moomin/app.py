@@ -7,15 +7,17 @@ import signal
 import subprocess
 import sys
 import time
+import wave
 from contextlib import ExitStack
 from pathlib import Path
 
-from .audio import AudioPlayer, audio_device
+from .audio import StreamingAudioPlayer, audio_device
 from .buttons import Debouncer, calibrate, classify, load_calibration
 from .config import Settings
 from .hardware import ADS1x15, PreviewDisplay, ST7789
 from .media import prepare_audio, prepare_images
-from .ui import Gallery, screen_patterns
+from .ui import screen_patterns
+from .player import PlayerSession
 from .speaker_test import run_speaker_test
 
 
@@ -130,47 +132,39 @@ def monitor_buttons(settings, seconds=0):
 
 
 def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_audio=False):
-    gallery = Gallery(prepare_images(settings))
-    sounds = [] if no_audio else prepare_audio(settings)
+    images = prepare_images(settings)
+    sounds = [] if no_audio else prepare_audio(settings, full=True)
     with ExitStack() as stack:
         display = display_resource(stack, settings, simulate)
-        player = AudioPlayer(settings, simulate)
-        stack.callback(player.close)
-        display.show(gallery.frame())
+        audio = StreamingAudioPlayer(settings, simulate)
+        stack.callback(audio.close)
+        session = PlayerSession(images, sounds, audio)
+        if sounds:
+            import wave
+            with wave.open(str(sounds[0]), "rb") as recording:
+                audio.duration = recording.getnframes() / recording.getframerate()
+        display.show(session.frame())
         if once:
-            print("Displayed the first photo." + (f" Preview: {settings.state / 'preview/current.png'}" if simulate else ""))
+            print("Displayed the player." + (f" Preview: {settings.state / 'preview/current.png'}" if simulate else ""))
             return
-        states, adc = None, None
+        adc = None
         if not simulate and not keyboard_only:
             states = load_calibration(settings)
             adc = adc_resource(stack, settings)
         debounce = Debouncer(settings.data["adc"]["debounce_ms"] / 1000)
         keyboard = stack.enter_context(Keyboard())
         center_since = None
-        last_playing = False
-        print("Gallery: A/D or left/right arrows = photos; W/S = first/last; Space = sound; Q = quit.")
-        print("Buttons: LEFT/RIGHT = photos; UP/DOWN = first/last; tap CENTER = sound; hold CENTER 2 seconds = quit.")
+        previous_frame = session.render_key()
+        print("Player: LEFT/RIGHT (A/D) = photos; UP/DOWN (W/S) = volume; CENTER (Space) = play/stop.")
+        print("Hold CENTER for 2 seconds or press Q / Ctrl+C to quit. Volume changes in 5% steps during playback.")
         if simulate:
-            print(f"Simulation saves each frame to {settings.state / 'preview/current.png'}.")
-        def action(button):
-            if button == "center":
-                if no_audio:
-                    display.show(gallery.frame("Audio disabled"))
-                elif player.playing:
-                    player.stop()
-                else:
-                    player.play(sounds[0])
-            else:
-                gallery.navigate(button)
-                display.show(gallery.frame("Playing" if player.playing else "Ready"))
-                print(f"Photo {gallery.index + 1}/{len(gallery.paths)}: {gallery.paths[gallery.index].name}")
+            print(f"Simulation saves frames to {settings.state / 'preview/current.png'}; it produces no sound.")
         while True:
-            keys = keyboard.read()
-            for key in keys.lower():
+            for key in keyboard.read().lower():
                 if key in ("q", "\x03"):
                     return
                 if key in {"a", "d", "w", "s", " "}:
-                    action({"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key])
+                    session.action({"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key])
             if adc:
                 name = classify(adc.read_voltage(), states)
                 now = time.monotonic()
@@ -181,19 +175,19 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                         if button == "center":
                             center_since = now
                         else:
-                            action(button)
+                            session.action(button)
                     elif button == "center" and center_since is not None:
                         if now - center_since < 2:
-                            action("center")
+                            session.action("center")
                         center_since = None
                 if center_since is not None and name == "center" and now - center_since >= 2:
-                    print("Center held: stopping the gallery.")
+                    print("Center held: stopping the player.")
                     return
-            playing = player.playing
-            if playing != last_playing:
-                display.show(gallery.frame("Playing" if playing else "Ready"))
-                last_playing = playing
-            time.sleep(0.01)
+            key = session.render_key()
+            if key != previous_frame:
+                display.show(session.frame())
+                previous_frame = key
+            time.sleep(.01)
 
 
 def parser():
@@ -205,6 +199,7 @@ def parser():
     prepare = commands.add_parser("prepare", help="Prepare display PNGs and short stereo WAVs.")
     prepare.add_argument("--force", action="store_true")
     prepare.add_argument("--images-only", action="store_true")
+    prepare.add_argument("--full-audio", action="store_true", help="Prepare complete recordings for the interactive player.")
     commands.add_parser("doctor", help="Check dependencies, interfaces, ADC and audio device.")
     screen = commands.add_parser("screen-test", help="Show colors, borders and orientation labels.")
     screen.add_argument("--seconds", type=float, default=1.5, help="Duration per pattern.")
@@ -221,7 +216,7 @@ def parser():
     commands.add_parser("calibrate-buttons", help="Measure idle plus all five buttons.")
     buttons = commands.add_parser("buttons", help="Print raw A0 voltage and calibrated button events.")
     buttons.add_argument("--seconds", type=float, default=0, help="0 means run until Ctrl+C.")
-    gallery = commands.add_parser("gallery", help="Browse photos with buttons or the SSH keyboard.")
+    gallery = commands.add_parser("player", aliases=["gallery"], help="Photo and recording player with button volume control.")
     gallery.add_argument("--keyboard", action="store_true", help="Skip ADC and calibration; use keyboard controls.")
     gallery.add_argument("--once", action="store_true", help="Display the first photo and exit.")
     gallery.add_argument("--no-audio", action="store_true", help="Run without preparing or playing audio.")
@@ -238,8 +233,8 @@ def main(argv=None):
             images = prepare_images(settings, args.force)
             print(f"Prepared {len(images)} images at {settings.size}: {settings.path('images', 'prepared')}")
             if not args.images_only:
-                sounds = prepare_audio(settings, args.force)
-                print(f"Prepared {len(sounds)} short stereo WAVs: {settings.path('audio', 'prepared')}")
+                sounds = prepare_audio(settings, args.force, full=args.full_audio)
+                print(f"Prepared {len(sounds)} stereo WAVs: {settings.path('audio', 'prepared')}")
         elif args.command == "doctor":
             return doctor(settings, args.simulate)
         elif args.command == "screen-test":
@@ -263,13 +258,13 @@ def main(argv=None):
             if args.seconds < 0:
                 raise ValueError("Monitoring duration cannot be negative.")
             monitor_buttons(settings, args.seconds)
-        elif args.command == "gallery":
+        elif args.command in ("player", "gallery"):
             run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio)
         return 0
     except KeyboardInterrupt:
         print("\nStopped. Audio and display resources released.")
         return 0
-    except (OSError, ValueError, RuntimeError, ImportError, subprocess.TimeoutExpired, EOFError) as error:
+    except (OSError, ValueError, RuntimeError, ImportError, subprocess.TimeoutExpired, wave.Error, EOFError) as error:
         print(f"Error: {error}", file=sys.stderr)
         if args.debug:
             import traceback

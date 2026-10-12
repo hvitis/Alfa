@@ -89,12 +89,13 @@ def run_tool(command):
     return result.stdout
 
 
-def prepare_audio(settings, force=False):
+def prepare_audio(settings, force=False, *, full=False):
     files = source_files(settings.path("audio", "input"), AUDIO_TYPES)
     if not files:
         raise ValueError("No supported sound files in sounds. Add a WAV or MP3 file.")
-    directory = settings.path("audio", "prepared")
-    signature = fingerprint(files, {"version": 1, "seconds": settings.data["audio"]["clip_seconds"], "rate": 48000, "channels": 2})
+    directory = settings.path("audio", "prepared") / "full" if full else settings.path("audio", "prepared")
+    clip_seconds = None if full else settings.data["audio"]["clip_seconds"]
+    signature = fingerprint(files, {"version": 1, "seconds": clip_seconds, "rate": 48000, "channels": 2})
     cached = None if force else cached_manifest(directory, signature)
     if cached:
         return [directory / item["file"] for item in cached["items"]]
@@ -105,7 +106,7 @@ def prepare_audio(settings, force=False):
     items = []
     for index, path in enumerate(files):
         duration = float(run_tool(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", str(path)]).strip())
-        duration = min(duration, settings.data["audio"]["clip_seconds"])
+        duration = duration if full else min(duration, clip_seconds)
         if duration <= 0:
             raise ValueError(f"Sound is empty: {path.name}")
         fade = min(0.08, duration / 4)

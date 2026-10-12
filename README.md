@@ -4,11 +4,12 @@ This Python app tests the hardware in your photos over SSH. It runs without a gr
 
 - The screen test displays colors, a border, and orientation labels.
 - The speaker test plays a short clip from `sounds` through the MAX98357A amplifier.
-- The gallery displays the photos from `imgs` and uses the five buttons for navigation.
+- The on-screen player displays photos and plays the complete recording with button volume control.
 - The button tools display the ADC voltage and save calibration for each button.
 
 The six supplied photos are prepared in `media/images` as **240 × 320 RGB PNGs**.
-The supplied WAV is prepared in `media/sounds` as a **5-second, 48 kHz, stereo, 16-bit WAV**.
+The speaker test uses a **5-second, 48 kHz, stereo, 16-bit WAV** in `media/sounds`.
+The player prepares the complete recording separately in `media/sounds/full`.
 The original files stay in `imgs` and `sounds`.
 
 The app starts at **20% digital audio volume**.
@@ -315,43 +316,58 @@ Source: [Texas Instruments ADS1115 register definitions](https://www.ti.com/lit/
 
 ## 8. Run everything together
 
-Start the photo browser.
+After the setup check and button calibration, start the on-screen player:
 
 ```bash
-python -m moomin gallery
+python -m moomin doctor
+python -m moomin calibrate-buttons
+python -m moomin player
 ```
+
+The player tests the LCD, five buttons, ADC, amplifier, and speaker together.
+It displays your current picture, the recording name, playback progress, and volume.
+The recording plays in full. The five-second limit applies to the separate speaker test.
 
 | Button | Action |
 |---|---|
-| LEFT | Previous photo; wraps to the last photo |
-| RIGHT | Next photo; wraps to the first photo |
-| UP | First photo |
-| DOWN | Last photo |
-| Tap CENTER | Play the first sound clip, or stop the current clip |
-| Hold CENTER for 2 seconds | Exit the app |
+| LEFT | Previous picture, with wraparound |
+| RIGHT | Next picture, with wraparound |
+| UP | Increase volume by 5 percentage points |
+| DOWN | Decrease volume by 5 percentage points |
+| Tap CENTER | Play the recording from the start, or stop playback |
+| Hold CENTER for 2 seconds | Exit the player |
 
-Release CENTER to play the sound.
-The app waits for release to distinguish a tap from a hold.
-Release all buttons before the first press after startup.
+Use the isolated lower button for CENTER during calibration.
+Release CENTER to play or stop. Release all buttons before the first press after startup.
+Volume starts at 20% and stays between 0% and 100%.
+Volume changes apply during playback. Picture navigation also works during playback.
+The screen controls are indicators for the physical buttons; the LCD has no touch input.
 
-The status bar displays the photo number and playback state.
-The app stays responsive during audio playback.
-It stops audio and turns off the backlight when it exits.
+The app stops audio and turns off the backlight when it exits.
 It does not shut down the Pi.
+Existing calibration remains valid because the five button names stay the same.
 
 Keyboard controls also work in an interactive SSH terminal:
 
 | Key | Action |
 |---|---|
-| `A` / left arrow | Previous photo |
-| `D` / right arrow | Next photo |
-| `W` | First photo |
-| `S` | Last photo |
-| Space | Play or stop the sound |
+| `A` / left arrow | Previous picture |
+| `D` / right arrow | Next picture |
+| `W` / up arrow | Increase volume |
+| `S` / down arrow | Decrease volume |
+| Space | Play or stop |
 | `Q` / `Ctrl+C` | Exit |
 
-To use the keyboard without the ADC, add `--keyboard`.
-To use the gallery without audio, add `--no-audio`.
+For a keyboard test without the ADC, run `python -m moomin player --keyboard`.
+For pictures without sound, add `--no-audio`.
+The existing `gallery` command is an alias for `player`.
+
+```bash
+python -m moomin --simulate player --once
+```
+
+This command saves the player screen to `.state/preview/current.png` without Pi hardware.
+Simulation uses the recording duration and displays progress. It produces no sound.
 
 ## Add photos or sounds
 
@@ -375,6 +391,7 @@ The original media files remain unchanged.
 Preparation runs automatically when the gallery or speaker test needs updated media.
 A content hash prevents repeated conversions when the source files and configuration stay unchanged.
 The manifest selects current files, so older generated files do not appear in the gallery.
+Use `python -m moomin prepare --full-audio` to prepare complete recordings before the player starts.
 
 To change rotation, fit, or clip length, create a local configuration.
 For example:
@@ -412,7 +429,7 @@ python -m pip install -r requirements.txt
 python -m moomin prepare
 python -m moomin --simulate doctor
 python -m moomin --simulate screen-test --seconds 0
-python -m moomin --simulate gallery --once
+python -m moomin --simulate player --once
 python -m moomin --simulate speaker-test
 ```
 
@@ -466,6 +483,7 @@ Audio logs are saved in `.state/audio-*.log`.
 | Path | Purpose |
 |---|---|
 | `moomin/` | Python app and hardware drivers |
+| `moomin/player.py` | Button actions and on-screen player state |
 | `config.json` | Default wiring and media configuration |
 | `config.local.json` | Optional local overrides; ignored by Git |
 | `imgs/` / `sounds/` | Original media |
@@ -481,6 +499,8 @@ The ST7789 initialization uses the Waveshare 2-inch module settings.
 The driver writes RGB565 pixels through `spidev` and uses `gpiozero` with `lgpio` for display controls.
 The ADC driver uses single-shot A0 measurements through `smbus2`.
 The amplifier uses the Raspberry Pi audio driver and `aplay`.
+The player streams short PCM blocks with software volume control.
+The [ALSA playback options](https://github.com/alsa-project/alsa-utils/blob/master/aplay/aplay.c) define the format, channels, rate, and buffer duration.
 
 References: [Waveshare LCD documentation](https://www.waveshare.com/wiki/2inch_LCD_Module),
 [Waveshare driver download](https://www.waveshare.com/w/upload/8/8d/LCD_Module_RPI_code.zip),

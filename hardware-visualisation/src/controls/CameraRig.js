@@ -53,7 +53,7 @@ export class CameraRig {
   focus(view='divider') {
     this.view=view;this.speed=view!=='divider'?440:140;
     if(view!=='divider'){this.camera.position.set(0,800,1010);this.orbit.target.set(0,12,45);}
-    else {this.camera.position.set(160,300,415);this.orbit.target.set(0,12,35);}
+    else {this.camera.position.set(175,390,540);this.orbit.target.set(35,22,25);}
     this.camera.lookAt(this.orbit.target);this.camera.updateMatrixWorld();this.orbit.update();
   }
   focusModule(object){
@@ -71,6 +71,18 @@ export class CameraRig {
       this.orbit.target.copy(center).add(new THREE.Vector3(0,mode==='before'?32:15,0));
       this.camera.position.copy(center).add(new THREE.Vector3(55,mode==='before'?210:190,255));
     }
+    this.camera.lookAt(this.orbit.target);this.camera.updateMatrixWorld();this.orbit.update();
+  }
+  inspectKeypad(keypad){
+    const center=keypad.hardware.getWorldPosition(new THREE.Vector3());
+    this.orbit.target.copy(center).add(new THREE.Vector3(25,10,0));
+    this.camera.position.copy(center).add(new THREE.Vector3(155,305,325));
+    this.camera.lookAt(this.orbit.target);this.camera.updateMatrixWorld();this.orbit.update();
+  }
+  inspectAdc(adc){
+    const center=adc.hardware.getWorldPosition(new THREE.Vector3());
+    this.orbit.target.copy(center).add(new THREE.Vector3(0,-12,0));
+    this.camera.position.copy(center).add(new THREE.Vector3(190,240,265));
     this.camera.lookAt(this.orbit.target);this.camera.updateMatrixWorld();this.orbit.update();
   }
   focusJoin(){

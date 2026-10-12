@@ -16,7 +16,7 @@ For example, physical pin **22** is **GPIO25**.
 
 [Open the rotatable 3D wiring diagram](../output/wiring-3d.html) · [View its PNG overview](../output/wiring-3d-overview.png) · [Read the photo-specific wiring notes](../output/wiring-notes.md).
 
-The 3D diagram shows all working devices connected to one Pi, with an enlarged header and numbered cables in separate lanes. Click a cable or connection table row to show only that connection. The group controls show only the cables for one device. It uses the photographed ADS1115/ADS1015 breakout and shows the green PAM8403 amplifier as an unused alternative. ADC and amplifier terminal layouts are schematic; match their printed labels. The Pi header has explicit physical pin positions.
+The 3D diagram shows all working devices connected to one Pi, with an enlarged header and numbered cables in separate lanes. Click a cable or connection table row to show only that connection. The group controls show only the cables for one device. It uses the photographed ADS1115/ADS1015 breakout and shows the green PAM8403 amplifier as an unused alternative. The ADC model uses but1/but2, including the ten-pin order, V/G markings, and header on the component side. The amplifier uses max1–max4. Both boards are enlarged for clear connections. The Pi header has explicit physical pin positions.
 
 Separate cable views: [LCD](../output/wiring-lcd.png) · [Amplifier and speaker](../output/wiring-audio.png) · [ADC](../output/wiring-adc.png) · [Keypad and resistors](../output/wiring-keypad.png).
 

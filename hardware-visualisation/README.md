@@ -81,11 +81,72 @@ The Pico VIN cable connects through the shared USB 5 V join.
 
 Signal and mode reference: [MAX98357A pin descriptions](https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp/pinouts).
 
+## Your five-button module
+
+The button model uses [photo _003](../photos/signal-2026-10-11-22-16-05-518_003.jpg).
+The black board has four buttons in a directional layout and one lower button.
+The model includes five yellow caps, switch housings, four mounting holes, and a right-angle header.
+The header is at the bottom-right. Its order is **OUT, VCC, GND** from top to bottom.
+The model is enlarged for clear connections.
+
+1. Select **Button wiring** for the module close-up.
+2. Click **OUT**, **VCC**, or **GND** on the module or in its connection table.
+3. Select **R1 & R2 close-up** to trace OUT through the voltage divider.
+
+| Pin | Pi 3 connection | Pico connection | Diagram color |
+|---|---|---|---|
+| OUT | R1 input | R1 input | Mustard |
+| VCC | Physical pin 4, 5 V | Physical pin 40, VBUS through the USB 5 V join | Red |
+| GND | Physical pin 14 | Physical pin 18 | Black |
+
+The three jumper sockets fit the horizontal header pins.
+Each cable starts at its socket. OUT reaches R1 before the shared R1/R2/A0 join.
+The divider view shows the VCC supply and the common ground connection.
+The button GND lead stays black. The separate ADC ground-join branches stay yellow.
+
+## Your ADS ADC board
+
+The ADC model uses [but1.jpg](../photos/but1.jpg) and [but2.jpg](../photos/but2.jpg).
+It includes a narrow purple PCB, two mounting holes, ten header pins, and components on the reverse side.
+The printed side faces upward. The header is on the right, with V at the top.
+The black spacer and long pins are on the component side.
+The model is enlarged for clear connections. The photos do not establish exact board dimensions.
+
+```text
+V  G  SCL  SDA  ADDR  ALERT  A0  A1  A2  A3
+```
+
+V means VDD. G means GND.
+The component side lists both ADS1115 and ADS1015. This marking does not identify the fitted chip.
+
+1. Select **ADC wiring** for the close-up and its connections.
+2. Select **Component side** to inspect the reverse face from but1.
+3. Select **Labels & wiring** to restore the connections.
+4. Click a printed pin or its table row to trace its wires.
+
+The G pin shows three separate branches: controller ground, R2 ground, and ADDR.
+A0 receives the shared R1/R2 join. ALERT and A1–A3 remain unconnected.
+The ADC cable group also includes the two divider wires.
+The divider close-up, Pi 3 setup, and Pico setup use the same header layout.
+
+| Connection | Diagram color |
+|---|---|
+| Controller GND → ground join → G | Yellow |
+| R2 → ground join → G | Yellow |
+| ADDR → ground join → G | Yellow |
+| Shared join → A0 | Purple |
+
+The three wires at G share one electrical connection.
+All wires at the ground join are yellow along their full routes.
+The visible ground join connects these branches before the single G jumper socket.
+One yellow lead connects that join to G. Each other wire has a separate exit and a continuous color.
+
+Electrical reference: [ADS11x5 wiring and addressing](https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/assembly-and-wiring).
+
 ## Pico 2 W with fitted headers (WH)
 
 This view replaces the Pi 3 with a Pico 2 W with fitted headers.
 The screen, keypad, ADC, two resistors, MAX98357A, and speaker remain the same.
-The PAM8403 remains disconnected.
 
 The Pico has two rows of 20 pins.
 With USB at the top, physical pin 1 is top-left and pin 40 is top-right.

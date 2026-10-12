@@ -89,3 +89,55 @@ def speaker_status_frame(size, status, lines=(), progress=None, error=False):
         draw.rectangle((12, height - 42, 12 + int((width - 25) * fraction), height - 31), fill=accent)
     draw.text((12, height - 23), "Details in SSH / Ctrl+C stops", font=font(10), fill="#91aabb")
     return frame
+
+
+def player_frame(gallery, audio, recording, last_action="Ready"):
+    """Photo and player controls for both 240x320 and 320x240 displays."""
+    from PIL import ImageOps
+    with Image.open(gallery.paths[gallery.index]) as source:
+        size = source.size
+        photo = source.convert("RGB")
+    width, height = size
+    panel_y = height - 126
+    frame = Image.new("RGB", size, "#101f2c")
+    draw = ImageDraw.Draw(frame)
+    draw.text((10, 8), "MOOMIN", font=font(13), fill="#63c6ad")
+    counter = f"PHOTO {gallery.index + 1}/{len(gallery.paths)}"
+    draw.text((width - 10 - draw.textlength(counter, font=font(11)), 9), counter, font=font(11), fill="#d2dee7")
+    fitted = ImageOps.contain(photo, (width - 16, panel_y - 39), Image.Resampling.LANCZOS)
+    frame.paste(fitted, ((width - fitted.width) // 2, 31 + (panel_y - 39 - fitted.height) // 2))
+    draw.rounded_rectangle((6, panel_y, width - 7, height - 4), radius=8, fill="#192e3d")
+    name = recording[4:] if len(recording) > 4 and recording[:3].isdigit() and recording[3] == "-" else recording
+    title_font = font(11)
+    while name and draw.textlength(name, font=title_font) > width - 24:
+        name = name[:-4] + "..." if not name.endswith("...") else name[:-4] + "..."
+    draw.text((12, panel_y + 9), name, font=title_font, fill="white")
+    playing, elapsed, duration = audio.playing, audio.position, audio.duration
+    progress = min(1, elapsed / duration) if duration else 0
+    draw.rectangle((12, panel_y + 28, width - 13, panel_y + 32), fill="#304b5f")
+    if progress:
+        draw.rectangle((12, panel_y + 28, 12 + int((width - 25) * progress), panel_y + 32), fill="#63c6ad")
+    status = "Playing" if playing else "Finished" if duration and elapsed >= duration else "Stopped"
+    if recording == "Audio disabled":
+        status = recording
+    draw.text((12, panel_y + 38), status, font=font(11), fill="#63c6ad" if playing else "#c3d3df")
+    def timestamp(seconds):
+        minutes, seconds = divmod(max(0, int(seconds)), 60)
+        return f"{minutes:02d}:{seconds:02d}"
+    timing = f"{timestamp(elapsed)} / {timestamp(duration)}"
+    draw.text((width - 12 - draw.textlength(timing, font=font(10)), panel_y + 39), timing, font=font(10), fill="#c3d3df")
+    draw.text((12, panel_y + 58), f"VOL {audio.volume:.0%}", font=font(11), fill="white")
+    draw.rectangle((89, panel_y + 62, width - 13, panel_y + 68), fill="#304b5f")
+    if audio.volume:
+        draw.rectangle((89, panel_y + 62, 89 + int((width - 102) * audio.volume), panel_y + 68), fill="#e4bd45")
+    labels = ("< PHOTO", "STOP" if playing else "PLAY", "PHOTO >")
+    cell = (width - 24) / 3
+    for index, label in enumerate(labels):
+        left, right = int(10 + index * cell), int(10 + (index + 1) * cell - 4)
+        draw.rounded_rectangle((left, panel_y + 78, right, panel_y + 102), radius=4,
+                               fill="#63c6ad" if index == 1 else "#304b5f")
+        draw.text((left + (right - left - draw.textlength(label, font=font(10))) / 2, panel_y + 85), label,
+                  font=font(10), fill="#101f2c" if index == 1 else "white")
+    hint = "UP/DOWN: volume | hold CENTER: quit"
+    draw.text((12, height - 17), hint, font=font(9), fill="#c3d3df")
+    return frame

@@ -68,7 +68,7 @@ def adc_identity(settings):
 def calibrate(adc, settings):
     samples = {}
     actions = {"idle": "release all buttons", "left": "hold LEFT (previous photo)", "right": "hold RIGHT (next photo)",
-               "up": "hold UP (first photo)", "down": "hold DOWN (last photo)", "center": "hold CENTER (play sound)"}
+               "up": "hold UP (volume up)", "down": "hold DOWN (volume down)", "center": "hold CENTER (play / stop recording)"}
     print("Choose the physical button for each action. Hold one button until the reading is complete.")
     for state in STATES:
         input(f"Please {actions[state]}, then press Enter here: ")

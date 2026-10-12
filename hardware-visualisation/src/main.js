@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { createScene } from './scene/createScene.js';
 import { CameraRig } from './controls/CameraRig.js';
 import { createInterface } from './ui/interface.js';
+import { KEYPAD, keypadConnection } from './data/keypad.js';
+import { ADC, adcConnection, isAdcWire } from './data/adc.js';
 import { STEPS } from './data/divider.js';
 import { AMPLIFIER, amplifierConnection } from './data/amplifier.js';
 import { installLiveReload } from './ui/liveReload.js';
@@ -10,7 +12,7 @@ import { isVisible } from './scene/modules.js';
 function boot() {
   const viewport=document.getElementById('viewport');
   const world=createScene(viewport),rig=new CameraRig(world.camera,world.renderer.domElement);
-  let view='divider',group='all',selectedCable=null,selectedModule=null,assemblyMode='wiring',selectedAmpPin=null;
+  let view='divider',group='all',selectedCable=null,selectedModule=null,assemblyMode='wiring',selectedAmpPin=null,adcMode='labels',selectedAdcPin=null;
   const activeScene=()=>world[view];
   const activeSetup=()=>view==='pico'?world.pico:world.setup;
   const labelsVisible=visible=>{world.labels.domElement.style.display=visible?'':'none';};
@@ -19,21 +21,27 @@ function boot() {
     const show=view!=='divider'&&(selectedModule==='amp'||group==='Audio');
     activeSetup().amplifier.setDetailed(show);activeSetup().root.traverse(object=>{if(object.userData.amplifierOverview)object.visible=assemblyMode!=='underside';});
     ui.amplifier(show,assemblyMode);ui.amplifierPin(selectedAmpPin);
+    activeScene().keypad.setDetailed(selectedModule==='keypad'||view!=='divider'&&group==='Keypad');
+    ui.keypad(selectedModule==='keypad',view);
+    ui.adc(selectedModule==='adc'||group==='ADC',adcMode,selectedAdcPin);
   }
   function updateCables(){
     const setup=activeSetup();
     const unused=selectedModule==='amp'&&['MGAIN','MSD'].includes(selectedAmpPin);
-    for(const cable of setup.cables)cable.group.visible=(group==='all'||cable.circuitGroup===group)&&(!selectedCable||selectedCable===cable.id)&&(assemblyMode==='wiring'||cable.circuitGroup!=='Audio')&&(!unused||cable.circuitGroup!=='Audio');
-    setup.setVisibleLabels(selectedCable,group);
+    for(const cable of setup.cables)cable.group.visible=(group==='all'||cable.circuitGroup===group||group==='ADC'&&isAdcWire(cable))&&(!selectedCable||selectedCable===cable.id)&&(!selectedAdcPin||!isAdcWire(cable)||ADC.pins.find(p=>p.key===selectedAdcPin)?.cables.includes(cable.id))&&(adcMode==='labels'||!isAdcWire(cable))&&(assemblyMode==='wiring'||cable.circuitGroup!=='Audio')&&(!unused||cable.circuitGroup!=='Audio');
+    setup.setVisibleLabels(selectedCable,group,selectedAdcPin);
   }
-  function refreshWireList(){ui.wires(activeSetup().cables.filter(c=>group==='all'||c.circuitGroup===group),selectCable);}
+  function refreshWireList(){ui.wires(activeSetup().cables.filter(c=>group==='all'||c.circuitGroup===group||group==='ADC'&&isAdcWire(c)),selectCable);}
   function clear(){
-    selectedCable=null;group='all';selectedAmpPin=null;document.getElementById('cable-group').value='all';refreshWireList();activeSetup().amplifier.selectPin(null);
+    activeScene().keypad.selectPin(null);
+    selectedCable=null;group='all';selectedAmpPin=null;selectedAdcPin=null;activeScene().adc.selectPin(null);document.getElementById('cable-group').value='all';refreshWireList();activeSetup().amplifier.selectPin(null);
     for(const part of Object.values(world.divider.parts))opacity(part,1);ui.step(null);updateCables();updateAmpGuide();
     ui.detail(view==='divider'?'Purple join = R1 leg B + R2 leg A + the ADC A0 wire.':view==='pico'?'PICO VIEW · Amber marks the replaced controller and changed pins. Click a module for its purpose, or a cable to trace it.':'Click a module for its purpose. Click a cable to trace its endpoints.');
   }
   function selectModule(id){
     if(!activeScene().modules[id])id=null;
+    if(id!=='keypad')activeScene().keypad.selectPin(null);
+    if(id!=='adc'){selectedAdcPin=null;activeScene().adc.selectPin(null);}
     selectedModule=id;activeScene().selectModule(id);ui.module(id,view);updateCables();updateAmpGuide();
   }
   function selectStep(id){
@@ -43,10 +51,15 @@ function boot() {
   }
   function selectCable(id){
     const setup=activeSetup(),cable=setup.cables.find(c=>c.id===id);if(!cable)return;
+    selectedAdcPin=null;activeScene().adc.selectPin(null);
+    if(isAdcWire(cable)&&adcMode!=='labels')setAdcMode('labels');
     if(cable.circuitGroup==='Audio'&&assemblyMode!=='wiring'){assemblyMode='wiring';setup.amplifier.setMode('wiring');rig.focusGroup('Audio');}
     if(cable.circuitGroup==='Audio')selectedAmpPin=cable.to.startsWith('M')?cable.to:cable.from;
     selectedCable=id;updateCables();const endpoint=key=>setup.data.pinNames?.[key]??key;
     ui.detail((cable.changed?'CHANGED · ':'')+cable.id+' · '+cable.title+' · '+endpoint(cable.from)+' ↔ '+endpoint(cable.to)+(cable.previousTitle?' · Pi 3: '+cable.previousTitle:''));
+    if(isAdcWire(cable)){selectedAdcPin=cable.from.startsWith('A')?cable.from:cable.to==='GND_JOIN'?'AGND':cable.to;activeScene().adc.selectPin(selectedAdcPin);selectModule('adc');}
+    const keypadPin=KEYPAD.pins.find(p=>p.cable===id);
+    if(keypadPin){selectModule('keypad');activeScene().keypad.selectPin(keypadPin.key);}
     if(cable.circuitGroup==='Audio'){
       selectedAmpPin=cable.to.startsWith('M')?cable.to:cable.from;setup.amplifier.selectPin(selectedAmpPin);
       selectModule('amp');
@@ -54,10 +67,46 @@ function boot() {
   }
   function setView(next){
     view=next;for(const name of ['divider','setup','pico'])world[name].root.visible=name===view;
-    activeSetup().amplifier.setMode(assemblyMode);ui.setView(view,activeScene().modules);rig.focus(view);selectModule(null);clear();
+    activeSetup().amplifier.setMode(assemblyMode);activeScene().adc.setMode(adcMode);
+    for(const id of ['a0','ground','ground-links','address','gnd-pin'])world.divider.parts[id].visible=adcMode==='labels';
+    ui.setView(view,activeScene().modules);rig.focus(view);selectModule(null);clear();
   }
   function setGroup(next){
-    group=next;selectedCable=null;document.getElementById('cable-group').value=group;updateCables();rig.focusGroup(group);refreshWireList();updateAmpGuide();
+    group=next;selectedCable=null;selectedAdcPin=null;activeScene().adc.selectPin(null);document.getElementById('cable-group').value=group;updateCables();rig.focusGroup(group);refreshWireList();updateAmpGuide();
+  }
+  function focusKeypad(){
+    if(view==='divider')setView('setup');setGroup('Keypad');selectModule('keypad');rig.inspectKeypad(activeScene().keypad);
+  }
+  function selectKeypadPin(key){
+    const pin=KEYPAD.pins.find(p=>p.key===key);if(!pin)return;
+    if(view==='divider'){
+      selectModule('keypad');activeScene().keypad.selectPin(key);
+      if(key==='KOUT')selectStep('out');else if(key==='KGND')selectStep('ground');
+      else {for(const [name,part]of Object.entries(world.divider.parts))opacity(part,name==='keypad-power'?1:0.16);ui.step(null);}
+    }else {setGroup('Keypad');selectCable(pin.cable);}
+    ui.detail(pin.name+' · '+keypadConnection(pin,view));
+  }
+  function focusAdc(){
+    if(view==='divider')setView('setup');
+    adcMode='labels';activeScene().adc.setMode(adcMode);setGroup('ADC');selectModule('adc');rig.inspectAdc(activeScene().adc);
+  }
+  function adcCloseUp(){selectModule('adc');rig.inspectAdc(activeScene().adc);}
+  function setAdcMode(next){
+    if(!['labels','components'].includes(next))return;
+    adcMode=next;activeScene().adc.setMode(next);selectedCable=null;selectedAdcPin=null;activeScene().adc.selectPin(null);selectModule('adc');
+    for(const id of ['a0','ground','ground-links','address','gnd-pin'])world.divider.parts[id].visible=next==='labels';
+    updateCables();rig.inspectAdc(activeScene().adc);
+    ui.detail(next==='components'?'ADC component side · but1 · return to the label side to trace cables.':'ADC label side · but2 · V = VDD, G = GND · click a header pin to trace it.');
+  }
+  function selectAdcPin(key){
+    const pin=ADC.pins.find(p=>p.key===key);if(!pin)return;
+    selectedCable=null;selectedAdcPin=key;selectModule('adc');activeScene().adc.selectPin(key);
+    if(view==='divider'){
+      if(key==='AA0')selectStep('a0');else if(key==='AGND'||key==='AADDR')selectStep('ground');
+      else {for(const part of Object.values(world.divider.parts))opacity(part,0.16);ui.step(null);}
+      if(key==='AGND'||key==='AADDR')opacity(world.divider.parts.address,1);
+    }else {group='ADC';document.getElementById('cable-group').value=group;updateCables();refreshWireList();}
+    updateAmpGuide();ui.detail(pin.name+' · '+pin.purpose+' · '+adcConnection(pin,view)+(adcMode==='components'?' · component inspection: cables hidden':''));
   }
   function focusAmplifier(){
     if(view==='divider')setView('setup');assemblyMode='wiring';activeSetup().amplifier.setMode(assemblyMode);setGroup('Audio');selectModule('amp');
@@ -81,8 +130,8 @@ function boot() {
     if(pin)ui.detail(pin.name+' · '+pin.purpose+' · '+amplifierConnection(pin,view)+(assemblyMode==='wiring'?'':' · Solder this header pin even if it has no jumper.'));
   }
   const ui=createInterface({
-    setView,selectModule,setGroup,focusAmplifier,amplifierCloseUp,setAssemblyMode,selectAmpPin,
-    focusModule(){const object=activeScene().modules[selectedModule];if(selectedModule==='amp')rig.inspectAmplifier(activeSetup().amplifier,assemblyMode);else if(object)rig.focusModule(object);},
+    setView,selectModule,setGroup,focusKeypad,selectKeypadPin,focusAdc,adcCloseUp,setAdcMode,selectAdcPin,focusAmplifier,amplifierCloseUp,setAssemblyMode,selectAmpPin,
+    focusModule(){const object=activeScene().modules[selectedModule];if(selectedModule==='keypad')rig.inspectKeypad(activeScene().keypad);else if(selectedModule==='adc')rig.inspectAdc(activeScene().adc);else if(selectedModule==='amp')rig.inspectAmplifier(activeSetup().amplifier,assemblyMode);else if(object)rig.focusModule(object);},
     focusJoin:()=>rig.focusJoin(),resetCamera:()=>rig.focus(view),top:()=>rig.top(),
     setCameraMode(mode){rig.setMode(mode);ui.camera(mode);},showLabels:labelsVisible,
     move(direction,on){on?rig.moving.add(direction):rig.moving.delete(direction);},clear,selectStep,
@@ -99,18 +148,22 @@ function boot() {
   world.renderer.domElement.addEventListener('pointerup',e=>{
     if(e.button!==0||!pointerStart||Math.hypot(e.clientX-pointerStart[0],e.clientY-pointerStart[1])>5)return;
     const hit=hitAt(e);pointerStart=null;if(!hit)return;
+    if(hit.userData.keypadPin){selectKeypadPin(hit.userData.keypadPin);return;}
+    if(hit.userData.adcPin){selectAdcPin(hit.userData.adcPin);return;}
     if(hit.userData.amplifierPin){selectAmpPin(hit.userData.amplifierPin);return;}
     if(hit.userData.moduleId){selectModule(hit.userData.moduleId);return;}
     const id=hit.userData.cableId;
-    if(view!=='divider')selectCable(id);else selectStep({out:'out',a0:'a0',ground:'ground','ground-links':'ground'}[id]);
+    if(view==='divider'&&id==='keypad-power'){selectKeypadPin('KVCC');return;}
+    if(view!=='divider')selectCable(id);else selectStep({out:'out',a0:'a0',ground:'ground','ground-links':'ground',address:'ground','gnd-pin':'ground'}[id]);
   });
   let previous=performance.now();
   function frame(time){const delta=(time-previous)/1000;previous=time;rig.update(delta);world.render();requestAnimationFrame(frame);}requestAnimationFrame(frame);
-  window.hardwareViewer={world,rig,setView,selectModule,selectCable,selectStep,clear,focusAmplifier,setAssemblyMode,selectAmpPin,getState:()=>({view,group,selectedModule,selectedCable,assemblyMode,selectedAmpPin})};
+  window.hardwareViewer={world,rig,setView,selectModule,selectCable,selectStep,clear,focusKeypad,selectKeypadPin,focusAdc,setAdcMode,selectAdcPin,focusAmplifier,setAssemblyMode,selectAmpPin,getState:()=>({view,group,selectedModule,selectedCable,assemblyMode,selectedAmpPin,adcMode,selectedAdcPin})};
   installLiveReload({
     getState:()=>({...window.hardwareViewer.getState(),mode:rig.mode,position:world.camera.position.toArray(),quaternion:world.camera.quaternion.toArray(),target:rig.orbit.target.toArray(),labels:document.getElementById('show-labels').checked}),
     restoreState(state){
       if(!state||!['divider','setup','pico'].includes(state.view))return;
+      if(['labels','components'].includes(state.adcMode))adcMode=state.adcMode;
       if(['wiring','before','underside'].includes(state.assemblyMode))assemblyMode=state.assemblyMode;
       setView(state.view);
       if(state.mode==='free'){document.getElementById('camera-mode').value='free';rig.setMode('free');ui.camera('free');}
@@ -121,7 +174,10 @@ function boot() {
       if(['all','LCD','Audio','ADC','Keypad','Power'].includes(state.group)){group=state.group;document.getElementById('cable-group').value=group;updateCables();refreshWireList();}
       if(state.selectedModule)selectModule(state.selectedModule);
       if(state.selectedCable&&activeSetup().cables.some(c=>c.id===state.selectedCable))selectCable(state.selectedCable);
-      if(state.selectedAmpPin){selectedAmpPin=state.selectedAmpPin;activeSetup().amplifier.selectPin(selectedAmpPin);}updateCables();updateAmpGuide();
+      if(state.selectedAmpPin){selectedAmpPin=state.selectedAmpPin;activeSetup().amplifier.selectPin(selectedAmpPin);}
+      if(state.selectedAdcPin&&!state.selectedCable)selectAdcPin(state.selectedAdcPin);
+      for(const id of ['a0','ground','ground-links','address','gnd-pin'])world.divider.parts[id].visible=adcMode==='labels';
+      updateCables();updateAmpGuide();
       world.camera.updateMatrixWorld();if(rig.mode==='inspect')rig.orbit.update();
     },
   });

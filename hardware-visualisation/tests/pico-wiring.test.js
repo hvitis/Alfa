@@ -8,7 +8,7 @@ import { isVisible, registerModule } from '../src/scene/modules.js';
 
 const pico=createPicoData();
 test('Pico pin assignments use physical DIP pins and valid SPI / I2C / PIO functions',()=>{
-  const expected={LVCC:[36,'3V3 OUT'],LGND:[3,'GND'],LDIN:[25,'GP19'],LCLK:[24,'GP18'],LCS:[22,'GP17'],LDC:[21,'GP16'],LRST:[26,'GP20'],LBL:[27,'GP21'],MVIN:[40,'VBUS'],MGND:[13,'GND'],MBCLK:[14,'GP10'],MLRC:[15,'GP11'],MDIN:[16,'GP12'],AVDD:[36,'3V3 OUT'],AGND:[8,'GND'],ASDA:[6,'GP4'],ASCL:[7,'GP5'],KVCC:[40,'VBUS'],KGND:[18,'GND']};
+  const expected={LVCC:[36,'3V3 OUT'],LGND:[3,'GND'],LDIN:[25,'GP19'],LCLK:[24,'GP18'],LCS:[22,'GP17'],LDC:[21,'GP16'],LRST:[26,'GP20'],LBL:[27,'GP21'],MVIN:[40,'VBUS'],MGND:[13,'GND'],MBCLK:[14,'GP10'],MLRC:[15,'GP11'],MDIN:[16,'GP12'],AVDD:[36,'3V3 OUT'],GND_JOIN:[8,'GND'],ASDA:[6,'GP4'],ASCL:[7,'GP5'],KVCC:[40,'VBUS'],KGND:[18,'GND']};
   const changed=pico.wires.filter(w=>w.previousPin);assert.equal(changed.length,19);
   for(const [terminal,[pin,name]]of Object.entries(expected)){
     const wire=changed.find(w=>w.to===terminal);assert.equal(wire.controllerPin,'P'+pin,terminal);assert.equal(PICO_PIN_NAMES[pin-1],name,terminal);assert(wire.changed);
@@ -30,7 +30,7 @@ test('Pico retains every module, LCD harness color, divider net and speaker pola
   for(const wire of pico.wires){assert.deepEqual(wire.path[0],pico.points[wire.from],wire.id);assert.deepEqual(wire.path.at(-1),pico.points[wire.to],wire.id);}
   for(const wire of base.wires.filter(w=>!/^P\d+$/.test(w.from)&&w.id!=='USB'))assert.deepEqual(pico.wires.find(w=>w.id===wire.id).path,wire.path,wire.id);
   for(const wire of base.wires.filter(w=>w.group==='LCD'))assert.equal(pico.wires.find(w=>w.id===wire.id).color,wire.color);
-  assert.equal(pico.wires.find(w=>w.from==='M-').to,'S-');assert.equal(pico.wires.filter(w=>w.added).length,2);assert.equal(base.wires.length,26);
+  assert.equal(pico.wires.find(w=>w.from==='M-').to,'S-');assert.equal(pico.wires.filter(w=>w.added).length,2);assert.equal(base.wires.length,27);
 });
 test('Pico headers follow DIP numbering, with USB between pins 1 and 40',()=>{
   const p=pico.points;assert(p.P1[0]<0);assert(p.P40[0]>0);assert.equal(p.P1[2],p.P40[2]);
