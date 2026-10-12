@@ -43,6 +43,8 @@ It uses **BCM GPIO24** for the backlight, so the display does not share GPIO18 w
 
 ## Interactive hardware visualisation
 
+[The plywood case design](design/wooden-case/README.md) includes an offline 3D planner, four actual-size A4 cutting/drilling templates, component placement, and cable routing for the Pi 3, Baseus 5000 mAh bank and existing five-button board. It uses 6 mm plywood and a removable rear cover.
+
 [Open the 3D viewer](hardware-visualisation/viewer.html) for clickable module explanations, the R1/R2 close-up, and free camera movement.
 The **Pi 3 setup** and **Pico 2 WH setup** views show the same modules with different controller connections.
 The Pico view marks changed pins in amber and compares all 19 header connections.

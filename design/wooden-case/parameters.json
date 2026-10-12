@@ -1,0 +1,26 @@
+{
+  "units": "mm",
+  "revision": "A",
+  "case": {"width": 150, "height": 200, "depth": 64, "plywood": 6, "saw_gap": 5},
+  "battery": {"size": [69, 106, 14], "origin": [73, 82, 9], "confidence": "user dimensions", "mass_g": 150},
+  "pi": {"size": [56, 85, 1.6], "origin": [28, 55, 48.4], "standoff": 8, "mount_holes": [[31.5, 58.5], [80.5, 58.5], [31.5, 116.5], [80.5, 116.5]], "confidence": "manufacturer drawing; rotated portrait; connectors simplified"},
+  "lcd": {"size": [35, 58, 10], "origin": [24.5, 18, 6], "window": [26, 24, 32, 46], "mount_holes": [[27, 20.5], [57, 20.5], [27, 73.5], [57, 73.5]], "confidence": "manufacturer outline and 30 x 53 hole pitch; active-area offset inferred"},
+  "keypad": {"size": [30, 65, 1.6], "origin": [22, 110, 7], "button_centres": [[37, 118], [29.5, 133], [44.5, 133], [37, 148], [37, 167]], "cap_diameter": 12, "cap_height": 6, "confidence": "user PCB dimensions; button positions and heights approximate; transfer mounting holes"},
+  "speaker": {"size": [40, 40, 20], "origin": [92, 12, 6], "centre": [112, 32], "confidence": "user overall dimensions; frame, magnet and mounting holes simplified"},
+  "adc": {"size": [9, 29, 1.6], "origin": [59, 135, 9], "confidence": "user PCB dimensions; header and mounting details approximate"},
+  "amp": {"size": [20, 15, 1.6], "origin": [51, 89, 10], "confidence": "user PCB dimensions; header and terminal heights approximate"},
+  "divider": {"size": [16, 20, 1.6], "origin": [54, 174, 9], "confidence": "new small perfboard with two 10 kohm resistors"},
+  "switch": {"size": [18, 40, 22], "origin": [0, 140, 21], "confidence": "PROVISIONAL clearance envelope; supplier does not publish housing dimensions", "reference": "https://thepihut.com/products/micro-usb-cable-with-on-off-switch", "supplier_sku": "103418", "actuator_diameter": 16},
+  "switch_cover": {"size": [40, 72], "origin_yz": [124, 12], "screw_holes": [[20, 8], [20, 64]]},
+  "rear_screws": [[12, 12], [138, 12], [12, 188], [138, 188]],
+  "notes": [
+    "All origins are the top-left-front of each envelope in the assembled case.",
+    "Exported CAD coordinates map drawing x,y,z to x,-y,-z; drawing y increases downward, z goes into the box.",
+    "Only 5 existing keypad buttons; no additional GPIO power button.",
+    "Four M3 screws release the entire rear panel for battery and connector access.",
+    "No router, laser cutter or 3D printer is required.",
+    "Mounting holes on the keypad, speaker, ADC and amplifier must be transferred from the actual parts.",
+    "Confirm the inline switch housing and actuator before cutting its opening and cover.",
+    "The Baseus USB-C socket is shared for charging and output. Remove the rear panel and unplug the Pi power cable to recharge the bank."
+  ]
+}
