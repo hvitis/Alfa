@@ -9,12 +9,20 @@ class PlayerSession:
         self.audio = audio
         self.last_action = "Ready"
         self.fullscreen = fullscreen
+        self.animation = None
 
     def action(self, button):
         if button in ("left", "right"):
+            if self.animation:
+                self.animation.stop()
             self.gallery.navigate(button)
             self.last_action = "Previous photo" if button == "left" else "Next photo"
         elif button in ("up", "down"):
+            if self.animation:
+                name = "listening" if button == "up" else "speaking"
+                self.animation.start(name)
+                self.last_action = name.capitalize()
+                return
             delta = .05 if button == "up" else -.05
             self.audio.set_volume(round(max(0, min(1, self.audio.volume + delta)), 2))
             self.last_action = f"Volume {self.audio.volume:.0%}"
@@ -29,6 +37,10 @@ class PlayerSession:
                 self.last_action = "Playing"
 
     def frame(self):
+        if self.animation:
+            frame = self.animation.frame()
+            if frame is not None:
+                return frame
         if self.fullscreen:
             from PIL import Image
             with Image.open(self.gallery.paths[self.gallery.index]) as image:
@@ -37,5 +49,7 @@ class PlayerSession:
                             self.sounds[0].name if self.sounds else "Audio disabled", self.last_action)
 
     def render_key(self):
+        if self.animation:
+            return (self.gallery.index, self.animation.render_key())
         return (self.gallery.index, round(self.audio.volume * 100), self.audio.playing,
                 int(self.audio.position * 4), self.last_action)

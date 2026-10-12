@@ -1,6 +1,9 @@
 # Alphabet App Plan
 
-This document describes a planned feature. Alphabet mode and its asset pipeline are not implemented yet.
+This document describes the broader planned alphabet interface.
+The gallery already displays letter cards and plays TOP/BOTTOM character animations with `config.alphabet.json`.
+The activity indicators, letter dial, recordings for each letter, and parent menu remain planned.
+The [animation documentation](../assets/animations/README.md) describes the current implementation.
 
 ## Core Idea
 A grid navigation interface.

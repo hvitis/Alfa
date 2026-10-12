@@ -18,6 +18,7 @@ from .hardware import ADS1x15, PreviewDisplay, ST7789
 from .media import image_sources, prepare_audio, prepare_images
 from .ui import screen_patterns
 from .player import PlayerSession
+from .animation import CharacterAnimation
 from .speaker_test import run_speaker_test
 
 
@@ -150,11 +151,23 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         audio = StreamingAudioPlayer(settings, simulate)
         stack.callback(audio.close)
         session = PlayerSession(images, sounds, audio, fullscreen)
+        animation_cfg = settings.data.get("animations", {})
+        if animation_cfg.get("enabled"):
+            session.fullscreen = True
+            session.animation = CharacterAnimation(
+                settings.path("animations", "prepared"), animation_cfg["fps"],
+                animation_cfg["cycles"], settings.data["display"]["rotation"])
+        def show_frame():
+            payload = session.animation.wire_frame() if session.animation else None
+            if payload is not None and hasattr(display, "show_rgb565"):
+                display.show_rgb565(payload)
+            else:
+                display.show(session.frame())
         if sounds:
             import wave
             with wave.open(str(sounds[0]), "rb") as recording:
                 audio.duration = recording.getnframes() / recording.getframerate()
-        display.show(session.frame())
+        show_frame()
         if once:
             print("Displayed the player." + (f" Preview: {settings.state / 'preview/current.png'}" if simulate else ""))
             return
@@ -166,8 +179,12 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         keyboard = stack.enter_context(Keyboard())
         center_since = None
         previous_frame = session.render_key()
-        print("Player: LEFT/RIGHT (A/D) = photos; UP/DOWN (W/S) = volume; CENTER (Space) = play/stop.")
-        print("Hold CENTER for 2 seconds or press Q / Ctrl+C to quit. Volume changes in 5% steps during playback.")
+        next_frame_at = 0
+        if session.animation:
+            print("Alphabet: LEFT/RIGHT (A/D) = letter; TOP (W/UP) = listening; BOTTOM (S/DOWN) = speaking.")
+        else:
+            print("Player: LEFT/RIGHT (A/D) = photos; UP/DOWN (W/S) = volume; CENTER (Space) = play/stop.")
+        print("Hold CENTER for 2 seconds or press Q / Ctrl+C to quit.")
         if simulate:
             print(f"Simulation saves frames to {settings.state / 'preview/current.png'}; it produces no sound.")
         while True:
@@ -195,9 +212,13 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                     print("Center held: stopping the player.")
                     return
             key = session.render_key()
-            if key != previous_frame:
-                display.show(session.frame())
+            if key != previous_frame and time.monotonic() >= next_frame_at:
+                frame_started = time.monotonic()
+                show_frame()
                 previous_frame = key
+                if session.animation:
+                    # Include SPI transfer time in the budget; never queue late frames.
+                    next_frame_at = max(time.monotonic(), frame_started + 1 / animation_cfg["fps"])
             time.sleep(.01)
 
 

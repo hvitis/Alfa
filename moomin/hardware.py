@@ -88,11 +88,17 @@ class ST7789:
         if frame.size != self.size:
             raise ValueError(f"Frame must be {self.size}.")
         frame = frame.rotate(self.cfg["rotation"], expand=True)
+        self.show_rgb565(rgb565(frame))
+
+    def show_rgb565(self, payload):
+        """Send a native 240x320 frame already encoded in ST7789 wire byte order."""
+        if len(payload) != 240 * 320 * 2:
+            raise ValueError("RGB565 payload must contain exactly 153600 bytes.")
         self.command(0x2A, [0, 0, 0, 239])
         self.command(0x2B, [0, 0, 1, 63])
         self.command(0x2C)
         self.dc.on()
-        self.spi.writebytes2(rgb565(frame))
+        self.spi.writebytes2(payload)
 
     def close(self):
         if self.backlight:

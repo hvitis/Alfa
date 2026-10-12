@@ -53,6 +53,15 @@ class Settings:
         for section in ("images", "audio"):
             if self.path(section, "input") == self.path(section, "prepared"):
                 raise ValueError("Prepared media must use a different directory from the originals.")
+        animations = self.data.get("animations", {})
+        if animations.get("enabled"):
+            if self.size != (240, 320):
+                raise ValueError("Alphabet animations need portrait rotation 0 or 180.")
+            fps, cycles = animations["fps"], animations["cycles"]
+            if not math.isfinite(fps) or not 4 <= fps <= 6:
+                raise ValueError("Full-screen animation FPS must be between 4 and 6.")
+            if type(cycles) is not int or not 1 <= cycles <= 4:
+                raise ValueError("Animation cycles must be an integer between 1 and 4.")
 
     @property
     def size(self):

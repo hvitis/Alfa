@@ -23,8 +23,14 @@ To display the complete cards on the Pi, run:
 python3 -m moomin --config config.alphabet.json gallery --fullscreen --no-audio
 ```
 
-Use LEFT and RIGHT to change the card. Add `--keyboard` for SSH keyboard control.
+Use LEFT and RIGHT to change the card.
+Press TOP (UP) for Moominmamma's listening animation.
+Press BOTTOM (DOWN) for Mała Mi's speaking animation.
+Each animation uses four frames at 5 FPS and returns to the selected card after two cycles (1.6 seconds).
+LEFT and RIGHT stop the animation and change the letter.
+Add `--keyboard` for SSH keyboard control (A/D for letters, W/S for animations).
 For a preview without hardware, add `--simulate` before `gallery` and `--once` after it.
+The [animation assets and previews](assets/animations/README.md) include PNG frames, RGB565 files, and GIF previews.
 
 The app starts at **20% digital audio volume**.
 It uses **BCM GPIO24** for the backlight, so the display does not share GPIO18 with the amplifier.

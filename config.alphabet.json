@@ -1,4 +1,7 @@
 {
+  "animations": {
+    "enabled": true
+  },
   "images": {
     "input": "assets/alphabet",
     "prepared": "media/alphabet",

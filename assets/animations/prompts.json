@@ -1,0 +1,28 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "references": {
+    "speaking": [
+      "assets/alphabet/04-Ć.png",
+      "assets/animations/references/little-my-anime-smile.jpg",
+      "assets/animations/references/little-my-anime-talking.jpg"
+    ],
+    "listening": "assets/alphabet/07-Ę.png"
+  },
+  "prompts": {
+    "speaking": "Use case: illustration-story. Asset type: production four-frame speaking animation atlas for a children's Polish alphabet toy on a 240x320 portrait ST7789 LCD. Replace the speaking character with Mała Mi (Little My), faithfully reflecting the original 1990 hand-drawn Moomin anime facial design and talking mouth.\nInput images: image 1 (Ć letter card) is the project's watercolor/ink rendering style and Little My identity reference only: omit the letter completely. Images 2 and 3 are original anime screenshots to STUDY HER EXACT MOUTH SHAPES, face proportions, straight forehead fringe, eyebrows and pointed nose. Do not reproduce scenes, windows, furniture, words, backgrounds, another character, or screenshot artifacts.\nCreate ONE square atlas split into exactly four equal square quadrants in a 2x2 grid, no gaps or borders. Each quadrant contains a whole-body Little My at the exact same scale and coordinates, fixed camera, fixed hairline, nose, eyes, dress, arms and boots. Generous margins so no part is cut. Large round head, tiny short body, orange-red topknot with straight fringe, sharp small pointed triangular nose, side-looking eyes with green irises, slightly lowered mischievous eyebrows, bright red flared dress with large pale pink neck bow, black gloves and short black lace-up boots. One black-gloved hand on hip, other hand lightly raised in an assertive conversational gesture; the gesture does not change between frames, so the animation focuses on mouth movement. Familiar cheeky determined Little My, not a generic cute girl.\nMouth anatomy from the 1990 references: NO sculpted lips, NO lipstick, NO modern anime pout. A fine black contour and a simple pink/reddish interior. Keep mouth in the lower center of her round face, under her small pointed nose, clearly visible at LCD size. Four different sequential mouth shapes, in reading order: TOP LEFT closed sly smile, just a thin asymmetric curved black line; TOP RIGHT shallow sideways open wedge with pink interior, upper edge almost straight/slightly angled, curved lower contour matching screenshot 2; BOTTOM LEFT modest taller open pink oval/bean, contour matching screenshot 3, not an exaggerated giant laughing mouth and no teeth; BOTTOM RIGHT small horizontally narrow opening like end of a spoken syllable, which naturally transitions back to the closed smile. Do not draw full red lips around any mouth. All other facial geometry stays IDENTICAL across frames; only the mouth changes.\nStyle: soft clean ink contour with subtle watercolor coloring, consistent with the project's letter card and listening animation. Pale ivory background #fffdf5, very faint mint watercolor wash around the figure, no scenery or props. No letters, text, speech bubbles, numbers, labels or watermark. Preserve square quadrant alignment. The frames will be fitted without stretching to240x320 and shown at5FPS, a0.8second loop.",
+    "listening": "Use case: illustration-story. Asset type: a production four-frame animation atlas for a 240x320 portrait ST7789 children's alphabet toy. Create ONE square 2x2 sprite sheet, four equal portrait illustrations arranged in precisely equal quadrants, no borders or gaps, no text or labels. Each quadrant is treated as a separate portrait frame; the final square atlas may require blank side margins INSIDE each quadrant to preserve a portrait composition. Same fixed camera, same character scale, same face/body location in every quadrant. Whole character visible with generous margins, simple flat pale ivory background #fffdf5, faint mint wash only near the character, soft ink contours and gentle watercolor matching reference. No letters, other characters, speech bubbles, UI or words. Motion must be easy to read when each quadrant is resized to240x320. Subject: Moominmamma, recognizable round white Moomin mother with upright ears, rounded long snout, kind eyes, red-and-white vertically striped apron tied behind, small black handbag held in the LEFT paw by her hip. Front three-quarter view facing right. Four sequential frames in reading order: top-left relaxed listening posture, right paw at chest; top-right right forearm lifting paw toward her right ear; bottom-left right paw cupped beside her right ear as she leans her head slightly to listen better; bottom-right right paw still cupped at ear, slight attentive head tilt and a gentle blink. Clearly place raised hand NEXT TO EAR, above eye level, not at mouth. Maintain matching apron stripes, handbag, tail and rooted feet in every frame. Reference image is character/style reference only; remove the big letter."
+  },
+  "speakingCharacter": "Mała Mi (Little My)",
+  "mouthReferenceSources": [
+    {
+      "url": "https://kobieta.gazeta.pl/kobieta/7,107881,29627694,podkladala-glos-malej-mi-w-muminkach-ze-slyszenia-znalo-ja.html",
+      "image": "references/little-my-anime-smile.jpg",
+      "observation": "Simple shallow asymmetric open wedge, a curved lower contour, and reddish interior; no distinct painted lip outline."
+    },
+    {
+      "url": "https://www.millionmonkeytheater.com/22Shit7.html",
+      "image": "references/little-my-anime-talking.jpg",
+      "observation": "Small pink rounded oval during speech, with a fine dark outline and no separate modeled lips."
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "size": [
+    240,
+    320
+  ],
+  "source_format": "RGB888-PNG",
+  "raw_format": "RGB565-LE",
+  "wire_format": "RGB565-BE",
+  "fps": 5,
+  "clips": {
+    "listening": [
+      {
+        "png": "listening/frame-00.png",
+        "raw": "listening/frame-00.raw",
+        "bin": "listening/frame-00.bin"
+      },
+      {
+        "png": "listening/frame-01.png",
+        "raw": "listening/frame-01.raw",
+        "bin": "listening/frame-01.bin"
+      },
+      {
+        "png": "listening/frame-02.png",
+        "raw": "listening/frame-02.raw",
+        "bin": "listening/frame-02.bin"
+      },
+      {
+        "png": "listening/frame-03.png",
+        "raw": "listening/frame-03.raw",
+        "bin": "listening/frame-03.bin"
+      }
+    ],
+    "speaking": [
+      {
+        "png": "speaking/frame-00.png",
+        "raw": "speaking/frame-00.raw",
+        "bin": "speaking/frame-00.bin"
+      },
+      {
+        "png": "speaking/frame-01.png",
+        "raw": "speaking/frame-01.raw",
+        "bin": "speaking/frame-01.bin"
+      },
+      {
+        "png": "speaking/frame-02.png",
+        "raw": "speaking/frame-02.raw",
+        "bin": "speaking/frame-02.bin"
+      },
+      {
+        "png": "speaking/frame-03.png",
+        "raw": "speaking/frame-03.raw",
+        "bin": "speaking/frame-03.bin"
+      }
+    ]
+  }
+}

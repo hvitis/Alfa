@@ -26,9 +26,13 @@ python3 -m moomin --config config.alphabet.json gallery --fullscreen --no-audio
 ```
 
 Use LEFT and RIGHT to change the card.
+Press TOP (UP) for Moominmamma listening with her hand at her ear.
+Press BOTTOM (DOWN) for Mała Mi speaking.
+Each animation plays two four-frame cycles at 5 FPS, then restores the selected card.
+LEFT and RIGHT stop the animation and change the letter.
 Hold CENTER for two seconds to exit the current gallery viewer.
 The physical buttons require the existing button calibration.
-For SSH keyboard control, add `--keyboard` and use A/D or the arrow keys.
+For SSH keyboard control, add `--keyboard` and use A/D for letters or W/S for animations.
 
 ## Preview without hardware
 
@@ -111,6 +115,8 @@ The [Polish dubbing credits](https://dubbingpedia.pl/wiki/Muminki) record animat
 ## Layout scope
 
 These cards use the complete screen in the current gallery viewer.
-The planned LISTEN/SAY interface still requires implementation.
-That interface must fit the artwork into its safe area before it adds activity indicators or a letter dial.
+The TOP/BOTTOM character animations work in the gallery with `config.alphabet.json`.
+The [animation documentation](../animations/README.md) describes playback and file formats.
+Activity indicators, a letter dial, and recordings for each letter remain planned.
+Their future interface must fit the artwork into its safe area before it adds these controls.
 The full-screen cards must not receive overlays that hide letter strokes or diacritics.
