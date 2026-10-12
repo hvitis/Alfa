@@ -82,7 +82,8 @@ class AnimationTests(unittest.TestCase):
         for name, frames in self.animation.clips.items():
             self.assertEqual(len(frames), 4)
             self.animation.start(name)
-            self.assertEqual(sum(map(len, self.animation.payloads)), 614400)
+            self.assertEqual(self.animation.wire_frame(),
+                             (self.animation.directory / frames[0]["bin"]).read_bytes())
             for frame in frames:
                 with Image.open(self.animation.directory / frame["png"]) as png:
                     self.assertEqual(png.mode, "RGB")
@@ -94,12 +95,39 @@ class AnimationTests(unittest.TestCase):
                 self.assertEqual(raw[0::2], wire[1::2])
                 self.assertEqual(raw[1::2], wire[0::2])
 
+    def test_listening_feet_remain_at_one_screen_anchor_throughout_the_loop(self):
+        anchors = []
+        for frame in self.animation.clips["listening"]:
+            with Image.open(self.animation.directory / frame["png"]) as image:
+                # Foot outlines below the apron; arm and head motion do not enter this region.
+                points = [(x, y) for y in range(250, 285) for x in range(75, 170)
+                          if sum(image.getpixel((x, y))) < 450]
+                anchors.append((min(x for x, y in points if x < 120),
+                                max(y for x, y in points)))
+        self.assertEqual(anchors, [(84, 266)] * 4)
+
     def test_rotated_wire_payload_preserves_pixel_words(self):
         animation = CharacterAnimation(ROOT / "media/animations", rotation=180)
         animation.start("speaking")
         with Image.open(ROOT / "media/animations/speaking/frame-00.png") as png:
             expected = rgb565(png.rotate(180))
         self.assertEqual(animation.wire_frame(), expected)
+
+    def test_wire_cache_keeps_one_frame_and_reuses_it_until_the_tick_changes(self):
+        self.animation.start("listening")
+        with patch.object(Path, "read_bytes", autospec=True) as read:
+            def load(path):
+                with path.open("rb") as source:
+                    return source.read()
+            read.side_effect = load
+            first = self.animation.wire_frame()
+            self.assertIs(self.animation.wire_frame(), first)
+            self.assertEqual(read.call_count, 1)
+            self.now += .201
+            self.animation.wire_frame()
+            self.assertEqual(read.call_count, 2)
+            self.assertEqual(len(self.animation.payloads), 1)
+            self.assertEqual(len(self.animation.payloads[0]), 153600)
 
     def test_display_sends_precompiled_bytes_and_rejects_truncated_payload_before_spi(self):
         self.animation.start("speaking")

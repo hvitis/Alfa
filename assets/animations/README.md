@@ -1,6 +1,8 @@
 # Alphabet character animations
 
 TOP (UP) shows Moominmamma listening as she raises her hand to her ear.
+Her feet stay at one screen position while her arm, head, and upper body move.
+The exporter aligns each pose to the same toe position and sole baseline.
 BOTTOM (DOWN) shows Mała Mi (Little My) speaking with four different mouth shapes.
 The artwork matches the soft ink and watercolor style of the alphabet cards.
 
@@ -62,10 +64,12 @@ The GIF previews repeat indefinitely for visual review:
 The built-in `image_gen.imagegen` tool generated both source atlases.
 [prompts.json](prompts.json) contains the complete prompts and character references.
 The compiler splits each atlas in reading order and fits each frame without cropping or stretching.
+For listening frames, [layout.json](layout.json) supplies small offsets after resizing to keep her feet anchored.
 
 | Path | Content |
 | :--- | :--- |
 | `assets/animations/listening-atlas.png` | Moominmamma source atlas, 2 × 2 frames |
+| `assets/animations/layout.json` | Listening frame offsets in native LCD pixels |
 | `assets/animations/speaking-atlas.png` | Mała Mi source atlas, 2 × 2 frames |
 | `assets/animations/references/little-my-anime-*.jpg` | Original cartoon stills for mouth reference |
 | `media/animations/*/frame-00.png` through `frame-03.png` | 24-bit RGB PNG frames, 240 × 320 |

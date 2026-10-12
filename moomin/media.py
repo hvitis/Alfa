@@ -58,10 +58,10 @@ def cached_manifest(directory, signature):
     return None
 
 
-def image_sources(settings):
+def image_sources(settings, prepared_only=False):
     """A Git checkout includes prepared photos, while original imgs is optional."""
     source = settings.path("images", "input")
-    files = source_files(source, IMAGE_TYPES) if source.is_dir() else []
+    files = source_files(source, IMAGE_TYPES) if not prepared_only and source.is_dir() else []
     if files:
         return files, False
     directory = settings.path("images", "prepared")
@@ -86,6 +86,31 @@ def image_sources(settings):
     except (OSError, KeyError, TypeError, ValueError) as error:
         raise ValueError(f"Cannot use prepared photos in {directory}: {error}") from error
     return prepared, True
+
+
+def prepared_audio(settings):
+    """Read deployed WAV headers without hashing sources or invoking ffmpeg."""
+    import wave
+    directory = settings.path("audio", "prepared") / "full"
+    try:
+        items = json.loads((directory / "manifest.json").read_text())["items"]
+        if not isinstance(items, list) or not items:
+            raise ValueError("The prepared recording list is empty.")
+        paths = []
+        for item in items:
+            name = item["file"]
+            if not isinstance(name, str) or Path(name).name != name:
+                raise ValueError("Invalid prepared recording filename.")
+            path = directory / name
+            with wave.open(str(path), "rb") as recording:
+                if (recording.getnchannels(), recording.getsampwidth(), recording.getframerate(), recording.getcomptype()) != (2, 2, 48000, "NONE"):
+                    raise ValueError(f"Invalid recording format: {name}")
+                if recording.getnframes() <= 0 or path.stat().st_size < recording.getnframes() * 4 + 44:
+                    raise ValueError(f"Empty or truncated recording: {name}")
+            paths.append(path)
+        return paths
+    except (OSError, KeyError, TypeError, ValueError, wave.Error, EOFError) as error:
+        raise ValueError(f"Cannot use prepared recordings in {directory}: {error}. Run prepare --full-audio.") from error
 
 
 def prepare_images(settings, force=False):

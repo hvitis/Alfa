@@ -15,7 +15,9 @@ from .audio import StreamingAudioPlayer, audio_device
 from .buttons import Debouncer, calibrate, classify, load_calibration
 from .config import Settings
 from .hardware import ADS1x15, PreviewDisplay, ST7789
-from .media import image_sources, prepare_audio, prepare_images
+from .media import image_sources, prepare_audio, prepare_images, prepared_audio
+from .frames import WireFrames, prepare_wire_images
+from .service import ServiceWatchdog
 from .ui import screen_patterns
 from .player import PlayerSession
 from .animation import CharacterAnimation
@@ -143,9 +145,10 @@ def monitor_buttons(settings, seconds=0):
             time.sleep(0.01)
 
 
-def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_audio=False, fullscreen=False):
-    images = prepare_images(settings)
-    sounds = [] if no_audio else prepare_audio(settings, full=True)
+def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_audio=False, fullscreen=False,
+                standalone=False, prepared_only=False, autoplay=False):
+    images = image_sources(settings, prepared_only=True)[0] if prepared_only else prepare_images(settings)
+    sounds = [] if no_audio else prepared_audio(settings) if prepared_only else prepare_audio(settings, full=True)
     with ExitStack() as stack:
         display = display_resource(stack, settings, simulate)
         audio = StreamingAudioPlayer(settings, simulate)
@@ -157,8 +160,11 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
             session.animation = CharacterAnimation(
                 settings.path("animations", "prepared"), animation_cfg["fps"],
                 animation_cfg["cycles"], settings.data["display"]["rotation"])
+        wire_images = WireFrames(settings) if session.fullscreen and hasattr(display, "show_rgb565") else None
         def show_frame():
             payload = session.animation.wire_frame() if session.animation else None
+            if payload is None and wire_images is not None:
+                payload = wire_images.frame(session.gallery.paths[session.gallery.index])
             if payload is not None and hasattr(display, "show_rgb565"):
                 display.show_rgb565(payload)
             else:
@@ -171,6 +177,8 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         if once:
             print("Displayed the player." + (f" Preview: {settings.state / 'preview/current.png'}" if simulate else ""))
             return
+        if autoplay and sounds:
+            session.action("center")
         adc = None
         if not simulate and not keyboard_only:
             states = load_calibration(settings)
@@ -184,13 +192,20 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
             print("Alphabet: LEFT/RIGHT (A/D) = letter; TOP (W/UP) = listening; BOTTOM (S/DOWN) = speaking.")
         else:
             print("Player: LEFT/RIGHT (A/D) = photos; UP/DOWN (W/S) = volume; CENTER (Space) = play/stop.")
-        print("Hold CENTER for 2 seconds or press Q / Ctrl+C to quit.")
+        print("Standalone mode: CENTER hold cannot exit; stop with systemctl." if standalone else
+              "Hold CENTER for 2 seconds or press Q / Ctrl+C to quit.")
         if simulate:
             print(f"Simulation saves frames to {settings.state / 'preview/current.png'}; it produces no sound.")
+        watchdog = ServiceWatchdog()
+        watchdog.ready()
         while True:
+            watchdog.tick()
+            # Detect ALSA worker failures even when a full-screen card has no progress UI.
+            _ = audio.playing
             for key in keyboard.read().lower():
                 if key in ("q", "\x03"):
-                    return
+                    if not standalone:
+                        return
                 if key in {"a", "d", "w", "s", " "}:
                     session.action({"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key])
             if adc:
@@ -208,7 +223,7 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                         if now - center_since < 2:
                             session.action("center")
                         center_since = None
-                if center_since is not None and name == "center" and now - center_since >= 2:
+                if not standalone and center_since is not None and name == "center" and now - center_since >= 2:
                     print("Center held: stopping the player.")
                     return
             key = session.render_key()
@@ -219,7 +234,7 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                 if session.animation:
                     # Include SPI transfer time in the budget; never queue late frames.
                     next_frame_at = max(time.monotonic(), frame_started + 1 / animation_cfg["fps"])
-            time.sleep(.01)
+            time.sleep(.04 if standalone else .01)
 
 
 def parser():
@@ -232,6 +247,7 @@ def parser():
     prepare.add_argument("--force", action="store_true")
     prepare.add_argument("--images-only", action="store_true")
     prepare.add_argument("--full-audio", action="store_true", help="Prepare complete recordings for the interactive player.")
+    prepare.add_argument("--wire-only", action="store_true", help="Compile deployed PNGs into native display transfers without preparing audio.")
     commands.add_parser("doctor", help="Check dependencies, interfaces, ADC and audio device.")
     screen = commands.add_parser("screen-test", help="Show colors, borders and orientation labels.")
     screen.add_argument("--seconds", type=float, default=1.5, help="Duration per pattern.")
@@ -253,6 +269,9 @@ def parser():
     gallery.add_argument("--once", action="store_true", help="Display the first photo and exit.")
     gallery.add_argument("--no-audio", action="store_true", help="Run without preparing or playing audio.")
     gallery.add_argument("--fullscreen", action="store_true", help="Display the complete image without player panels or text overlays.")
+    gallery.add_argument("--standalone", action="store_true", help="Keep running under a service; disable button and keyboard quit actions.")
+    gallery.add_argument("--prepared-only", action="store_true", help="Use deployed media without hashing originals or running ffmpeg.")
+    gallery.add_argument("--autoplay", action="store_true", help="Start the first prepared recording on launch, when audio is enabled.")
     return result
 
 
@@ -263,6 +282,10 @@ def main(argv=None):
         if args.command in ("buttons", "calibrate-buttons") and args.simulate:
             raise ValueError("Button voltage and calibration need the real ADC. Simulation only supports display/audio commands.")
         if args.command == "prepare":
+            if args.wire_only:
+                directory = prepare_wire_images(settings)
+                print(f"Prepared native RGB565 display frames: {directory}")
+                return 0
             images = prepare_images(settings, args.force)
             print(f"Prepared {len(images)} images at {settings.size}: {settings.path('images', 'prepared')}")
             if not args.images_only:
@@ -292,7 +315,8 @@ def main(argv=None):
                 raise ValueError("Monitoring duration cannot be negative.")
             monitor_buttons(settings, args.seconds)
         elif args.command in ("player", "gallery"):
-            run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio, args.fullscreen)
+            run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio, args.fullscreen,
+                        args.standalone, args.prepared_only, args.autoplay)
         return 0
     except KeyboardInterrupt:
         print("\nStopped. Audio and display resources released.")

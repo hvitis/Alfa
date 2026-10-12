@@ -39,8 +39,8 @@ class AudioPlayer:
         self.configured_device = device or settings.data["audio"]["device"]
         self.process = self.log = None
         self.simulated_until = 0.0
-        self.temp = settings.state / f"playback-{os.getpid()}.wav"
-        self.log_path = settings.state / f"audio-{os.getpid()}.log"
+        self.temp = settings.runtime_state / f"playback-{os.getpid()}.wav"
+        self.log_path = settings.runtime_state / f"audio-{os.getpid()}.log"
 
     def play(self, path):
         self.stop()
@@ -51,7 +51,7 @@ class AudioPlayer:
             return
         device = audio_device(self.configured_device)
         self.selected_device = device
-        self.settings.state.mkdir(parents=True, exist_ok=True)
+        self.settings.runtime_state.mkdir(parents=True, exist_ok=True)
         conversion = ["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", str(path), "-af", f"volume={self.volume}", "-c:a", "pcm_s16le", str(self.temp)]
         if self.verbose:
             self.report("Volume conversion: " + shlex.join(conversion))
@@ -138,7 +138,7 @@ class StreamingAudioPlayer:
         self._error = None
         self._stop_event = threading.Event()
         self._device = None
-        self.log_path = settings.state / f"player-audio-{os.getpid()}.log"
+        self.log_path = settings.runtime_state / f"player-audio-{os.getpid()}.log"
 
     def set_volume(self, value):
         import math
@@ -164,7 +164,7 @@ class StreamingAudioPlayer:
             self._active = True
             return
         self._device = self._device or audio_device(self.settings.data["audio"]["device"])
-        self.settings.state.mkdir(parents=True, exist_ok=True)
+        self.settings.runtime_state.mkdir(parents=True, exist_ok=True)
         self._log = self.log_path.open("w")
         try:
             self._process = subprocess.Popen(

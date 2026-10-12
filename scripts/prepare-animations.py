@@ -14,6 +14,8 @@ from moomin.media import fit_image
 
 def prepare(source, destination):
     destination.mkdir(parents=True, exist_ok=True)
+    layout_path = source / "layout.json"
+    layout = json.loads(layout_path.read_text()) if layout_path.exists() else {}
     clips = {}
     for name in ("listening", "speaking"):
         frames = []
@@ -24,6 +26,13 @@ def prepare(source, destination):
                 box = (x * atlas.width // 2, y * atlas.height // 2,
                        (x + 1) * atlas.width // 2, (y + 1) * atlas.height // 2)
                 frame = fit_image(atlas.crop(box), (240, 320), background="#fffdf5")
+                offsets = layout.get(name, {}).get("frame_offsets", [[0, 0]] * 4)
+                dx, dy = offsets[index]
+                if dx or dy:
+                    # Register the animation on its planted feet after native-size fitting.
+                    canvas = Image.new("RGB", (240, 320), "#fffdf5")
+                    canvas.paste(frame, (dx, dy))
+                    frame = canvas
                 directory = destination / name
                 directory.mkdir(exist_ok=True)
                 stem = directory / f"frame-{index:02d}"

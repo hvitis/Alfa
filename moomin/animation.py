@@ -29,26 +29,20 @@ class CharacterAnimation:
         self.started = 0
         self.serial = 0
         self.payloads = []
+        self.payload_index = None
 
     def start(self, name):
-        # Cache only the active four-frame clip (614400 bytes at native resolution).
-        payloads = []
-        for frame in self.clips[name]:
-            payload = (self.directory / frame["bin"]).read_bytes()
-            if len(payload) != 240 * 320 * 2:
-                raise ValueError(f"Invalid RGB565 frame length: {frame['bin']}")
-            if self.rotation == 180:
-                # Reverse pixel order, preserving each pixel's two-byte wire word.
-                payload = b"".join(payload[index:index + 2]
-                                   for index in range(len(payload) - 2, -1, -2))
-            payloads.append(payload)
-        self.payloads = payloads
+        if name not in self.clips:
+            raise ValueError(f"Unknown animation: {name}")
+        # One native frame (153600 bytes), loaded only when it reaches the screen.
+        self.payloads, self.payload_index = [], None
         self.active, self.started = name, self.clock()
         self.serial += 1
 
     def stop(self):
         self.active = None
         self.payloads = []
+        self.payload_index = None
 
     def index(self):
         if self.active is None:
@@ -75,4 +69,18 @@ class CharacterAnimation:
 
     def wire_frame(self):
         index = self.index()
-        return None if index is None else self.payloads[index]
+        if index is None:
+            return None
+        if index != self.payload_index:
+            self.payloads = []
+            frame = self.clips[self.active][index]
+            payload = (self.directory / frame["bin"]).read_bytes()
+            if len(payload) != 240 * 320 * 2:
+                raise ValueError(f"Invalid RGB565 frame length: {frame['bin']}")
+            if self.rotation == 180:
+                from array import array
+                words = array("H", payload)
+                words.reverse()
+                payload = words.tobytes()
+            self.payloads, self.payload_index = [payload], index
+        return self.payloads[0]

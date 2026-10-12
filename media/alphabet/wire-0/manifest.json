@@ -1,0 +1,170 @@
+{
+  "rotation": 0,
+  "size": [
+    240,
+    320
+  ],
+  "format": "RGB565-BE",
+  "items": [
+    {
+      "png": "000-00-A.png",
+      "bin": "000-00-A.bin",
+      "source_mtime_ns": 1791799305183363272
+    },
+    {
+      "png": "001-01-\u0104.png",
+      "bin": "001-01-\u0104.bin",
+      "source_mtime_ns": 1791799305222104333
+    },
+    {
+      "png": "002-02-B.png",
+      "bin": "002-02-B.bin",
+      "source_mtime_ns": 1791799305264107342
+    },
+    {
+      "png": "003-03-C.png",
+      "bin": "003-03-C.bin",
+      "source_mtime_ns": 1791799305302624502
+    },
+    {
+      "png": "004-04-\u0106.png",
+      "bin": "004-04-\u0106.bin",
+      "source_mtime_ns": 1791799305343411025
+    },
+    {
+      "png": "005-05-D.png",
+      "bin": "005-05-D.bin",
+      "source_mtime_ns": 1791799305385922329
+    },
+    {
+      "png": "006-06-E.png",
+      "bin": "006-06-E.bin",
+      "source_mtime_ns": 1791799305428818590
+    },
+    {
+      "png": "007-07-\u0118.png",
+      "bin": "007-07-\u0118.bin",
+      "source_mtime_ns": 1791799305469742279
+    },
+    {
+      "png": "008-08-F.png",
+      "bin": "008-08-F.bin",
+      "source_mtime_ns": 1791799305508794103
+    },
+    {
+      "png": "009-09-G.png",
+      "bin": "009-09-G.bin",
+      "source_mtime_ns": 1791799305547759385
+    },
+    {
+      "png": "010-10-H.png",
+      "bin": "010-10-H.bin",
+      "source_mtime_ns": 1791799305591958472
+    },
+    {
+      "png": "011-11-I.png",
+      "bin": "011-11-I.bin",
+      "source_mtime_ns": 1791799305635562313
+    },
+    {
+      "png": "012-12-J.png",
+      "bin": "012-12-J.bin",
+      "source_mtime_ns": 1791799305678115825
+    },
+    {
+      "png": "013-13-K.png",
+      "bin": "013-13-K.bin",
+      "source_mtime_ns": 1791799305716864818
+    },
+    {
+      "png": "014-14-L.png",
+      "bin": "014-14-L.bin",
+      "source_mtime_ns": 1791799305758586543
+    },
+    {
+      "png": "015-15-\u0141.png",
+      "bin": "015-15-\u0141.bin",
+      "source_mtime_ns": 1791799305801420638
+    },
+    {
+      "png": "016-16-M.png",
+      "bin": "016-16-M.bin",
+      "source_mtime_ns": 1791799305842527200
+    },
+    {
+      "png": "017-17-N.png",
+      "bin": "017-17-N.bin",
+      "source_mtime_ns": 1791799305883128432
+    },
+    {
+      "png": "018-18-\u0143.png",
+      "bin": "018-18-\u0143.bin",
+      "source_mtime_ns": 1791799305924083162
+    },
+    {
+      "png": "019-19-O.png",
+      "bin": "019-19-O.bin",
+      "source_mtime_ns": 1791799305964392271
+    },
+    {
+      "png": "020-20-\u00d3.png",
+      "bin": "020-20-\u00d3.bin",
+      "source_mtime_ns": 1791799306003171679
+    },
+    {
+      "png": "021-21-P.png",
+      "bin": "021-21-P.bin",
+      "source_mtime_ns": 1791799306041248634
+    },
+    {
+      "png": "022-22-R.png",
+      "bin": "022-22-R.bin",
+      "source_mtime_ns": 1791799306079576503
+    },
+    {
+      "png": "023-23-S.png",
+      "bin": "023-23-S.bin",
+      "source_mtime_ns": 1791799306117410626
+    },
+    {
+      "png": "024-24-\u015a.png",
+      "bin": "024-24-\u015a.bin",
+      "source_mtime_ns": 1791799306157877192
+    },
+    {
+      "png": "025-25-T.png",
+      "bin": "025-25-T.bin",
+      "source_mtime_ns": 1791799306197158431
+    },
+    {
+      "png": "026-26-U.png",
+      "bin": "026-26-U.bin",
+      "source_mtime_ns": 1791799306235105136
+    },
+    {
+      "png": "027-27-W.png",
+      "bin": "027-27-W.bin",
+      "source_mtime_ns": 1791799306272996645
+    },
+    {
+      "png": "028-28-Y.png",
+      "bin": "028-28-Y.bin",
+      "source_mtime_ns": 1791799306311312154
+    },
+    {
+      "png": "029-29-Z.png",
+      "bin": "029-29-Z.bin",
+      "source_mtime_ns": 1791799306348894124
+    },
+    {
+      "png": "030-30-\u0179.png",
+      "bin": "030-30-\u0179.bin",
+      "source_mtime_ns": 1791799306386186054
+    },
+    {
+      "png": "031-31-\u017b.png",
+      "bin": "031-31-\u017b.bin",
+      "source_mtime_ns": 1791799306426347553
+    }
+  ]
+}

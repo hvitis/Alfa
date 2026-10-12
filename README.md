@@ -1,5 +1,9 @@
 # Moomin: Raspberry Pi screen, speaker, and button tests
 
+For offline startup at power-on and automatic recovery, read [the Raspberry Pi standalone guide](docs/raspberry-pi-standalone.md).
+On the configured Pi, install the service with `bash scripts/install-service.sh`.
+The [Pico requirements](docs/pico-requirements.md) record future firmware research. The active implementation targets Raspberry Pi 3.
+
 This Python app tests the hardware in your photos over SSH. It runs without a graphical desktop.
 
 - The screen test displays colors, a border, and orientation labels.

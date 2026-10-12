@@ -1,0 +1,13 @@
+{
+  "images": {
+    "input": "assets/alphabet",
+    "prepared": "media/alphabet",
+    "fit": "contain",
+    "background": "#fffdf5"
+  },
+  "animations": {
+    "enabled": true,
+    "fps": 4,
+    "cycles": 2
+  }
+}

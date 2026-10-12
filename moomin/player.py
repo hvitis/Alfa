@@ -51,5 +51,7 @@ class PlayerSession:
     def render_key(self):
         if self.animation:
             return (self.gallery.index, self.animation.render_key())
+        if self.fullscreen:
+            return (self.gallery.index,)
         return (self.gallery.index, round(self.audio.volume * 100), self.audio.playing,
                 int(self.audio.position * 4), self.last_action)
