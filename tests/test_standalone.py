@@ -121,6 +121,10 @@ class StandaloneTests(unittest.TestCase):
     def test_unit_starts_offline_restarts_and_uses_a_nonroot_hardware_user(self):
         unit = render_unit("/home/pi/Code/my project%", "pi", "/home/pi/Code/my project%/.venv/bin/python")
         self.assertIn("Restart=always", unit)
+        self.assertIn("SuccessExitStatus=42", unit)
+        self.assertIn("RestartPreventExitStatus=42", unit)
+        self.assertIn("ExecStopPost=+/bin/sh /usr/local/lib/moomin/poweroff-on-idle.sh", unit)
+        self.assertIn("Environment=MOOMIN_IDLE_POWEROFF=1", unit)
         self.assertIn("WatchdogSec=30", unit)
         self.assertIn("--standalone --prepared-only --autoplay", unit)
         self.assertIn('WorkingDirectory=/home/pi/Code/my project%%\n', unit)

@@ -2,6 +2,8 @@
 
 For offline startup at power-on and automatic recovery, read [the Raspberry Pi standalone guide](docs/raspberry-pi-standalone.md).
 On the configured Pi, install the service with `bash scripts/install-service.sh`.
+The player shuts down Raspberry Pi OS after five minutes without input or audio playback.
+Use `--idle-shutdown-seconds 0` to disable the timer during interactive hardware tests.
 The [Pico requirements](docs/pico-requirements.md) record future firmware research. The active implementation targets Raspberry Pi 3.
 
 This Python app tests the hardware in your photos over SSH. It runs without a graphical desktop.

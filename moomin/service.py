@@ -60,7 +60,10 @@ NotifyAccess=main
 User={user}
 WorkingDirectory={working_directory}
 ExecStart={command}
+ExecStopPost=+/bin/sh /usr/local/lib/moomin/poweroff-on-idle.sh
 Restart=always
+SuccessExitStatus=42
+RestartPreventExitStatus=42
 RestartSec=5
 WatchdogSec=30
 WatchdogSignal=SIGTERM
@@ -70,6 +73,7 @@ KillMode=control-group
 RuntimeDirectory=moomin
 RuntimeDirectoryMode=0750
 Environment=MOOMIN_RUNTIME_DIR=/run/moomin
+Environment=MOOMIN_IDLE_POWEROFF=1
 Environment=PYTHONDONTWRITEBYTECODE=1
 StandardInput=null
 StandardOutput=journal

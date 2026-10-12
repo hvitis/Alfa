@@ -26,6 +26,9 @@ class Settings:
 
     def validate(self):
         display, adc, audio = (self.data[k] for k in ("display", "adc", "audio"))
+        idle_seconds = self.data.get("power", {}).get("idle_shutdown_seconds", 300)
+        if type(idle_seconds) not in (int, float) or not math.isfinite(idle_seconds) or idle_seconds < 0:
+            raise ValueError("Idle shutdown seconds must be a finite non-negative number; 0 disables shutdown.")
         pins = [display[k] for k in ("dc_pin", "reset_pin", "backlight_pin")]
         if any(type(pin) is not int or not 0 <= pin <= 27 for pin in pins):
             raise ValueError("Display pins must be BCM GPIO numbers from 0 to 27.")

@@ -1,5 +1,6 @@
 import argparse
 import importlib.util
+import math
 import os
 import select
 import shutil
@@ -18,6 +19,7 @@ from .hardware import ADS1x15, PreviewDisplay, ST7789
 from .media import image_sources, prepare_audio, prepare_images, prepared_audio
 from .frames import WireFrames, prepare_wire_images
 from .service import ServiceWatchdog
+from .power import IDLE_POWEROFF_STATUS, IdleTimer, request_poweroff
 from .ui import screen_patterns
 from .player import PlayerSession
 from .animation import CharacterAnimation
@@ -146,7 +148,11 @@ def monitor_buttons(settings, seconds=0):
 
 
 def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_audio=False, fullscreen=False,
-                standalone=False, prepared_only=False, autoplay=False):
+                standalone=False, prepared_only=False, autoplay=False, idle_shutdown_seconds=None):
+    idle_seconds = (settings.data.get("power", {}).get("idle_shutdown_seconds", 300)
+                    if idle_shutdown_seconds is None else idle_shutdown_seconds)
+    if type(idle_seconds) not in (int, float) or not math.isfinite(idle_seconds) or idle_seconds < 0:
+        raise ValueError("Idle shutdown seconds must be a finite non-negative number; 0 disables shutdown.")
     images = image_sources(settings, prepared_only=True)[0] if prepared_only else prepare_images(settings)
     sounds = [] if no_audio else prepared_audio(settings) if prepared_only else prepare_audio(settings, full=True)
     with ExitStack() as stack:
@@ -198,21 +204,27 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
             print(f"Simulation saves frames to {settings.state / 'preview/current.png'}; it produces no sound.")
         watchdog = ServiceWatchdog()
         watchdog.ready()
+        idle_timer = IdleTimer(idle_seconds, time.monotonic())
+        if idle_seconds:
+            print(f"Automatic shutdown after {idle_seconds:g} seconds without input or audio playback.")
         while True:
             watchdog.tick()
             # Detect ALSA worker failures even when a full-screen card has no progress UI.
             _ = audio.playing
+            activity = False
             for key in keyboard.read().lower():
                 if key in ("q", "\x03"):
                     if not standalone:
                         return
                 if key in {"a", "d", "w", "s", " "}:
+                    activity = True
                     session.action({"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key])
             if adc:
                 name = classify(adc.read_voltage(), states)
                 now = time.monotonic()
                 event = debounce.update(name, now)
                 if event:
+                    activity = True
                     kind, button = event
                     if kind == "press":
                         if button == "center":
@@ -226,6 +238,11 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                 if not standalone and center_since is not None and name == "center" and now - center_since >= 2:
                     print("Center held: stopping the player.")
                     return
+                # Debounced held buttons count as use, without extra actions.
+                activity |= debounce.state in ("left", "right", "up", "down", "center")
+            if idle_timer.expired(time.monotonic(), activity=activity, busy=audio.playing):
+                print("Inactivity timeout reached: closing audio and display before system shutdown.", flush=True)
+                return IDLE_POWEROFF_STATUS
             key = session.render_key()
             if key != previous_frame and time.monotonic() >= next_frame_at:
                 frame_started = time.monotonic()
@@ -272,6 +289,7 @@ def parser():
     gallery.add_argument("--standalone", action="store_true", help="Keep running under a service; disable button and keyboard quit actions.")
     gallery.add_argument("--prepared-only", action="store_true", help="Use deployed media without hashing originals or running ffmpeg.")
     gallery.add_argument("--autoplay", action="store_true", help="Start the first prepared recording on launch, when audio is enabled.")
+    gallery.add_argument("--idle-shutdown-seconds", type=float, help="Power off Raspberry Pi OS after inactivity (default: 300 seconds; 0 disables). Audio playback keeps it awake.")
     return result
 
 
@@ -315,8 +333,10 @@ def main(argv=None):
                 raise ValueError("Monitoring duration cannot be negative.")
             monitor_buttons(settings, args.seconds)
         elif args.command in ("player", "gallery"):
-            run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio, args.fullscreen,
-                        args.standalone, args.prepared_only, args.autoplay)
+            status = run_gallery(settings, args.simulate, args.keyboard, args.once, args.no_audio, args.fullscreen,
+                                 args.standalone, args.prepared_only, args.autoplay, args.idle_shutdown_seconds)
+            if status == IDLE_POWEROFF_STATUS:
+                return request_poweroff(args.simulate)
         return 0
     except KeyboardInterrupt:
         print("\nStopped. Audio and display resources released.")
