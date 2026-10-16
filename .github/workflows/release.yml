@@ -76,13 +76,13 @@ jobs:
         run: python scripts/generate_release_notes.py "$RELEASE_TAG" > output/release-notes.md
       - name: Retain diagnostics on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-failure-reports
           path: output/reports/
           if-no-files-found: ignore
       - name: Upload exact release deliverables
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-deliverables
           if-no-files-found: error
