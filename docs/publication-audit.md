@@ -46,4 +46,4 @@ No repository visibility setting, remote repository, or published release change
 
 The release archive is `output/Alfa-Build-Kit.zip`.
 The fresh source repository is `output/Alfa-public/`.
-[Publishing instructions](PUBLISHING.md) describe the separate remote publication step.
+[Publishing instructions](publishing.md) describe the separate remote publication step.

@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "recordings": {
+    "A": {
+      "file": "media/letter-sounds/00-A.wav",
+      "source": "sounds/literka_A.wav",
+      "text": null,
+      "sha256": "25c5bb971aad7ed40ae3698a921e89b709ea03899f4e3c788ff2ba3c5ffde9d1"
+    },
+    "Ą": {
+      "file": "media/letter-sounds/01-Ą.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "ą, jak w słowie wąż",
+      "sha256": "e4cecd0b591567d7f95c1804c68a1eaba8960e7bddd01e3cb94ff38d45cb7bfc"
+    },
+    "B": {
+      "file": "media/letter-sounds/02-B.wav",
+      "source": "sounds/literka_B.wav",
+      "text": null,
+      "sha256": "a2de998e96bb514bd39f44e970c3912e7fd83351336804ce2ee4ceb7ca45f197"
+    },
+    "C": {
+      "file": "media/letter-sounds/03-C.wav",
+      "source": "sounds/literka_C.wav",
+      "text": null,
+      "sha256": "f759737727eb5ccefe3f691efe1e8deef89082983b0e07591bfdf2d4b35e8853"
+    },
+    "Ć": {
+      "file": "media/letter-sounds/04-Ć.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "ć, jak ćma",
+      "sha256": "95285447244080d451ef7c731e824193a8744cca3cfe39d36d6497e973059e23"
+    },
+    "D": {
+      "file": "media/letter-sounds/05-D.wav",
+      "source": "sounds/literka_D.wav",
+      "text": null,
+      "sha256": "f291048c108d47c71e32dfc859d5684aedaf3aa15d85b583fc3cb7dc691595e0"
+    },
+    "E": {
+      "file": "media/letter-sounds/06-E.wav",
+      "source": "sounds/literka_E.wav",
+      "text": null,
+      "sha256": "3ad33e04db3b2cb259c2abeb29a977da759ebdb4ce85f6fb5720206052d9e0f6"
+    },
+    "Ę": {
+      "file": "media/letter-sounds/07-Ę.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "ę, jak w słowie gęś",
+      "sha256": "628cfc8729b18ff894f33aee9919dc41e40a929dc5f7cb13a4265d364f90a4f6"
+    },
+    "F": {
+      "file": "media/letter-sounds/08-F.wav",
+      "source": "sounds/literka_F.wav",
+      "text": null,
+      "sha256": "f2a3cfad7d709830692ed95c28f98af835be5f4a7856ffed6b5d79f0cdf31a84"
+    },
+    "G": {
+      "file": "media/letter-sounds/09-G.wav",
+      "source": "sounds/literka_G.wav",
+      "text": null,
+      "sha256": "ea775292227f3b43680b8b2644d6617d42e418b0be3e06a3dbb1bcc72a7c9aa3"
+    },
+    "H": {
+      "file": "media/letter-sounds/10-H.wav",
+      "source": "sounds/literka_H.mp3",
+      "text": null,
+      "sha256": "f75c8d33429e572982b3390da23e9a79ff8bf7fcedeac4104d72666d6c3516cc"
+    },
+    "I": {
+      "file": "media/letter-sounds/11-I.wav",
+      "source": "sounds/literka_I.wav",
+      "text": null,
+      "sha256": "2da80c6457d9ba1863a42662d26e5c406dfb4005968a2aca4baab8530ab469be"
+    },
+    "J": {
+      "file": "media/letter-sounds/12-J.wav",
+      "source": "sounds/literka_J.wav",
+      "text": null,
+      "sha256": "707f2fc44e0baeb0647659d076d5ed3afe6efb99995b3e8ff1613b488d3ec75e"
+    },
+    "K": {
+      "file": "media/letter-sounds/13-K.wav",
+      "source": "sounds/literka_K.wav",
+      "text": null,
+      "sha256": "0b9eb0a84eb1d4d4938368d2f770804d096d14a047a3baa73d417146c25d690a"
+    },
+    "L": {
+      "file": "media/letter-sounds/14-L.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "lll, jak lalka",
+      "sha256": "e0f9369d01f65cac9b9fe8b9fe2cc5fdb47d6d6f9aee8aaf2fb0f3f9e6a43df6"
+    },
+    "Ł": {
+      "file": "media/letter-sounds/15-Ł.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "ł, jak łódka",
+      "sha256": "158256c7d797dfee0fface9d1e3523573d3399b4bad1fb6eb5dd1f6a40361471"
+    },
+    "M": {
+      "file": "media/letter-sounds/16-M.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "mmm, jak mama",
+      "sha256": "01c9e5d342448db5dd2a0218c714553101e0d8e04fb3a859c37e64d9837cb438"
+    },
+    "N": {
+      "file": "media/letter-sounds/17-N.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "nnn, jak nos",
+      "sha256": "753959b6b7d6c50c6426d44f3505c12915cd7268611a657682a2aa9ecbf72e59"
+    },
+    "Ń": {
+      "file": "media/letter-sounds/18-Ń.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "ń, jak w słowie koń",
+      "sha256": "f1e382358bc074137c8c2a34ddb57ac604ac57a0361f58bc11cf8e9285215691"
+    },
+    "O": {
+      "file": "media/letter-sounds/19-O.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "o, jak oko",
+      "sha256": "c1d6b08b1f46ffbf1542327127fa12d97bf6afae8bf8682f5d2291eb9bfa2b19"
+    },
+    "Ó": {
+      "file": "media/letter-sounds/20-Ó.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "u, ó kreskowane, jak ołówek",
+      "sha256": "9f612ad91ea727b7f36bac7dbc41037b52bd1728390047fa3139c5b70bbf1d9e"
+    },
+    "P": {
+      "file": "media/letter-sounds/21-P.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "p, jak pies",
+      "sha256": "aec146671026778ebecdf7fa8a8783218a1a07bf4d1b14a181231c498c5b6676"
+    },
+    "R": {
+      "file": "media/letter-sounds/22-R.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "rrr, jak ryba",
+      "sha256": "1b3de05f8ec11af8131964793069531e6bcdc0bb44ee364bce46a24dd02f423b"
+    },
+    "S": {
+      "file": "media/letter-sounds/23-S.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "sss, jak słońce",
+      "sha256": "7949bf61ce8f2141e2b09ab1b8b704f4233e88b8ee513025a431ced465dace2f"
+    },
+    "Ś": {
+      "file": "media/letter-sounds/24-Ś.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "ś, jak ślimak",
+      "sha256": "78ef5dade60128c197dc0687eb4d815f4498489019933a699d59d911677e589f"
+    },
+    "T": {
+      "file": "media/letter-sounds/25-T.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "t, jak tata",
+      "sha256": "5f6fbf541aee1f04e5814723d39b0f2cfc425bde374713afab3a64a89aaadd39"
+    },
+    "U": {
+      "file": "media/letter-sounds/26-U.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "u, jak ucho",
+      "sha256": "9313b7268077d35f26f86d76ac8f0a01b83a4bfafa5b6ee2843e8d5029a78ca9"
+    },
+    "W": {
+      "file": "media/letter-sounds/27-W.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "www, jak woda",
+      "sha256": "19da8c56bfde85e0116e23cd0fa178e33889191d9dcfbf95a5563eec2dc55f61"
+    },
+    "Y": {
+      "file": "media/letter-sounds/28-Y.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "y, jak w słowie buty",
+      "sha256": "238d4c500859ea1342e1713d13b6e5fe3f01b45ed43ba72fd0a6b596a5cc7b4b"
+    },
+    "Z": {
+      "file": "media/letter-sounds/29-Z.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "zzz, jak zebra",
+      "sha256": "dec6b6fdf29acc2f8e4335f1eaac75bb17b96e0f4403bd8198427f532d1b7945"
+    },
+    "Ź": {
+      "file": "media/letter-sounds/30-Ź.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "ź, jak źrebak",
+      "sha256": "af24e5a2ceec70f2f017ca64611f0f8ad441262960f7b5edbb14b2d6568d5dc0"
+    },
+    "Ż": {
+      "file": "media/letter-sounds/31-Ż.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "ż, jak żaba",
+      "sha256": "a83ba4a4d557af716f1d5adaf5e127c7cc51f139032c10118748037207443bc9"
+    },
+    "prompt": {
+      "file": "media/letter-sounds/prompt.wav",
+      "source": "Piper pl_PL-gosia-medium (offline)",
+      "text": "Powiesz ze mną?",
+      "sha256": "bab43350ad9ecb07c05bd221eea166b4c101b450524b20766d23f092d939e376"
+    },
+    "praise_1": {
+      "file": "media/letter-sounds/praise_1.wav",
+      "source": "praise_1.wav",
+      "text": null,
+      "sha256": "502b97e43bc4311875fe653a80eb14ef218d80e0359ba58971488a156e57592a"
+    },
+    "praise_2": {
+      "file": "media/letter-sounds/praise_2.wav",
+      "source": "praise_2.wav",
+      "text": null,
+      "sha256": "a0fd65ee2375f489bdd045cfad5fccd0c367a6f6c8a35db6cdf824bd10c3832b"
+    }
+  }
+}

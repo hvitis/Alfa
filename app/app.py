@@ -14,7 +14,8 @@ from pathlib import Path
 from .audio import LetterRecordings, StreamingAudioPlayer, audio_device
 from .buttons import Debouncer, PressGuard, calibrate, classify, load_calibration
 from .config import Settings
-from .hardware import ADS1x15, PreviewDisplay, ST7789
+from .hardware import ADS1x15, Amplifier, LatestDisplay, PreviewDisplay, ST7789
+from .engagement import CardMotion, HoldClock, IdlePlay
 from .media import image_sources, prepare_audio, prepare_images, prepared_audio
 from .frames import AnimationPresenter, WireFrames, prepare_wire_images
 from .service import ServiceWatchdog
@@ -66,6 +67,12 @@ class Keyboard:
 def display_resource(stack, settings, simulate):
     display = PreviewDisplay(settings) if simulate else ST7789(settings)
     stack.callback(display.close)
+    if getattr(display, "async_frames", False) is True:
+        amplifier = Amplifier(settings, display.factory)
+        stack.callback(amplifier.close)
+        display = LatestDisplay(display)
+        display.amplifier = amplifier
+        stack.callback(display.close)
     return display
 
 
@@ -151,6 +158,16 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                 standalone=False, prepared_only=False, autoplay=False):
     images = image_sources(settings, prepared_only=True)[0] if prepared_only else prepare_images(settings)
     drawing_cfg = settings.data.get("letter_drawing", {})
+    catalog = None
+    if drawing_cfg.get("enabled"):
+        catalog = LetterCatalog(settings.path("letter_drawing", "data"))
+        selected = settings.data.get("lesson", {}).get("letters", "all")
+        if selected != "all":
+            available = {catalog.letter_for_image(path): path for path in images}
+            missing = [letter for letter in selected if letter not in available]
+            if missing:
+                raise ValueError(f"Selected letters have no prepared cards: {', '.join(missing)}")
+            images = [available[letter] for letter in selected]
     if no_audio or drawing_cfg.get("enabled"):
         sounds = []
     else:
@@ -158,27 +175,41 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
     with ExitStack() as stack:
         display = display_resource(stack, settings, simulate)
         audio = StreamingAudioPlayer(settings, simulate)
+        audio.enabled = not no_audio
         stack.callback(audio.close)
         session = PlayerSession(images, sounds, audio, fullscreen)
         animation_cfg = settings.data.get("animations", {})
-        if animation_cfg.get("enabled"):
+        if animation_cfg.get("enabled") and not drawing_cfg.get("enabled"):
             session.fullscreen = True
             session.animation = CharacterAnimation(
                 settings.path("animations", "prepared"), animation_cfg["fps"],
                 animation_cfg["cycles"], settings.data["display"]["rotation"])
         if drawing_cfg.get("enabled"):
-            catalog = LetterCatalog(settings.path("letter_drawing", "data"))
             session.fullscreen = True
+            session.hold_clock = HoldClock(clock=lambda: time.monotonic())
+            session.card_motion = CardMotion(clock=lambda: time.monotonic())
             session.drawing = LetterLesson(catalog, size=settings.size,
+                clock=session.hold_clock,
                 **{key: drawing_cfg[key] for key in ("fps", "draw_seconds", "stroke_pause",
                    "intro_seconds", "hold_seconds", "celebration_seconds")})
             session.letter_recordings = LetterRecordings(catalog, settings.root, audio, enabled=not no_audio)
+            session.letter_recordings.preload([catalog.letter_for_image(path) for path in images])
+            lesson_cfg = settings.data.get("lesson", {})
+            session.idle = IdlePlay(display, audio, getattr(display, "amplifier", None),
+                invite_seconds=lesson_cfg.get("invite_seconds", 20),
+                sleep_seconds=lesson_cfg.get("sleep_seconds", 300), clock=lambda: time.monotonic())
             print(f"Letter drawing enabled: {len(catalog.letters)} letters from {settings.path('letter_drawing', 'data')}", flush=True)
         elif session.animation:
             print("Letter drawing disabled: enable letter_drawing.enabled in the active configuration.", flush=True)
         presenter = AnimationPresenter(display)
         wire_images = WireFrames(settings) if session.fullscreen and hasattr(display, "show_rgb565") else None
         def show_frame():
+            if session.idle and session.idle.sleeping:
+                return
+            if ((session.card_motion and session.card_motion.active)
+                    or (session.idle and session.idle.peeking)):
+                presenter.show(session.frame())
+                return
             if session.drawing:
                 frame = session.drawing.frame()
                 if frame is not None:
@@ -200,6 +231,7 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         if once:
             print("Displayed the player." + (f" Preview: {settings.state / 'preview/current.png'}" if simulate else ""))
             return
+        audio.start()
         if autoplay and sounds:
             session.action("center")
         adc = None
@@ -209,9 +241,11 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         debounce = Debouncer(settings.data["adc"]["debounce_ms"] / 1000)
         # Physical buttons only: the SSH keyboard belongs to a grown-up.
         guard = PressGuard(settings.press_guard)
-        exit_hold = settings.exit_hold
+        exit_hold = 0 if session.drawing else settings.exit_hold
         keyboard = stack.enter_context(Keyboard())
         center_since = None
+        keyboard_center_until = None
+        physical_center = False
         previous_frame = session.render_key()
         next_frame_at = 0
         def perform_action(button):
@@ -222,6 +256,9 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                 print(f"CENTER: {session.last_action}; card={session.gallery.paths[session.gallery.index].name}", flush=True)
         if session.animation:
             print("Alphabet: LEFT/RIGHT (A/D) = letter; TOP (W/UP) = listening; BOTTOM (S/DOWN) = repeating; CENTER (Space) = draw letter.")
+        elif session.drawing:
+            print("Alphabet: LEFT/RIGHT = letter; UP = sound and word; DOWN = repeat; hold CENTER = draw.")
+            print("SSH: Space holds the pencil for 0.2 seconds; repeat Space to keep drawing.")
         else:
             print("Player: LEFT/RIGHT (A/D) = photos; UP/DOWN (W/S) = volume; CENTER (Space) = play/stop.")
         if standalone or not exit_hold:
@@ -234,6 +271,8 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         watchdog.ready()
         while True:
             watchdog.tick()
+            if isinstance(display, LatestDisplay):
+                display.check()
             # Detect ALSA worker failures even when a full-screen card has no progress UI.
             _ = audio.playing
             for key in keyboard.read().lower():
@@ -241,17 +280,31 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                     if not standalone:
                         return
                 if key in {"a", "d", "w", "s", " "}:
-                    perform_action({"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key])
+                    button = {"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key]
+                    if session.idle:
+                        session.idle.touch()
+                    session.feedback(button)
+                    perform_action(button)
+                    if button == "center" and session.drawing:
+                        keyboard_center_until = time.monotonic() + .2
             if adc:
                 name = classify(adc.read_voltage(), states)
                 now = time.monotonic()
                 event = debounce.update(name, now)
-                if event and event[0] == "press" and not guard.accept(now):
-                    # Too soon after the last press: ignore it, and its release.
-                    event = None
                 if event:
                     kind, button = event
+                    if session.idle:
+                        session.idle.touch()
                     if kind == "press":
+                        accepted = guard.accept(now)
+                        session.feedback(button, accepted)
+                        # Resume an existing trace even if this new press is guarded.
+                        if button == "center" and session.drawing:
+                            physical_center = True
+                            if session.drawing.active:
+                                session.hold_clock.hold(True)
+                        if not accepted:
+                            continue
                         if button == "center":
                             center_since = now
                             # Begin a letter lesson on press, including a held button.
@@ -259,14 +312,23 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                                 perform_action("center")
                         else:
                             perform_action(button)
-                    elif button == "center" and center_since is not None:
-                        if not session.drawing and now - center_since < 2:
-                            perform_action("center")
-                        center_since = None
+                    elif button == "center":
+                        physical_center = False
+                        session.release(button)
+                        if center_since is not None:
+                            if not session.drawing and now - center_since < 2:
+                                perform_action("center")
+                            center_since = None
                 if (not standalone and exit_hold and center_since is not None and name == "center"
                         and now - center_since >= exit_hold):
                     print(f"CENTER held for {exit_hold:g} seconds: stopping the player.")
                     return
+            if keyboard_center_until is not None and time.monotonic() >= keyboard_center_until:
+                if not physical_center:
+                    session.release("center")
+                keyboard_center_until = None
+            if session.idle:
+                session.idle.update(held=physical_center or keyboard_center_until is not None)
             key = session.render_key()
             if key != previous_frame and time.monotonic() >= next_frame_at:
                 frame_started = time.monotonic()
@@ -276,7 +338,7 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                 if fps:
                     # Include SPI transfer time in the budget; never queue late frames.
                     next_frame_at = max(time.monotonic(), frame_started + 1 / fps)
-            time.sleep(.04 if standalone else .01)
+            time.sleep(.005)
 
 
 def parser():

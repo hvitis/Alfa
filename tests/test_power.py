@@ -28,7 +28,7 @@ class PowerTests(unittest.TestCase):
 
     def run_loop(self, batches, simulate=False, standalone=True):
         clock, closed, consumed, sessions = [0.0], [], [], []
-        audio = Mock(spec=["playing", "close"])
+        audio = Mock(spec=["playing", "close", "start", "effect"])
         audio.playing = False
         audio.close.side_effect = lambda: closed.append("audio")
         display = Mock(spec=["show", "close"])

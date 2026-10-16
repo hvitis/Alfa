@@ -1,6 +1,6 @@
 {
   "animations": {
-    "enabled": true
+    "enabled": false
   },
   "letter_drawing": {
     "enabled": true

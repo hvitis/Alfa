@@ -23,7 +23,7 @@ The alphabet character animations are optional repository features and are absen
 
 For Pi hardware installation, run `bash scripts/setup-pi.sh` on the Pi.
 Read `runtime/docs/wiring.md` before connecting hardware.
-The complete instructions remain in the source repository's `docs/HARDWARE-GUIDE.md`.
+The complete instructions remain in the source repository's `docs/hardware-guide.md`.
 Service installation requires prepared user media and its configuration. Follow the source repository's standalone guide.
 
 ## View the showcase

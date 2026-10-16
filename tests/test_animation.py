@@ -162,7 +162,8 @@ class AnimationTests(unittest.TestCase):
 
     def test_alphabet_configuration_requires_portrait_and_hardware_fps(self):
         settings = Settings.load(ROOT / "config.alphabet.json")
-        self.assertTrue(settings.data["animations"]["enabled"])
+        self.assertFalse(settings.data["animations"]["enabled"])
+        settings.data["animations"]["enabled"] = True
         for rotation in (90, 270):
             settings.data["display"]["rotation"] = rotation
             with self.assertRaisesRegex(ValueError, "portrait"):
@@ -174,6 +175,8 @@ class AnimationTests(unittest.TestCase):
 
     def test_keyboard_loop_uses_raw_frames_and_limits_transfers_with_spi_time(self):
         settings = Settings.load(ROOT / "config.alphabet.json")
+        settings.data["letter_drawing"]["enabled"] = False
+        settings.data["animations"]["enabled"] = True
         sent, pngs = [], []
         elapsed = [100.0]
         class Display:
@@ -190,7 +193,7 @@ class AnimationTests(unittest.TestCase):
             def __exit__(self, *args): pass
             def read(self):
                 self.calls += 1
-                return "w" if self.calls == 1 else "q" if self.calls >= 100 else ""
+                return "w" if self.calls == 1 else "q" if elapsed[0] > 106 else ""
         def make_animation(*args):
             return CharacterAnimation(*args, clock=lambda: elapsed[0])
         def sleep(seconds): elapsed[0] += seconds

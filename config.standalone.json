@@ -6,7 +6,7 @@
     "background": "#fffdf5"
   },
   "animations": {
-    "enabled": true,
+    "enabled": false,
     "fps": 4,
     "cycles": 2
   },

@@ -59,7 +59,7 @@ The manifest records the actual Python, Node.js, and Pillow versions, commit, an
 
 ## Hardware and CAD
 
-Read [HARDWARE-GUIDE.md](HARDWARE-GUIDE.md) for Pi installation, calibration, media, and physical checks.
+Read [hardware-guide.md](hardware-guide.md) for Pi installation, calibration, media, and physical checks.
 Read [the viewer guide](../web/hardware-visualisation/README.md) for the existing FastAPI and Three.js development viewer.
 That viewer requires its own dependencies and generated design assets.
 

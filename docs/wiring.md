@@ -22,9 +22,9 @@ The 3D diagram shows all working devices connected to one Pi, with an enlarged h
 
 Separate cable views: [LCD](../output/wiring-lcd.png) · [Amplifier and speaker](../output/wiring-audio.png) · [ADC](../output/wiring-adc.png) · [Keypad and resistors](../output/wiring-keypad.png).
 
-![LCD, speaker, and button connections](../raspberry-pi-lcd-speaker-adkey.png)
+![LCD, speaker, and button connections overview](../output/wiring-3d-overview.png)
 
-[Open the PNG diagram](../raspberry-pi-lcd-speaker-adkey.png) · [Open the scalable SVG diagram](../raspberry-pi-lcd-speaker-adkey.svg)
+[Open the 3D wiring diagram](../output/wiring-3d.html) · [View wiring overview image](../output/wiring-3d-overview.png)
 
 The diagram shows electrical connections, not the physical order of pins on each module.
 The Pi blocks in all three sections represent the same Raspberry Pi.
@@ -288,3 +288,21 @@ Source: [ADS1115 Python library and Raspberry Pi connections](https://learn.adaf
 
 [Raspberry Pi hardware documentation](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html)
 describes the Pi models and their GPIO headers.
+
+
+## Amplifier sleep control
+
+The software uses BCM GPIO23 (physical pin 16) to control MAX98357A `SD`/`MODE`.
+Connect GPIO23 to `SD` on the Adafruit-style breakout with its existing 1 MΩ pull-up.
+Keep the common ground connection. GPIO23 is separate from I²S and the display pins.
+Do not connect GPIO23 to an SD pin tied directly to 5 V. Remove that direct connection first.
+
+A LOW output shuts down the amplifier. A HIGH output selects its left channel.
+The lesson recordings and effects have identical left and right channels.
+[Adafruit documents the SD voltage ranges and onboard resistors](https://learn.adafruit.com/adafruit-max98357-i2s-class-d-mono-amp/pinouts).
+
+The software drives GPIO23 HIGH at startup, LOW during idle sleep, and HIGH on any button press.
+The backlight uses its existing GPIO24 connection. The Pi stays powered and continues polling buttons.
+Without the SD connection, software silence works but the amplifier remains electrically enabled.
+If GPIO23 is unavailable, select another unused pin with `audio.shutdown_pin`.
+Use `null` only when hardware amplifier sleep is unavailable.

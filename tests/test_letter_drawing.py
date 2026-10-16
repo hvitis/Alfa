@@ -186,10 +186,9 @@ class LetterDrawingTests(unittest.TestCase):
             self.assertTrue(self.audio.playing)
             self.session.action(button)
             self.assertIsNone(self.lesson.active)
-            self.assertFalse(self.audio.playing)
+            self.assertEqual(self.audio.playing, button == "up")
             self.assertEqual(self.audio.volume, .2)
-            if button in ("up", "down"):
-                self.assertEqual(self.session.animation.active, "listening" if button == "up" else "speaking")
+            self.assertIsNone(self.session.animation.active)
 
     def test_recording_for_current_letter_plays_in_full_before_fireworks_and_mute_still_draws(self):
         self.recording("Ż", seconds=12)
@@ -252,6 +251,7 @@ class LetterDrawingTests(unittest.TestCase):
 
     def test_real_gallery_loop_draws_with_compiled_cards_and_restores_after_success(self):
         settings = Settings.load(ROOT / "config.alphabet.json")
+        settings.data["lesson"]["letters"] = "all"
         elapsed = [100.0]
         events, frames, sessions = [], [], []
         class Display:
@@ -267,11 +267,11 @@ class LetterDrawingTests(unittest.TestCase):
             def __exit__(self, *args): pass
             def read(self):
                 self.calls += 1
-                return " " if self.calls == 1 else "q" if elapsed[0] > 110 else ""
+                return "q" if elapsed[0] > 110 else " " if elapsed[0] < 108.35 else ""
         class Session(PlayerSession):
             def __init__(self, *args): super().__init__(*args); sessions.append(self)
-        def make_lesson(*args, **kwargs): return LetterLesson(*args, **kwargs, clock=lambda: elapsed[0])
-        def sleep(seconds): elapsed[0] += seconds
+        def make_lesson(*args, **kwargs): return LetterLesson(*args, **kwargs)
+        def sleep(seconds): elapsed[0] += max(seconds, .05)
         with patch("app.app.prepare_images", return_value=self.paths), patch("app.app.prepare_audio", side_effect=AssertionError("Unrelated audio conversion")), patch("app.app.display_resource", side_effect=lambda stack, *args: (stack.callback(display.close), display)[1]), patch("app.app.Keyboard", Keyboard), patch("app.app.PlayerSession", Session), patch("app.app.LetterLesson", side_effect=make_lesson), patch("app.app.WireFrames") as wire, patch("app.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("app.app.time.sleep", side_effect=sleep):
             wire.return_value.frame.return_value = bytes(153600)
             run_gallery(settings, simulate=True, no_audio=True, autoplay=True)
@@ -285,6 +285,7 @@ class LetterDrawingTests(unittest.TestCase):
 
     def test_configuration_rejects_invalid_timing_and_landscape(self):
         settings = Settings.load(ROOT / "config.alphabet.json")
+        settings.data["lesson"]["letters"] = "all"
         for key in ("fps", "draw_seconds", "stroke_pause", "intro_seconds", "hold_seconds", "celebration_seconds"):
             for bad in (float("nan"), -1, True):
                 value = settings.data["letter_drawing"][key]
@@ -294,8 +295,9 @@ class LetterDrawingTests(unittest.TestCase):
         settings.data["display"]["rotation"] = 90
         with self.assertRaisesRegex(ValueError, "portrait"): settings.validate()
 
-    def test_physical_center_starts_on_press_even_when_held_and_draws_again_once_finished(self):
+    def test_physical_center_starts_on_press_and_pauses_across_releases(self):
         settings = Settings.load(ROOT / "config.alphabet.json")
+        settings.data["lesson"]["letters"] = "all"
         elapsed, level, sessions, snapshots = [0.0], ["idle"], [], []
         # The real debouncer receives idle, a >2s hold, release, a tap mid-lesson, then a tap after it.
         batches = iter(((0, "idle"), (.1, "idle"), (.2, "center"), (.3, "center"),
@@ -315,7 +317,7 @@ class LetterDrawingTests(unittest.TestCase):
                 return ""
         class Session(PlayerSession):
             def __init__(self, *args): super().__init__(*args); sessions.append(self)
-        def make_lesson(*args, **kwargs): return LetterLesson(*args, **kwargs, clock=lambda: elapsed[0])
+        def make_lesson(*args, **kwargs): return LetterLesson(*args, **kwargs)
         display = Mock(spec=["show", "close"])
         with patch("app.app.prepare_images", return_value=self.paths), patch("app.app.display_resource", return_value=display), patch("app.app.adc_resource", return_value=Mock()), patch("app.app.load_calibration", return_value={}), patch("app.app.classify", side_effect=lambda *_: level[0]), patch("app.app.Keyboard", Keyboard), patch("app.app.PlayerSession", Session), patch("app.app.LetterLesson", side_effect=make_lesson), patch("app.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("app.app.time.sleep"):
             with self.assertRaises(KeyboardInterrupt):
@@ -323,8 +325,8 @@ class LetterDrawingTests(unittest.TestCase):
         self.assertIn((.3, 1, "A"), snapshots, "The lesson must start before the button is released")
         self.assertIn((3, 1, "A"), snapshots, "Holding CENTER must not suppress or restart the lesson")
         self.assertIn((3.4, 1, "A"), snapshots, "A tap while the letter is still drawing must not restart it")
-        self.assertIn((30.1, 2, "A"), snapshots)
-        self.assertEqual(sessions[0].drawing.serial, 2, "Release must not trigger a second lesson")
+        self.assertIn((30.1, 1, "A"), snapshots)
+        self.assertEqual(sessions[0].drawing.serial, 1, "Released time cannot finish or restart the trace")
 
 
 if __name__ == "__main__":

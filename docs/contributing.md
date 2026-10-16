@@ -2,7 +2,7 @@
 
 ## Development
 
-Use the prerequisites in [BUILD-GUIDE.md](BUILD-GUIDE.md).
+Use the prerequisites in [build-guide.md](build-guide.md).
 
 ```bash
 make install
@@ -23,7 +23,7 @@ State the commands used when a change affects those projects.
 Update both READMEs when changing features or specifications.
 Keep the specification blocks identical. Keep the feature markers in the same order.
 Retain commands and configuration keys exactly in translations.
-The complete hardware instructions are in [HARDWARE-GUIDE.md](HARDWARE-GUIDE.md).
+The complete hardware instructions are in [hardware-guide.md](hardware-guide.md).
 
 For new media, record the owner, source, license, and redistribution evidence in [the asset notices](../THIRD_PARTY_NOTICES.md).
 Do not put calibration, credentials, personal recordings, or local device addresses in commits.

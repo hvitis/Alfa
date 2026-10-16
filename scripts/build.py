@@ -85,7 +85,7 @@ def build():
         shutil.copytree(ROOT / "_site", staging / "site")
         for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
             shutil.copy2(ROOT / name, staging / name)
-        shutil.copy2(ROOT / "docs/RELEASE-CONTENTS.md", staging / "START-HERE.md")
+        shutil.copy2(ROOT / "docs/release-contents.md", staging / "START-HERE.md")
         run("packaged-runtime", [sys.executable, "-m", "app", "--simulate", "player", "--once", "--no-audio"], cwd=staging / "runtime")
         shutil.rmtree(staging / "runtime/.state")
         for cache in list(staging.rglob("__pycache__")):

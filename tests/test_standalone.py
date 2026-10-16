@@ -101,7 +101,7 @@ class StandaloneTests(unittest.TestCase):
         self.assertEqual(sessions[0].last_action, "Playing")
         self.assertEqual(display.show.call_count, 1, "A static full-screen card does not need audio-progress redraws")
         self.assertEqual(sleep.call_count, 3)
-        sleep.assert_called_with(.04)
+        sleep.assert_called_with(.005)
 
     def test_service_notifies_local_manager_and_calibration_stays_persistent(self):
         address = str(self.root / "notify.sock")

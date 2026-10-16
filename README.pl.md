@@ -12,7 +12,7 @@
 Pastelowa chmurka, pięć żółtych przycisków i 32 polskie litery do odkrycia. Alfa odtwarza muzykę i lekcje liter bez sieci.
 Wydrukuj obudowę w swoich kolorach, zamontuj elektronikę i stwórz własne radio.
 
-[Prezentacja w przeglądarce](https://hvitis.github.io/Alfa/) · [Najnowszy pakiet](https://github.com/hvitis/Alfa/releases/latest) · [Instrukcja sprzętu](docs/HARDWARE-GUIDE.md)
+[Prezentacja w przeglądarce](https://hvitis.github.io/Alfa/) · [Najnowszy pakiet](https://github.com/hvitis/Alfa/releases/latest) · [Instrukcja sprzętu](docs/hardware-guide.md) · [Dokumentacja](docs/README.md)
 
 ## Zajrzyj do środka
 
@@ -78,7 +78,7 @@ python -m app --simulate player --once --no-audio
 
 Symulator zapisuje `.state/preview/current.png`. Repozytorium korzysta z istniejących przygotowanych multimediów.
 Pakiet wydania zawiera neutralny obraz demonstracyjny.
-Połączenia, kalibrację przycisków, sprawdzanie głośnika i instalację usługi opisuje [instrukcja sprzętu](docs/HARDWARE-GUIDE.md).
+Połączenia, kalibrację przycisków, sprawdzanie głośnika i instalację usługi opisuje [instrukcja sprzętu](docs/hardware-guide.md).
 
 Zainstaluj narzędzia programistyczne i uruchom lokalną prezentację:
 
@@ -89,7 +89,7 @@ make serve
 ```
 
 Otwórz `http://127.0.0.1:8000`. Testy przeglądarki wymagają Node.js 22.
-Plik [BUILD-GUIDE.md](docs/BUILD-GUIDE.md) opisuje wymagania Linuksa i środowisko.
+Plik [build-guide.md](docs/build-guide.md) opisuje wymagania Linuksa i środowisko.
 
 ## Automatyczna walidacja
 
@@ -111,20 +111,20 @@ make build
 Pakiet powstaje jako `output/Alfa-Build-Kit.zip`. Raporty trafiają do `output/reports/`.
 Pakiet zawiera aplikację Python, instrukcję połączeń, neutralny obraz i prezentację statyczną z siatkami modeli 3D.
 Nie zawiera grafik postaci, nagrań ani starszej przeglądarki. Strona zawiera pliki chmurki do druku. Źródła strony i generator są w [web/](web/README.md).
-Przeczytaj [zawartość wydania](docs/RELEASE-CONTENTS.md), [opis automatyzacji](docs/PIPELINE.md) i [kroki publikacji](docs/PUBLISHING.md).
+Przeczytaj [zawartość wydania](docs/release-contents.md), [opis automatyzacji](docs/pipeline.md) i [kroki publikacji](docs/publishing.md).
 
 CI sprawdza pull requesty. GitHub Pages wdraża stronę po poprawnych testach na `main`.
 Wydanie wymaga tagu SemVer wskazującego rzeczywisty commit z gałęzi `main`.
 
 ## Współpraca i licencje
 
-Plik [CONTRIBUTING.md](docs/CONTRIBUTING.md) opisuje pracę nad kodem.
+Plik [contributing.md](docs/contributing.md) opisuje pracę nad kodem.
 Problemy bezpieczeństwa zgłaszaj zgodnie z [SECURITY.md](SECURITY.md).
 [Licencja MIT](LICENSE) obejmuje oryginalny kod i dokumentację techniczną.
 Plik [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) opisuje wyłączenia dotyczące zasobów i informacje o zależnościach.
 
 Obudowa jest prototypem do sprawdzenia dopasowania. Próby fizyczne uchwytu, zatrzasków, upadków i temperatury są nadal wymagane.
-Grafiki postaci i nagrania wymagają osobnego przeglądu praw przed publikacją. Zobacz [listę czynności przed publikacją](docs/PUBLISHING.md).
+Grafiki postaci i nagrania wymagają osobnego przeglądu praw przed publikacją. Zobacz [listę czynności przed publikacją](docs/publishing.md).
 Obrazy w README i karty społecznościowe są oryginalnymi renderami CAD.
 
 Aby odtworzyć obrazy, uruchom `make serve`, a potem `npm run render:assets`. Polecenie `make site` eksportuje ilustrowany PDF ADR.

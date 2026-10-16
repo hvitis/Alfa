@@ -1,6 +1,6 @@
 # Alfa: Raspberry Pi screen, speaker, and button tests
 
-For offline startup at power-on and automatic recovery, read [the Raspberry Pi standalone guide](../docs/raspberry-pi-standalone.md).
+For offline startup at power-on and automatic recovery, read [the Raspberry Pi standalone guide](raspberry-pi-standalone.md).
 On the configured Pi, install the service with `bash scripts/install-service.sh`.
 The app keeps running when idle. It does not shut down the Pi after inactivity.
 To pull and load the newest changes on the Pi, run:
@@ -15,9 +15,9 @@ This command stops the service, pulls Git updates, updates Python dependencies, 
 Use `make restart` to reinstall and restart the current checkout without pulling.
 Use `make run` for a manual test. It stops the service first and restores it when the test ends.
 `make logs` follows the service log, and `make help` lists all commands.
-The [maintenance guide](../docs/raspberry-pi-standalone.md#check-and-maintain-the-service) explains the update steps and recovery behavior.
+The [maintenance guide](raspberry-pi-standalone.md#check-and-maintain-the-service) explains the update steps and recovery behavior.
 
-The [Pico requirements](../docs/pico-requirements.md) record future firmware research. The active implementation targets Raspberry Pi 3.
+The [Pico requirements](pico-requirements.md) record future firmware research. The active implementation targets Raspberry Pi 3.
 
 This Python app tests the hardware in your photos over SSH. It runs without a graphical desktop.
 
@@ -230,7 +230,7 @@ The MAX98357A appears in the ALSA card list after the restart.
 **CAUTION:** Use the two 10 kΩ divider resistors between keypad OUT and ADC A0.
 The ADC uses 3.3 V; keypad OUT can reach 5 V.
 
-[Read the full wiring guide](../docs/wiring.md) or [open the clearer 3D diagram](../output/wiring-3d.html).
+[Read the full wiring guide](wiring.md) or [open the clearer 3D diagram](../output/wiring-3d.html).
 
 ## 5. Test the screen
 
@@ -262,7 +262,7 @@ Press `Q` to stop.
 
 ## 6. Test the speaker with your sound
 
-For the speaker test with LCD status and detailed diagnostics, read [Speaker testing instructions](../docs/speaker-testing.md).
+For the speaker test with LCD status and detailed diagnostics, read [Speaker testing instructions](speaker-testing.md).
 The guide uses the corrected **LRC-first, BCLK-second** header order from `photos/max4.jpg`.
 
 ```bash
@@ -556,7 +556,7 @@ Audio logs are saved in `.state/audio-*.log`.
 | `scripts/setup-pi.sh` | Pi package installation |
 | `app/speaker_test.py` | Speaker diagnostics, optional LCD status, and saved reports |
 | `tests/` | Tests that do not need Pi hardware |
-| [docs/wiring.md](../docs/wiring.md) | Full wiring tables and hardware references |
+| [wiring.md](wiring.md) | Full wiring tables and hardware references |
 | [output/wiring-3d.html](../output/wiring-3d.html) | Rotatable wiring diagram with isolated cables |
 
 The ST7789 initialization uses the Waveshare 2-inch module settings.

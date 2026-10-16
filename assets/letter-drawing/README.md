@@ -1,8 +1,8 @@
 # Letter drawing lessons
 
-CENTER (the fifth button) draws the selected letter in alphabet mode.
-The lesson starts on the button press. Release does not start another lesson.
-Space starts the same lesson from an SSH keyboard.
+Hold CENTER (the fifth button) to draw the selected letter in alphabet mode.
+Release CENTER to pause. Press it again to resume the same trace.
+Each Space from an SSH keyboard supplies a 0.2-second hold pulse.
 The alphabet and standalone presets enable this feature.
 
 The lesson shows a pale guide and a tilted yellow pencil with a graphite tip and pink eraser.
@@ -23,21 +23,22 @@ The original character card returns when the fireworks finish.
 | Button | Action |
 |---|---|
 | LEFT / RIGHT | Interrupt the lesson and select the previous or next letter |
-| UP | Interrupt the lesson and show the listening animation |
-| DOWN | Interrupt the lesson and show the repeating animation |
-| Press CENTER / Space | Start the selected letter lesson; a press while it is still drawing is ignored |
+| UP | Cancel the lesson and play the letter sound and word |
+| DOWN | Cancel the lesson and play a prompt, a pause, and praise |
+| Hold CENTER | Start or resume the selected letter lesson |
 
-The normal exit control still applies outside standalone mode.
-Hold CENTER for ten seconds, or press Q, to exit (`controls.exit_hold_seconds`).
+CENTER never exits the alphabet. Press Q or Ctrl+C to exit a manual run.
+The standalone service ignores Q.
 
-The default lesson lasts about 8–9 seconds.
+The default lesson needs about 8–9 seconds of total hold time.
 It has a 0.5-second introduction, 5 seconds of tracing, and 0.22-second pauses between strokes.
 The completed letter stays visible for 0.7 seconds before the 1.8-second fireworks animation.
 If the recording lasts longer, the completed letter stays visible until that recording ends.
-The app stays running when idle, including with silent placeholders.
+After 20 seconds idle, a character peeks in. After five minutes, the backlight and amplifier sleep.
+Any button wakes the device without rebooting.
 
 The `letter_drawing` section in [config.json](../../config.json) sets these durations and a target of 20 frames per second.
-The player skips late frames and transfers only changed rectangles during the lesson.
+The display worker skips obsolete frames and transfers only changed rectangles during the lesson.
 The actual frame rate depends on the Pi and the display connection.
 
 ## Components and data
@@ -48,8 +49,8 @@ The actual frame rate depends on the Pi and the display connection.
 | [LetterCatalog and Stroke](../../app/letter_paths.py) | Resolve a card filename, expand shared geometry, and measure stroke paths |
 | [LetterLesson](../../app/letter_lesson.py) | Control introduction, tracing, pen lifts, the completed letter, and fireworks |
 | `LetterRenderer` and `Pencil` in that module | Draw the guide, completed strokes, pencil, and fireworks |
-| [LetterRecordings](../../app/audio.py) | Play the selected letter recording, or use a silent placeholder |
-| [PlayerSession](../../app/player.py) | Connect button actions to lessons, audio, navigation, and character animations |
+| [LetterRecordings](../../app/audio.py) | Play prepared letter recordings and the prompt/pause/praise sequence |
+| [PlayerSession](../../app/player.py) | Connect button actions to lessons, audio, navigation, and card movement |
 | [AnimationPresenter](../../app/frames.py) | Retain one frame and transfer only changed pixels |
 | [ST7789.show_region](../../app/hardware.py) | Send a rectangle through SPI with the configured display rotation |
 
@@ -89,12 +90,13 @@ python3 scripts/preview-letter-drawing.py --letter Ż --destination output/lette
 ## Add recordings
 
 Each letter has its own recording path in `letters.json`.
-Absent files act as silent placeholders.
+All 32 recording slots now contain audio. Missing selected recordings produce a startup error.
 The app starts the recording when the drawing lesson starts.
-Navigation or a character button stops both the lesson and its recording.
+Navigation or UP/DOWN stops the lesson. UP/DOWN immediately plays its own recording.
 `--no-audio` also keeps all drawing lessons silent.
 
-Put prepared WAV recordings in [media/letter-sounds](../../media/letter-sounds/README.md).
+Read [the recording guide](../../media/letter-sounds/README.md) for offline Piper generation and individual replacements.
+Put prepared WAV recordings in `media/letter-sounds/`.
 Use stereo, 48 kHz, 16-bit PCM WAV files.
 For example, convert an original recording with:
 

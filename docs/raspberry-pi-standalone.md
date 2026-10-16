@@ -118,9 +118,9 @@ Explicit `systemctl stop` stops the service for maintenance.
 These behaviors use [systemd service supervision](https://github.com/systemd/systemd/blob/main/man/systemd.service.xml).
 
 In standalone mode, holding CENTER and pressing Q do not exit the app.
-A CENTER press immediately draws the selected letter and plays its optional recording.
+Hold CENTER to draw the selected letter and start its recording. Release CENTER to pause the pencil.
 The finished letter stays visible during fireworks, then the original card returns.
-LEFT/RIGHT change the letter. UP/DOWN start the listening and repeating animations.
+LEFT/RIGHT change the letter. UP plays its sound and word. DOWN plays a prompt, a pause, and praise.
 These four controls also interrupt the drawing lesson and stop its recording.
 The [drawing lesson guide](../assets/letter-drawing/README.md) lists all 32 recording slots and explains the component architecture.
 Alphabet mode waits for button input at startup, including when the service supplies `--autoplay`.
@@ -132,9 +132,9 @@ Alphabet mode waits for button input at startup, including when the service supp
 | `--prepared-only` | Startup skips source-image hashing, resizing, and ffmpeg conversion |
 | Precompiled static cards | Hardware display transfers use native RGB565 bytes |
 | One cached static card | The app retains one 153,600-byte native card instead of loading all cards |
-| One cached animation frame | The raw animation cache decreases from 614,400 to 153,600 bytes |
+| Directional card movement | The alphabet uses existing card artwork instead of a generic animation |
 | Full-screen render key | Audio progress does not cause repeated transfers of an unchanged card |
-| Four animation frames per second | The standalone preset reduces transfers from the normal five-per-second preset |
+| Separate display worker | SPI transfers cannot block button input |
 | Drawing with vector paths | The complete stroke catalog occupies less than 8 KB |
 | Partial display transfers during drawing | Each lesson sends changed pixels with a target of 20 frames per second |
 | A 40 ms interval between polls | Idle input processing wakes less often than the normal 10 ms interval |
@@ -143,7 +143,10 @@ Alphabet mode waits for button input at startup, including when the service supp
 The frame-cache measurements describe payload bytes, not total process RAM.
 ADC conversion and display transfer time also contribute to the loop duration.
 The program skips late animation frames instead of creating a growing queue.
-The LCD retains its current picture while idle, so the program does not continuously refresh a static card.
+The LCD retains static cards without continuous refresh. A character peeks in after 20 seconds idle.
+After five minutes, the backlight and amplifier sleep. Any button wakes them without rebooting.
+Edit `settings.json` to select the letters shown after startup.
+See [the alphabet interaction guide](alphabet-plan.md) and [amplifier sleep wiring](wiring.md#amplifier-sleep-control).
 The complete app's CPU use, RAM use, and startup time still need measurement on the Pi.
 
 Button calibration stays in the project's persistent `.state/buttons.json`.

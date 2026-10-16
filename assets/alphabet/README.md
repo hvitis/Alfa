@@ -6,6 +6,7 @@ The artwork follows the letter-and-character compositions in the supplied `photo
 
 [View all 32 finished cards](../../docs/alphabet-contact-sheet.png).
 [View the revised B, M, and P cards](../../docs/alphabet-revisions.png).
+[View the character swaps: Ć ↔ D, Ą ↔ A, Ż ↔ G, E ↔ Ę](../../docs/alphabet-character-swaps.png).
 
 The source cards are **960 × 1280 RGB PNGs**.
 The prepared cards in [media/alphabet](../../media/alphabet) are **240 × 320 RGB PNGs** for the project's ST7789 LCD.
@@ -71,8 +72,8 @@ A checkout can use the bundled prepared cards when this source folder is absent.
 
 [characters.json](characters.json) records the letter order and file paths.
 Illustration numbers identify retained assets. They do not teach a letter through a character name.
-[prompts.json](prompts.json) records the card dimensions and paths.
-Brand-specific generation instructions are removed. The existing images remain unchanged.
+[prompts.json](prompts.json) records the card dimensions, paths, and prompts for the eight edited cards.
+The built-in image generator edited these eight cards using the original cards as references.
 See [the media notice](../../THIRD_PARTY_NOTICES.md) for their distribution status.
 
 ## Layout scope

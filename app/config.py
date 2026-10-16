@@ -23,6 +23,12 @@ class Settings:
                 if section not in data or not isinstance(values, dict):
                     raise ValueError(f"Unknown configuration section: {section}")
                 data[section].update(values)
+        selection = root / "settings.json"
+        if selection.exists():
+            custom = json.loads(selection.read_text(encoding="utf-8"))
+            if not isinstance(custom, dict) or set(custom) != {"letters"}:
+                raise ValueError("settings.json must contain only a letters list or letters: all.")
+            data.setdefault("lesson", {})["letters"] = custom["letters"]
         settings = cls(root, data)
         settings.validate()
         return settings
@@ -69,6 +75,20 @@ class Settings:
             if self.path(section, "input") == self.path(section, "prepared"):
                 raise ValueError("Prepared media must use a different directory from the originals.")
         animations = self.data.get("animations", {})
+        lesson = self.data.get("lesson", {})
+        letters = lesson.get("letters", "all")
+        if letters != "all" and (not isinstance(letters, list) or not letters
+                or any(not isinstance(letter, str) or letter not in list("AĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ") for letter in letters)
+                or len(set(letters)) != len(letters)):
+            raise ValueError("Lesson letters must be all or a nonempty list of unique Polish uppercase letters.")
+        invite, sleep = lesson.get("invite_seconds", 20), lesson.get("sleep_seconds", 300)
+        if (any(type(value) not in (int, float) or not math.isfinite(value) for value in (invite, sleep))
+                or not 1 <= invite < sleep <= 86400):
+            raise ValueError("Lesson idle times need 1 <= invite_seconds < sleep_seconds <= 86400.")
+        amp_pin = audio.get("shutdown_pin")
+        if amp_pin is not None and (type(amp_pin) is not int or not 0 <= amp_pin <= 27
+                                   or amp_pin in reserved.union(pins)):
+            raise ValueError("Audio shutdown_pin must be an unused BCM GPIO, or null.")
         drawing = self.data.get("letter_drawing", {})
         if drawing.get("enabled"):
             if self.size != (240, 320):

@@ -29,8 +29,12 @@ class PreviewDisplay:
     def close(self):
         pass
 
+    def set_awake(self, awake):
+        self.awake = awake
+
 
 class ST7789:
+    async_frames = True
     def __init__(self, settings, initial_payload=None):
         from .display_handoff import release_boot_splash
 
@@ -136,6 +140,88 @@ class ST7789:
                 pin.close()
         self.spi.close()
         self.factory.close()
+
+    def set_awake(self, awake):
+        self.backlight.on() if awake else self.backlight.off()
+
+
+class Amplifier:
+    """MAX98357A SD control. LOW sleeps, HIGH selects the left audio channel."""
+    def __init__(self, settings, factory):
+        from gpiozero import OutputDevice
+        pin = settings.data["audio"].get("shutdown_pin")
+        self.pin = OutputDevice(pin, initial_value=True, pin_factory=factory) if pin is not None else None
+
+    def set_awake(self, awake):
+        if self.pin:
+            self.pin.on() if awake else self.pin.off()
+
+    def close(self):
+        if self.pin:
+            self.pin.off()
+            self.pin.close()
+
+
+class LatestDisplay:
+    """Send only the latest requested frame; SPI must never delay button polling."""
+    def __init__(self, display):
+        import threading
+        self.display = display
+        self.pending = None
+        self.error = None
+        self.lock, self.changed = threading.Lock(), threading.Event()
+        self.stopping = False
+        self.worker = threading.Thread(target=self._run, daemon=True)
+        self.worker.start()
+
+    def _submit(self, kind, payload):
+        self.check()
+        with self.lock:
+            self.pending = kind, payload
+        self.changed.set()
+
+    def check(self):
+        if self.error:
+            raise self.error
+
+    def show(self, frame, name="current"):
+        self._submit("image", frame.copy())
+
+    def show_rgb565(self, payload):
+        self._submit("wire", payload)
+
+    def set_awake(self, awake):
+        self.display.set_awake(awake)
+
+    def _run(self):
+        from .frames import AnimationPresenter
+        presenter = AnimationPresenter(self.display)
+        try:
+            while True:
+                self.changed.wait()
+                self.changed.clear()
+                with self.lock:
+                    pending, self.pending = self.pending, None
+                if pending:
+                    kind, payload = pending
+                    if kind == "wire":
+                        presenter.reset()
+                        self.display.show_rgb565(payload)
+                    else:
+                        presenter.show(payload)
+                with self.lock:
+                    if self.stopping and self.pending is None:
+                        break
+        except Exception as error:
+            self.error = error
+
+    def close(self):
+        self.stopping = True
+        self.changed.set()
+        self.worker.join(timeout=3)
+        if self.worker.is_alive():
+            raise RuntimeError("The display worker did not stop.")
+        self.check()
 
 
 def adc_voltage(raw, model):

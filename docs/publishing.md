@@ -82,7 +82,7 @@ The workflow selects that tag's commit, regardless of the branch selected in the
 
 The release contains the runtime ZIP, `SHA256SUMS`, build manifest, validation report, and electronics BOM.
 Existing releases can receive replacement assets on a workflow retry.
-Read [RELEASE-CONTENTS.md](RELEASE-CONTENTS.md) for the archive layout.
+Read [release-contents.md](release-contents.md) for the archive layout.
 
 ## Local preview and checksums
 

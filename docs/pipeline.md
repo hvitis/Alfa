@@ -62,5 +62,5 @@ Archive validation checks required files, duplicate names, unsafe paths, exclude
 
 The current-tree credential scan detects private-key headers and common GitHub and AWS token formats.
 It does not scan all Git history or prove that no secrets exist.
-Asset ownership requires human evidence, as described in [PUBLISHING.md](PUBLISHING.md).
+Asset ownership requires human evidence, as described in [publishing.md](publishing.md).
 The release validates software. Acoustic output, wiring, and fabrication geometry require their own checks.

@@ -40,3 +40,14 @@ The release kit uses an original geometric demo card. Existing character media a
 | Vite | MIT | Build dependency, not required at runtime. |
 
 Dependency distributions retain their own license files. Consult those files for the full terms.
+
+
+## Generated Polish fallback speech
+
+`media/letter-sounds/manifest.json` identifies each personal recording and generated fallback.
+The fallback voice is Piper `pl_PL-gosia-medium` from
+[the Piper voice repository](https://huggingface.co/rhasspy/piper-voices/tree/main/pl/pl_PL/gosia/medium).
+Its [model card](https://huggingface.co/rhasspy/piper-voices/blob/main/pl/pl_PL/gosia/medium/MODEL_CARD)
+lists the voice dataset as CC0. The model and Piper executable are not bundled.
+Piper runs only during laptop preparation. The Pi plays prepared WAV files.
+Personal A–K sources retain the recording rights status described above.

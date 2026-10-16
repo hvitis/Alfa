@@ -12,7 +12,7 @@
 A pastel cloud, five yellow buttons, and 32 Polish letters to explore. Alfa plays music and letter lessons offline on a Raspberry Pi.
 Print the cloud in your favorite colors, fit the electronics, and make it your own.
 
-[Live showcase](https://hvitis.github.io/Alfa/) · [Latest build kit](https://github.com/hvitis/Alfa/releases/latest) · [Hardware guide](docs/HARDWARE-GUIDE.md)
+[Live showcase](https://hvitis.github.io/Alfa/) · [Latest build kit](https://github.com/hvitis/Alfa/releases/latest) · [Hardware guide](docs/hardware-guide.md) · [Documentation](docs/README.md)
 
 ## A little look around
 
@@ -76,7 +76,7 @@ python -m app --simulate player --once --no-audio
 
 The simulator saves `.state/preview/current.png`. The checkout uses existing prepared media.
 The release kit supplies a neutral demo image instead.
-For wiring, button calibration, speaker checks, and service installation, read the [hardware guide](docs/HARDWARE-GUIDE.md).
+For wiring, button calibration, speaker checks, and service installation, read the [hardware guide](docs/hardware-guide.md).
 
 For the development tools and local showcase:
 
@@ -87,7 +87,7 @@ make serve
 ```
 
 Open `http://127.0.0.1:8000`. Use Node.js 22 for the browser checks.
-Read [BUILD-GUIDE.md](docs/BUILD-GUIDE.md) for Linux prerequisites and environment details.
+Read [build-guide.md](docs/build-guide.md) for Linux prerequisites and environment details.
 
 ## Automated validation
 
@@ -110,19 +110,19 @@ make build
 The kit is `output/Alfa-Build-Kit.zip`. Reports are in `output/reports/`.
 The kit includes the Python runtime, wiring guide, neutral demo image, and static atlas with its viewer meshes.
 It excludes character media, recordings, and the legacy viewer. The static site includes the cloud print downloads. Website sources and generation live in [web/](web/README.md).
-Read [release contents](docs/RELEASE-CONTENTS.md), [pipeline details](docs/PIPELINE.md), and [publication steps](docs/PUBLISHING.md).
+Read [release contents](docs/release-contents.md), [pipeline details](docs/pipeline.md), and [publication steps](docs/publishing.md).
 
 CI validates pull requests. GitHub Pages deploys after successful checks on `main`.
 Releases require a SemVer tag whose actual commit is on `main`.
 
 ## Contributing and licenses
 
-Read [CONTRIBUTING.md](docs/CONTRIBUTING.md) for the development workflow.
+Read [CONTRIBUTING.md](docs/contributing.md) for the development workflow.
 Use [SECURITY.md](SECURITY.md) for security reports.
 The [MIT license](LICENSE) covers original code and technical documentation.
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) records asset exclusions and dependency notices.
 Existing character artwork and recordings require a separate rights review before public visibility.
-Read the [publication checklist](docs/PUBLISHING.md). The README and social cards use original CAD renders.
+Read the [publication checklist](docs/publishing.md). The README and social cards use original CAD renders.
 
 To recreate these images, run `make serve`, then `npm run render:assets`. Run `make site` to export the illustrated ADR PDF.
 The GitHub social card is [.github/social-preview.png](.github/social-preview.png).

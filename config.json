@@ -14,7 +14,7 @@
     "model": "ads1115",
     "bus": 1,
     "address": "0x48",
-    "debounce_ms": 80
+    "debounce_ms": 30
   },
   "images": {
     "input": "imgs",
@@ -42,9 +42,15 @@
     "input": "sounds",
     "prepared": "media/sounds",
     "device": "auto",
+    "shutdown_pin": 23,
     "volume": 0.2,
     "max_volume": 0.5,
     "clip_seconds": 5.0
+  },
+  "lesson": {
+    "letters": "all",
+    "invite_seconds": 20,
+    "sleep_seconds": 300
   },
   "controls": {
     "exit_hold_seconds": 10,

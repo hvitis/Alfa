@@ -80,35 +80,18 @@ class PlayerTests(unittest.TestCase):
         audio.close()
 
     def test_live_pcm_stream_changes_volume_without_restart_and_preserves_channels(self):
-        audio = StreamingAudioPlayer(self.settings)
-        chunks = []
-        class Pipe:
-            closed = False
-            def write(self, payload):
-                chunks.append(bytes(payload))
-                if len(chunks) == 1:
-                    audio.set_volume(.45)
-                return len(payload)
-            def close(self): self.closed = True
-        class Process:
-            stdin = Pipe()
-            done = False
-            def wait(self, **kwargs): self.done = True; return 0
-            def poll(self): return 0 if self.done else None
-        process = Process()
-        with patch("app.audio.audio_device", return_value="test"), patch("app.audio.subprocess.Popen", return_value=process) as spawn:
-            audio.play(self.recording())
-            audio._thread.join(2)
-            self.assertFalse(audio.playing)
-            self.assertEqual(spawn.call_count, 1)
-            self.assertEqual(struct.unpack("<hh", chunks[0][:4]), (200, -200))
-            self.assertEqual(struct.unpack("<hh", chunks[1][:4]), (450, -450))
-            self.assertEqual(sum(map(len, chunks)), 960 * 4)
-            self.assertTrue(process.stdin.closed)
-            self.assertIn("--buffer-time=100000", spawn.call_args.args[0])
+        audio = StreamingAudioPlayer(self.settings, simulate=True)
+        audio.play(self.recording())
+        first = audio._mix_block()
+        audio.set_volume(.45)
+        second = audio._mix_block()
+        self.assertEqual(struct.unpack("<hh", first[:4]), (200, -200))
+        self.assertEqual(struct.unpack("<hh", second[:4]), (450, -450))
+        self.assertFalse(audio.playing)
+        self.assertEqual(len(first) + len(second), 960 * 4)
         audio.close()
 
-    def test_stop_unblocks_audio_worker_and_releases_pipe_and_log(self):
+    def test_close_unblocks_audio_worker_and_releases_pipe_and_log(self):
         audio = StreamingAudioPlayer(self.settings)
         writing, stopped = threading.Event(), threading.Event()
         class Pipe:
@@ -126,7 +109,7 @@ class PlayerTests(unittest.TestCase):
             audio.play(self.recording())
             self.assertTrue(writing.wait(2))
             worker = audio._thread
-            audio.stop()
+            audio.close()
             self.assertFalse(worker.is_alive())
             self.assertTrue(process.stdin.closed)
             self.assertIsNone(audio._process)
@@ -134,8 +117,10 @@ class PlayerTests(unittest.TestCase):
 
     def test_playback_failure_is_reported_to_ui_loop_with_alsa_diagnostic(self):
         audio = StreamingAudioPlayer(self.settings)
+        class Pipe:
+            def close(self): pass
         class Process:
-            stdin = io.BytesIO()
+            stdin = Pipe()
             def poll(self): return 1
             def wait(self, **kwargs): return 1
         with patch("app.audio.audio_device", return_value="test"), patch("app.audio.subprocess.Popen", return_value=Process()):

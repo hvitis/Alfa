@@ -26,10 +26,10 @@ When this document is provided as a prompt or repository guideline:
 │       └── release.yml                  # Tag-triggered full build, validation & GitHub Release publishing
 ├── docs/                                # Long-form technical documentation
 │   ├── images/                          # Visual documentation assets (WebP/PNG)
-│   ├── BUILD-GUIDE.md                   # Step-by-step reproduction and toolchain setup
-│   ├── PIPELINE.md                      # Architecture, validation gates & data flow
-│   ├── PUBLISHING.md                    # Release steps, deployment instructions, and local serving
-│   └── CONTRIBUTING.md                  # Development setup, PR guidelines, and coding standards
+│   ├── build-guide.md                   # Step-by-step reproduction and toolchain setup
+│   ├── pipeline.md                      # Architecture, validation gates & data flow
+│   ├── publishing.md                    # Release steps, deployment instructions, and local serving
+│   └── contributing.md                  # Development setup, PR guidelines, and coding standards
 ├── _site/                               # Static web export for GitHub Pages (served from main)
 │   ├── index.html                       # Responsive static web app / showcase / viewer
 │   ├── app.js                           # Frontend logic (ES modules, relative paths)

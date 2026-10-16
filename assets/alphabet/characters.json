@@ -45,16 +45,16 @@
   "characters": [
     {
       "letter": "A",
-      "character": "Retained illustration 01",
-      "characterPolish": "Ilustracja 01",
+      "character": "Retained illustration 02",
+      "characterPolish": "Ilustracja 02",
       "initialMatches": false,
       "master": "00-A.png",
       "prepared": "000-00-A.png"
     },
     {
       "letter": "Ą",
-      "character": "Retained illustration 02",
-      "characterPolish": "Ilustracja 02",
+      "character": "Retained illustration 01",
+      "characterPolish": "Ilustracja 01",
       "initialMatches": false,
       "master": "01-Ą.png",
       "prepared": "001-01-Ą.png"
@@ -77,32 +77,32 @@
     },
     {
       "letter": "Ć",
-      "character": "Retained illustration 05",
-      "characterPolish": "Ilustracja 05",
+      "character": "Retained illustration 06",
+      "characterPolish": "Ilustracja 06",
       "initialMatches": false,
       "master": "04-Ć.png",
       "prepared": "004-04-Ć.png"
     },
     {
       "letter": "D",
-      "character": "Retained illustration 06",
-      "characterPolish": "Ilustracja 06",
+      "character": "Retained illustration 05",
+      "characterPolish": "Ilustracja 05",
       "initialMatches": false,
       "master": "05-D.png",
       "prepared": "005-05-D.png"
     },
     {
       "letter": "E",
-      "character": "Retained illustration 07",
-      "characterPolish": "Ilustracja 07",
+      "character": "Retained illustration 08",
+      "characterPolish": "Ilustracja 08",
       "initialMatches": false,
       "master": "06-E.png",
       "prepared": "006-06-E.png"
     },
     {
       "letter": "Ę",
-      "character": "Retained illustration 08",
-      "characterPolish": "Ilustracja 08",
+      "character": "Retained illustration 07",
+      "characterPolish": "Ilustracja 07",
       "initialMatches": false,
       "master": "07-Ę.png",
       "prepared": "007-07-Ę.png"
@@ -117,8 +117,8 @@
     },
     {
       "letter": "G",
-      "character": "Retained illustration 10",
-      "characterPolish": "Ilustracja 10",
+      "character": "Retained illustration 32",
+      "characterPolish": "Ilustracja 32",
       "initialMatches": false,
       "master": "09-G.png",
       "prepared": "009-09-G.png"
@@ -293,8 +293,8 @@
     },
     {
       "letter": "Ż",
-      "character": "Retained illustration 32",
-      "characterPolish": "Ilustracja 32",
+      "character": "Retained illustration 10",
+      "characterPolish": "Ilustracja 10",
       "initialMatches": false,
       "master": "31-Ż.png",
       "prepared": "031-31-Ż.png"
@@ -303,5 +303,5 @@
   "sources": [
     "https://software.sil.org/andika/"
   ],
-  "notice": "Existing artwork is retained unchanged. Asset labels identify files, not character names. See THIRD_PARTY_NOTICES.md."
+  "notice": "Eight cards regenerated with character swaps: Ć ↔ D, Ą ↔ A, Ż ↔ G, E ↔ Ę. Asset labels identify illustrations, not character names. See THIRD_PARTY_NOTICES.md."
 }
