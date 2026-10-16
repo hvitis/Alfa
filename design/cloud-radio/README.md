@@ -1,14 +1,16 @@
-# Alfa cloud radio — PETG prototype 4
+# Alfa cloud radio — PETG prototype 5
 
 This enclosure has two snap-together shells and a separate battery door.
 Three M3 screws secure the rear shell. One M3 screw secures the battery door.
 The battery door has two retaining tabs. It lifts out after removal of its screw.
 The cloud has a flat base and smooth, tangent-connected lobes. Its nominal outside dimensions are 210 × 190 × 86 mm.
 The front and rear rims have a 1.4 mm radius. The integrated handle has a 64 × 22 mm through-opening.
-The handle follows the existing crown. Its grip is 20 mm deep and centered on the joint between the shells.
+The handle follows the existing crown. Its raised grip is 20 mm deep and centered on the joint between the shells.
 Each shell forms 9.85 mm of the grip, with a 0.3 mm joint gap.
-Open recesses provide finger space on both sides of the grip.
-Each recess has a partition that separates fingers from the electronics.
+The front and rear have full-width rounded shoulders instead of rectangular finger recesses.
+The roof has 8 mm body rounds, 10 mm handle root rounds, and a rounded crown.
+A closed 3 mm roof separates the fingers from the electronics. The handle crown is solid.
+The four former upright tips beside the handle are removed.
 The horizontal battery door stays in the lower back, away from the handle.
 No separate handle or extra printed part is required.
 The three case screw posts join the outer wall. Their axes sit 5.2–8.2 mm from the outer outline.
@@ -79,7 +81,9 @@ make stress
 ```
 
 The static export includes every model and download. GitHub Pages needs no CAD software or backend.
-The generated ZIP contains the STL files, STEP assembly, GLB model, parameters, source, guide, and verification report.
+The website build creates the ZIP from the verified CAD exports. ZIP files are not tracked in Git.
+The development server creates the same download on demand. CI does not need CAD software to create the ZIP.
+The ZIP contains the STL files, STEP assembly, GLB model, parameters, source, guide, and verification report.
 The source build script uses `../wooden-case/run-cad.sh` in this repository.
 The ZIP can be used for printing without that script.
 
@@ -163,7 +167,7 @@ Use an inert mass with the battery dimensions for mechanical tests.
 | Test | Procedure | Acceptance |
 | --- | --- | --- |
 | Initial fit | Fit every component and connect the complete harness. | No forced cables, trapped wires, board bending, or preloaded buttons. |
-| Child grip fit | After the adult mechanical tests pass, check the unpowered enclosure with the child under adult supervision. | Fingers wrap the thin grip comfortably. Both recesses stay clear of the hand. |
+| Child grip fit | After the adult mechanical tests pass, check the unpowered enclosure with the child under adult supervision. | Fingers wrap the thin grip comfortably. The rounded shoulders stay clear of the hand. |
 | Snap cycles | Open and close the shells 50 times without their screws. | All four snaps engage. No cracks, whitening, or permanent bend. |
 | Screw service | Remove and refit all four enclosure screws 20 times by hand. | Nuts stay seated. Bosses do not crack. Screw heads remain recessed. |
 | Handle retention | Pull the integrated handle upward with 50 N for 10 seconds, three times, with inert mass fitted. | No cracks, permanent bend, or opening of the shell seam. |
@@ -180,6 +184,7 @@ Keep the print settings, part revision, measured force, temperatures, and photog
 
 The generator checks connected solids, print-bed size, nominal collisions, and expanded component envelopes.
 It checks the battery extraction sweep and the saved STL edge topology, winding, and volume.
+STL vertices are joined at 0.0001 mm resolution. Collapsed triangles are removed before the topology check.
 The snap calculation is a cantilever strain estimate with an assumed 2% limit.
 It is not finite-element analysis and does not predict print fatigue or impact strength.
 Connector models are simplified envelopes. The fit allowance cannot guarantee dimensions that are still unknown.

@@ -1,20 +1,29 @@
 {
-  "revision": "prototype-4",
+  "revision": "prototype-5",
   "checks": [
     {
       "check": "front: valid connected solid",
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 209160.06
+        "volume_mm3": 205030.63
       }
+    },
+    {
+      "check": "front: retains full lower frame",
+      "pass": true,
+      "detail": [
+        210.0,
+        189.999,
+        79.5
+      ]
     },
     {
       "check": "front: fits 210 x 210 print field",
       "pass": true,
       "detail": [
         210.0,
-        190.0,
+        189.999,
         79.5
       ]
     },
@@ -23,15 +32,24 @@
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 176877.18
+        "volume_mm3": 167386.48
       }
+    },
+    {
+      "check": "rear: retains full lower frame",
+      "pass": true,
+      "detail": [
+        210.0,
+        189.999,
+        42.7
+      ]
     },
     {
       "check": "rear: fits 210 x 210 print field",
       "pass": true,
       "detail": [
         210.0,
-        190.0,
+        189.999,
         42.7
       ]
     },
@@ -906,32 +924,22 @@
       "detail": null
     },
     {
-      "check": "Open finger space front of grip: front",
+      "check": "No raised side tip: front left",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Open finger space front of grip: rear",
+      "check": "No raised side tip: front right",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Open finger space front of grip: battery_door",
+      "check": "No raised side tip: rear left",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Open finger space rear of grip: front",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Open finger space rear of grip: rear",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Open finger space rear of grip: battery_door",
+      "check": "No raised side tip: rear right",
       "pass": true,
       "detail": null
     },
@@ -950,9 +958,13 @@
       }
     },
     {
-      "check": "Front and rear handle load sections match",
+      "check": "Front and rear grip volumes within 0.1%",
       "pass": true,
-      "detail": 0.575
+      "detail": {
+        "front_mm3": 9814.714,
+        "rear_mm3": 9814.708,
+        "relative_error": 5e-07
+      }
     },
     {
       "check": "Case screw 1 beside perimeter wall",
@@ -978,20 +990,22 @@
       "check": "front: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 41520,
+        "triangles": 36266,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 208866.37
+        "volume_mm3": 200749.69,
+        "removed_degenerate_triangles": 2
       }
     },
     {
       "check": "rear: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 35064,
+        "triangles": 29482,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 177105.5
+        "volume_mm3": 162485.5,
+        "removed_degenerate_triangles": 0
       }
     },
     {
@@ -1001,7 +1015,8 @@
         "triangles": 1310,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 33924.91
+        "volume_mm3": 33924.91,
+        "removed_degenerate_triangles": 0
       }
     },
     {
@@ -1011,7 +1026,8 @@
         "triangles": 76,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 1984.48
+        "volume_mm3": 1984.48,
+        "removed_degenerate_triangles": 0
       }
     },
     {
@@ -1021,7 +1037,8 @@
         "triangles": 76,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 1990.36
+        "volume_mm3": 1990.36,
+        "removed_degenerate_triangles": 0
       }
     },
     {
@@ -1031,7 +1048,8 @@
         "triangles": 76,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 1996.0
+        "volume_mm3": 1996.0,
+        "removed_degenerate_triangles": 0
       }
     }
   ],
@@ -1045,40 +1063,46 @@
   ],
   "meshes": {
     "front": {
-      "triangles": 41520,
+      "triangles": 36266,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 208866.37
+      "volume_mm3": 200749.69,
+      "removed_degenerate_triangles": 2
     },
     "rear": {
-      "triangles": 35064,
+      "triangles": 29482,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 177105.5
+      "volume_mm3": 162485.5,
+      "removed_degenerate_triangles": 0
     },
     "battery_door": {
       "triangles": 1310,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 33924.91
+      "volume_mm3": 33924.91,
+      "removed_degenerate_triangles": 0
     },
     "snap-coupon-0.2": {
       "triangles": 76,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 1984.48
+      "volume_mm3": 1984.48,
+      "removed_degenerate_triangles": 0
     },
     "snap-coupon-0.3": {
       "triangles": 76,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 1990.36
+      "volume_mm3": 1990.36,
+      "removed_degenerate_triangles": 0
     },
     "snap-coupon-0.4": {
       "triangles": 76,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 1996.0
+      "volume_mm3": 1996.0,
+      "removed_degenerate_triangles": 0
     }
   },
   "checks_count": 195

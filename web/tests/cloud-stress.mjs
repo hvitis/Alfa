@@ -33,6 +33,39 @@ try {
   await page.goto(`${base}#3dprint`);
   await waitCloud('assembled');
   await page.reload(); await waitCloud('assembled');
+  const colorPanel=await page.locator('#cloud-colors').boundingBox();
+  const downloads=await page.locator('.cloud-downloads').boundingBox();
+  assert(colorPanel.width<=downloads.width/2+.5,'Desktop color panel must use at most half the page width');
+  assert(colorPanel.y>=downloads.y+downloads.height,'Color controls must follow Print your cloud');
+  const canvasBefore=await page.locator('#viewport canvas').screenshot();
+  await page.locator('.palette-picker summary').click();
+  assert.equal(await page.locator('.palette-options .palette-swatches i').count(),18);
+  await page.getByRole('button',{name:'Candy cloud',exact:true}).click();
+  assert.equal(await page.locator('#cloud-color-front').inputValue(),'#ffd6e6');
+  const canvasAfter=await page.locator('#viewport canvas').screenshot();
+  assert(!canvasBefore.equals(canvasAfter),'Palette selection must repaint the actual 3D canvas');
+  await page.locator('[data-part=front] summary').click();
+  assert.equal(await page.locator('[data-part=front] .filament-color').count(),16);
+  await page.getByRole('button',{name:'Front shell: Orange',exact:true}).click();
+  assert.equal(await page.locator('#cloud-color-front').inputValue(),'#eb5403');
+  assert.equal(await page.locator('#cloud-color-rear').inputValue(),'#d7c6f5');
+  for(const [part,title,color,value] of [['rear','Rear shell','Sky blue','#346ce3'],['battery_door','Battery door','Yellow','#f2b706']]) {
+    await page.locator(`[data-part=${part}] summary`).click();
+    assert.equal(await page.locator(`[data-part=${part}] .filament-color`).count(),16);
+    await page.getByRole('button',{name:`${title}: ${color}`,exact:true}).click();
+    assert.equal(await page.locator(`#cloud-color-${part}`).inputValue(),value);
+    assert.equal(await page.locator('#cloud-color-front').inputValue(),'#eb5403');
+  }
+  await page.locator('.palette-picker summary').click();
+  await page.getByRole('button',{name:'Candy cloud',exact:true}).click();
+  await page.locator('[data-part=front] summary').click();
+  await page.locator('#cloud-color-front').fill('#aabbcc');
+  assert.equal(await page.locator('.palette-name').textContent(),'Custom colors');
+  await page.reload(); await waitCloud('assembled');
+  assert.equal(await page.locator('#cloud-color-front').inputValue(),'#aabbcc');
+  assert.equal(await page.locator('#cloud-color-rear').inputValue(),'#d7c6f5');
+  await page.locator('.palette-picker summary').click();
+  await page.getByRole('button',{name:'Cloud blue',exact:true}).click();
   const checks = await (await page.request.get(`${base}cloud/verification.json`)).json();
   assert(checks.passed); assert(checks.checks.length > 100);
   const manifest = await (await page.request.get(`${base}cloud/manifest.json`)).json();
@@ -45,6 +78,7 @@ try {
   // Raycast through the label's projected centre onto the real CAD surface.
   // A mount behind the front skin must not override the visible shell ID.
   for (const [label,id,title] of [[frontLabel,'F-00','Front shell'],[lcdLabel,'lcd','Waveshare 2-inch LCD']]) {
+    await label.scrollIntoViewIfNeeded();
     const rect = await label.boundingBox(); assert(rect);
     await page.mouse.move(rect.x+rect.width/2,rect.y+rect.height/2);
     await page.waitForFunction(id => document.querySelector('#viewport').dataset.hoverId === id,id);
@@ -52,6 +86,17 @@ try {
     await page.mouse.click(rect.x+rect.width/2,rect.y+rect.height/2);
     assert((await page.locator('#viewer-status').textContent()).includes(title));
   }
+  await page.selectOption('#cloud-mode','battery_open'); await waitCloud('battery_open');
+  const rearLabel=page.locator('.annotation').filter({hasText:/^R-00 · Rear shell$/});
+  await rearLabel.waitFor({state:'visible'});
+  await rearLabel.scrollIntoViewIfNeeded();
+  const rearRect=await rearLabel.boundingBox(); assert(rearRect);
+  await page.mouse.move(rearRect.x+rearRect.width/2,rearRect.y+rearRect.height/2);
+  await page.waitForFunction(()=>document.querySelector('#viewport').dataset.hoverId==='R-00');
+  await page.locator('#cloud-labels').uncheck();
+  await mkdir('test-results',{recursive:true});
+  await page.locator('#viewport').screenshot({path:'test-results/cloud-rear.png'});
+  await page.selectOption('#cloud-mode','assembled'); await waitCloud('assembled');
   await page.mouse.move(5,5);
   assert(await page.locator('.model-tooltip').isHidden());
   await page.locator('#cloud-labels').uncheck();
@@ -84,10 +129,28 @@ try {
     assert(after.geometries <= before.geometries + 2, JSON.stringify({ before, after }));
     assert(after.textures <= before.textures + 1);
   }
+  await page.setViewportSize({width:375,height:812});
+  for(const part of ['front','rear','battery_door']) {
+    await page.locator(`[data-part=${part}] summary`).click();
+    const menu=await page.locator(`[data-part=${part}] .filament-menu`).boundingBox();
+    assert(menu.x>=0 && menu.x+menu.width<=375,'Mobile filament menu must fit the screen');
+    await page.locator(`[data-part=${part}] summary`).press('Escape');
+  }
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.selectOption('#cloud-mode', 'assembled'); await waitCloud('assembled');
   await mkdir('test-results', { recursive: true });
   await page.screenshot({ path: 'test-results/cloud-radio.png', fullPage: true });
+  // Keep a high oblique detail view so shoulder changes can be reviewed.
+  const canvas = page.locator('#viewport canvas');
+  await canvas.scrollIntoViewIfNeeded();
+  const rect = await canvas.boundingBox();
+  const x=rect.x+rect.width/2,y=rect.y+rect.height*.45;
+  await page.mouse.move(x,y); await page.mouse.down();
+  await page.mouse.move(x,y+rect.height*.09,{steps:16}); await page.mouse.up();
+  await page.waitForTimeout(700);
+  await page.locator('#viewport').screenshot({path:'test-results/cloud-handle.png'});
+  await page.locator('[data-part=front] summary').click();
+  await page.screenshot({path:'test-results/cloud-colors.png',fullPage:true});
   assert.deepEqual(errors, []); assert.deepEqual(failures, []);
   const report = { passed: true, cycles: 100, elapsed_ms: Date.now()-started, geometry_checks: checks.checks.length, before, after, base };
   await writeFile('test-results/cloud-stress.json', JSON.stringify(report, null, 2)+'\n');

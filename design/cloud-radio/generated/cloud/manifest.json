@@ -1,5 +1,5 @@
 {
-  "revision": "prototype-4",
+  "revision": "prototype-5",
   "outer_mm": [
     210.0,
     190.0,
@@ -276,18 +276,13 @@
       22
     ],
     "wall": 3,
-    "note": "20 mm grip centred on the front/rear joint, half in each shell, with open finger space on both sides; physical hand fit remains to be checked.",
+    "note": "Raised 20 mm grip centred on the shell joint, with full-width closed rounded shoulders and smooth roots. Physical hand fit remains to be checked.",
     "grip_depth": 20,
-    "recess": {
-      "origin": [
-        -48,
-        148
-      ],
-      "size": [
-        96,
-        100
-      ],
-      "radius": 12
+    "shoulder": {
+      "height": 152,
+      "front_radius": 8,
+      "root_radius": 10,
+      "crown_radius": 10
     }
   },
   "fasteners": {
@@ -1004,32 +999,32 @@
     },
     {
       "id": "F-H01",
-      "title": "Front half of centred handle",
+      "title": "Rounded front handle and shoulder",
       "part": "front",
       "origin": [
-        -48.0,
-        148.0,
-        33.15
+        -67.1538,
+        152.0,
+        23.15
       ],
       "size": [
-        96.0,
-        42.0,
-        9.85
+        137.0041,
+        37.9989,
+        19.85
       ]
     },
     {
       "id": "R-H01",
-      "title": "Rear half of centred handle",
+      "title": "Rounded rear handle and shoulder",
       "part": "rear",
       "origin": [
-        -48.0,
-        148.0,
+        -67.1538,
+        152.0,
         43.3
       ],
       "size": [
-        96.0,
-        42.0,
-        9.85
+        137.0041,
+        37.9989,
+        19.85
       ]
     }
   ],

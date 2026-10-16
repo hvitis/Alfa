@@ -40,6 +40,30 @@ export function cloudDevelopment(root) {
         clearTimeout(timer); timer = setTimeout(rebuild, 350);
       };
       server.watcher.on('change', changed);
+      let archiveJob;
+      const archivePath=resolve(root,'web/.generated/cloud-radio.zip');
+      function packageArchive() {
+        if (archiveJob) return archiveJob;
+        archiveJob=new Promise((resolveJob,reject)=>{
+          const process=spawn('python3',[resolve(root,'web/archives.py'),archivePath],{cwd:root,stdio:['ignore','pipe','pipe']});
+          let log='';process.stderr.on('data',chunk=>{log=(log+chunk).slice(-4000)});
+          process.on('error',reject);
+          process.on('close',code=>code===0?resolveJob():reject(new Error(log||'Cloud archive creation failed')));
+        }).finally(()=>{archiveJob=undefined});
+        return archiveJob;
+      }
+      // Generate the same archive on demand in development; production uses
+      // the ZIP created by web/build.py, with no runtime Python dependency.
+      server.middlewares.use(async(request,response,next)=>{
+        if(request.url?.split('?')[0]!=='/cloud/cloud-radio.zip')return next();
+        try {
+          await packageArchive();
+          response.setHeader('Content-Type','application/zip');
+          response.setHeader('Content-Disposition','attachment; filename="cloud-radio.zip"');
+          response.setHeader('Cache-Control','no-store');
+          response.end(await readFile(archivePath));
+        } catch(error){next(error)}
+      });
       // Match the production manifest URL during Vite development.
       server.middlewares.use(async (request, response, next) => {
         if (request.url?.split('?')[0] !== '/data/manifest.json') return next();

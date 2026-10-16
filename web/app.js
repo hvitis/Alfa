@@ -1,5 +1,6 @@
 import adrHTML from './.generated/adr.html?raw';
 import './cloud/style.css';
+import {createCloudColorControls} from './cloud/colors.js';
 import architecture from './content/architecture.mmd?raw';
 import raspberryData from './hardware-visualisation/src/data/setup.json' with { type: 'json' };
 import houseData from './hardware-visualisation/src/data/radio-house.json' with { type: 'json' };
@@ -14,6 +15,7 @@ const models = {
   case: { title: 'Original plywood case', description: 'A compact 6 mm plywood enclosure with a removable rear cover and space for the Pi, screen, buttons, and power bank.', modes: [['enclosure', 'Assembled'], ['internals', 'Inside'], ['exploded', 'Exploded']], size: [caseData.parameters.case.width, caseData.parameters.case.height, caseData.parameters.case.depth], folder: 'wooden-case' },
 };
 const picoData = createPicoData();
+let cloudColorControls;
 let activeTab = 'plywood', viewerPromise, viewer, diagramPromise, transition = 0, selectedWire = '', repository;
 
 function fail(error) {
@@ -80,6 +82,7 @@ async function showScene() {
     await world.setMode($('#cloud-mode').value);
     world.setLabels($('#cloud-labels').checked); world.setClearances($('#cloud-clearances').checked);
     fillCloud(model.data);
+    world.setPartColors(cloudColorControls.getColors());
   } else if (!hardware) {
     const mode = $('#assembly-mode').value;
     if (model.getMode() !== mode) await world.setMode(mode);
@@ -221,6 +224,7 @@ async function start() {
   $('#software-view').addEventListener('change', () => handle(showSoftware()));
   window.addEventListener('hashchange', () => handle(activate(location.hash.slice(1), false)));
   window.addEventListener('pagehide', () => viewer?.dispose(), { once: true });
+  cloudColorControls=createCloudColorControls($('#cloud-colors'),colors=>viewer?.setPartColors(colors));
   await activate(location.hash.slice(1) || 'plywood', false);
   document.documentElement.dataset.ready = 'true';
 }

@@ -14,7 +14,6 @@ from pathlib import Path
 import shutil
 import struct
 import tempfile
-import zipfile
 
 from cadgen import build123d as b
 
@@ -112,9 +111,53 @@ def door_profile():
     return rr(-59, 3.5, 118, 81.5, 6) + rr(50, 26, 38, 59, 6)
 
 
-def handle_recess(p):
-    r=p["handle"]["recess"]
-    return rr(*r["origin"],*r["size"],r["radius"])
+def shoulder_profile(p):
+    """Closed YZ roof: rounded body, concave handle roots, and round crown.
+
+    The roof extends across the entire cloud width. There are no rectangular
+    side recesses, residual horns, or open pockets beside the handle.
+    """
+    h,c=p["handle"],p["case"]
+    sh=h["shoulder"]
+    y,r,root,cap=sh["height"],sh["front_radius"],sh["root_radius"],sh["crown_radius"]
+    mid=c["split"]+c["seam_gap"]/2
+    lo,hi=mid-h["grip_depth"]/2,mid+h["grip_depth"]/2
+    top=190
+    depth=c["depth"]
+    k=.5522847498307936
+    # Coordinates below are (depth Z, height Y), then mapped to Plane.YZ.
+    segments=[
+        [(0,-10),(0,y-r)],
+        [(0,y-r),(0,y-r+k*r),(r-k*r,y),(r,y)],
+        [(r,y),(lo-root,y)],
+        [(lo-root,y),(lo-root+k*root,y),(lo,y+root-k*root),(lo,y+root)],
+        [(lo,y+root),(lo,top-cap)],
+        [(lo,top-cap),(lo,top-cap+k*cap),(mid-k*cap,top),(mid,top)],
+        [(mid,top),(mid+k*cap,top),(hi,top-cap+k*cap),(hi,top-cap)],
+        [(hi,top-cap),(hi,y+root)],
+        [(hi,y+root),(hi,y+root-k*root),(hi+root-k*root,y),(hi+root,y)],
+        [(hi+root,y),(depth-r,y)],
+        [(depth-r,y),(depth-r+k*r,y),(depth,y-r+k*r),(depth,y-r)],
+        [(depth,y-r),(depth,-10)],[(depth,-10),(0,-10)],
+    ]
+    edges=[]
+    for points in segments:
+        points=[(yy,zz) for zz,yy in points]
+        curve=b.Line(*points) if len(points)==2 else b.Bezier(*points)
+        edges.extend(curve.edges())
+    return b.Plane.YZ * b.Face(b.Wire(edges))
+
+
+def shoulder_envelopes(p,outer):
+    profile=shoulder_profile(p)
+    roof=b.Pos(-110,0,0)*b.extrude(profile,amount=220)
+    # Offset the actual curved roof in its own plane to preserve wall thickness.
+    inner_profile=b.offset(profile,amount=-p["case"]["wall"])
+    cavity=b.Pos(-110,0,0)*b.extrude(inner_profile,amount=220)
+    outer_solid=slab(outer,0,p["case"]["depth"]) & roof
+    inside=b.offset(outer,amount=-p["case"]["wall"])
+    inner_solid=slab(inside,0,p["case"]["depth"]) & cavity
+    return roof,outer_solid-inner_solid
 
 
 def place_snap(shape, site):
@@ -300,34 +343,61 @@ def make(p):
     front -= slab(handle,-1,depth+2)
     rear -= slab(handle,-1,depth+2)
 
-    # The 20 mm grip straddles the centre of the shell joint. Both outside
-    # faces have finger recesses, separated from the electronics by a wall.
-    recess=handle_recess(p)
-    grip=p["handle"]["grip_depth"]
+    # Replace the cut-away crown with a closed rounded roof. Its smooth
+    # concave roots lift the handle from the body at the centre of the depth.
+    lower_region=box(-110,-1,-1,220,141,depth+2)
+    lower_before={"front":front & lower_region,"rear":rear & lower_region}
+    roof,skin=shoulder_envelopes(p,outer)
+    # Add only the new roof skin. Lower walls keep their existing battery
+    # door, snap receiver windows, and fastener reliefs.
+    skin &= box(-110,p["handle"]["shoulder"]["height"]-12,-1,220,70,depth+2)
+    front &= roof
+    rear &= roof
+    front += skin & box(-110,-10,0,220,220,split)
+    rear_skin=skin & box(-110,-10,split+gap,220,220,depth-split-gap)
+    # The default union can return an empty shape at these nearly coincident
+    # curved faces. Glue matching surfaces at a 0.00001 mm Boolean tolerance
+    # and independently require all lower-frame material to remain.
+    rear_base=rear
+    rear=rear_base.fuse(rear_skin,glue=True,tol=.00001)
+    if not rear or rear.volume<rear_base.volume-.02:
+        debug=ROOT/".build-debug"
+        debug.mkdir(exist_ok=True)
+        b.export_brep(rear_base,debug/"rear-base.brep")
+        b.export_brep(rear_skin,debug/"rear-roof.brep")
+        raise ValueError("Rear roof union removed existing case material")
+    # The solid handle bridges the outer crown and the rim of the opening.
+    # Only the upper crown is solid; the electronics remain in a hollow case.
+    raised=box(-110,p["handle"]["shoulder"]["height"],0,220,60,depth)
+    crown=slab(outer,0,depth) & roof & raised
+    front += crown & box(-110,140,0,220,70,split)
+    rear += crown & box(-110,140,split+gap,220,70,depth-split-gap)
+    front -= slab(handle,-1,depth+2)
+    rear -= slab(handle,-1,depth+2)
+    # End the original planar alignment lip below the curved roof. The other
+    # perimeter sections and four snaps continue to align the two shells.
+    front -= box(-110,p["handle"]["shoulder"]["height"]-t,split,220,65,3.1)
     middle=split+gap/2
-    grip_start,grip_end=middle-grip/2,middle+grip/2
-    partition=(b.offset(recess,amount=t)-recess) & outer
-    front += slab(partition,t,split-t)
-    rear += slab(partition,split+gap,depth-t-split-gap)
-    # Solid matching crown sections connect the outer rim and opening rim.
-    # Each printed half carries the same cross section at the joint.
-    crown=(outer & recess)-handle
-    front += slab(crown,grip_start,split-grip_start)
-    rear += slab(crown,split+gap,grip_end-split-gap)
-    front -= slab(recess,-1,grip_start+1)
-    rear -= slab(recess,grip_end,depth-grip_end+1)
-    # Remove the original lip in this recess so the handle has the same joint
-    # clearance as the body and equal front/rear grip thickness.
-    front -= slab(b.offset(recess,amount=t+gap),split,3.1)
-    front_cap=rounded_rim(outer,grip_start,radius)
-    rear_cap=rounded_rim(outer,grip_end,radius,-1)
-    front -= slab(recess,grip_start,radius)-front_cap
-    rear -= slab(recess,grip_end-radius,radius)-rear_cap
+    grip_start=middle-p["handle"]["grip_depth"]/2
+    grip_end=middle+p["handle"]["grip_depth"]/2
     front -= rounded_rim(handle,grip_start,radius,opening=True)
     rear -= rounded_rim(handle,grip_end,radius,-1,opening=True)
-    record(slab(outer & recess,grip_start,split-grip_start),"F-H01","Front half of centred handle","front")
-    record(slab(outer & recess,split+gap,grip_end-split-gap),"R-H01","Rear half of centred handle","rear")
+    record(front & raised,"F-H01","Rounded front handle and shoulder","front")
+    record(rear & raised,"R-H01","Rounded rear handle and shoulder","rear")
 
+    for name,shape in (("front",front),("rear",rear)):
+        # Compare actual missing/added regions rather than subtracting two
+        # large curved-solid volume integrals, which have numerical noise.
+        missing=lower_before[name]-shape
+        added=(shape & lower_region)-lower_before[name]
+        missing_volume=sum(v.volume for v in missing.solids()) if missing else 0
+        added_volume=sum(v.volume for v in added.solids()) if added else 0
+        if missing_volume>.02 or added_volume>.02:
+            debug=ROOT/".build-debug"
+            debug.mkdir(exist_ok=True)
+            if missing:b.export_brep(missing,debug/f"{name}-missing.brep")
+            if added:b.export_brep(added,debug/f"{name}-added.brep")
+            raise ValueError(f"{name}: shoulder changed lower frame (missing {missing_volume}, added {added_volume} mm3)")
     parts = {"front": front, "rear": rear, "battery_door": door}
     for name, shape in parts.items():
         color(shape, name, COLORS[name])
@@ -376,6 +446,33 @@ def make(p):
     return parts, electronics, extras, outer, features
 
 
+def weld_stl(path):
+    """Weld at 0.0001 mm and remove triangles collapsed by that weld.
+
+    Curved Boolean seams can tessellate into sub-micron slivers. Quantizing
+    every shared vertex makes the saved mesh explicit; the independent edge
+    and winding checks below still reject holes or non-manifold topology.
+    """
+    raw=path.read_bytes()
+    count=struct.unpack_from("<I",raw,80)[0]
+    faces=[]
+    for i in range(count):
+        values=struct.unpack_from("<12fH",raw,84+i*50)
+        vertices=[tuple(round(v,4) for v in values[j:j+3]) for j in (3,6,9)]
+        if len(set(vertices))<3:
+            continue
+        a,c,d=vertices
+        u=[c[j]-a[j] for j in range(3)]
+        v=[d[j]-a[j] for j in range(3)]
+        normal=(u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0])
+        length=math.sqrt(sum(n*n for n in normal))
+        if length<1e-14:
+            continue
+        faces.append(struct.pack("<12fH",*[n/length for n in normal],*a,*c,*d,0))
+    path.write_bytes(raw[:80]+struct.pack("<I",len(faces))+b"".join(faces))
+    return count-len(faces)
+
+
 def mesh_check(path):
     """Read saved binary STL independently: topology, orientation and volume."""
     raw = path.read_bytes()
@@ -411,6 +508,9 @@ def verify(p, parts, electronics, outer, features):
         if len(shape.solids())!=1:
             print("Disconnected solids",name,[(round(v.volume,3),list(v.bounding_box().min),list(v.bounding_box().max)) for v in shape.solids()],flush=True)
         bb = shape.bounding_box()
+        if name in ("front","rear"):
+            check(name+": retains full lower frame",bb.min.Y<.01 and bb.min.X < -104.9 and bb.max.X>104.9,
+                  [round(v,3) for v in bb.size])
         check(name+": fits 210 x 210 print field", bb.size.X <= 210.01 and bb.size.Y <= 210.01,
               [round(v,3) for v in bb.size])
     for (na,a),(nc,c) in combinations(parts.items(),2):
@@ -465,23 +565,33 @@ def verify(p, parts, electronics, outer, features):
         vol=overlap(shape,hand_sweep)
         check("Integrated handle through-opening: "+name,vol<.02,round(vol,4))
     check("Handle opening at least 64 x 22 mm",p["handle"]["opening"][0]>=64 and p["handle"]["opening"][1]>=22)
-    check("Horizontal battery door remains below handle",parts["battery_door"].bounding_box().max.Y < p["handle"]["recess"]["origin"][1]-20)
+    check("Horizontal battery door remains below handle",parts["battery_door"].bounding_box().max.Y < p["handle"]["shoulder"]["height"]-20)
     check("Grip depth <= 20 mm",p["handle"]["grip_depth"]<=20)
     middle=p["case"]["split"]+p["case"]["seam_gap"]/2
     start=middle-p["handle"]["grip_depth"]/2
     end=middle+p["handle"]["grip_depth"]/2
-    for side,z,height in (("front",-1,start+1),("rear",end,p["case"]["depth"]-end+1)):
-        fingers=slab(handle_recess(p),z,height)
-        for name,shape in parts.items():
-            check(f"Open finger space {side} of grip: {name}",overlap(shape,fingers)<.02)
-    crown=handle_recess(p) & outer
-    front_grip=parts["front"] & slab(crown,start-.1,p["handle"]["grip_depth"]+.2)
-    rear_grip=parts["rear"] & slab(crown,start-.1,p["handle"]["grip_depth"]+.2)
+    # The former four upright tips must be completely absent. These regions
+    # cover both sides of the front and rear shoulder above the body roof.
+    level=p["handle"]["shoulder"]["height"]
+    root=p["handle"]["shoulder"]["root_radius"]
+    for side,z,thickness in (("front",-1,start-root),("rear",end+root+1,p["case"]["depth"]-end-root)):
+        for edge,x in (("left",-100),("right",40)):
+            probe=box(x,level+.1,z,60,60,thickness)
+            check(f"No raised side tip: {side} {edge}",sum(overlap(shape,probe) for shape in parts.values())<.02)
+    # Measure the grasped crown above the finger opening. Rounded roots below
+    # this band deliberately widen into the body for a continuous transition.
+    crown=box(-100,p["handle"]["center"][1]+p["handle"]["opening"][1]/2+4,-1,200,40,p["case"]["depth"]+2)
+    front_grip=parts["front"] & crown
+    rear_grip=parts["rear"] & crown
     fb,rb=front_grip.bounding_box(),rear_grip.bounding_box()
     check("Handle centred on shell joint",abs((fb.min.Z+rb.max.Z)/2-middle)<.01)
     check("Equal handle depth in both shells",abs(fb.size.Z-rb.size.Z)<.01,
           {"front_mm":round(fb.size.Z,3),"rear_mm":round(rb.size.Z,3),"seam_mm":p["case"]["seam_gap"]})
-    check("Front and rear handle load sections match",abs(front_grip.volume-rear_grip.volume)<1,round(front_grip.volume-rear_grip.volume,3))
+    # Curved-surface offsets and lofts have a small numerical volume error.
+    # Compare relative volumes as well as the exact depth and centring above.
+    error=abs(front_grip.volume-rear_grip.volume)/max(front_grip.volume,rear_grip.volume)
+    check("Front and rear grip volumes within 0.1%",error<.001,
+          {"front_mm3":round(front_grip.volume,3),"rear_mm3":round(rear_grip.volume,3),"relative_error":round(error,7)})
     for index,(x,y) in enumerate(p["exterior_screws"],1):
         distance=outer.outer_wire().distance_to(b.Vertex(x,y,0))
         check(f"Case screw {index} beside perimeter wall",5.2<=distance<=p["case"]["wall"]+5.2,round(distance,3))
@@ -519,6 +629,10 @@ def build(check_only=False):
     if check_only:
         print(json.dumps(report,indent=2))
         return report["passed"]
+    if not report["passed"]:
+        (ROOT/"last-failed-verification.json").write_text(json.dumps(report,indent=2)+"\n")
+        print("Verification failed; last good published files retained.",flush=True)
+        return False
     OUTPUT.parent.mkdir(parents=True,exist_ok=True)
     staging=Path(tempfile.mkdtemp(prefix=".build-",dir=ROOT))
     try:
@@ -533,7 +647,9 @@ def build(check_only=False):
             printable= b.Pos(0,0,-bb.min.Z)*printable
             path=staging/f"{name}.stl"
             b.export_stl(printable,path,tolerance=.035,angular_tolerance=.15)
+            removed=weld_stl(path)
             mesh=mesh_check(path)
+            mesh["removed_degenerate_triangles"]=removed
             meshes[name]=mesh
             report["checks"].append({"check":name+": saved STL manifold and outward winding", "pass":mesh["watertight"] and mesh["consistent_winding"] and mesh["volume_mm3"]>0,"detail":mesh})
         assembly=b.Compound(children=list(parts.values())+list(electronics.values())+list(extras.values()),label="cloud_radio")
@@ -556,9 +672,6 @@ def build(check_only=False):
         (staging/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
         for name in ("parameters.json","README.md","build.py","run-cad.sh"):
             shutil.copyfile(ROOT/name,staging/name)
-        with zipfile.ZipFile(staging/"cloud-radio.zip","w",zipfile.ZIP_DEFLATED) as bundle:
-            for file in sorted(staging.iterdir()):
-                if file.suffix!=".zip":bundle.write(file,file.name)
         # Directory swap avoids half-written GLBs and mixed download revisions.
         backup=OUTPUT.with_name(".previous-cloud")
         if backup.exists():shutil.rmtree(backup)

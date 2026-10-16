@@ -1,5 +1,7 @@
 """Behavioral tests for release provenance and distribution integrity."""
 import json
+import os
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -7,6 +9,7 @@ import zipfile
 from pathlib import Path
 
 from web.build import export_site
+from web.archives import CLOUD, MEMBERS, create_cloud_archive
 from scripts.package import KIT_NAME, REQUIRED, create_kit, digest, validate_release_kit
 from scripts.project import write_json
 from scripts.verify_release_ref import SEMVER, verify
@@ -78,12 +81,41 @@ class PackageTests(unittest.TestCase):
             export_site(directory)
             files = {p.relative_to(directory).as_posix() for p in Path(directory).rglob("*") if p.is_file()}
             self.assertTrue({"index.html", ".nojekyll", "data/manifest.json", "docs/adr.md", "docs/architecture.mmd", "THIRD-PARTY-LICENSES.txt"}.issubset(files))
+            self.assertIn("cloud/cloud-radio.zip", files)
+            with zipfile.ZipFile(Path(directory)/"cloud/cloud-radio.zip") as archive:
+                self.assertEqual(set(archive.namelist()), set(MEMBERS))
+                self.assertEqual(archive.read("front.stl"), (CLOUD/"front.stl").read_bytes())
+                self.assertTrue(json.loads(archive.read("verification.json"))["passed"])
             self.assertTrue(any(name.endswith(".glb") for name in files))
             self.assertTrue(any(name.endswith(".js") for name in files))
             self.assertFalse(any(name.endswith((".png", ".jpg", ".wav", ".gif")) for name in files))
             data = json.loads((Path(directory) / "data/manifest.json").read_text())
             self.assertEqual(len(data["alphabet"]), 32)
             self.assertLessEqual(data["audio"]["initial_volume"], data["audio"]["max_volume"])
+
+    def test_cloud_zip_is_reproducible_and_preserves_last_valid_archive_on_invalid_inputs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source=Path(directory)/"cad"
+            source.mkdir()
+            for name in MEMBERS:
+                shutil.copyfile(CLOUD/name,source/name)
+            destination=Path(directory)/"download.zip"
+            create_cloud_archive(destination,source)
+            original=destination.read_bytes()
+            for file in source.iterdir():
+                os.utime(file,(1700000000,1700000000))
+            create_cloud_archive(destination,source)
+            self.assertEqual(destination.read_bytes(),original)
+            verification=json.loads((source/"verification.json").read_text())
+            verification["passed"]=False
+            (source/"verification.json").write_text(json.dumps(verification))
+            with self.assertRaisesRegex(ValueError,"verified CAD"):
+                create_cloud_archive(destination,source)
+            self.assertEqual(destination.read_bytes(),original)
+            (source/"front.stl").unlink()
+            with self.assertRaises(FileNotFoundError):
+                create_cloud_archive(destination,source)
+            self.assertEqual(destination.read_bytes(),original)
 
     def test_site_export_rejects_source_directories_before_emptying_them(self):
         from scripts.project import ROOT

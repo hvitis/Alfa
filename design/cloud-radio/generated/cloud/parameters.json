@@ -1,5 +1,5 @@
 {
-  "revision": "prototype-4",
+  "revision": "prototype-5",
   "units": "mm",
   "material": "PETG",
   "uncertain_dimension_allowance_mm": 5,
@@ -342,18 +342,13 @@
       22
     ],
     "wall": 3,
-    "note": "20 mm grip centred on the front/rear joint, half in each shell, with open finger space on both sides; physical hand fit remains to be checked.",
+    "note": "Raised 20 mm grip centred on the shell joint, with full-width closed rounded shoulders and smooth roots. Physical hand fit remains to be checked.",
     "grip_depth": 20,
-    "recess": {
-      "origin": [
-        -48,
-        148
-      ],
-      "size": [
-        96,
-        100
-      ],
-      "radius": 12
+    "shoulder": {
+      "height": 152,
+      "front_radius": 8,
+      "root_radius": 10,
+      "crown_radius": 10
     }
   },
   "switch_lugs": [

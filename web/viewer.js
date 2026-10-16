@@ -159,8 +159,9 @@ export function createViewer(container, onSelect) {
     async setMode(mode) { hideHover(); const model = current; await model.setMode(mode); if (model === current) { container.dataset.mode = mode; reset(); } },
     setWood(value) { current?.setWood?.(value); },
     setLabels(value) { current?.setLabels?.(value); },
+    setPartColors(values) { current?.setPartColors?.(values); },
     setClearances(value) { current?.setClearances?.(value); },
-    get stats() { return { scenes: scenes.size, ...renderer.info.memory }; },
+    get stats() { return { scenes: scenes.size, ...renderer.info.memory, camera: camera.position.toArray(), target: controls.target.toArray(), mode: current?.getMode?.() }; },
     filter(value) { filter = value; wireId = ''; filterWires(); },
     selectWire(id) { wireId = id; if (Array.isArray(current?.cables)) filterWires(); else current?.selectWire(id); },
     dispose() {

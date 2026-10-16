@@ -13,6 +13,8 @@ export function createCloudScene() {
   const labels = new THREE.Group(), clearances = new THREE.Group();
   root.add(labels, clearances);
   const pickables = [], shells = {}, data = { components: [] }, labelAnchors = [];
+  const partMaterials = {}, colors = {front:'#dae9ed',rear:'#b7d2da',battery_door:'#f3c96d'};
+  function applyColors() { for(const [part,materials] of Object.entries(partMaterials)) for(const material of materials) material.color.set(colors[part]); }
   let mode = 'assembled', showLabels = false, showClearances = false, request = 0;
   function apply() {
     for (const [name, node] of Object.entries(shells)) {
@@ -46,7 +48,16 @@ export function createCloudScene() {
       root.attach(node);
       node.userData.home = node.position.clone();
       shells[name] = node;
+      // Clone once per printed part so recoloring never changes electronics.
+      const clones=new Map();
+      node.traverse(child=>{
+        if(!child.isMesh)return;
+        function clone(material){if(!clones.has(material))clones.set(material,material.clone());return clones.get(material)}
+        child.material=Array.isArray(child.material)?child.material.map(clone):clone(child.material);
+      });
+      partMaterials[name]=[...clones.values()];
     }
+    applyColors();
     const hardware = new Map([...data.components, ...data.keepouts].map(item => [item.id, item]));
     root.traverse(object => {
       if (!object.isMesh) return;
@@ -106,6 +117,11 @@ export function createCloudScene() {
       if (token !== request) return;
       mode = value; apply();
     },
+    setPartColors(values) {
+      for(const part of Object.keys(colors)) if(/^#[\da-f]{6}$/i.test(values[part])) colors[part]=values[part].toLowerCase();
+      applyColors();
+    },
+    getColors:()=>({...colors}),
     getHoverInfo(hit) {
       if (hit.object.userData.hoverInfo) return hit.object.userData.hoverInfo;
       const part = hit.object.userData.partId, node = shells[part];

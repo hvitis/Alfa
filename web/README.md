@@ -35,16 +35,23 @@ The Pages workflow publishes `_site/` after those checks pass on `main`.
 ## Views
 
 - **Plywood:** Little House Radio and the original case, with assembly modes, orbit controls, wood visibility, and labels.
-- **3DPrint:** PETG cloud enclosure, assembly views, frame IDs, hover names, fit allowances, STL/STEP/ZIP downloads, and geometry checks.
+- **3DPrint:** PETG cloud enclosure, assembly views, frame IDs, hover names, preset color palettes, individual PETG swatch dropdowns and custom color pickers, fit allowances, STL/STEP/ZIP downloads, and geometry checks.
 - **Hardware:** Complete Raspberry Pi and Pico wiring atlases, circuit filters, and selectable wire endpoints.
 - **Software:** A Design dropdown shows the ADR. Implementation shows the rendered Mermaid architecture.
+
+Cloud preview colors update without a CAD rebuild and persist in browser storage.
+The color controls affect the preview; choose matching filament when printing.
+PETG swatch values follow the [official Prusa color reference](https://help.prusa3d.com/article/hueforge-filament-transparency-values-and-hexcodes_762314).
+The color panel sits below the print downloads and uses at most half the desktop page width.
 
 Hash links (`#plywood`, `#3dprint`, `#hardware`, `#software`) work with a plain static server.
 All JavaScript, styles, meshes, and documents use local relative URLs. No backend or CDN is required.
 Three.js and Mermaid load only when their views need them. Library license text is included in the export.
 
 The CAD meshes are committed viewer inputs. The static build does not run CAD tools or generate fabrication PDFs.
-The cloud assets are generated with `make cloud` and committed under `design/cloud-radio/generated/cloud/`.
+The verified CAD assets are generated with `make cloud` and committed under `design/cloud-radio/generated/cloud/`.
+Download ZIP files are not committed. `make site` creates the cloud ZIP in `_site/cloud/` from the verified assets.
+CI uses this same static build, without CAD software. The development server creates the archive on demand.
 Run `make dev` for the website at port 8000 with automatic cloud CAD rebuilds and browser refresh.
 Run `make stress` after `make site` for 100 cloud view, tab, and viewport cycles.
 Use `CLOUD_BASE_URL=http://127.0.0.1:8000/ make stress` to check the live server and GPU resource counts.
