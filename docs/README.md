@@ -19,6 +19,7 @@ flowchart TD
 
   subgraph UX["Interaction & Pedagogy"]
     AP["alphabet-plan.md<br/>Interaction Specifications"]
+    PED["pedagogical-research.md<br/>Cognitive & Learning Science"]
     SC["software-improvements-checklist.md<br/>Implementation Tracker"]
     IT["improvements-todo.md<br/>Roadmap & Backlog"]
   end
@@ -64,6 +65,7 @@ flowchart TD
 | Document | Focus Area | Description |
 |---|---|---|
 | [**alphabet-plan.md**](alphabet-plan.md) | Interaction Spec | Fixed-function keypad mapping, continuous ALSA audio mixing, hold-to-draw tracing physics, and sleep timers. |
+| [**pedagogical-research.md**](pedagogical-research.md) | Learning Science | Research analysis (Piaget, Montessori, Vygotsky, Dehaene, Ehri), comparative audit of Alfa's method, and improvement roadmap. |
 | [**software-improvements-checklist.md**](software-improvements-checklist.md) | Feature Tracking | Verification status for the five core interaction improvements and remaining physical hardware checks. |
 | [**improvements-todo.md**](improvements-todo.md) | Roadmap & RFCs | Backlog covering early childhood phonics methodology, audio indexing pipelines, NFC token games, and hardware upgrades. |
 
