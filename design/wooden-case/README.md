@@ -1,8 +1,8 @@
-# Moomin plywood case — revision A
+# Alfa plywood case — revision A
 
 Open [the offline 3D planner](viewer.html), [the four A4 cutting templates](PDF/a4_cutting_and_drilling.pdf), and [the placement and wiring plans](PDF/placement_and_wiring.pdf). The planner includes assembled, open and exploded views. It embeds the CAD meshes and works without a server or an internet connection. Keep the PDF folders beside it so its document links work.
 
-[Download the complete planning bundle](../moomin-wooden-case.zip) to move the CAD, templates and source together. Extract it and open `moomin-case/design/wooden-case/viewer.html`.
+[Download the complete planning bundle](../alfa-wooden-case.zip) to move the CAD, templates and source together. Extract it and open `alfa-case/design/wooden-case/viewer.html`.
 
 The main box is **150 mm wide × 200 mm high × 64 mm deep**, made from **6 mm plywood**. The clear inside space is **138 × 188 × 52 mm**. The side switch cover adds 6 mm to the overall width: allow **156 × 200 × 64 mm** for the complete enclosure. It uses your existing five-button board. Four rear screws give access to the battery, connectors and Pi.
 
@@ -133,7 +133,7 @@ The program's five-minute inactivity shutdown halts Raspberry Pi OS. It does not
 
 ## Electrical connections
 
-The enclosure preserves all **27 connections** from the existing [wiring atlas](../../hardware-visualisation/src/data/setup.json) and [wiring guide](../../docs/wiring.md). The PDF has five physical cable overlays and a full connection table. [wiring.csv](wiring.csv) records wire IDs, endpoints and suggested lengths. These lengths are estimates from the planning routes, with service allowance; measure the actual harness before cutting wire. Insulated wire crossings are not joins.
+The enclosure preserves all **27 connections** from the existing [wiring atlas](../../web/hardware-visualisation/src/data/setup.json) and [wiring guide](../../docs/wiring.md). The PDF has five physical cable overlays and a full connection table. [wiring.csv](wiring.csv) records wire IDs, endpoints and suggested lengths. These lengths are estimates from the planning routes, with service allowance; measure the actual harness before cutting wire. Insulated wire crossings are not joins.
 
 The two 10 kΩ resistors halve the keypad OUT voltage before ADC A0. Speaker minus connects to the amplifier output, not to Pi ground. LCD BL remains physical pin 18 / GPIO24; physical pin 12 / GPIO18 is the amplifier clock. Use the printed labels on each board when orienting the actual header.
 
@@ -179,4 +179,4 @@ bash design/wooden-case/run-cad.sh python viewer_links.py
 bash design/wooden-case/run-cad.sh python package.py
 ```
 
-The first CAD build downloads its Python packages; the first review render installs its headless browser. The completed planner and PDFs need neither download. Building the HTML requires the existing `hardware-visualisation` Node dependencies. Edit [parameters.json](parameters.json) and [src/lib/geometry.py](src/lib/geometry.py), then regenerate all outputs. Some placement details are explicit constants in the factory, so changing one parameter is not a promise that every layout automatically adjusts. Re-run the saved-file checks after any geometry change.
+The first CAD build downloads its Python packages; the first review render installs its headless browser. The completed planner and PDFs need neither download. Building the HTML requires the existing `web/hardware-visualisation` Node dependencies. Edit [parameters.json](parameters.json) and [src/lib/geometry.py](src/lib/geometry.py), then regenerate all outputs. Some placement details are explicit constants in the factory, so changing one parameter is not a promise that every layout automatically adjusts. Re-run the saved-file checks after any geometry change.

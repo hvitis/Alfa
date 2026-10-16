@@ -1,15 +1,15 @@
 [English](README.md) · **Polski**
 
-# Moomin Radio
+# Alfa
 
-![Moomin Radio: odtwarzacz Raspberry Pi i nauka polskiego alfabetu bez sieci](.github/social-preview.png)
+![Alfa: odtwarzacz Raspberry Pi i nauka polskiego alfabetu bez sieci](.github/social-preview.png)
 
-[![CI](https://github.com/hvitis/moomin/actions/workflows/ci.yml/badge.svg)](https://github.com/hvitis/moomin/actions/workflows/ci.yml)
+[![CI](https://github.com/hvitis/Alfa/actions/workflows/ci.yml/badge.svg)](https://github.com/hvitis/Alfa/actions/workflows/ci.yml)
 [![Licencja kodu: MIT](https://img.shields.io/badge/code-MIT-green)](LICENSE)
 
 Odtwarzacz Raspberry Pi z małym ekranem, pięcioma przyciskami i lekcjami polskich liter. Działa bez sieci.
 
-[Prezentacja w przeglądarce](https://hvitis.github.io/moomin/) · [Najnowszy pakiet](https://github.com/hvitis/moomin/releases/latest) · [Instrukcja sprzętu](docs/HARDWARE-GUIDE.md)
+[Prezentacja w przeglądarce](https://hvitis.github.io/Alfa/) · [Najnowszy pakiet](https://github.com/hvitis/Alfa/releases/latest) · [Instrukcja sprzętu](docs/HARDWARE-GUIDE.md)
 
 Prezentacja i pakiet będą dostępne po pierwszym wdrożeniu i wydaniu z tagiem.
 Oryginalny kod i dokumentacja techniczna mają licencję MIT. Grafiki postaci i nagrania wymagają osobnego przeglądu praw przed upublicznieniem repozytorium.
@@ -17,11 +17,11 @@ Zobacz [informacje o zasobach](THIRD_PARTY_NOTICES.md) i [listę czynności prze
 
 ## Galeria
 
-| Koncepcja urządzenia | Interaktywna prezentacja |
-| --- | --- |
-| ![Autorska ilustracja geometrycznego radia](_site/device.svg) | ![Prezentacja z pięcioma przyciskami](docs/images/showcase.png) |
+| Interaktywna prezentacja |
+| --- |
+| ![Prezentacja z zakładkami projektu](docs/images/showcase.png) |
 
-Ilustracja przedstawia koncepcję. Folder [CAD](design/) zawiera osobne projekty obudów i instrukcje ich budowania.
+Folder [CAD](design/) zawiera osobne projekty obudów i instrukcje ich budowania.
 
 ## Specyfikacja
 
@@ -49,9 +49,9 @@ Tabela używa tych samych nazw co wersja angielska, aby automatycznie wykrywać 
 - <!-- feature:offline-player --> **Odtwarzacz bez sieci:** Pięć przycisków służy do zmiany obrazów, odtwarzania nagrań i regulacji głośności.
 - <!-- feature:letter-lessons --> **Nauka liter:** Animacja rysuje 32 polskie litery, kreska po kresce. Istniejące grafiki postaci mają osobne informacje o prawach.
 - <!-- feature:hardware-simulation --> **Symulacja sprzętu:** Komputer zapisuje podgląd ekranu bez urządzeń GPIO, SPI i I²C.
-- <!-- feature:static-showcase --> **Prezentacja statyczna:** Przyciski działają w przeglądarce. Wszystkie zasoby działają z wyeksportowanego folderu.
+- <!-- feature:static-showcase --> **Prezentacja statyczna:** Zakładki Plywood, 3DPrint, Hardware i Software zawierają modele 3D, połączenia kontrolerów, ADR i diagram Mermaid.
 - <!-- feature:verified-distribution --> **Sprawdzany pakiet:** Pakiet zawiera neutralny obraz demonstracyjny, sumy kontrolne, raporty walidacji i zestawienie elektroniki.
-- <!-- feature:enclosure-research --> **Projekty obudów:** Istniejąca przeglądarka połączeń 3D i projekty CAD mają osobne instrukcje budowania.
+- <!-- feature:enclosure-research --> **Projekty obudów:** Oba projekty ze sklejki można obejrzeć w prezentacji statycznej. Generowanie CAD ma osobne instrukcje.
 
 ## Szybki start
 
@@ -83,7 +83,7 @@ Plik [BUILD-GUIDE.md](docs/BUILD-GUIDE.md) opisuje wymagania Linuksa i środowis
 
 `make check` sprawdza konfigurację, testy Pythona, składnię JavaScript, dane przeglądarki 3D i zgodność dokumentacji dwujęzycznej.
 CI eksportuje prezentację i sprawdza ją w Chromium, w katalogu głównym oraz podkatalogu repozytorium, na ekranie komputera i telefonu.
-Testy obejmują zmianę liter, limity głośności, wskaźnik odtwarzania, zmianę motywu, obrazy i lokalne zasoby.
+Testy obejmują oba modele ze sklejki, pustą zakładkę 3DPrint, połączenia obu kontrolerów, ADR, diagram Mermaid i lokalne zasoby.
 `make build` uruchamia również symulator z pakietu i sprawdza zawartość archiwum oraz sumy SHA-256.
 
 Połączenia fizyczne, głośność akustyczna, dopasowanie obudowy i prawa do multimediów wymagają osobnego przeglądu.
@@ -96,9 +96,9 @@ make smoke
 make build
 ```
 
-Pakiet powstaje jako `output/Moomin-Radio-Build-Kit.zip`. Raporty trafiają do `output/reports/`.
-Pakiet zawiera aplikację Python, instrukcję połączeń, neutralny obraz i prezentację bez serwera aplikacyjnego.
-Nie zawiera istniejących grafik postaci, nagrań, badawczej przeglądarki 3D ani wygenerowanych plików CAD.
+Pakiet powstaje jako `output/Alfa-Build-Kit.zip`. Raporty trafiają do `output/reports/`.
+Pakiet zawiera aplikację Python, instrukcję połączeń, neutralny obraz i prezentację statyczną z siatkami modeli 3D.
+Nie zawiera grafik postaci, nagrań, starszej przeglądarki ani plików produkcyjnych CAD. Źródła strony i generator są w [web/](web/README.md).
 Przeczytaj [zawartość wydania](docs/RELEASE-CONTENTS.md), [opis automatyzacji](docs/PIPELINE.md) i [kroki publikacji](docs/PUBLISHING.md).
 
 CI sprawdza pull requesty. GitHub Pages wdraża stronę po poprawnych testach na `main`.

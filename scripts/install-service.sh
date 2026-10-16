@@ -39,15 +39,15 @@ fi
 "$python_bin" -m app --config config.standalone.json --simulate player --fullscreen --prepared-only --once ${audio_args[@]+"${audio_args[@]}"}
 
 unit_dir="$(mktemp -d)"
-unit_path="$unit_dir/moomin.service"
-splash_unit_path="$unit_dir/moomin-splash.service"
+unit_path="$unit_dir/alfa.service"
+splash_unit_path="$unit_dir/alfa-splash.service"
 trap 'rm -f -- "$unit_path" "$splash_unit_path"; rmdir -- "$unit_dir"' EXIT
 "$python_bin" -m app.service --project "$project_dir" --user "$service_user" --python "$python_bin" ${audio_args[@]+"${audio_args[@]}"} > "$unit_path"
 "$python_bin" -m app.service --project "$project_dir" --user "$service_user" --python "$python_bin" --splash > "$splash_unit_path"
 systemd-analyze verify "$unit_path" "$splash_unit_path"
-sudo install -m 0644 "$unit_path" /etc/systemd/system/moomin.service
-sudo install -m 0644 "$splash_unit_path" /etc/systemd/system/moomin-splash.service
+sudo install -m 0644 "$unit_path" /etc/systemd/system/alfa.service
+sudo install -m 0644 "$splash_unit_path" /etc/systemd/system/alfa-splash.service
 sudo systemctl daemon-reload
-sudo systemctl enable moomin.service moomin-splash.service
-sudo systemctl restart moomin.service
-sudo systemctl --no-pager status moomin.service
+sudo systemctl enable alfa.service alfa-splash.service
+sudo systemctl restart alfa.service
+sudo systemctl --no-pager status alfa.service

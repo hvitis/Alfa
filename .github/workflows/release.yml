@@ -87,7 +87,7 @@ jobs:
           name: release-deliverables
           if-no-files-found: error
           path: |
-            output/Moomin-Radio-Build-Kit.zip
+            output/Alfa-Build-Kit.zip
             output/SHA256SUMS
             output/release-notes.md
             output/reports/build-manifest.json
@@ -117,10 +117,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ASSETS=(Moomin-Radio-Build-Kit.zip SHA256SUMS reports/build-manifest.json reports/validation.json reports/hardware.csv)
+          ASSETS=(Alfa-Build-Kit.zip SHA256SUMS reports/build-manifest.json reports/validation.json reports/hardware.csv)
           if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" "${ASSETS[@]}" --clobber
             gh release edit "$RELEASE_TAG" --notes-file release-notes.md
           else
-            gh release create "$RELEASE_TAG" "${ASSETS[@]}" --verify-tag --title "Moomin Radio $RELEASE_TAG" --notes-file release-notes.md
+            gh release create "$RELEASE_TAG" "${ASSETS[@]}" --verify-tag --title "Alfa $RELEASE_TAG" --notes-file release-notes.md
           fi

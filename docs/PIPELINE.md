@@ -17,13 +17,15 @@ flowchart LR
 ## Pull requests and main
 
 `.github/workflows/ci.yml` runs with read access to repository contents.
-It installs only hardware-free Python dependencies and Playwright. Pi GPIO libraries and CAD tools are absent.
+It installs hardware-free Python dependencies, Playwright, and the static website build dependencies. Pi GPIO libraries and CAD tools are absent.
 Python and npm dependency downloads use the setup actions' caches.
-The small manifest always regenerates from source. No generated geometry cache can become stale.
+`web/build.py` generates the manifest from configuration. `web/build.mjs` renders the ADR and bundles the interface, Mermaid, Three.js, and committed meshes.
+All website generation logic lives under `web/`. The static build does not regenerate CAD geometry.
 
 The browser checks serve `_site/` at `/` and `/repo-preview/`, at desktop and mobile widths.
 They reject runtime requests to other origins, failed requests, HTTP errors, and browser exceptions.
-They exercise letter wraparound, both volume bounds, keyboard navigation, playback indicators, theme changes, and image loading.
+They exercise all four tabs, both plywood projects and their modes, both controller atlases, wire filters and selection, the ADR, and rendered Mermaid.
+They also verify keyboard tab navigation, direct hash links, mesh loading, downloads, and mobile overflow.
 
 Only successful `main` runs upload a Pages artifact. Pull requests cannot deploy.
 The separate deployment job receives `pages: write` and `id-token: write`.

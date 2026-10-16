@@ -1,9 +1,9 @@
 How it teaches
-1. Sound before name. Have each letter start with its sound, then its name: "Mmm… M is for Moomin!" Keep three clips per letter: the sound, the name, and a character saying the word.
-2. Characters as anchors. Tie letters to characters where the cartoon allows: M for Moomin, S for Snufkin, L for Little My, G for Groke, H for Hemulen. Use everyday words from the episodes for the other letters.
+1. Sound before name. Have each letter start with its sound, then its name: "Mmm… M is for moon!" Keep three clips per letter: the sound, the name, and a character saying the word.
+2. Pictures as anchors. Use familiar Polish words: M for most, S for słońce, L for las. Match each recording to its letter.
 3. Don't go A→Z. Start with the letters in his name and his favourite characters' names. Add a new letter when he's asking for the current ones.
 4. Say it with me. A clip asks "Can you say mmm?", waits 2 seconds, then the character answers "Mmm! Well done!" He gets to join in, and it needs no microphone.
-5. Two-choice game. Show two big letters, one per side. The voice asks "Where's the M?" and he presses LEFT or RIGHT. A wrong press gets "That's S, for Snufkin! Try again." No scores or failure sounds.
+5. Two-choice game. Show two big letters, one per side. The voice asks "Where's the M?" and he presses LEFT or RIGHT. A wrong press gets "That's S, for sun! Try again." No scores or failure sounds.
 6. Quiet repetition. Log each letter he plays and each game answer in .state/. Then bring back the letters he hears less often or gets wrong.
 7. Full-screen letters. Fill the screen with the letter in thick type, one fixed colour per letter, next to the character. Start with uppercase, since kids this age usually learn capitals first.
 8. Radio channels. Channels make it feel like a radio: letters, the alphabet song with each letter lit on screen as it's sung, and a story clip or two.
@@ -11,7 +11,7 @@ How it teaches
 Content pipeline (run on your laptop, not the Pi)
 
 9. Find words automatically. Your clip names (SPEAKER_01_0014) look like they came from a tool that splits episodes by speaker. Run WhisperX on the episodes to get the time of every word and who said it. Index the words by first letter and cut clips of characters saying "M" words.
-10. Name the speakers once. A small table mapping SPEAKER_01 to "Moomintroll" lets the screen show who's talking and lets you pick favourites.
+10. Name the speakers once. A small table mapping SPEAKER_01 to "Narrator" lets the screen show who's talking and lets you pick favourites.
 11. Even loudness. Use ffmpeg (already installed) to bring every clip to the same loudness, trim silence and add short fades, so no clip comes out much louder than the rest.
 12. One folder per letter. For example media/letters/M/ holding sound.wav, name.wav, word-*.wav and picture.png. The existing manifest and change-detection code in media.py can extend to this.
 13. Your own voice as a backup. Record yourself for letters the cartoon doesn't cover well. A parent's voice also teaches well at this age.
@@ -35,15 +35,15 @@ Toddler-proofing
 5 hardware add-ons
 
 1. Radio tuning knob. Use a rotary encoder that clicks as it turns, e.g. a KY-040. Each click moves to the next letter, with a short burst of radio static in between. Wire it to GPIO5, 6 and 13 (pins 29, 31, 33), which the screen, audio and ADC don't use. A potentiometer on the ADC's spare A1 input needs no free pins, but its steps feel less crisp.
-2. NFC letter cards or figures (PN532 board, set to I²C mode). He taps an "M" card, or a Moomin figure with a sticker tag, and that letter plays, like a Toniebox. It shares the ADC's I²C wires at address 0x24, so the two don't clash. NTAG213 stickers are cheap.
+2. NFC letter cards or figures (PN532 board, set to I²C mode). He taps an "M" card, or a toy figure with a sticker tag, and that letter plays, like a Toniebox. It shares the ADC's I²C wires at address 0x24, so the two don't clash. NTAG213 stickers are cheap.
 3. Big arcade buttons (30 mm, lit). Wire them in parallel with the button board's tiny switches. The board's voltages stay the same, so you only need to run calibrate-buttons again. If you wire the LEDs to GPIO pins, the game can light up the button he should press.
 4. Battery with safe shutdown. Use a battery board that fits your Pi model, such as a PiSugar, with a protected cell, a power button and safe shutdown. Make sure it can supply the amp's peak current at high volume. Check its I²C address doesn't clash with 0x48.
-5. Microphone for "say it back". Record his attempt and play it back, maybe pitch-shifted so it "sounds like Moomin". Use a USB mini mic, because the amp already uses the Pi's I²S audio port. Keep the recordings on the device.
+5. Microphone for "say it back". Record his attempt and play it back, maybe pitch-shifted for a playful echo. Use a USB mini mic, because the amp already uses the Pi's I²S audio port. Keep the recordings on the device.
 
 Findings from the house-radio design review (2026-10-14)
 
 Fix first
-21. [ ] Correct the wrong shutdown advice. The app no longer shuts down when idle, but these still say it does or tell you to wait for sleep: the power page and roof-page step 1 in `design/house-radio/src/plans.py` (Moomin.pdf), the charging page in `design/house-radio/src/booklet.py` (Moomin-assembly.pdf), the charging paragraph in `design/house-radio/README.md`, and the "five-minute inactivity shutdown" paragraph in `design/wooden-case/README.md`. Until 22 or 23 is done, cutting power with the switch can corrupt the SD card.
+21. [ ] Correct the wrong shutdown advice. The app no longer shuts down when idle, but these still say it does or tell you to wait for sleep: the power page and roof-page step 1 in `design/house-radio/src/plans.py` (Alfa.pdf), the charging page in `design/house-radio/src/booklet.py` (Alfa-assembly.pdf), the charging paragraph in `design/house-radio/README.md`, and the "five-minute inactivity shutdown" paragraph in `design/wooden-case/README.md`. Until 22 or 23 is done, cutting power with the switch can corrupt the SD card.
 22. [ ] Make the SD card read-only (item 19). With a physical switch and no shutdown, this is the most important change.
 23. [ ] Or replace the power bank with a battery board that shuts down safely (hardware add-on 4, e.g. PiSugar-type). It gives a power button, safe shutdown and a charging socket, and would make the QUARKZMAN cable and opening the roof to charge unnecessary. The house's back gable would need a new layout.
 

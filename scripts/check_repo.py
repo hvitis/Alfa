@@ -8,6 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts.project import ROOT, metadata
+from scripts.publication import check_public_source
 
 
 def specification_block(path):
@@ -52,11 +53,7 @@ def check_repo():
     files = subprocess.check_output(
         ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=ROOT
     ).decode().split("\0")
-    patterns = [
-        re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
-        re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,})\b"),
-        re.compile(r"\b(?:AKIA|ASIA)[A-Z0-9]{16}\b"),
-    ]
+    check_public_source(ROOT)
     for name in sorted(set(files) - {""}):
         path = ROOT / name
         if not path.is_file():
@@ -69,16 +66,11 @@ def check_repo():
             ast.parse(path.read_text(encoding="utf-8"), filename=name)
         if path.suffix == ".json":
             json.loads(path.read_text(encoding="utf-8"))
-        # Report only the filename, never a matched credential.
-        if path.suffix in {".py", ".js", ".mjs", ".json", ".yml", ".yaml", ".sh", ".md", ".txt", ".html"}:
-            content = path.read_text(encoding="utf-8")
-            if any(pattern.search(content) for pattern in patterns):
-                raise ValueError(f"Potential credential in {name}. Review without sharing its value.")
     for name in ("ci.yml", "release.yml"):
         workflow = yaml.safe_load((ROOT / ".github/workflows" / name).read_text())
         if not isinstance(workflow.get("jobs"), dict):
             raise ValueError(f"Invalid workflow: {name}")
-    print("PASS: configurations, Python/JSON syntax, bilingual documentation, workflows, credential patterns")
+    print("PASS: configurations, Python/JSON syntax, bilingual documentation, workflows, public filenames, Alfa naming, credential patterns")
 
 
 if __name__ == "__main__":

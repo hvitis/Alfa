@@ -1,8 +1,8 @@
-# Moomin wooden radio — concepts
+# Alfa wooden radio — concepts
 
-Three quick concepts for a child's radio that holds the same Pi 3 setup as the [wooden case](../wooden-case/README.md). **Concept B, the Little House, was chosen** and is now designed completely in [../house-radio](../house-radio/README.md) as *Moomin*. This folder keeps the concept stage.
+Three quick concepts for a child's radio that holds the same Pi 3 setup as the [wooden case](../wooden-case/README.md). **Concept B, the Little House, was chosen** and is now designed completely in [../house-radio](../house-radio/README.md) as *Alfa*. This folder keeps the concept stage.
 
-Open [the concept drawings](PDF/radio_concepts.pdf). The **Wooden Radio** tab of the [hardware viewer](../../hardware-visualisation/README.md) now shows the full house; the three concepts appear there as images.
+Open [the concept drawings](PDF/radio_concepts.pdf). The **Wooden Radio** tab of the [hardware viewer](../../web/hardware-visualisation/README.md) now shows the full house; the three concepts appear there as images.
 
 | | A · Lunchbox Radio | B · Little House Radio | C · Cloud Caddy |
 |---|---|---|---|
@@ -39,7 +39,7 @@ bash design/wooden-radio/run-cad.sh python build_concepts.py   # models, checks,
 python3 design/wooden-radio/sync_viewer.py                     # copy into the viewer's Wooden Radio tab
 ```
 
-`build_concepts.py` writes STEP, GLB, facts, `verification.json`, previews and `PDF/radio_concepts.pdf`. A rebuild is byte-identical. `sync_viewer.py` refuses to sync while any check fails. It copies the thumbnails, drawing sheets and a `radio-concepts.json` manifest into `hardware-visualisation/src/data/`. Those copies are committed so the viewer works after a fresh checkout. The other generated files are ignored. Shapes, CAD export and patterns come from the shared [woodkit](../woodkit/README.md).
+`build_concepts.py` writes STEP, GLB, facts, `verification.json`, previews and `PDF/radio_concepts.pdf`. A rebuild is byte-identical. `sync_viewer.py` refuses to sync while any check fails. It copies the thumbnails, drawing sheets and a `radio-concepts.json` manifest into `web/hardware-visualisation/src/data/`. Those copies are committed so the viewer works after a fresh checkout. The other generated files are ignored. Shapes, CAD export and patterns come from the shared [woodkit](../woodkit/README.md).
 
 | File | Purpose |
 |---|---|

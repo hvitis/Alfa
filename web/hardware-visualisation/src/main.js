@@ -46,7 +46,7 @@ function boot() {
   function clear(){
     if(view==='radio'){
       selectedCable=null;selectedModule=null;world.radio.selectModule(null);world.radio.selectWire('');ui.selectRadioWire('');ui.module(null,'radio');
-      ui.detail('Moomin, the little house radio. Click a part or a wire; try Roof open to see how charging works.');
+      ui.detail('Alfa, the little house radio. Click a part or a wire; try Roof open to see how charging works.');
       return;
     }
     if(view==='case'){

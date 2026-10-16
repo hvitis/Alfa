@@ -9,7 +9,7 @@ import json
 import shutil
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT.parents[1] / "hardware-visualisation/src/data"
+DATA = ROOT.parents[1] / "web/hardware-visualisation/src/data"
 
 
 def main():

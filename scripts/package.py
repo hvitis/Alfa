@@ -1,15 +1,17 @@
 """Create and independently validate a deterministic runtime distribution."""
 import hashlib
 import json
+import re
 import stat
 import zipfile
 from pathlib import Path
 
-KIT_NAME = "Moomin-Radio-Build-Kit.zip"
+KIT_NAME = "Alfa-Build-Kit.zip"
 REQUIRED = {
     "runtime/app/__main__.py", "runtime/config.json", "runtime/requirements.txt",
     "runtime/media/images/000-demo.png", "runtime/media/images/manifest.json",
-    "site/index.html", "site/app.js", "site/style.css", "site/data/manifest.json",
+    "site/index.html", "site/data/manifest.json", "site/docs/adr.md",
+    "site/docs/architecture.mmd", "site/THIRD-PARTY-LICENSES.txt",
     "LICENSE", "THIRD_PARTY_NOTICES.md", "START-HERE.md", "checksums.json",
 }
 
@@ -47,7 +49,8 @@ def validate_release_kit(directory):
                 raise ValueError("Unsafe path in release kit.")
             if any(part in {".git", ".state", ".venv", "node_modules", "photos", "imgs", "animations", "alphabet"} for part in path.parts):
                 raise ValueError(f"Private or unreviewed content in release kit: {name}")
-            if name.endswith((".wav", ".mp3", ".jpg", ".jpeg", ".gif", ".glb", ".pdf")):
+            viewer_mesh = re.fullmatch(r"site/assets/(?:enclosure|internals|exploded|house_(?:assembled|roof_open|inside|exploded))-[A-Za-z0-9_-]+\.glb", name)
+            if name.endswith((".wav", ".mp3", ".jpg", ".jpeg", ".gif", ".pdf")) or (name.endswith(".glb") and not viewer_mesh):
                 raise ValueError(f"Unreviewed binary media in release kit: {name}")
         checksums = json.loads(kit.read("checksums.json"))
         if set(checksums) != set(names) - {"checksums.json"}:

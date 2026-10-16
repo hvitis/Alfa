@@ -115,7 +115,7 @@ class Settings:
     @property
     def runtime_state(self):
         import os
-        return Path(os.environ.get("MOOMIN_RUNTIME_DIR", str(self.state)))
+        return Path(os.environ.get("ALFA_RUNTIME_DIR", str(self.state)))
 
     def path(self, section, key):
         return (self.root / self.data[section][key]).resolve()

@@ -1,6 +1,6 @@
 # woodkit
 
-Reusable pieces for hand-cut plywood enclosure plans, built while designing [the radio concepts](../wooden-radio/README.md) and [Moomin, the house radio](../house-radio/README.md). One geometry description feeds the CAD, the checks, the drawings, the 1:1 templates, the assembly booklet and the hardware viewer, so they cannot drift apart.
+Reusable pieces for hand-cut plywood enclosure plans, built while designing [the radio concepts](../wooden-radio/README.md) and [Alfa, the house radio](../house-radio/README.md). One geometry description feeds the CAD, the checks, the drawings, the 1:1 templates, the assembly booklet and the hardware viewer, so they cannot drift apart.
 
 | Module | Needs | What it gives you |
 |---|---|---|
@@ -14,7 +14,7 @@ Reusable pieces for hand-cut plywood enclosure plans, built while designing [the
 | `booklet` | matplotlib | IKEA-style pages: step numbers, line art, `4×` hardware callouts, 1:1 screws, nuts, washers, hinges, magnets; tool icons and do/don't badges |
 | `scenery` | matplotlib | illustrated cover pieces: night sky, moon, hills, pines, snowfall, glow, snow lying on a roof line |
 
-Viewer side: `hardware-visualisation/src/scene/workshopScene.js` shows any synced design with view modes, traceable wires, clickable parts, labels and camera presets.
+Viewer side: `web/hardware-visualisation/src/scene/workshopScene.js` shows any synced design with view modes, traceable wires, clickable parts, labels and camera presets.
 
 ## Making the next plan
 
@@ -23,7 +23,7 @@ Viewer side: `hardware-visualisation/src/scene/workshopScene.js` shows any synce
 3. Write one entrypoint per view with cadgen's `@step`/`@glb` at module level, returning `woodkit.cad.compound(...)`.
 4. Write facts (cut list, `fasteners.size`, `shopping_list`), then a check script using `woodkit.checks`.
 5. Draw pages with `paper.View`, templates with `templates.pack` + `template_pages`, a booklet with `booklet`, and a cover with `scenery`.
-6. Sync a small JSON manifest and the GLBs into `hardware-visualisation/src/data/`, then add a tab with `createWorkshopScene({...})`.
+6. Sync a small JSON manifest and the GLBs into `web/hardware-visualisation/src/data/`, then add a tab with `createWorkshopScene({...})`.
 
 `design/house-radio/build_all.py` shows the order: models → facts → checks → step models → renders → PDFs.
 

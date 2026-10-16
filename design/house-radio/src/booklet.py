@@ -1,4 +1,4 @@
-"""Moomin-assembly.pdf: an IKEA-style, nearly wordless assembly booklet."""
+"""Alfa-assembly.pdf: an IKEA-style, nearly wordless assembly booklet."""
 from __future__ import annotations
 
 import json
@@ -49,7 +49,7 @@ def short(joint_id):
 
 def cover():
     fig, ax = page()
-    ax.text(105, 34, "MOOMIN", fontsize=46, weight="bold", ha="center", color=bk.INK)
+    ax.text(105, 34, "ALFA", fontsize=46, weight="bold", ha="center", color=bk.INK)
     ax.text(105, 46, "Little House Radio", fontsize=10, ha="center", color=bk.INK)
     picture(ax, image("line_iso"), 25, 58, 160, 190)
     bk.person(ax, 30, 282, 16)
@@ -185,8 +185,8 @@ def charging():
 if __name__ == "__main__":
     (ROOT / "PDF").mkdir(exist_ok=True)
     figs = [cover(), prepare(), parts(), hardware()] + steps_pages() + [charging()]
-    with PdfPages(ROOT / "PDF/Moomin-assembly.pdf") as pdf:
+    with PdfPages(ROOT / "PDF/Alfa-assembly.pdf") as pdf:
         for i, fig in enumerate(figs, 1):
             pdf.savefig(fig)
             fig.savefig(ROOT / "previews" / f"booklet_{i:02d}.png", dpi=90)
-    print(f"Wrote PDF/Moomin-assembly.pdf ({len(figs)} pages).")
+    print(f"Wrote PDF/Alfa-assembly.pdf ({len(figs)} pages).")

@@ -46,7 +46,7 @@ class StandaloneTests(unittest.TestCase):
         with patch("app.app.Settings.load", return_value=self.settings), patch("app.app.prepare_images", side_effect=AssertionError("Original images accessed")), patch("app.app.prepare_audio", side_effect=AssertionError("ffmpeg accessed")), redirect_stdout(io.StringIO()):
             self.assertEqual(main(["--simulate", "player", "--prepared-only", "--fullscreen", "--once"]), 0)
         with Image.open(self.settings.state / "preview/current.png") as frame:
-            with Image.open(ROOT / "media/images/000-moomin_0.png") as expected:
+            with Image.open(ROOT / "media/images/000-illustration_0.png") as expected:
                 self.assertEqual(frame.tobytes(), expected.tobytes())
 
     def test_prepared_audio_rejects_traversal_and_truncated_wav(self):
@@ -63,7 +63,7 @@ class StandaloneTests(unittest.TestCase):
             self.settings.data["display"]["rotation"] = rotation
             prepare_wire_images(self.settings)
             frames = WireFrames(self.settings)
-            photo = self.root / "media/images/000-moomin_0.png"
+            photo = self.root / "media/images/000-illustration_0.png"
             with Image.open(photo) as source:
                 expected = rgb565(source.rotate(rotation))
             self.assertEqual(frames.frame(photo), expected)
@@ -108,7 +108,7 @@ class StandaloneTests(unittest.TestCase):
         with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as server:
             server.bind(address)
             server.settimeout(1)
-            with patch.dict(os.environ, {"NOTIFY_SOCKET": address, "WATCHDOG_USEC": "30000000", "WATCHDOG_PID": str(os.getpid()), "MOOMIN_RUNTIME_DIR": str(self.root / "runtime")}), patch("app.service.time.monotonic", return_value=100):
+            with patch.dict(os.environ, {"NOTIFY_SOCKET": address, "WATCHDOG_USEC": "30000000", "WATCHDOG_PID": str(os.getpid()), "ALFA_RUNTIME_DIR": str(self.root / "runtime")}), patch("app.service.time.monotonic", return_value=100):
                 watchdog = ServiceWatchdog()
                 watchdog.ready()
                 self.assertIn(b"READY=1", server.recv(128))
@@ -124,7 +124,7 @@ class StandaloneTests(unittest.TestCase):
         self.assertNotIn("ExecStopPost", unit)
         self.assertNotIn("SuccessExitStatus=42", unit)
         self.assertNotIn("RestartPreventExitStatus=42", unit)
-        self.assertNotIn("MOOMIN_IDLE_POWEROFF", unit)
+        self.assertNotIn("ALFA_IDLE_POWEROFF", unit)
         self.assertNotIn("poweroff", unit)
         self.assertIn("WatchdogSec=30", unit)
         self.assertIn("--standalone --prepared-only --autoplay", unit)

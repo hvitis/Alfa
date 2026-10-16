@@ -1,15 +1,15 @@
-# Moomin — the little house radio
+# Alfa — the little house radio
 
 Concept B from [the radio concepts](../wooden-radio/README.md), designed completely: every plywood part, hinge, magnet, screw and wire, around the same Raspberry Pi 3 setup as the [wooden case](../wooden-case/README.md).
 
 | Open | What it is |
 |---|---|
-| [PDF/Moomin.pdf](PDF/Moomin.pdf) | The plan: winter cover, overview, inside placement, the split roof, the QUARKZMAN power chain, calculated screws, shopping list, wiring, cut list, then the 1:1 A4 templates |
-| [PDF/Moomin-assembly.pdf](PDF/Moomin-assembly.pdf) | IKEA-style assembly booklet: tools, parts A–K, hardware at 1:1, 13 steps, charging |
-| [PDF/Moomin-cut-templates.pdf](PDF/Moomin-cut-templates.pdf) | Only the 4 template sheets, for printing at Actual Size / 100 %. Also as [SVG](SVG/) and [DXF](DXF/) |
+| [PDF/Alfa.pdf](PDF/Alfa.pdf) | The plan: winter cover, overview, inside placement, the split roof, the QUARKZMAN power chain, calculated screws, shopping list, wiring, cut list, then the 1:1 A4 templates |
+| [PDF/Alfa-assembly.pdf](PDF/Alfa-assembly.pdf) | IKEA-style assembly booklet: tools, parts A–K, hardware at 1:1, 13 steps, charging |
+| [PDF/Alfa-cut-templates.pdf](PDF/Alfa-cut-templates.pdf) | Only the 4 template sheets, for printing at Actual Size / 100 %. Also as [SVG](SVG/) and [DXF](DXF/) |
 | Hardware viewer, **Wooden Radio** tab | The 3D model in the browser: assembled, roof open, inside and exploded; click parts and wires |
 
-To open the 3D model, start the viewer from `hardware-visualisation/` (`.venv/bin/python server.py`), open http://127.0.0.1:8000 and choose **Wooden Radio**. The plan and booklet links in its sidebar work through the same server.
+To open the 3D model, start the viewer from `web/hardware-visualisation/` (`.venv/bin/python server.py`), open http://127.0.0.1:8000 and choose **Wooden Radio**. The plan and booklet links in its sidebar work through the same server.
 
 ## The design
 
@@ -93,7 +93,7 @@ bash design/house-radio/run-cad.sh python build_all.py   # models, facts, checks
 python3 design/house-radio/sync_viewer.py                # copy the meshes and facts into the viewer tab
 ```
 
-The CAD toolchain is the wooden case's pinned cadgen; its download cache is shared. Generated files are ignored by git. The viewer copies in `hardware-visualisation/src/data/radio-*` are committed so the tab works after a fresh checkout.
+The CAD toolchain is the wooden case's pinned cadgen; its download cache is shared. Generated files are ignored by git. The viewer copies in `web/hardware-visualisation/src/data/radio-*` are committed so the tab works after a fresh checkout.
 
 | File | Purpose |
 |---|---|

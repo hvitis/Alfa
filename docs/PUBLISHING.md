@@ -16,10 +16,40 @@ It does not change repository visibility, push commits, create tags, or publish 
 9. Configure branch protection for `main`, with the CI validation job as a required check.
 10. Change repository visibility only after the asset and history review is complete.
 
-The repository contains character illustrations, prepared media, and a recording whose redistribution evidence is not recorded.
-The new release kit and showcase exclude those files. This exclusion does not remove them from the repository or its history.
-Ignore rules do not untrack existing files. Historical `output/` files remain tracked to preserve existing work.
-Any history rewrite requires a separate, coordinated operation with repository collaborators.
+## Prepare the public source repository
+
+The Alfa copy uses one new initial commit. This checkout retains its existing history.
+The export includes current source files, retained images, and existing tracked assets.
+It excludes deleted files, ignored private inputs, credentials, dependencies, and local state.
+The exporter refuses symlinks and existing destination directories.
+
+```bash
+python3 scripts/export_public.py output/Alfa-public
+cd output/Alfa-public
+git log --oneline --all
+git status --short
+```
+
+Run Gitleaks against the copy before publication:
+
+```bash
+gitleaks dir --redact --no-banner .
+gitleaks git --redact --no-banner --log-opts=--all .
+```
+
+Create an empty GitHub repository named `Alfa`. Then publish the reviewed copy:
+
+```bash
+git remote add origin https://github.com/hvitis/Alfa.git
+git push -u origin main
+```
+
+Do not push branches or tags from the private checkout into the public repository.
+The new initial commit uses a project author with a public noreply address.
+GitHub visibility, repository creation, and remote publication are separate actions.
+
+Retained images remain unchanged. Their existing media notice still applies.
+The source rename does not remove lettering embedded in image pixels.
 
 ## Enable GitHub Pages
 
@@ -29,8 +59,8 @@ Any history rewrite requires a separate, coordinated operation with repository c
 4. Push the reviewed changes to `main`.
 5. Wait for the CI validation and Pages deployment jobs.
 
-The expected address is `https://hvitis.github.io/moomin/`.
-Update the repository URLs in both READMEs, `_site/index.html`, and `scripts/project.py` if the owner or repository name changes.
+The expected address is `https://hvitis.github.io/Alfa/`.
+Update the repository URLs in both READMEs, `web/index.html`, and `web/project.py` if the owner or repository name changes.
 The deployment follows the [GitHub custom workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
 ## Create a release
@@ -41,7 +71,7 @@ Run these commands only after the reviewed commit is on `main`:
 git switch main
 git pull --ff-only
 make build
-git tag -a v1.0.0 -m "Moomin Radio v1.0.0"
+git tag -a v1.0.0 -m "Alfa v1.0.0"
 git push origin v1.0.0
 ```
 
@@ -67,4 +97,4 @@ After downloading a release, run `sha256sum --check SHA256SUMS` on Linux or `sha
 
 Upload `.github/social-preview.png` in **Settings → General → Social preview**.
 GitHub does not automatically select an image from this path.
-Regenerate the image with `python scripts/make_social_preview.py` in the development environment.
+Regenerate the image with `python web/social_preview.py` in the development environment.

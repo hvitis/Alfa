@@ -1,0 +1,4 @@
+.build-*/
+__pycache__/
+.build.lock
+last-failed-verification.json

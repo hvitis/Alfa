@@ -1,9 +1,9 @@
 export function installLiveReload({getState,restoreState}) {
-  const key='moomin-hardware-view-v1',versionKey='moomin-hardware-revision-v1';
+  const key='alfa-hardware-view-v1',versionKey='alfa-hardware-revision-v1';
   try{
     const state=sessionStorage.getItem(key);if(state){restoreState(JSON.parse(state));sessionStorage.removeItem(key);}
   }catch{ /* A fresh camera is valid if the saved state is unavailable. */ }
-  if(!window.MOOMIN_LIVE_RELOAD)return;
+  if(!window.ALFA_LIVE_RELOAD)return;
   const status=document.getElementById('live-status');status.hidden=false;status.textContent='Connecting live preview…';
   const events=new EventSource('/api/events');
   function refresh(revision){

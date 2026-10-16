@@ -7,7 +7,7 @@ import json
 import shutil
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT.parents[1] / "hardware-visualisation/src/data"
+DATA = ROOT.parents[1] / "web/hardware-visualisation/src/data"
 MODES = ("assembled", "roof_open", "inside", "exploded")
 
 
@@ -32,12 +32,12 @@ def main():
         "cut_list": [{k: c[k] for k in ("part", "title", "size_mm", "quantity")} for c in facts["cut_list"]],
         "checks": {"passed": report["passed"], "count": len(report["checks"])},
         "mass_g": report["facts"]["mass_g"], "tip_angles_deg": report["facts"]["tip_angles_deg"],
-        "documents": {"plan": "/design/house-radio/PDF/Moomin.pdf", "assembly": "/design/house-radio/PDF/Moomin-assembly.pdf",
-                      "templates": "/design/house-radio/PDF/Moomin-cut-templates.pdf",
+        "documents": {"plan": "/design/house-radio/PDF/Alfa.pdf", "assembly": "/design/house-radio/PDF/Alfa-assembly.pdf",
+                      "templates": "/design/house-radio/PDF/Alfa-cut-templates.pdf",
                       "step": "/design/house-radio/STEP/house_assembled.step"},
     }
     (DATA / "radio-house.json").write_text(json.dumps(manifest, indent=1) + "\n")
-    print(f"Synced Moomin house: {len(MODES)} models, {len(manifest['wires'])} wires, into {DATA.relative_to(ROOT.parents[1])}.")
+    print(f"Synced Alfa house: {len(MODES)} models, {len(manifest['wires'])} wires, into {DATA.relative_to(ROOT.parents[1])}.")
 
 
 if __name__ == "__main__":

@@ -5,13 +5,22 @@ It accepts physical button input and stays running when idle.
 It starts without a graphical desktop, login, SSH session, or internet connection.
 The [Pico findings](pico-requirements.md) describe a separate future firmware project.
 
+## Existing installations
+
+Before installing Alfa, stop and disable any previous player and splash service units on the Pi.
+The Alfa units use `alfa.service` and `alfa-splash.service`.
+The application package is `app`; runtime configuration uses `ALFA_RUNTIME_DIR`.
+Install from the `Alfa` project directory after the previous services release the GPIO pins.
+
+
+
 ## Install on the Pi
 
 Copy the current project files to the Pi first. New local files do not reach the Pi through a Git pull alone.
 From the computer's project directory, run:
 
 ```bash
-rsync -av --exclude='.venv' --exclude='.state' --exclude='.git' --exclude='node_modules' --exclude='dist' ./ pi@PI_HOST:~/Code/moomin/
+rsync -av --exclude='.venv' --exclude='.state' --exclude='.git' --exclude='node_modules' --exclude='dist' ./ pi@PI_HOST:~/Code/Alfa/
 ```
 
 Replace `PI_HOST` with the Pi's SSH address.
@@ -20,7 +29,7 @@ The `.state` exclusion preserves the Pi's existing button calibration.
 On the Pi, run:
 
 ```bash
-cd ~/Code/moomin
+cd ~/Code/Alfa
 bash scripts/install-service.sh
 ```
 
@@ -28,16 +37,16 @@ The installer uses `.venv/bin/python` when available, or the installed `python3`
 It requires the existing Pi dependencies, SPI/I2C/audio setup, and button calibration.
 It does not download dependencies or change the wiring.
 It compiles the deployed cards into RGB565 frames and does a simulated startup check.
-It also prepares a Moomin picture with the text “Starting…” for the early boot splash.
+It also prepares a retained illustration with the text “Starting…” for the early boot splash.
 It validates both service units with `systemd-analyze verify` before installation.
-It enables `moomin-splash.service` and `moomin.service`.
+It enables `alfa-splash.service` and `alfa.service`.
 It also starts the service immediately.
 After this update, reinstall the service to replace its old shutdown hook.
 
 If the buttons need calibration, run:
 
 ```bash
-.venv/bin/python -m moomin --config config.standalone.json calibrate-buttons
+.venv/bin/python -m app --config config.standalone.json calibrate-buttons
 ```
 
 For display-only operation without the amplifier, run the installer with `--no-audio`.
@@ -73,7 +82,7 @@ The splash log records when the image becomes visible, in seconds since kernel s
 After copying the updated files to the Pi, install both services:
 
 ```bash
-cd ~/Code/moomin
+cd ~/Code/Alfa
 make restart
 sudo reboot
 ```
@@ -81,13 +90,13 @@ sudo reboot
 After reconnecting, read both service logs:
 
 ```bash
-journalctl -b -u moomin-splash.service -u moomin.service -o short-monotonic --no-pager
+journalctl -b -u alfa-splash.service -u alfa.service -o short-monotonic --no-pager
 ```
 
 To prepare a PNG preview without hardware, run:
 
 ```bash
-python3 -m moomin.splash --prepare
+python3 -m app.splash --prepare
 ```
 
 The preview is `.state/boot-splash.png`.
@@ -129,7 +138,7 @@ Alphabet mode waits for button input at startup, including when the service supp
 | Drawing with vector paths | The complete stroke catalog occupies less than 8 KB |
 | Partial display transfers during drawing | Each lesson sends changed pixels with a target of 20 frames per second |
 | A 40 ms interval between polls | Idle input processing wakes less often than the normal 10 ms interval |
-| Temporary audio logs in `/run/moomin` | The service avoids routine audio-log writes to the SD card |
+| Temporary audio logs in `/run/alfa` | The service avoids routine audio-log writes to the SD card |
 
 The frame-cache measurements describe payload bytes, not total process RAM.
 ADC conversion and display transfer time also contribute to the loop duration.
@@ -138,7 +147,7 @@ The LCD retains its current picture while idle, so the program does not continuo
 The complete app's CPU use, RAM use, and startup time still need measurement on the Pi.
 
 Button calibration stays in the project's persistent `.state/buttons.json`.
-Temporary service files go to `/run/moomin` and disappear at reboot.
+Temporary service files go to `/run/alfa` and disappear at reboot.
 The service disables Python bytecode writes and limits repetitive journal messages.
 Its socket restriction permits local Unix sockets and prevents IP socket creation by the app.
 The Pi can still retain SSH access through its separate system services.
@@ -148,14 +157,14 @@ The Pi can still retain SSH access through its separate system services.
 To pull and load the newest committed code, run as your normal Pi user:
 
 ```bash
-cd /home/pi/Code/moomin
+cd /home/pi/Code/Alfa
 make update
 ```
 
 The Makefile calls [update-app.sh](../scripts/update-app.sh).
 The script performs these steps in order:
 
-1. Stop `moomin.service` to release the display pins.
+1. Stop `alfa.service` to release the display pins.
 2. Pull the current branch with `git pull --ff-only`.
 3. Update Python dependencies in the existing virtual environment.
 4. Reset the service failure state.
@@ -214,7 +223,7 @@ The LCD keeps the selected letter card visible until another action starts.
 After copying the updated files, reinstall the service on the Pi:
 
 ```bash
-cd ~/Code/moomin
+cd ~/Code/Alfa
 make restart
 ```
 

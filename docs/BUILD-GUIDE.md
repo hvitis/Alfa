@@ -40,7 +40,8 @@ make serve
 
 Open `http://127.0.0.1:8000`. HTTP serves the JSON manifest. Opening `index.html` through `file://` cannot load that manifest reliably.
 The exporter reads the default configuration and letter paths. It copies no private photos, recordings, or character artwork.
-The showcase uses native browser APIs, so it has no vendor directory or CDN dependencies.
+All website sources and generation tools live in `web/`. Vite bundles Three.js, Mermaid, and the CAD viewer meshes into `_site/`.
+The export uses relative URLs and includes library license text. It has no backend or runtime CDN dependencies.
 
 ## Runtime distribution
 
@@ -59,7 +60,7 @@ The manifest records the actual Python, Node.js, and Pillow versions, commit, an
 ## Hardware and CAD
 
 Read [HARDWARE-GUIDE.md](HARDWARE-GUIDE.md) for Pi installation, calibration, media, and physical checks.
-Read [the viewer guide](../hardware-visualisation/README.md) for the existing FastAPI and Three.js development viewer.
+Read [the viewer guide](../web/hardware-visualisation/README.md) for the existing FastAPI and Three.js development viewer.
 That viewer requires its own dependencies and generated design assets.
 
 Read the build instructions for the [plywood case](../design/wooden-case/README.md),

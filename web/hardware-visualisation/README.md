@@ -1,7 +1,7 @@
 # Hardware visualisation
 
 This folder contains the Three.js viewer, its modules, and a FastAPI server with live reload.
-The Raspberry Pi test app remains in the project-level `moomin/` folder.
+The Raspberry Pi test app remains in the project-level `app/` folder.
 
 ## Start the live server
 
@@ -24,7 +24,7 @@ The green “Live” indicator confirms the file-change connection.
 
 ## Views and module explanations
 
-The viewer has five views: **R1 & R2 close-up**, **Pi 3 setup**, **Pico 2 WH setup**, **Wooden case 3D**, and **Wooden Radio** (Moomin house).
+The viewer has five views: **R1 & R2 close-up**, **Pi 3 setup**, **Pico 2 WH setup**, **Wooden case 3D**, and **Wooden Radio** (Alfa house).
 
 1. Select a view from the toolbar.
 2. In the **Wooden case 3D** view:
@@ -34,7 +34,7 @@ The viewer has five views: **R1 & R2 close-up**, **Pi 3 setup**, **Pico 2 WH set
    - Trace any of the 27 wires from the routing atlas or filter by wire group.
    - Click any workshop component (battery, switch, ADC, amplifier, divider, Pi, speaker, etc.) in 3D to inspect its dimensions and role.
    - Access direct links to 1:1 cutting & drilling PDF, placement/wiring PDF, and STEP CAD model.
-3. In the **Wooden Radio** view (Moomin, the little house radio):
+3. In the **Wooden Radio** view (Alfa, the little house radio):
    - Switch between **Assembled**, **Roof open** (both roof halves upright, as for charging), **Inside** (right wall and roof off) and **Exploded**.
    - Jump to **3D**, **Front**, **Side** or **Back**, or focus the screen, buttons, Pi, power bank or QUARKZMAN switch.
    - Hide the plywood, show labels, filter wire groups and trace any of the 27 wires; click parts and wires in 3D.
@@ -205,7 +205,7 @@ The existing R1/R2 signal join remains unchanged.
 
 ### Firmware and media
 
-The existing `moomin/` app runs on Raspberry Pi OS and uses Linux drivers.
+The existing `app/` app runs on Raspberry Pi OS and uses Linux drivers.
 It does not run on the Pico.
 The Pico needs separate firmware for SPI pixels, I2C button readings, and I2S audio through PIO.
 This view proposes the firmware pin assignments; it does not include Pico firmware.
@@ -292,7 +292,7 @@ Color changes do not change the pin assignments.
 | `src/scene/amplifier.js` | MAX98357A model and assembly modes |
 | `src/scene/controllers.js` | Detailed Pi 3 and Pico models |
 | `src/scene/workshopScene.js` | Reusable scene for a woodkit design: view modes, traceable wires, clickable parts, cameras |
-| `src/scene/radioScene.js` | The Moomin house radio's configuration of that scene |
+| `src/scene/radioScene.js` | The Alfa house radio's configuration of that scene |
 | `src/data/radio-house.json`, `radio-glb/` | Synced by `design/house-radio/sync_viewer.py`; do not edit by hand |
 | `src/data/radio-concepts.json`, `radio-images/` | Synced by `design/wooden-radio/sync_viewer.py` (concept images) |
 | `src/scene/` | Boards, resistors, cables, labels, and rendering |

@@ -29,8 +29,8 @@ class BootSplashTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.settings = Settings(self.root, copy.deepcopy(Settings.load().data))
         (self.root / "media/images").mkdir(parents=True)
-        shutil.copyfile(ROOT / "media/images/000-moomin_0.png",
-                        self.root / "media/images/000-moomin_0.png")
+        shutil.copyfile(ROOT / "media/images/000-illustration_0.png",
+                        self.root / "media/images/000-illustration_0.png")
 
     def test_installed_payload_matches_preview_in_all_rotations(self):
         for rotation in (0, 90, 180, 270):
@@ -39,7 +39,7 @@ class BootSplashTests(unittest.TestCase):
                 preview = prepare_splash(self.settings)
                 with Image.open(preview) as image:
                     self.assertEqual(image.size, self.settings.size)
-                    # The supplied Moomin artwork and navy text both reach the preview.
+                    # The supplied Alfa artwork and navy text both reach the preview.
                     self.assertTrue(any(r > 200 and g < 180 and b > 100 for r, g, b in image.getdata()))
                     self.assertTrue(any(b > r + 30 for r, g, b in image.crop((0, image.height - 55, image.width, image.height)).getdata()))
                     self.assertEqual((self.settings.state / "boot-splash.bin").read_bytes(),
@@ -145,7 +145,7 @@ class BootSplashTests(unittest.TestCase):
         unit = render_unit("/home/pi/my project%", "pi", "/usr/bin/python3", splash=True)
         self.assertIn("DefaultDependencies=no", unit)
         self.assertIn("WantedBy=sysinit.target", unit)
-        self.assertIn("Before=moomin.service shutdown.target", unit)
+        self.assertIn("Before=alfa.service shutdown.target", unit)
         self.assertIn('RequiresMountsFor=/usr "/home/pi/my project%%" "/usr/bin/python3"', unit)
         self.assertIn("Restart=no", unit)
         self.assertIn("Type=notify", unit)
@@ -153,9 +153,9 @@ class BootSplashTests(unittest.TestCase):
         for delayed_target in ("sound.target", "local-fs.target", "basic.target", "network-online.target"):
             self.assertNotIn(delayed_target, unit)
         normal = render_unit("/home/pi/project", "pi", "/usr/bin/python3")
-        self.assertIn("After=local-fs.target sound.target moomin-splash.service", normal)
-        self.assertNotIn("Requires=moomin-splash.service", normal)
-        self.assertNotIn("Wants=moomin-splash.service", normal)
+        self.assertIn("After=local-fs.target sound.target alfa-splash.service", normal)
+        self.assertNotIn("Requires=alfa-splash.service", normal)
+        self.assertNotIn("Wants=alfa-splash.service", normal)
 
     def test_boot_entry_point_does_not_import_player_audio_or_adc_tools(self):
         result = subprocess.run([sys.executable, "-c", "import sys; import app.splash; assert not any(name in sys.modules for name in ('app.app', 'app.audio', 'app.buttons', 'smbus2'))"], cwd=ROOT, capture_output=True, text=True)

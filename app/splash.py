@@ -19,7 +19,7 @@ def prepare_splash(settings):
 
     width, height = settings.size
     frame = Image.new("RGB", settings.size, "white")
-    with Image.open(settings.root / "media/images/000-moomin_0.png") as source:
+    with Image.open(settings.root / "media/images/000-illustration_0.png") as source:
         picture = ImageOps.contain(source.convert("RGB"), (width - 24, height - 64), Image.Resampling.LANCZOS)
     frame.paste(picture, ((width - picture.width) // 2, (height - 64 - picture.height) // 2))
     draw = ImageDraw.Draw(frame)

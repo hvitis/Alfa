@@ -94,7 +94,7 @@ class PowerTests(unittest.TestCase):
         self.assertEqual(session.gallery.index, 1)
 
     def test_simulation_ignores_old_service_poweroff_environment(self):
-        with patch.dict(os.environ, {"MOOMIN_IDLE_POWEROFF": "1"}):
+        with patch.dict(os.environ, {"ALFA_IDLE_POWEROFF": "1"}):
             status, consumed, closed, _ = self.run_loop(
                 [(300, "", False), (86400, "", False)], simulate=True)
         self.assertEqual(status, 0)

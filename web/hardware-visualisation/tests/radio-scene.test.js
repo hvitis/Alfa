@@ -9,7 +9,7 @@ import concepts from '../src/data/radio-concepts.json' with { type: 'json' };
 import { moduleInfo } from '../src/data/modules.js';
 
 test('synced house passed its CAD checks and carries the working 27 nets', () => {
-  assert.equal(house.name, 'Moomin');
+  assert.equal(house.name, 'Alfa');
   assert.ok(house.checks.passed && house.checks.count >= 50);
   assert.deepEqual(house.modes, ['assembled', 'roof_open', 'inside', 'exploded']);
   const keys = w => [w.id, w.group, w.from, w.to, w.color].join('|');

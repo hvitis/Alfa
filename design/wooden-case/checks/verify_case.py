@@ -90,7 +90,7 @@ for page in range(1,5):
     bounds=bbox.extents(doc.modelspace())
     check(path.name+' geometry within A4',bounds.extmin.x>=5 and bounds.extmax.x<=205 and bounds.extmin.y>=5 and bounds.extmax.y<=292)
 
-atlas=json.loads((ROOT.parents[1]/'hardware-visualisation/src/data/setup.json').read_text())['wires']
+atlas=json.loads((ROOT.parents[1]/'web/hardware-visualisation/src/data/setup.json').read_text())['wires']
 routes=json.loads((ROOT/'routing.json').read_text())['wires']
 keys=('id','group','from','to','color')
 check('27 nets match existing electrical atlas exactly',len(routes)==27 and [{k:v[k] for k in keys} for v in routes]==[{k:v[k] for k in keys} for v in atlas])

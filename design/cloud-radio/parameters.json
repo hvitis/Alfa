@@ -1,0 +1,373 @@
+{
+  "revision": "prototype-4",
+  "units": "mm",
+  "material": "PETG",
+  "uncertain_dimension_allowance_mm": 5,
+  "case": {
+    "depth": 86,
+    "wall": 3,
+    "split": 43,
+    "seam_gap": 0.3,
+    "fit_clearance": 0.3,
+    "bed": [
+      220,
+      220
+    ],
+    "print_limit": [
+      210,
+      210
+    ],
+    "edge_radius": 1.4
+  },
+  "snap": {
+    "width": 8,
+    "thickness": 1.5,
+    "length": 18,
+    "root_z": 31,
+    "engagement": 0.7,
+    "sites": [
+      [
+        -55,
+        0,
+        0
+      ],
+      [
+        55,
+        0,
+        0
+      ],
+      [
+        105,
+        85,
+        90
+      ],
+      [
+        -105,
+        85,
+        -90
+      ]
+    ]
+  },
+  "components": [
+    {
+      "id": "battery",
+      "title": "Baseus 5000 mAh",
+      "size": [
+        106,
+        69,
+        14
+      ],
+      "origin": [
+        -53,
+        10,
+        63
+      ],
+      "uncertain": false,
+      "source": "User-confirmed 69 x 106 x 14 bank, rotated horizontally; USB-C centred on right 69 x 14 end face",
+      "color": "#d9e4e5",
+      "rotation_deg": 90
+    },
+    {
+      "id": "pi",
+      "title": "Raspberry Pi 3 B",
+      "size": [
+        85,
+        56,
+        1.6
+      ],
+      "origin": [
+        -42.5,
+        84,
+        75
+      ],
+      "uncertain": false,
+      "source": "https://datasheets.raspberrypi.com/rpi3/raspberry-pi-3-b-mechanical-drawing.pdf",
+      "color": "#287557"
+    },
+    {
+      "id": "lcd",
+      "title": "Waveshare 2-inch LCD",
+      "size": [
+        35,
+        58,
+        10
+      ],
+      "origin": [
+        39,
+        51,
+        6
+      ],
+      "uncertain": false,
+      "source": "https://files.waveshare.com/upload/6/6d/2inch_LCD_Module_2D_Drawing.pdf",
+      "color": "#275579"
+    },
+    {
+      "id": "keypad",
+      "title": "Five-button AD-Key \u00b7 provisional",
+      "size": [
+        30,
+        68,
+        8
+      ],
+      "origin": [
+        -77,
+        45,
+        6
+      ],
+      "uncertain": true,
+      "source": "https://sklep.msalamon.pl/produkt/modul-ad-key-klawiatura-5-przyciskow/",
+      "note": "Supplier says 68 x 26 with inconsistent 61 x 26 hole pitch; reserve 68 x 30 plus allowance. User hole offset 4.5 diagonally. Button positions/height are illustrative.",
+      "color": "#303a42",
+      "rotation_deg": 90
+    },
+    {
+      "id": "speaker",
+      "title": "40 mm speaker \u00b7 provisional",
+      "size": [
+        40,
+        40,
+        20
+      ],
+      "origin": [
+        -38,
+        98,
+        5.5
+      ],
+      "uncertain": true,
+      "source": "Recorded envelope; user-confirmed corner-hole diagonal offset 4.5 mm",
+      "color": "#39414a"
+    },
+    {
+      "id": "amp",
+      "title": "MAX98357A \u00b7 provisional",
+      "size": [
+        20,
+        19,
+        12
+      ],
+      "origin": [
+        -12,
+        70,
+        8
+      ],
+      "uncertain": true,
+      "source": "https://www.gotronik.pl/modul-wzmacniacza-audio-i2s-3w-klasa-d-dacmax98357-p-13866.html",
+      "note": "Supplier approx. 19 x 19; reserve max of earlier 20 x 15 and supplier outline. Populated height estimated.",
+      "color": "#77529a"
+    },
+    {
+      "id": "adc",
+      "title": "ADS1115/ADS1015 \u00b7 provisional",
+      "size": [
+        9,
+        29,
+        12
+      ],
+      "origin": [
+        -4,
+        34,
+        8
+      ],
+      "uncertain": true,
+      "source": "Recorded provisional envelope; exact module manufacturer unidentified",
+      "color": "#77529a"
+    },
+    {
+      "id": "divider",
+      "title": "10 k\u03a9 divider perfboard",
+      "size": [
+        16,
+        20,
+        8
+      ],
+      "origin": [
+        -14,
+        8,
+        8
+      ],
+      "uncertain": true,
+      "source": "New perfboard design target",
+      "color": "#b78b56"
+    },
+    {
+      "id": "switch",
+      "title": "QUARKZMAN switch \u00b7 provisional",
+      "size": [
+        18,
+        40,
+        12
+      ],
+      "origin": [
+        54,
+        95,
+        65
+      ],
+      "uncertain": true,
+      "source": "QUARKZMAN B0H1JMNHQT; manufacturer housing drawing unavailable",
+      "color": "#343f47",
+      "rotation_deg": 0
+    }
+  ],
+  "keepouts": [
+    {
+      "id": "pi_ports",
+      "title": "Pi connectors",
+      "origin": [
+        -42.5,
+        82,
+        59
+      ],
+      "size": [
+        87,
+        60,
+        16
+      ],
+      "uncertain": false,
+      "parent": "pi"
+    },
+    {
+      "id": "gpio",
+      "title": "Connected GPIO sockets \u00b7 provisional",
+      "origin": [
+        -35.5,
+        134,
+        51
+      ],
+      "size": [
+        53,
+        8,
+        24
+      ],
+      "uncertain": true,
+      "parent": "pi",
+      "fixed_back_z": 75
+    },
+    {
+      "id": "pi_power",
+      "title": "Angled micro-USB plug \u00b7 provisional",
+      "origin": [
+        -49,
+        85,
+        61
+      ],
+      "size": [
+        20,
+        12,
+        10
+      ],
+      "uncertain": true,
+      "parent": "pi"
+    },
+    {
+      "id": "bank_plug",
+      "title": "Battery USB-C plug \u00b7 provisional",
+      "origin": [
+        53,
+        38.5,
+        66.75
+      ],
+      "size": [
+        22,
+        12,
+        6.5
+      ],
+      "uncertain": true,
+      "parent": "battery"
+    },
+    {
+      "id": "usb_join",
+      "title": "Connected USB-C coupling \u00b7 provisional",
+      "origin": [
+        -6,
+        61,
+        42
+      ],
+      "size": [
+        16,
+        30,
+        12
+      ],
+      "uncertain": true,
+      "parent": "switch"
+    },
+    {
+      "id": "lcd_cable",
+      "title": "LCD connector \u00b7 provisional",
+      "origin": [
+        42,
+        52,
+        16
+      ],
+      "size": [
+        25,
+        10,
+        12
+      ],
+      "uncertain": true,
+      "parent": "lcd"
+    }
+  ],
+  "exterior_screws": [
+    [
+      -95,
+      25
+    ],
+    [
+      -74,
+      139
+    ],
+    [
+      96,
+      105
+    ]
+  ],
+  "battery_door_screw": [
+    76,
+    79
+  ],
+  "fasteners": {
+    "enclosure": "3 x M3 x 55 pan head + 3 DIN 934 M3 nuts",
+    "battery_door": "1 x M3 x 12 pan head + 1 DIN 934 M3 nut",
+    "lcd": "4 x M2.5 x 6 thread-forming screws; verify actual PCB holes",
+    "pi": "4 x M2.5 x 6 thread-forming screws",
+    "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README"
+  },
+  "handle": {
+    "center": [
+      0,
+      159
+    ],
+    "opening": [
+      64,
+      22
+    ],
+    "wall": 3,
+    "note": "20 mm grip centred on the front/rear joint, half in each shell, with open finger space on both sides; physical hand fit remains to be checked.",
+    "grip_depth": 20,
+    "recess": {
+      "origin": [
+        -48,
+        148
+      ],
+      "size": [
+        96,
+        100
+      ],
+      "radius": 12
+    }
+  },
+  "switch_lugs": [
+    [
+      48,
+      100
+    ],
+    [
+      48,
+      130
+    ],
+    [
+      78,
+      121
+    ]
+  ]
+}

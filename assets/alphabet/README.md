@@ -1,7 +1,7 @@
-# Polish Moomin letter cards
+# Polish letter cards
 
 This folder contains 32 portrait letter cards, in Polish alphabet order.
-Each card has a large uppercase letter and a different Moomin character behind it.
+Each card has a large uppercase letter and an illustration behind it.
 The artwork follows the letter-and-character compositions in the supplied `photos/alphabet_*` references.
 
 [View all 32 finished cards](../../docs/alphabet-contact-sheet.png).
@@ -22,12 +22,12 @@ The character illustrations use soft ink contours, pastel colors, and a faint mi
 From the project directory, run:
 
 ```bash
-python3 -m moomin --config config.alphabet.json gallery --fullscreen --no-audio
+python3 -m app --config config.alphabet.json gallery --fullscreen --no-audio
 ```
 
 Use LEFT and RIGHT to change the card.
-Press TOP (UP) for Moominmamma listening with her hand at her ear.
-Press BOTTOM (DOWN) for Mała Mi speaking.
+Press TOP (UP) for the listening animation.
+Press BOTTOM (DOWN) for the speaking animation.
 Each animation plays two four-frame cycles at 5 FPS, then restores the selected card.
 LEFT and RIGHT stop the animation and change the letter.
 Tap CENTER to draw the selected letter with a moving pencil tip.
@@ -43,7 +43,7 @@ For SSH keyboard control, add `--keyboard` and use A/D for letters, W/S for char
 Run:
 
 ```bash
-python3 -m moomin --config config.alphabet.json --simulate gallery --fullscreen --no-audio --once
+python3 -m app --config config.alphabet.json --simulate gallery --fullscreen --no-audio --once
 ```
 
 The preview appears in `.state/preview/current.png`.
@@ -61,60 +61,19 @@ Use a separate prepared folder in a landscape configuration to retain both expor
 Run preparation with the selected configuration:
 
 ```bash
-python3 -m moomin --config config.alphabet.json prepare --images-only
+python3 -m app --config config.alphabet.json prepare --images-only
 ```
 
 The gallery also prepares images automatically before display.
 A checkout can use the bundled prepared cards when this source folder is absent.
 
-## Character assignments
+## Asset inventory
 
-Twenty-one cards match the initial of the Polish character name.
-The remaining characters are visual companions. Their names do not represent the displayed letter.
-Recordings for these cards must teach the letter independently of the character name.
-The set keeps the requested `M — Migotka`, `C — Czarodziej`, and `T — Tata Muminka` assignments.
-`Czarodziej` is the requested label for the character also called `Czarnoksiężnik`.
-
-| Letter | Polish character name | Matching initial |
-| :--- | :--- | :--- |
-| A | Alicja | Yes |
-| Ą | Muminek | No |
-| B | Bobek | Yes |
-| C | Czarodziej | Yes |
-| Ć | Mała Mi | No |
-| D | Duch | Yes |
-| E | Emma | Yes |
-| Ę | Mama Muminka | No |
-| F | Filifionka | Yes |
-| G | Gapsa | Yes |
-| H | Hatifnat | Yes |
-| I | Inspektor | Yes |
-| J | Jok | Yes |
-| K | Koń Primadonny | Yes |
-| L | Latarnik | Yes |
-| Ł | Topik | No |
-| M | Migotka | Yes |
-| N | Nini | Yes |
-| Ń | Topcia | No |
-| O | Olbrzym Edward | Yes |
-| Ó | Mimbla | No |
-| P | Paszczak | Yes |
-| R | Ryjek | Yes |
-| S | Smok | Yes |
-| Ś | Too-tiki | No |
-| T | Tata Muminka | Yes |
-| U | Piżmowiec | No |
-| W | Włóczykij | Yes |
-| Y | Ynk | Yes |
-| Z | Buka | No |
-| Ź | Przodek | No |
-| Ż | Migotek | No |
-
-[characters.json](characters.json) records the names, file paths, and initial matches.
-[prompts.json](prompts.json) records the final prompt for each card and the use of the built-in image generator.
-The [official Polish character guide](https://moomin.pl/blogs/news/poznaj-postacie-z-muminkow) supplies most Polish names and descriptions.
-The [official Japanese character guide](https://www.moomin.co.jp/moomins/characters) includes additional characters.
-The [Polish dubbing credits](https://dubbingpedia.pl/wiki/Muminki) record animated-series names such as Alicja, Jok, and Ynk.
+[characters.json](characters.json) records the letter order and file paths.
+Illustration numbers identify retained assets. They do not teach a letter through a character name.
+[prompts.json](prompts.json) records the card dimensions and paths.
+Brand-specific generation instructions are removed. The existing images remain unchanged.
+See [the media notice](../../THIRD_PARTY_NOTICES.md) for their distribution status.
 
 ## Layout scope
 

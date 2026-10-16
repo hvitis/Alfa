@@ -12,15 +12,15 @@ The project name does not imply endorsement by any character owner or hardware m
 | `media/alphabet/`, `media/animations/`, `media/images/` | Prepared versions of artwork or photographs. The same source rights apply. |
 | `sounds/`, `media/sounds/`, optional `media/letter-sounds/*.wav` | Recording ownership and redistribution permission need confirmation. |
 | `docs/*contact-sheet.png`, `docs/alphabet-revisions.png`, `assets/letter-drawing/preview.gif` | Composite previews can contain character artwork. |
-| `output/`, `hardware-visualisation/viewer.html`, design previews and PDFs | Existing generated files can contain embedded artwork or reference photos. Review their contents. |
+| `output/`, `web/hardware-visualisation/viewer.html`, design previews and PDFs | Existing generated files can contain embedded artwork or reference photos. Review their contents. |
 | `photos/`, `imgs/` | Private source inputs, ignored by Git. Review history for earlier copies. |
 
 No redistribution license is assigned to these media files by this notice.
 Record the source, owner, license, and evidence of permission for each retained asset before making the repository public.
 Remove or replace files whose permission remains unresolved. Review Git history as well as the current tree.
 
-The new `_site/` showcase uses original CSS, SVG, and project data. Its export does not copy character artwork or recordings.
-The release kit uses an original geometric demo card. Existing media, generated CAD files, and the research viewer are excluded.
+The `_site/` atlas uses project CSS, SVG, routing data, and CAD viewer meshes. Its export does not copy character artwork, reference photos, or recordings.
+The release kit uses an original geometric demo card. Existing character media, fabrication files, and the legacy viewer are excluded. The static atlas includes the committed geometric viewer meshes.
 
 ## Dependencies
 
@@ -32,6 +32,9 @@ The release kit uses an original geometric demo card. Existing media, generated 
 | spidev | MIT | Installed on the Pi, not bundled. |
 | PyYAML | MIT | Development dependency, not bundled. |
 | Playwright | Apache-2.0 | Development dependency, not bundled. |
-| Three.js | MIT | Used by the separate research viewer, not bundled in the showcase or kit. |
+| Three.js | MIT | Bundled with the static atlas and included in its license notices. |
+| Mermaid | MIT | Bundled with the static atlas and included in its license notices. |
+| markdown-it | MIT | Used during website generation, not required at runtime. |
+| Vite | MIT | Build dependency, not required at runtime. |
 
 Dependency distributions retain their own license files. Consult those files for the full terms.

@@ -179,7 +179,7 @@ def pin_points(p):
 def wire_specs(p):
     # Keep this atlas identical to the working program's documented electrical nets.
     project_root = ROOT.parents[1]
-    atlas = json.loads((project_root / "hardware-visualisation/src/data/setup.json").read_text())
+    atlas = json.loads((project_root / "web/hardware-visualisation/src/data/setup.json").read_text())
     points = pin_points(p)
     wires = []
     for index, entry in enumerate(atlas["wires"]):
@@ -342,7 +342,7 @@ def assembly(p, explode=0, open_case=False, wires=True):
                                label=part.label, color=part.color)
         return part.mirror(bd.Plane.XY)
     parts = [front_facing(part) for part in parts]
-    return bd.Compound(children=parts, label="Moomin_wooden_case")
+    return bd.Compound(children=parts, label="Alfa_wooden_case")
 
 
 def sheet_layout(p):

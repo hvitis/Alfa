@@ -9,7 +9,7 @@ import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from scripts.export_site import export_site
+from web.build import export_site
 from scripts.package import KIT_NAME, create_kit, digest, validate_release_kit
 from scripts.project import ROOT, git, metadata, timestamp, write_json
 
@@ -19,7 +19,7 @@ def stage_runtime(staging):
 
     runtime = staging / "runtime"
     runtime.mkdir(parents=True)
-    for folder in ("app", "moomin"):
+    for folder in ("app",):
         for source in sorted((ROOT / folder).rglob("*.py")):
             if source.is_symlink():
                 raise ValueError(f"Runtime source cannot be a symlink: {source.name}")
@@ -73,16 +73,16 @@ def build():
 
     run("repository", [sys.executable, "scripts/check_repo.py"])
     run("unit-tests", [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"])
-    run("javascript-syntax", ["node", "tests/check-syntax.mjs"])
+    run("javascript-syntax", ["node", "web/tests/check-syntax.mjs"])
     # Node expands this glob with --test on the supported Node 22 runtime.
-    viewer_tests = sorted(str(p.relative_to(ROOT)) for p in (ROOT / "hardware-visualisation/tests").glob("*.test.js"))
+    viewer_tests = sorted(str(p.relative_to(ROOT)) for p in (ROOT / "web/hardware-visualisation/tests").glob("*.test.js"))
     run("viewer-data-tests", ["node", "--test", *viewer_tests])
     export_site(ROOT / "_site")
-    run("browser-smoke", ["node", "tests/smoke-tests.mjs"])
-    with tempfile.TemporaryDirectory(prefix="moomin-kit-") as temp:
+    run("browser-smoke", ["node", "web/tests/smoke-tests.mjs"])
+    with tempfile.TemporaryDirectory(prefix="alfa-kit-") as temp:
         staging = Path(temp)
         stage_runtime(staging)
-        export_site(staging / "site")
+        shutil.copytree(ROOT / "_site", staging / "site")
         for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
             shutil.copy2(ROOT / name, staging / name)
         shutil.copy2(ROOT / "docs/RELEASE-CONTENTS.md", staging / "START-HERE.md")
@@ -101,7 +101,7 @@ def build():
         "dirty": bool(git("status", "--porcelain")), "timestamp": timestamp(),
         "versions": {"python": sys.version.split()[0], "pillow": importlib.metadata.version("Pillow"), "node": subprocess.check_output(["node", "--version"], text=True).strip()},
         "artifacts": {KIT_NAME: {"sha256": checksum, "bytes": archive.stat().st_size}},
-        "scope": "Python runtime, neutral demo image, static showcase, wiring guide. CAD builds and existing media are excluded.",
+        "scope": "Python runtime, neutral demo image, static atlas with CAD viewer meshes, wiring guide. CAD fabrication builds and character media are excluded.",
     }
     write_json(reports / "build-manifest.json", manifest)
     (output / "SHA256SUMS").write_text(f"{checksum}  {KIT_NAME}\n")

@@ -1,5 +1,5 @@
 {
- "name": "Moomin",
+ "name": "Alfa",
  "title": "Little House Radio",
  "revision": "1",
  "outer_mm": [
@@ -1471,9 +1471,9 @@
   "front": 30.6
  },
  "documents": {
-  "plan": "/design/house-radio/PDF/Moomin.pdf",
-  "assembly": "/design/house-radio/PDF/Moomin-assembly.pdf",
-  "templates": "/design/house-radio/PDF/Moomin-cut-templates.pdf",
+  "plan": "/design/house-radio/PDF/Alfa.pdf",
+  "assembly": "/design/house-radio/PDF/Alfa-assembly.pdf",
+  "templates": "/design/house-radio/PDF/Alfa-cut-templates.pdf",
   "step": "/design/house-radio/STEP/house_assembled.step"
  }
 }

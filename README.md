@@ -1,15 +1,15 @@
 **English** · [Polski](README.pl.md)
 
-# Moomin Radio
+# Alfa
 
-![Moomin Radio: an offline Raspberry Pi player and Polish alphabet companion](.github/social-preview.png)
+![Alfa: an offline Raspberry Pi player and Polish alphabet companion](.github/social-preview.png)
 
-[![CI](https://github.com/hvitis/moomin/actions/workflows/ci.yml/badge.svg)](https://github.com/hvitis/moomin/actions/workflows/ci.yml)
+[![CI](https://github.com/hvitis/Alfa/actions/workflows/ci.yml/badge.svg)](https://github.com/hvitis/Alfa/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-green)](LICENSE)
 
 An offline Raspberry Pi player with a small screen, five buttons, and Polish letter lessons.
 
-[Live showcase](https://hvitis.github.io/moomin/) · [Latest build kit](https://github.com/hvitis/moomin/releases/latest) · [Hardware guide](docs/HARDWARE-GUIDE.md)
+[Live showcase](https://hvitis.github.io/Alfa/) · [Latest build kit](https://github.com/hvitis/Alfa/releases/latest) · [Hardware guide](docs/HARDWARE-GUIDE.md)
 
 The showcase and release links become available after the first successful deployment and tagged release.
 The original code and technical documentation use MIT. Existing character artwork and recordings require a separate rights review before public visibility.
@@ -17,11 +17,11 @@ See [asset notices](THIRD_PARTY_NOTICES.md) and the [publication checklist](docs
 
 ## Gallery
 
-| Device concept | Interactive showcase |
-| --- | --- |
-| ![Original geometric radio illustration](_site/device.svg) | ![Showcase with the five-button demo](docs/images/showcase.png) |
+| Interactive showcase |
+| --- |
+| ![Showcase with the project tabs](docs/images/showcase.png) |
 
-The illustration is a concept. The [CAD folders](design/) contain separate enclosure designs and their build instructions.
+The [CAD folders](design/) contain separate enclosure designs and their build instructions.
 
 ## Specifications
 
@@ -47,9 +47,9 @@ The illustration is a concept. The [CAD folders](design/) contain separate enclo
 - <!-- feature:offline-player --> **Offline player:** Navigate images, play recordings, and adjust volume with five physical buttons.
 - <!-- feature:letter-lessons --> **Letter lessons:** Draw 32 Polish letters stroke by stroke. The existing character assets have separate rights notes.
 - <!-- feature:hardware-simulation --> **Hardware simulation:** Save display previews on your computer without GPIO, SPI, or I²C devices.
-- <!-- feature:static-showcase --> **Static showcase:** Try the controls in a browser. All runtime assets load from the exported directory.
+- <!-- feature:static-showcase --> **Static showcase:** Explore Plywood, 3DPrint, Hardware, and Software tabs, with 3D models, controller wiring, an ADR, and rendered Mermaid.
 - <!-- feature:verified-distribution --> **Verified distribution:** Build a runtime kit with a neutral demo card, checksums, validation reports, and an electronics BOM.
-- <!-- feature:enclosure-research --> **Enclosure research:** Explore the existing 3D wiring viewer and CAD designs through their separate build instructions.
+- <!-- feature:enclosure-research --> **Enclosure research:** Inspect both plywood projects in the static atlas. CAD generation has separate build instructions.
 
 ## Quick start
 
@@ -81,7 +81,7 @@ Read [BUILD-GUIDE.md](docs/BUILD-GUIDE.md) for Linux prerequisites and environme
 
 `make check` runs configuration checks, Python tests, JavaScript syntax checks, viewer data tests, and bilingual documentation checks.
 CI exports the static showcase and runs Chromium checks at the domain root and a repository subpath, on desktop and mobile.
-Browser checks cover letter navigation, volume limits, playback indicators, theme changes, images, and local asset loading.
+Browser checks cover both plywood models, the blank 3DPrint tab, both wiring atlases, the ADR, rendered Mermaid, and local assets.
 `make build` also runs the packaged simulator and verifies archive contents and SHA-256 checksums.
 
 Physical wiring, acoustic volume, enclosure fit, and media redistribution rights require separate review.
@@ -94,9 +94,9 @@ make smoke
 make build
 ```
 
-The kit is `output/Moomin-Radio-Build-Kit.zip`. Reports are in `output/reports/`.
-The kit includes the Python runtime, wiring guide, neutral demo image, and offline showcase.
-It excludes existing character media, recordings, the research viewer, and generated CAD deliverables.
+The kit is `output/Alfa-Build-Kit.zip`. Reports are in `output/reports/`.
+The kit includes the Python runtime, wiring guide, neutral demo image, and static atlas with its viewer meshes.
+It excludes character media, recordings, the legacy viewer, and fabrication deliverables. Website sources and generation live in [web/](web/README.md).
 Read [release contents](docs/RELEASE-CONTENTS.md), [pipeline details](docs/PIPELINE.md), and [publication steps](docs/PUBLISHING.md).
 
 CI validates pull requests. GitHub Pages deploys after successful checks on `main`.

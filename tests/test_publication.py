@@ -6,7 +6,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from scripts.export_site import export_site
+from web.build import export_site
 from scripts.package import KIT_NAME, REQUIRED, create_kit, digest, validate_release_kit
 from scripts.project import write_json
 from scripts.verify_release_ref import SEMVER, verify
@@ -77,10 +77,19 @@ class PackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             export_site(directory)
             files = {p.relative_to(directory).as_posix() for p in Path(directory).rglob("*") if p.is_file()}
-            self.assertEqual(files, {"index.html", "style.css", "app.js", "device.svg", ".nojekyll", "data/manifest.json"})
+            self.assertTrue({"index.html", ".nojekyll", "data/manifest.json", "docs/adr.md", "docs/architecture.mmd", "THIRD-PARTY-LICENSES.txt"}.issubset(files))
+            self.assertTrue(any(name.endswith(".glb") for name in files))
+            self.assertTrue(any(name.endswith(".js") for name in files))
+            self.assertFalse(any(name.endswith((".png", ".jpg", ".wav", ".gif")) for name in files))
             data = json.loads((Path(directory) / "data/manifest.json").read_text())
             self.assertEqual(len(data["alphabet"]), 32)
             self.assertLessEqual(data["audio"]["initial_volume"], data["audio"]["max_volume"])
+
+    def test_site_export_rejects_source_directories_before_emptying_them(self):
+        from scripts.project import ROOT
+        for directory in (ROOT, ROOT / "web", ROOT / "app", ROOT / "web/output", ROOT.parent):
+            with self.subTest(directory=directory), self.assertRaisesRegex(ValueError, "separate generated directory"):
+                export_site(directory)
 
 
 if __name__ == "__main__":

@@ -27,29 +27,29 @@ fi
 
 # If the pull or installation fails, do not leave a previously running app stopped.
 was_running=false
-if systemctl is-active --quiet moomin.service; then
+if systemctl is-active --quiet alfa.service; then
     was_running=true
 fi
 restore_on_failure() {
     result=$?
     if ((result != 0)) && "$was_running"; then
         echo "Update failed. Restoring the app service." >&2
-        sudo systemctl reset-failed moomin.service || true
-        sudo systemctl start moomin.service || true
+        sudo systemctl reset-failed alfa.service || true
+        sudo systemctl start alfa.service || true
     fi
     exit "$result"
 }
 trap restore_on_failure EXIT
 
-sudo systemctl stop moomin.service
+sudo systemctl stop alfa.service
 if "$pull_changes"; then
     # Never discard local calibration, configuration, recordings, or code edits.
     git pull --ff-only
     "$python_bin" -m pip install -r requirements-pi.txt
 fi
-sudo systemctl reset-failed moomin.service
+sudo systemctl reset-failed alfa.service
 bash scripts/install-service.sh ${installer_args[@]+"${installer_args[@]}"}
-systemctl is-active --quiet moomin.service
+systemctl is-active --quiet alfa.service
 if revision="$(git rev-parse --short HEAD 2>/dev/null)"; then
     echo "Newest local revision: $revision"
 fi

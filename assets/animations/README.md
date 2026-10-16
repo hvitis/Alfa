@@ -1,17 +1,13 @@
 # Alphabet character animations
 
-TOP (UP) shows Moominmamma listening as she raises her hand to her ear.
+TOP (UP) plays the listening animation.
 Her feet stay at one screen position while her arm, head, and upper body move.
 The exporter aligns each pose to the same toe position and sole baseline.
-BOTTOM (DOWN) shows Mała Mi (Little My) speaking with four different mouth shapes.
+BOTTOM (DOWN) plays the speaking animation with four different mouth shapes.
 The artwork matches the soft ink and watercolor style of the alphabet cards.
 
-Mała Mi's mouth follows stills from the original 1990 cartoon.
-The loop uses a closed asymmetric smile, an open wedge, a small oval, and a narrow opening.
-The mouth uses a fine dark contour and a pink interior, with no separate lip outline.
-The reference stills appear in a [Polish article](https://kobieta.gazeta.pl/kobieta/7,107881,29627694,podkladala-glos-malej-mi-w-muminkach-ze-slyszenia-znalo-ja.html)
-and a [review of the Christmas episode](https://www.millionmonkeytheater.com/22Shit7.html).
-The generated loop approximates these mouth shapes; it does not trace a sequence from the cartoon.
+The speaking loop uses a closed smile, an open wedge, a small oval, and a narrow opening.
+The reference images and atlases remain unchanged. See [the media notice](../../THIRD_PARTY_NOTICES.md).
 
 Each animation contains four portrait frames at 240 × 320 pixels.
 The player uses 5 FPS, so one cycle takes 0.8 seconds.
@@ -26,7 +22,7 @@ The animation assets contain no voice recordings.
 Run from the project directory:
 
 ```bash
-python3 -m moomin --config config.alphabet.json gallery --fullscreen --no-audio
+python3 -m app --config config.alphabet.json gallery --fullscreen --no-audio
 ```
 
 Add `--keyboard` for SSH keyboard controls:
@@ -34,8 +30,8 @@ Add `--keyboard` for SSH keyboard controls:
 | Physical button | Keyboard | Action |
 | :--- | :--- | :--- |
 | LEFT / RIGHT | A / D or left / right arrows | Previous / next letter |
-| TOP (UP) | W or up arrow | Moominmamma listens |
-| BOTTOM (DOWN) | S or down arrow | Mała Mi speaks |
+| TOP (UP) | W or up arrow | Play listening animation |
+| BOTTOM (DOWN) | S or down arrow | Play speaking animation |
 | Hold CENTER for two seconds | Q or Ctrl+C | Exit |
 
 Use the existing button calibration for the physical buttons.
@@ -47,7 +43,7 @@ The standard photo player retains UP/DOWN volume controls when animations are di
 Run the interactive simulator:
 
 ```bash
-python3 -m moomin --config config.alphabet.json --simulate gallery --keyboard --no-audio
+python3 -m app --config config.alphabet.json --simulate gallery --keyboard --no-audio
 ```
 
 The simulator saves frames in `.state/preview/current.png`.
@@ -56,22 +52,22 @@ The `--once` option displays the first letter and exits before keyboard input.
 
 The GIF previews repeat indefinitely for visual review:
 
-- [Moominmamma listening](../../media/animations/listening/preview.gif)
-- [Mała Mi speaking](../../media/animations/speaking/preview.gif)
+- [Listening animation](../../media/animations/listening/preview.gif)
+- [Speaking animation](../../media/animations/speaking/preview.gif)
 
 ## Files and byte order
 
 The built-in `image_gen.imagegen` tool generated both source atlases.
-[prompts.json](prompts.json) contains the complete prompts and character references.
+[prompts.json](prompts.json) records the retained atlas paths and playback dimensions.
 The compiler splits each atlas in reading order and fits each frame without cropping or stretching.
 For listening frames, [layout.json](layout.json) supplies small offsets after resizing to keep her feet anchored.
 
 | Path | Content |
 | :--- | :--- |
-| `assets/animations/listening-atlas.png` | Moominmamma source atlas, 2 × 2 frames |
+| `assets/animations/listening-atlas.png` | Listening source atlas, 2 × 2 frames |
 | `assets/animations/layout.json` | Listening frame offsets in native LCD pixels |
-| `assets/animations/speaking-atlas.png` | Mała Mi source atlas, 2 × 2 frames |
-| `assets/animations/references/little-my-anime-*.jpg` | Original cartoon stills for mouth reference |
+| `assets/animations/speaking-atlas.png` | Speaking source atlas, 2 × 2 frames |
+| `assets/animations/references/speaking-*.jpg` | Original cartoon stills for mouth reference |
 | `media/animations/*/frame-00.png` through `frame-03.png` | 24-bit RGB PNG frames, 240 × 320 |
 | `media/animations/*/frame-00.raw` through `frame-03.raw` | Little-endian RGB565 pixels |
 | `media/animations/*/frame-00.bin` through `frame-03.bin` | Byte-swapped RGB565 pixels for the ST7789 SPI transfer |

@@ -19,7 +19,7 @@ class ServerTests(unittest.IsolatedAsyncioTestCase):
         async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
             page = await client.get("/")
             self.assertEqual(page.status_code, 200)
-            self.assertIn("window.MOOMIN_LIVE_RELOAD=true", page.text)
+            self.assertIn("window.ALFA_LIVE_RELOAD=true", page.text)
             self.assertIn('type="importmap"', page.text)
             self.assertIn('id="view-case"', page.text)
             self.assertIn('id="view-radio"', page.text)
@@ -37,8 +37,8 @@ class ServerTests(unittest.IsolatedAsyncioTestCase):
                 "/src/data/radio-glb/house_assembled.glb",
                 "/src/data/radio-house.json",
                 "/src/scene/workshopScene.js",
-                "/design/house-radio/PDF/Moomin.pdf",
-                "/design/house-radio/PDF/Moomin-assembly.pdf",
+                "/design/house-radio/PDF/Alfa.pdf",
+                "/design/house-radio/PDF/Alfa-assembly.pdf",
                 "/src/data/radio-images/sheet_overview.png",
                 "/design/wooden-radio/PDF/radio_concepts.pdf",
                 "/vendor/three/build/three.module.js",

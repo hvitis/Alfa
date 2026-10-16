@@ -101,7 +101,7 @@ def player_frame(gallery, audio, recording, last_action="Ready"):
     panel_y = height - 126
     frame = Image.new("RGB", size, "#101f2c")
     draw = ImageDraw.Draw(frame)
-    draw.text((10, 8), "MOOMIN", font=font(13), fill="#63c6ad")
+    draw.text((10, 8), "ALFA", font=font(13), fill="#63c6ad")
     counter = f"PHOTO {gallery.index + 1}/{len(gallery.paths)}"
     draw.text((width - 10 - draw.textlength(counter, font=font(11)), 9), counter, font=font(11), fill="#d2dee7")
     fitted = ImageOps.contain(photo, (width - 16, panel_y - 39), Image.Resampling.LANCZOS)

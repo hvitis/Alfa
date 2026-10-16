@@ -5,7 +5,7 @@ import path from 'node:path';
 let count = 0;
 function walk(directory) {
   for (const item of readdirSync(directory, { withFileTypes: true })) {
-    if (['node_modules', 'dist', 'data', '.venv', '__pycache__'].includes(item.name)) continue;
+    if (['node_modules', 'dist', 'data', '.generated', '.venv', '__pycache__'].includes(item.name)) continue;
     const file = path.join(directory, item.name);
     if (item.isDirectory()) walk(file);
     else if (/\.(?:js|mjs)$/.test(item.name)) {

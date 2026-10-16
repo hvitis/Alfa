@@ -36,7 +36,7 @@ SAY       [S]      [M]      [A]      [T]    ▼  DOWN: SAY
 │                        ● │ ← ear    LISTEN (UP)
 │            M             │
 │                        ○ │ ← mouth  SAY (DOWN)
-│     [ Moomin picture ]   │
+│     [ Letter picture ]   │
 │                          │
 ├──────────────────────────┤
 │   K   L  ( M )  N   O    │ ← letter dial
@@ -56,7 +56,7 @@ SAY       [S]      [M]      [A]      [T]    ▼  DOWN: SAY
 | :--- | :--- | :--- |
 | **LISTEN**<br>*(UP / Home)* | **On arrival** | Plays the letter's phonetic sound: *"Mmm"*. |
 | | **LEFT / RIGHT** | Moves to previous/next letter; plays that letter's sound. |
-| | **CENTER** | Plays full clip: *"Mmm. M. M is for Moomin!"* |
+| | **CENTER** | Plays full clip: *"Mmm. M. M is for moon!"* |
 | **SAY**<br>*(DOWN)* | **On arrival** | Spoken prompt + response: *"Can you say mmm?"*, a 2-second pause, then *"Mmm! Well done!"* |
 | | **LEFT / RIGHT** | Changes letter and plays the new letter's prompt/pause/praise sequence. |
 | | **CENTER** | Replays the prompt: *"Can you say mmm?"* |
@@ -105,8 +105,8 @@ assets/letters/M/
 media/letters/M/
   picture.png     # Prepared 240 × 320 RGB letter card, shared by LISTEN and SAY
   sound.wav       # Phonetic sound ("Mmm")
-  name.wav        # Full phrase ("M is for Moomin")
-  full.wav        # Combined: "Mmm. M. M is for Moomin!"
+  name.wav        # Full phrase ("M is for moon")
+  full.wav        # Combined: "Mmm. M. M is for moon!"
   say.wav         # Combined: prompt + 2s silence + "Mmm! Well done!"
 media/letters/shared/
   listen.wav      # Row prompt: "Listen"
@@ -149,7 +149,7 @@ Uppercase is the default. Lowercase cards are an optional later set.
 6. Include a CSV or JSON list with each letter, Polish example word, and signature color.
 7. Keep the editable originals, with the letter and illustration on separate layers, for future layouts.
 
-For example, deliver `assets/letters/M/picture-master.png` with `M` and Muminek.
+For example, deliver `assets/letters/M/picture-master.png` with `M` and a bridge for the Polish example word `most`.
 Deliver `assets/letters/Ą/picture-master.png` with `Ą` and a snake for the example word `wąż`.
 Folder names retain Polish diacritics. The planned pipeline must normalize names to Unicode NFC and preserve their letter identity.
 
@@ -161,7 +161,7 @@ Most example words start with the target letter. A word containing the target le
 | Letter | Example word | Picture | Association |
 | :--- | :--- | :--- | :--- |
 | A | auto | Car | Starts with A |
-| M | Muminek | Moomin character | Starts with M |
+| M | most | Bridge | Starts with M |
 | Ą | wąż | Snake | Contains Ą |
 | Ę | gęś | Goose | Contains Ę |
 | Ń | koń | Horse | Contains Ń |
@@ -178,7 +178,7 @@ For example, `W słowie wąż jest Ą` replaces a claim that the word starts wit
 
 **All dimensions are width × height in pixels. The current screen needs a 240 × 320 final frame.**
 The driver rejects frames with another size.
-The [display settings](../moomin/config.py) select the size, and the [display driver](../moomin/hardware.py) checks it.
+The [display settings](../app/config.py) select the size, and the [display driver](../app/hardware.py) checks it.
 
 | Asset or display | Required dimensions | Purpose |
 | :--- | :--- | :--- |
@@ -229,7 +229,7 @@ For other aspect ratios, the renderer must choose one of these behaviors:
 - **Separate layout**: Reposition the letter, illustration, and controls for the target screen. Separate layers support this option.
 - **Cover**: Fill the screen by cropping edges. Use this only for backgrounds because cropping can remove letter marks.
 
-The [existing image preparation code](../moomin/media.py) supports `contain` and `cover` for gallery images.
+The [existing image preparation code](../app/media.py) supports `contain` and `cover` for gallery images.
 It does not yet prepare alphabet cards or arrange their controls.
 The planned alphabet pipeline must prepare exact-size RGB cards before playback.
 It must preserve the letter and diacritic instead of stretching the image or cropping them.
@@ -253,19 +253,18 @@ The first delivery targets the portrait layout above.
 
 ### Current Artwork Delivery
 
-The [generated artwork set](../assets/alphabet/README.md) contains 32 cards with different Moomin characters.
-Twenty-one cards match a Polish character initial, including `M — Migotka`, `C — Czarodziej`, and `T — Tata Muminka`.
-The remaining characters are visual companions. Their names do not teach the displayed letter.
+The [generated artwork set](../assets/alphabet/README.md) contains 32 cards with retained illustrations.
+The illustrations are visual companions. Recordings teach the displayed letter independently of character names.
 The current viewer displays these cards across the complete screen with `--fullscreen`.
 The planned activity layout must fit the cards into its safe area before it adds icons or the dial.
 
 ```bash
-python3 -m moomin --config config.alphabet.json gallery --fullscreen --no-audio
+python3 -m app --config config.alphabet.json gallery --fullscreen --no-audio
 ```
 
 ### Planned Alphabet Mode
 
-- **`moomin/alphabet.py`**:
+- **`app/alphabet.py`**:
   - Implements `AlphabetSession` matching the `PlayerSession` interface (`action(button)`).
   - Plugs directly into `run_gallery` (reuses loop, event debounce, render trigger, CLI `--mode alphabet`).
 - **Row Handlers**:

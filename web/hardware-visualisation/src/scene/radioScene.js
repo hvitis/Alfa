@@ -1,7 +1,7 @@
 import facts from '../data/radio-house.json' with { type: 'json' };
 import { createWorkshopScene, prepareWorkshopModel } from './workshopScene.js';
 
-// Moomin, the little house radio. Data and meshes come from design/house-radio
+// Alfa, the little house radio. Data and meshes come from design/house-radio
 // (build_all.py, then sync_viewer.py).
 export const RADIO_TAGS = {
   lcd: 'LCD', keypad: 'Five buttons', speaker: 'Speaker', pi: 'Raspberry Pi 3', battery: 'Power bank',

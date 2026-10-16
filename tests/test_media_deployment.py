@@ -52,7 +52,7 @@ class DeploymentTests(unittest.TestCase):
         self.assertEqual(len(prepare_images(self.settings)), 1)
 
     def test_incomplete_or_wrong_size_prepared_images_are_reported_before_display_start(self):
-        first = self.root / "media/images/000-moomin_0.png"
+        first = self.root / "media/images/000-illustration_0.png"
         first.unlink()
         with self.assertRaisesRegex(ValueError, "Cannot use prepared photos"):
             prepare_images(self.settings)

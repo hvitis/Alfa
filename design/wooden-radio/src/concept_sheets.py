@@ -26,7 +26,7 @@ GHOST = {"pi": "#287557", "battery": "#6f7b7a", "speaker": "#343a42", "lcd": "#3
 IDS = [c["id"] for c in settings()["concepts"]]
 
 
-def page(title, subtitle, eyebrow="MOOMIN  /  WOODEN RADIO  /  CONCEPTS"):
+def page(title, subtitle, eyebrow="ALFA  /  WOODEN RADIO  /  CONCEPTS"):
     fig = plt.figure(figsize=(297 / 25.4, 210 / 25.4), dpi=150)
     ax = fig.add_axes([0, 0, 1, 1])
     ax.set_xlim(0, 297)

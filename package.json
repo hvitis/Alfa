@@ -1,17 +1,21 @@
 {
-  "name": "moomin-repository-checks",
+  "name": "alfa",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "test:syntax": "node tests/check-syntax.mjs",
-    "test:smoke": "node tests/smoke-tests.mjs",
-    "test:viewer": "node --test web/hardware-visualisation/tests/*.test.js"
+    "test:syntax": "node web/tests/check-syntax.mjs",
+    "test:smoke": "node web/tests/smoke-tests.mjs",
+    "test:viewer": "node --test web/hardware-visualisation/tests/*.test.js",
+    "build:site": "python3 web/build.py _site"
   },
   "devDependencies": {
+    "markdown-it": "14.1.0",
+    "mermaid": "11.12.2",
     "playwright": "1.61.1",
-    "three": "0.186.1"
+    "three": "0.186.1",
+    "vite": "8.3.2"
   }
 }

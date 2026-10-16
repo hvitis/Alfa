@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Moomin hardware — 3D wiring</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Alfa hardware — 3D wiring</title>
 <link rel="stylesheet" href="/src/styles.css">
 <script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
 </head>
 <body>
 <div id="app">
-  <header><a class="brand" href="./">MOOMIN / HARDWARE</a><span id="live-status" hidden></span><h1>Understand every module and connection.</h1><p>Click any module to learn its purpose. Compare the Pi 3 and Pico setups, or inspect the resistor divider.</p></header>
+  <header><a class="brand" href="./">ALFA / HARDWARE</a><span id="live-status" hidden></span><h1>Understand every module and connection.</h1><p>Click any module to learn its purpose. Compare the Pi 3 and Pico setups, or inspect the resistor divider.</p></header>
   <nav class="toolbar" aria-label="Scene and camera controls">
     <div class="main-tabs" role="tablist" aria-label="Main system views">
       <button id="view-setup" class="main-tab active" role="tab" aria-selected="true">Pi 3</button>
@@ -85,7 +85,7 @@
         <div class="note">150 × 200 × 64 mm · 6 mm plywood · 4 × A4 sheets</div>
       </div>
       <div id="radio-banner" class="case-banner radio-banner" hidden>
-        <strong>MOOMIN · LITTLE HOUSE RADIO</strong>
+        <strong>ALFA · LITTLE HOUSE RADIO</strong>
         <div id="radio-mode-text">Assembled</div>
         <div class="note" id="radio-banner-note"></div>
       </div>
@@ -125,8 +125,8 @@
         </div>
       </section>
       <section id="radio-guide" class="radio-guide" hidden>
-        <span class="eyebrow">WOODEN RADIO · MOOMIN · FULL DESIGN</span><h2>Little House Radio</h2>
-        <a id="radio-cover-link" class="radio-sheet" target="_blank" rel="noopener"><img id="radio-cover" alt="Moomin plan cover: the little house radio in a snowy night"></a>
+        <span class="eyebrow">WOODEN RADIO · ALFA · FULL DESIGN</span><h2>Little House Radio</h2>
+        <a id="radio-cover-link" class="radio-sheet" target="_blank" rel="noopener"><img id="radio-cover" alt="Alfa plan cover: the little house radio in a snowy night"></a>
         <p class="note">Concept B, complete: every panel, hinge, magnet, screw and wire. Click a part or a wire; hide the plywood to look inside.</p>
         <dl id="radio-facts" class="radio-facts"></dl>
         <div class="case-modes">
@@ -186,7 +186,7 @@
         <span class="eyebrow">PI 3 → PICO · WHAT CHANGES</span><h2>Same modules. New controller.</h2>
         <div id="pico-difference-list"></div>
         <details class="pin-comparison"><summary>Compare all 19 header connections</summary><table><thead><tr><th>Terminal</th><th>Pi 3 pin</th><th>Pico physical pin / GP</th></tr></thead><tbody id="pin-comparison-body"></tbody></table></details>
-        <p class="note">Pico wiring is a proposed firmware pin assignment. The Linux app in <code>moomin/</code> is for the Pi 3. The Pico needs separate firmware.</p>
+        <p class="note">Pico wiring is a proposed firmware pin assignment. The Linux app in <code>app/</code> is for the Pi 3. The Pico needs separate firmware.</p>
       </section>
       <div id="divider-guide">
         <span class="eyebrow">TWO RESISTORS · BOTH 10 kΩ</span><h2>One shared join. Three connections.</h2>
@@ -204,7 +204,7 @@
     <div><h2>The complete resistor connection</h2><p><strong>Keypad OUT → R1 → shared join → ADC A0</strong></p><p><strong>Shared join → R2 → GND</strong></p></div>
     <div><p>Keypad: <strong>5 V</strong>. ADC: <strong>3.3 V</strong>. All GND connections share Pi ground.</p><p class="note">The ADC header order follows but2.jpg. V = VDD, G = GND. Disconnect Pi power before changing wires.</p></div>
   </section>
-  <footer>Three.js 3D viewer · The Pi test software stays in <code>moomin/</code>. <a href="../output/resistor-divider-clear.png">Open the resistor image</a></footer>
+  <footer>Three.js 3D viewer · The Pi test software stays in <code>app/</code>. <a href="../output/resistor-divider-clear.png">Open the resistor image</a></footer>
 </div>
 <script type="module" src="/src/main.js"></script>
 </body></html>

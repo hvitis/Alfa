@@ -2,7 +2,7 @@
 import socket
 
 
-SPLASH_SOCKET = "/run/moomin-splash/handoff.sock"
+SPLASH_SOCKET = "/run/alfa-splash/handoff.sock"
 
 
 def release_boot_splash(path=SPLASH_SOCKET):

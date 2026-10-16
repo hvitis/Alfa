@@ -11,17 +11,17 @@ Run this command on your computer, from the project folder.
 Replace `PI_HOST` with the address you use for SSH.
 
 ```bash
-rsync -av --exclude='.venv' --exclude='.state' --exclude='.git' --exclude='node_modules' --exclude='dist' ./ pi@PI_HOST:~/Code/moomin/
+rsync -av --exclude='.venv' --exclude='.state' --exclude='.git' --exclude='node_modules' --exclude='dist' ./ pi@PI_HOST:~/Code/Alfa/
 ssh pi@PI_HOST
 ```
 
 Run the remaining commands in the Pi SSH session.
 
 ```bash
-cd ~/Code/moomin
+cd ~/Code/Alfa
 ```
 
-This folder contains `README.md`, `config.json`, and the `moomin/` Python package.
+This folder contains `README.md`, `config.json`, and the `app/` Python package.
 Your working screen test already uses the required virtual environment.
 If `.venv` is missing, run the installer once:
 
@@ -57,7 +57,7 @@ Neither speaker terminal connects to Pi ground.
 The amplifier BCLK uses physical pin 12, GPIO18.
 These are different pins despite the repeated number 18.
 
-The [3D viewer](../hardware-visualisation/viewer.html) has an **Amplifier wiring** button.
+The [3D viewer](../web/hardware-visualisation/viewer.html) has an **Amplifier wiring** button.
 It shows the corrected pin order, header assembly, seven solder joints, and each cable separately.
 The board's printed labels remain the reference when you connect wires.
 
@@ -89,7 +89,7 @@ sudo reboot
 Reconnect over SSH. Check the audio card:
 
 ```bash
-cd ~/Code/moomin
+cd ~/Code/Alfa
 aplay -l
 ```
 
@@ -106,14 +106,14 @@ References: [MAX98357A signal wiring](https://learn.adafruit.com/adafruit-max983
 First, test the audio path with a known tone at 10% digital volume:
 
 ```bash
-.venv/bin/python -m moomin speaker-test --with-screen --verbose --tone --repeat 3 --volume 0.1
+.venv/bin/python -m app speaker-test --with-screen --verbose --tone --repeat 3 --volume 0.1
 ```
 
 Listen for three two-second tones. Check that the LCD displays playback status.
 Then play your supplied sound at the same starting volume:
 
 ```bash
-.venv/bin/python -m moomin speaker-test --with-screen --verbose --repeat 3 --volume 0.1
+.venv/bin/python -m app speaker-test --with-screen --verbose --repeat 3 --volume 0.1
 ```
 
 The test prepares and plays the first sound from `sounds/` three times.
@@ -152,7 +152,7 @@ echo $?
 Use the known 440 Hz tone to test the audio path:
 
 ```bash
-.venv/bin/python -m moomin speaker-test --with-screen --verbose --tone --repeat 3 --volume 0.1
+.venv/bin/python -m app speaker-test --with-screen --verbose --tone --repeat 3 --volume 0.1
 ```
 
 The tone is a generated two-second stereo WAV. The original sounds stay unchanged.
@@ -161,14 +161,14 @@ If the tone plays but your clip does not, check the source sound and prepared me
 To test the speaker without LCD status:
 
 ```bash
-.venv/bin/python -m moomin speaker-test --verbose --tone --volume 0.1
+.venv/bin/python -m app speaker-test --verbose --tone --volume 0.1
 ```
 
 To select a card explicitly, use its actual identifier from `aplay -l`.
 For example:
 
 ```bash
-.venv/bin/python -m moomin speaker-test --with-screen --verbose --volume 0.1 --device 'plughw:CARD=sndrpimax98357a,DEV=0'
+.venv/bin/python -m app speaker-test --with-screen --verbose --volume 0.1 --device 'plughw:CARD=sndrpimax98357a,DEV=0'
 ```
 
 | Observation | Next action |
@@ -190,7 +190,7 @@ Its `hearing_confirmed` field stays false because there is no microphone or user
 A local simulation generates LCD previews and logs without accessing Pi hardware:
 
 ```bash
-python3 -m moomin --simulate speaker-test --with-screen --verbose --tone --repeat 2
+python3 -m app --simulate speaker-test --with-screen --verbose --tone --repeat 2
 python3 -m unittest discover -s tests -v
 ```
 

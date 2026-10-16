@@ -168,7 +168,7 @@ report.check("roof boards: plywood between round holes >= 2.5 mm", web >= 2.5 - 
 for r in facts["fasteners"]:
     report.check(f"Fastener {r['id']} ({r['title']}) has a standard length: {r['designation']}", r["length"] > 0, r["warnings"])
 
-atlas = json.loads((ROOT.parents[1] / "hardware-visualisation/src/data/setup.json").read_text())["wires"]
+atlas = json.loads((ROOT.parents[1] / "web/hardware-visualisation/src/data/setup.json").read_text())["wires"]
 keys = ("id", "group", "from", "to", "color")
 report.check("27 nets match the working electrical atlas exactly",
              len(routing["wires"]) == 27 and [{k: w[k] for k in keys} for w in routing["wires"]] == [{k: w[k] for k in keys} for w in atlas])

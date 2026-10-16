@@ -48,10 +48,10 @@ def render_unit(project, user, python, no_audio=False, splash=False):
         return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("%", "%%") + '"'
     if splash:
         return f"""[Unit]
-Description=Moomin early boot splash
+Description=Alfa early boot splash
 DefaultDependencies=no
 After=systemd-udevd.service
-Before=moomin.service shutdown.target
+Before=alfa.service shutdown.target
 Conflicts=shutdown.target
 RequiresMountsFor=/usr {quote(project)} {quote(python)}
 ConditionPathExists={working_directory}/.state/boot-splash.bin
@@ -62,7 +62,7 @@ NotifyAccess=main
 User={user}
 WorkingDirectory={working_directory}
 ExecStart={quote(python)} -u -m app.splash --config config.standalone.json
-RuntimeDirectory=moomin-splash
+RuntimeDirectory=alfa-splash
 RuntimeDirectoryMode=0750
 Environment=PYTHONDONTWRITEBYTECODE=1
 TimeoutStartSec=15
@@ -80,8 +80,8 @@ WantedBy=sysinit.target
     if no_audio:
         command += " --no-audio"
     return f"""[Unit]
-Description=Moomin offline alphabet player
-After=local-fs.target sound.target moomin-splash.service
+Description=Alfa offline alphabet player
+After=local-fs.target sound.target alfa-splash.service
 StartLimitIntervalSec=0
 
 [Service]
@@ -97,9 +97,9 @@ WatchdogSignal=SIGTERM
 TimeoutStartSec=30
 TimeoutStopSec=10
 KillMode=control-group
-RuntimeDirectory=moomin
+RuntimeDirectory=alfa
 RuntimeDirectoryMode=0750
-Environment=MOOMIN_RUNTIME_DIR=/run/moomin
+Environment=ALFA_RUNTIME_DIR=/run/alfa
 Environment=PYTHONDONTWRITEBYTECODE=1
 StandardInput=null
 StandardOutput=journal

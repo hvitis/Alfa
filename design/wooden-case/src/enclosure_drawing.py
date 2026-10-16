@@ -10,7 +10,7 @@ def enclosure_drawing():
             child.label not in ("wood_switch_cover", "wood_switch_clamp")]
     from cadgen import build123d as bd
     shell = bd.Compound(children=wood)
-    sheet = Sheet("A4", scale=.35, title="MOOMIN CASE", part_number="WOOD-CASE-A",
+    sheet = Sheet("A4", scale=.35, title="ALFA CASE", part_number="WOOD-CASE-A",
                   material="6 mm plywood", revision="A", units="mm")
     top = sheet.view(shell, "top", at=(75, 140), label="FACE VIEW")
     front = sheet.view(shell, "front", at=(75, 80), label="EDGE VIEW")

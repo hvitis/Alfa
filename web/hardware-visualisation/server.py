@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 
 ROOT = Path(__file__).resolve().parent
 PROJECT = ROOT.parents[1]
-app = FastAPI(title="Moomin hardware visualisation")
+app = FastAPI(title="Alfa hardware visualisation")
 
 
 def source_revision(root=ROOT):
@@ -49,7 +49,7 @@ async def disable_cache(request: Request, call_next):
 @app.get("/", response_class=HTMLResponse)
 async def index():
     html = (ROOT / "index.html").read_text()
-    return HTMLResponse(html.replace("</head>", "<script>window.MOOMIN_LIVE_RELOAD=true;</script></head>"))
+    return HTMLResponse(html.replace("</head>", "<script>window.ALFA_LIVE_RELOAD=true;</script></head>"))
 
 
 @app.get("/api/health")

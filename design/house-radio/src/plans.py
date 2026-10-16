@@ -1,4 +1,4 @@
-"""Moomin.pdf (cover, plan, 1:1 templates) and Moomin-cut-templates.pdf with SVG/DXF.
+"""Alfa.pdf (cover, plan, 1:1 templates) and Alfa-cut-templates.pdf with SVG/DXF.
 
 Reads facts.json, verification.json and the renders in previews/; draws every
 elevation from the same shapes as the CAD (woodkit.paper.View).
@@ -414,16 +414,16 @@ if __name__ == "__main__":
     figs = [cover(), glance(), inside(), roof_page(), power_page(), screws_page(), shopping_page(len(layout)), wiring_page(), cut_list_page(layout)]
     names = ["page_cover", "page_glance", "page_inside", "page_roof", "page_power", "page_screws", "page_shopping", "page_wiring", "page_cuts"]
     t_figs, rings = template_pages(layout, f"{NAME.upper()}  /  CUT TEMPLATES", legend, FOOT)
-    with PdfPages(ROOT / "PDF/Moomin.pdf") as pdf:
+    with PdfPages(ROOT / "PDF/Alfa.pdf") as pdf:
         for fig, name in zip(figs, names):
             pdf.savefig(fig)
             fig.savefig(ROOT / "previews" / f"{name}.png", dpi=110)
         for fig in t_figs:
             pdf.savefig(fig)
-    with PdfPages(ROOT / "PDF/Moomin-cut-templates.pdf") as pdf:
+    with PdfPages(ROOT / "PDF/Alfa-cut-templates.pdf") as pdf:
         for n, (fig, ring) in enumerate(zip(t_figs, rings), 1):
             pdf.savefig(fig)
             save_svg(fig, ROOT / "SVG" / f"sheet_{n}.svg")
             fig.savefig(ROOT / "previews" / f"sheet_{n}.png", dpi=110)
             save_dxf(ring, ROOT / "DXF" / f"sheet_{n}.dxf")
-    print(f"Wrote PDF/Moomin.pdf ({len(figs) + len(t_figs)} pages) and PDF/Moomin-cut-templates.pdf ({len(t_figs)} sheets).")
+    print(f"Wrote PDF/Alfa.pdf ({len(figs) + len(t_figs)} pages) and PDF/Alfa-cut-templates.pdf ({len(t_figs)} sheets).")

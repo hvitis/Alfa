@@ -69,4 +69,4 @@ def cad_step(number):
     solids = [panel_solid(s) for s in parts["panels"]]
     solids += [box_solid(b, "e_" + b.module + "__" if b.module not in ("hinge", "wood") else "") for b in parts["boxes"]]
     solids += [rod_solid(r) for r in parts["rods"]]
-    return compound(solids, f"Moomin_step_{number}")
+    return compound(solids, f"Alfa_step_{number}")

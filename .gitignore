@@ -21,12 +21,34 @@ htmlcov/
 credentials.json
 .aws/
 output/
-_site/data/
+_site/
+web/.generated/
 dist/
 build/
 FreeCAD-squashfs/
-/design/moomin-case/
 test-results/
 playwright-report/
 photos/
 imgs/
+
+# Private credentials and local configuration
+*.p12
+*.pfx
+*.keystore
+*.jks
+*.kdbx
+*.tfstate
+*.tfstate.*
+id_rsa
+id_ed25519
+.netrc
+.npmrc
+.pypirc
+*.sqlite
+*.sqlite3
+*.db
+.gcloud/
+.ssh/
+
+# Local exports
+/design/*-wooden-case.zip

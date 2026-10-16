@@ -1,6 +1,6 @@
-# Moomin Radio build kit
+# Alfa build kit
 
-The kit contains the Python runtime and a backend-free showcase with original demo graphics.
+The kit contains the Python runtime and a backend-free project atlas with CAD viewer meshes.
 It includes no existing character artwork, recordings, research viewer, or generated fabrication files.
 
 ## Run the simulator
@@ -45,9 +45,11 @@ The showcase uses only local runtime assets. Repository links require internet a
 | `runtime/media/images/` | One original geometric demo card and its manifest. |
 | `runtime/scripts/` | Pi dependency installation script. |
 | `runtime/docs/wiring.md` | Wiring reference. |
-| `site/` | Static showcase, SVG illustration, and generated specifications. |
+| `site/` | Four-tab static atlas, bundled libraries, CAD viewer meshes, ADR, Mermaid source, and specifications. |
 | `LICENSE`, `THIRD_PARTY_NOTICES.md` | Code license and asset exclusions. |
 | `checksums.json` | SHA-256 of every other ZIP entry. |
+
+The site includes `THIRD-PARTY-LICENSES.txt` for its bundled libraries.
 
 The release attachments include build provenance, validation results, and the core electronics BOM.
 The source repository contains tests and build tools. This archive is a runtime distribution.

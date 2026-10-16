@@ -45,13 +45,13 @@ The actual frame rate depends on the Pi and the display connection.
 | Component | Responsibility |
 |---|---|
 | [letters.json](letters.json) | All 32 Polish uppercase letters, stroke order, shared marks, card colors, and recording paths |
-| [LetterCatalog and Stroke](../../moomin/letter_paths.py) | Resolve a card filename, expand shared geometry, and measure stroke paths |
-| [LetterLesson](../../moomin/letter_lesson.py) | Control introduction, tracing, pen lifts, the completed letter, and fireworks |
+| [LetterCatalog and Stroke](../../app/letter_paths.py) | Resolve a card filename, expand shared geometry, and measure stroke paths |
+| [LetterLesson](../../app/letter_lesson.py) | Control introduction, tracing, pen lifts, the completed letter, and fireworks |
 | `LetterRenderer` and `Pencil` in that module | Draw the guide, completed strokes, pencil, and fireworks |
-| [LetterRecordings](../../moomin/audio.py) | Play the selected letter recording, or use a silent placeholder |
-| [PlayerSession](../../moomin/player.py) | Connect button actions to lessons, audio, navigation, and character animations |
-| [AnimationPresenter](../../moomin/frames.py) | Retain one frame and transfer only changed pixels |
-| [ST7789.show_region](../../moomin/hardware.py) | Send a rectangle through SPI with the configured display rotation |
+| [LetterRecordings](../../app/audio.py) | Play the selected letter recording, or use a silent placeholder |
+| [PlayerSession](../../app/player.py) | Connect button actions to lessons, audio, navigation, and character animations |
+| [AnimationPresenter](../../app/frames.py) | Retain one frame and transfer only changed pixels |
+| [ST7789.show_region](../../app/hardware.py) | Send a rectangle through SPI with the configured display rotation |
 
 The complete stroke catalog is less than 8 KB.
 The app retains flattened geometry only for the active letter.
@@ -120,7 +120,7 @@ This command stops the service to release its GPIO pins, then restores the servi
 For a silent preview without hardware, run:
 
 ```bash
-python3 -m moomin --config config.alphabet.json --simulate gallery --fullscreen --keyboard --no-audio
+python3 -m app --config config.alphabet.json --simulate gallery --fullscreen --keyboard --no-audio
 ```
 
 Simulation updates `.state/preview/current.png` as the lesson plays.
@@ -134,8 +134,8 @@ Physical display speed and speaker output still need a check on the Pi.
 Read the active service configuration and recent logs on the Pi:
 
 ```bash
-systemctl show moomin.service -p WorkingDirectory -p ExecStart
-journalctl -u moomin.service -n 30 --no-pager
+systemctl show alfa.service -p WorkingDirectory -p ExecStart
+journalctl -u alfa.service -n 30 --no-pager
 ```
 
 The startup log reports `Letter drawing enabled` and the stroke catalog path.
@@ -149,13 +149,13 @@ For example, `CENTER: Drawing A; card=000-00-A.png` confirms that the app starte
 If there is no CENTER log, stop the service and inspect physical button events:
 
 ```bash
-sudo systemctl stop moomin.service
-.venv/bin/python -m moomin --config config.standalone.json buttons
+sudo systemctl stop alfa.service
+.venv/bin/python -m app --config config.standalone.json buttons
 ```
 
 Press and release the fifth button. Its press event must identify `center`.
 Press Ctrl+C to stop the monitor, then restart the service:
 
 ```bash
-sudo systemctl start moomin.service
+sudo systemctl start alfa.service
 ```

@@ -1,4 +1,4 @@
-# Moomin: Raspberry Pi screen, speaker, and button tests
+# Alfa: Raspberry Pi screen, speaker, and button tests
 
 For offline startup at power-on and automatic recovery, read [the Raspberry Pi standalone guide](../docs/raspberry-pi-standalone.md).
 On the configured Pi, install the service with `bash scripts/install-service.sh`.
@@ -6,7 +6,7 @@ The app keeps running when idle. It does not shut down the Pi after inactivity.
 To pull and load the newest changes on the Pi, run:
 
 ```bash
-cd /home/pi/Code/moomin
+cd /home/pi/Code/Alfa
 make update
 ```
 
@@ -34,7 +34,7 @@ The original `imgs` folder is excluded from Git.
 A Git checkout uses the included `media/images` photos when originals are absent.
 Prepared photos must match the configured display size.
 
-The [Polish alphabet artwork](../assets/alphabet/README.md) contains 32 cards with different Moomin characters.
+The [Polish alphabet artwork](../assets/alphabet/README.md) contains 32 cards with retained illustrations.
 The source PNGs are in `assets/alphabet`, and the 240 × 320 LCD PNGs are in `media/alphabet`.
 To display the complete cards on the Pi, run:
 
@@ -43,8 +43,8 @@ python3 -m app --config config.alphabet.json gallery --fullscreen --no-audio
 ```
 
 Use LEFT and RIGHT to change the card.
-Press TOP (UP) for Moominmamma's listening animation.
-Press BOTTOM (DOWN) for Mała Mi's speaking animation.
+Press TOP (UP) for the listening animation.
+Press BOTTOM (DOWN) for the speaking animation.
 Each animation uses four frames at 5 FPS and returns to the selected card after two cycles (1.6 seconds).
 LEFT and RIGHT stop the animation and change the letter.
 Press CENTER (the fifth button) to draw the selected letter, stroke by stroke, with a moving pencil.
@@ -68,17 +68,17 @@ It uses **BCM GPIO24** for the backlight, so the display does not share GPIO18 w
 
 [The plywood case design](../design/wooden-case/README.md) includes an offline 3D planner, four actual-size A4 cutting/drilling templates, component placement, and cable routing for the Pi 3, Baseus 5000 mAh bank and existing five-button board. It uses 6 mm plywood and a removable rear cover.
 
-[Open the 3D viewer](../hardware-visualisation/viewer.html) for clickable module explanations, the R1/R2 close-up, and free camera movement.
+[Open the 3D viewer](../web/hardware-visualisation/viewer.html) for clickable module explanations, the R1/R2 close-up, and free camera movement.
 The **Pi 3 setup** and **Pico 2 WH setup** views show the same modules with different controller connections.
 The Pico view marks changed pins in amber and compares all 19 header connections.
 It also marks the two shared supply joins and explains the separate Pico firmware requirement.
-The modular Three.js viewer and FastAPI server are in [hardware-visualisation](../hardware-visualisation/README.md).
+The modular Three.js viewer and FastAPI server are in [hardware-visualisation](../web/hardware-visualisation/README.md).
 The screen cable colors match `photos/colors.jpg`.
 
 For live updates, start the server from that folder:
 
 ```bash
-cd hardware-visualisation
+cd web/hardware-visualisation
 .venv/bin/python server.py
 ```
 
@@ -92,14 +92,14 @@ Run this command on your computer, from this folder.
 Replace `PI_USER` and `PI_HOST` with your SSH username and address.
 
 ```bash
-rsync -av --exclude='.venv' --exclude='.state' --exclude='.git' --exclude='node_modules' --exclude='dist' ./ PI_USER@PI_HOST:~/moomin/
+rsync -av --exclude='.venv' --exclude='.state' --exclude='.git' --exclude='node_modules' --exclude='dist' ./ PI_USER@PI_HOST:~/Alfa/
 ssh PI_USER@PI_HOST
 ```
 
 Run the remaining hardware commands in the SSH session.
 
 ```bash
-cd ~/moomin
+cd ~/Alfa
 ```
 
 The app supports Raspberry Pi 2 and 3 with Raspberry Pi OS Bookworm or newer.
@@ -160,7 +160,7 @@ Activate the virtual environment.
 
 ```bash
 ssh PI_USER@PI_HOST
-cd ~/moomin
+cd ~/Alfa
 source .venv/bin/activate
 ```
 
@@ -443,7 +443,7 @@ python -m app prepare
 
 The preparation command accepts JPEG, PNG, WebP, and BMP images.
 It accepts WAV, MP3, FLAC, OGG, and M4A audio.
-It sorts filenames in numeric order, including `moomin_2` before `moomin_10`.
+It sorts filenames in numeric order, including `illustration_2` before `illustration_10`.
 
 By default, photos keep their aspect ratio and fit inside the screen with white padding.
 Transparent pixels use the same white background.

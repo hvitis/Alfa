@@ -49,16 +49,16 @@ esac
 ''')
         self.executable(self.root / ".venv/bin/python", '''#!/bin/sh
 printf 'python %s\n' "$*" >> "$STUB_CALLS"
-if test "$2" = moomin || test "$2" = app; then exit "${STUB_FAIL_RUN:-0}"; fi
+if test "$2" = app; then exit "${STUB_FAIL_RUN:-0}"; fi
 exit 0
 ''')
         self.executable(self.root / "scripts/install-service.sh", '''#!/bin/sh
 printf 'install %s\n' "$*" >> "$STUB_CALLS"
 if test "${STUB_FAIL_INSTALL:-0}" != 0; then exit "$STUB_FAIL_INSTALL"; fi
 sudo systemctl daemon-reload
-sudo systemctl enable moomin.service
-sudo systemctl restart moomin.service
-sudo systemctl --no-pager status moomin.service
+sudo systemctl enable alfa.service
+sudo systemctl restart alfa.service
+sudo systemctl --no-pager status alfa.service
 ''')
         self.env = dict(os.environ, PATH=f"{self.bin}:{os.environ['PATH']}",
                         STUB_CALLS=str(self.calls), STUB_STATE=str(self.state))
@@ -78,20 +78,20 @@ sudo systemctl --no-pager status moomin.service
     def test_update_stops_pulls_installs_reloads_resets_and_restarts_in_order(self):
         result, events = self.run_make("update", "INSTALL_ARGS=--no-audio")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(events, ["systemctl is-active --quiet moomin.service",
-            "systemctl stop moomin.service", "git pull --ff-only",
+        self.assertEqual(events, ["systemctl is-active --quiet alfa.service",
+            "systemctl stop alfa.service", "git pull --ff-only",
             "python -m pip install -r requirements-pi.txt",
-            "systemctl reset-failed moomin.service", "install --no-audio",
-            "systemctl daemon-reload", "systemctl enable moomin.service",
-            "systemctl restart moomin.service", "systemctl --no-pager status moomin.service",
-            "systemctl is-active --quiet moomin.service", "git rev-parse --short HEAD"])
+            "systemctl reset-failed alfa.service", "install --no-audio",
+            "systemctl daemon-reload", "systemctl enable alfa.service",
+            "systemctl restart alfa.service", "systemctl --no-pager status alfa.service",
+            "systemctl is-active --quiet alfa.service", "git rev-parse --short HEAD"])
         self.assertEqual(self.state.read_text(), "active")
 
     def test_failed_pull_restores_previously_running_service_and_reports_failure(self):
         result, events = self.run_make("update", STUB_FAIL_PULL="7")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Restoring the app service", result.stderr)
-        self.assertEqual(events[-2:], ["systemctl reset-failed moomin.service", "systemctl start moomin.service"])
+        self.assertEqual(events[-2:], ["systemctl reset-failed alfa.service", "systemctl start alfa.service"])
         self.assertFalse(any(event.startswith(("install", "python")) for event in events))
         self.assertEqual(self.state.read_text(), "active")
 
@@ -99,14 +99,14 @@ sudo systemctl --no-pager status moomin.service
         result, events = self.run_make("update", STUB_FAIL_INSTALL="7")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("install ", events)
-        self.assertEqual(events[-1], "systemctl start moomin.service")
+        self.assertEqual(events[-1], "systemctl start alfa.service")
         self.assertEqual(self.state.read_text(), "active")
 
     def test_failed_update_keeps_an_initially_stopped_service_stopped(self):
         self.state.write_text("inactive")
         result, events = self.run_make("update", STUB_FAIL_PULL="7")
         self.assertNotEqual(result.returncode, 0)
-        self.assertNotIn("systemctl start moomin.service", events)
+        self.assertNotIn("systemctl start alfa.service", events)
         self.assertEqual(self.state.read_text(), "inactive")
 
     def test_restart_reinstalls_current_checkout_without_network_commands(self):
@@ -121,22 +121,22 @@ sudo systemctl --no-pager status moomin.service
         result, events = self.run_make("reset")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("git pull --ff-only", events)
-        self.assertIn("systemctl restart moomin.service", events)
+        self.assertIn("systemctl restart alfa.service", events)
 
     def test_manual_run_releases_service_gpio_and_restores_service_after_failure(self):
         result, events = self.run_make("run", STUB_FAIL_RUN="7")
         self.assertNotEqual(result.returncode, 0)
-        self.assertEqual(events, ["systemctl is-active --quiet moomin.service",
-            "systemctl stop moomin.service",
+        self.assertEqual(events, ["systemctl is-active --quiet alfa.service",
+            "systemctl stop alfa.service",
             "python -m app --config config.alphabet.json gallery --fullscreen",
-            "systemctl reset-failed moomin.service", "systemctl start moomin.service"])
+            "systemctl reset-failed alfa.service", "systemctl start alfa.service"])
         self.assertEqual(self.state.read_text(), "active")
 
     def test_manual_run_does_not_start_a_service_that_was_stopped(self):
         self.state.write_text("inactive")
         result, events = self.run_make("run")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertNotIn("systemctl start moomin.service", events)
+        self.assertNotIn("systemctl start alfa.service", events)
         self.assertEqual(self.state.read_text(), "inactive")
 
 

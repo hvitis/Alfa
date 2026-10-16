@@ -13,9 +13,9 @@ if __name__ == "__main__":
     if not SEMVER.fullmatch(tag):
         raise SystemExit("Expected a SemVer tag.")
     manifest = validate_release_kit(ROOT / "output")
-    print(f"Moomin Radio {tag}\n")
+    print(f"Alfa {tag}\n")
     print("Python runtime and offline showcase with an original geometric demo card.\n")
-    print("Unzip the build kit and read START-HERE.md. Existing character artwork, recordings, and CAD exports are excluded.\n")
+    print("Unzip the build kit and read START-HERE.md. The static atlas includes CAD viewer meshes, wiring, an ADR, and a rendered Mermaid diagram. Character artwork, recordings, and fabrication files are excluded.\n")
     print(f"Commit: `{manifest['git_commit']}`\n")
     print(f"Archive: `{KIT_NAME}`\n")
     print(f"SHA-256: `{manifest['artifacts'][KIT_NAME]['sha256']}`\n")

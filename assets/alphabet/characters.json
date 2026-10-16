@@ -45,265 +45,263 @@
   "characters": [
     {
       "letter": "A",
-      "character": "Alicia (Alice) from the 1990 Moomin animated series",
-      "characterPolish": "Alicja",
-      "initialMatches": true,
+      "character": "Retained illustration 01",
+      "characterPolish": "Ilustracja 01",
+      "initialMatches": false,
       "master": "00-A.png",
       "prepared": "000-00-A.png"
     },
     {
       "letter": "Ą",
-      "character": "Moomintroll",
-      "characterPolish": "Muminek",
+      "character": "Retained illustration 02",
+      "characterPolish": "Ilustracja 02",
       "initialMatches": false,
       "master": "01-Ą.png",
       "prepared": "001-01-Ą.png"
     },
     {
       "letter": "B",
-      "character": "Stinky",
-      "characterPolish": "Bobek",
-      "initialMatches": true,
+      "character": "Retained illustration 03",
+      "characterPolish": "Ilustracja 03",
+      "initialMatches": false,
       "master": "02-B.png",
       "prepared": "002-02-B.png"
     },
     {
       "letter": "C",
-      "character": "The Hobgoblin",
-      "characterPolish": "Czarodziej",
-      "initialMatches": true,
+      "character": "Retained illustration 04",
+      "characterPolish": "Ilustracja 04",
+      "initialMatches": false,
       "master": "03-C.png",
       "prepared": "003-03-C.png"
     },
     {
       "letter": "Ć",
-      "character": "Little My",
-      "characterPolish": "Mała Mi",
+      "character": "Retained illustration 05",
+      "characterPolish": "Ilustracja 05",
       "initialMatches": false,
       "master": "04-Ć.png",
       "prepared": "004-04-Ć.png"
     },
     {
       "letter": "D",
-      "character": "The Island Ghost",
-      "characterPolish": "Duch",
-      "initialMatches": true,
+      "character": "Retained illustration 06",
+      "characterPolish": "Ilustracja 06",
+      "initialMatches": false,
       "master": "05-D.png",
       "prepared": "005-05-D.png"
     },
     {
       "letter": "E",
-      "character": "Emma",
-      "characterPolish": "Emma",
-      "initialMatches": true,
+      "character": "Retained illustration 07",
+      "characterPolish": "Ilustracja 07",
+      "initialMatches": false,
       "master": "06-E.png",
       "prepared": "006-06-E.png"
     },
     {
       "letter": "Ę",
-      "character": "Moominmamma",
-      "characterPolish": "Mama Muminka",
+      "character": "Retained illustration 08",
+      "characterPolish": "Ilustracja 08",
       "initialMatches": false,
       "master": "07-Ę.png",
       "prepared": "007-07-Ę.png"
     },
     {
       "letter": "F",
-      "character": "Fillyjonk",
-      "characterPolish": "Filifionka",
-      "initialMatches": true,
+      "character": "Retained illustration 09",
+      "characterPolish": "Ilustracja 09",
+      "initialMatches": false,
       "master": "08-F.png",
       "prepared": "008-08-F.png"
     },
     {
       "letter": "G",
-      "character": "Gaffsie",
-      "characterPolish": "Gapsa",
-      "initialMatches": true,
+      "character": "Retained illustration 10",
+      "characterPolish": "Ilustracja 10",
+      "initialMatches": false,
       "master": "09-G.png",
       "prepared": "009-09-G.png"
     },
     {
       "letter": "H",
-      "character": "Hattifattener",
-      "characterPolish": "Hatifnat",
-      "initialMatches": true,
+      "character": "Retained illustration 11",
+      "characterPolish": "Ilustracja 11",
+      "initialMatches": false,
       "master": "10-H.png",
       "prepared": "010-10-H.png"
     },
     {
       "letter": "I",
-      "character": "The Police Inspector",
-      "characterPolish": "Inspektor",
-      "initialMatches": true,
+      "character": "Retained illustration 12",
+      "characterPolish": "Ilustracja 12",
+      "initialMatches": false,
       "master": "11-I.png",
       "prepared": "011-11-I.png"
     },
     {
       "letter": "J",
-      "character": "The Joxter",
-      "characterPolish": "Jok",
-      "initialMatches": true,
+      "character": "Retained illustration 13",
+      "characterPolish": "Ilustracja 13",
+      "initialMatches": false,
       "master": "12-J.png",
       "prepared": "012-12-J.png"
     },
     {
       "letter": "K",
-      "character": "The Primadonna's Horse",
-      "characterPolish": "Koń Primadonny",
-      "initialMatches": true,
+      "character": "Retained illustration 14",
+      "characterPolish": "Ilustracja 14",
+      "initialMatches": false,
       "master": "13-K.png",
       "prepared": "013-13-K.png"
     },
     {
       "letter": "L",
-      "character": "The Lighthouse Keeper",
-      "characterPolish": "Latarnik",
-      "initialMatches": true,
+      "character": "Retained illustration 15",
+      "characterPolish": "Ilustracja 15",
+      "initialMatches": false,
       "master": "14-L.png",
       "prepared": "014-14-L.png"
     },
     {
       "letter": "Ł",
-      "character": "Thingumy",
-      "characterPolish": "Topik",
+      "character": "Retained illustration 16",
+      "characterPolish": "Ilustracja 16",
       "initialMatches": false,
       "master": "15-Ł.png",
       "prepared": "015-15-Ł.png"
     },
     {
       "letter": "M",
-      "character": "Snorkmaiden",
-      "characterPolish": "Migotka",
-      "initialMatches": true,
+      "character": "Retained illustration 17",
+      "characterPolish": "Ilustracja 17",
+      "initialMatches": false,
       "master": "16-M.png",
       "prepared": "016-16-M.png"
     },
     {
       "letter": "N",
-      "character": "Ninny",
-      "characterPolish": "Nini",
-      "initialMatches": true,
+      "character": "Retained illustration 18",
+      "characterPolish": "Ilustracja 18",
+      "initialMatches": false,
       "master": "17-N.png",
       "prepared": "017-17-N.png"
     },
     {
       "letter": "Ń",
-      "character": "Bob",
-      "characterPolish": "Topcia",
+      "character": "Retained illustration 19",
+      "characterPolish": "Ilustracja 19",
       "initialMatches": false,
       "master": "18-Ń.png",
       "prepared": "018-18-Ń.png"
     },
     {
       "letter": "O",
-      "character": "Edward the Booble",
-      "characterPolish": "Olbrzym Edward",
-      "initialMatches": true,
+      "character": "Retained illustration 20",
+      "characterPolish": "Ilustracja 20",
+      "initialMatches": false,
       "master": "19-O.png",
       "prepared": "019-19-O.png"
     },
     {
       "letter": "Ó",
-      "character": "Mymble's daughter",
-      "characterPolish": "Mimbla",
+      "character": "Retained illustration 21",
+      "characterPolish": "Ilustracja 21",
       "initialMatches": false,
       "master": "20-Ó.png",
       "prepared": "020-20-Ó.png"
     },
     {
       "letter": "P",
-      "character": "Hemulen",
-      "characterPolish": "Paszczak",
-      "initialMatches": true,
+      "character": "Retained illustration 22",
+      "characterPolish": "Ilustracja 22",
+      "initialMatches": false,
       "master": "21-P.png",
       "prepared": "021-21-P.png"
     },
     {
       "letter": "R",
-      "character": "Sniff",
-      "characterPolish": "Ryjek",
-      "initialMatches": true,
+      "character": "Retained illustration 23",
+      "characterPolish": "Ilustracja 23",
+      "initialMatches": false,
       "master": "22-R.png",
       "prepared": "022-22-R.png"
     },
     {
       "letter": "S",
-      "character": "The Last Dragon from Tales from Moominvalley",
-      "characterPolish": "Smok",
-      "initialMatches": true,
+      "character": "Retained illustration 24",
+      "characterPolish": "Ilustracja 24",
+      "initialMatches": false,
       "master": "23-S.png",
       "prepared": "023-23-S.png"
     },
     {
       "letter": "Ś",
-      "character": "Too-ticky",
-      "characterPolish": "Too-tiki",
+      "character": "Retained illustration 25",
+      "characterPolish": "Ilustracja 25",
       "initialMatches": false,
       "master": "24-Ś.png",
       "prepared": "024-24-Ś.png"
     },
     {
       "letter": "T",
-      "character": "Moominpappa",
-      "characterPolish": "Tata Muminka",
-      "initialMatches": true,
+      "character": "Retained illustration 26",
+      "characterPolish": "Ilustracja 26",
+      "initialMatches": false,
       "master": "25-T.png",
       "prepared": "025-25-T.png"
     },
     {
       "letter": "U",
-      "character": "The Muskrat",
-      "characterPolish": "Piżmowiec",
+      "character": "Retained illustration 27",
+      "characterPolish": "Ilustracja 27",
       "initialMatches": false,
       "master": "26-U.png",
       "prepared": "026-26-U.png"
     },
     {
       "letter": "W",
-      "character": "Snufkin",
-      "characterPolish": "Włóczykij",
-      "initialMatches": true,
+      "character": "Retained illustration 28",
+      "characterPolish": "Ilustracja 28",
+      "initialMatches": false,
       "master": "27-W.png",
       "prepared": "027-27-W.png"
     },
     {
       "letter": "Y",
-      "character": "Sorry-oo the dog",
-      "characterPolish": "Ynk",
-      "initialMatches": true,
+      "character": "Retained illustration 29",
+      "characterPolish": "Ilustracja 29",
+      "initialMatches": false,
       "master": "28-Y.png",
       "prepared": "028-28-Y.png"
     },
     {
       "letter": "Z",
-      "character": "The Groke",
-      "characterPolish": "Buka",
+      "character": "Retained illustration 30",
+      "characterPolish": "Ilustracja 30",
       "initialMatches": false,
       "master": "29-Z.png",
       "prepared": "029-29-Z.png"
     },
     {
       "letter": "Ź",
-      "character": "The Ancestor",
-      "characterPolish": "Przodek",
+      "character": "Retained illustration 31",
+      "characterPolish": "Ilustracja 31",
       "initialMatches": false,
       "master": "30-Ź.png",
       "prepared": "030-30-Ź.png"
     },
     {
       "letter": "Ż",
-      "character": "Snork",
-      "characterPolish": "Migotek",
+      "character": "Retained illustration 32",
+      "characterPolish": "Ilustracja 32",
       "initialMatches": false,
       "master": "31-Ż.png",
       "prepared": "031-31-Ż.png"
     }
   ],
   "sources": [
-    "https://moomin.pl/blogs/news/poznaj-postacie-z-muminkow",
-    "https://www.moomin.co.jp/moomins/characters",
-    "https://dubbingpedia.pl/wiki/Muminki",
     "https://software.sil.org/andika/"
-  ]
+  ],
+  "notice": "Existing artwork is retained unchanged. Asset labels identify files, not character names. See THIRD_PARTY_NOTICES.md."
 }

@@ -1,4 +1,4 @@
-"""Build, check, render and draw the Moomin house radio; run through run-cad.sh."""
+"""Build, check, render and draw the Alfa house radio; run through run-cad.sh."""
 from pathlib import Path
 import subprocess
 import sys

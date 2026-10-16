@@ -33,7 +33,7 @@ def page(title, subtitle):
     ax.set_ylim(297, 0)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.text(10, 8, "MOOMIN  /  WOODEN CASE", fontsize=7, color=GREEN, weight="bold")
+    ax.text(10, 8, "ALFA  /  WOODEN CASE", fontsize=7, color=GREEN, weight="bold")
     ax.text(10, 14, title, fontsize=10, color=NAVY, weight="bold")
     ax.text(10, 19, subtitle, fontsize=6.5, color=NAVY)
     return fig, ax

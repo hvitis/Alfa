@@ -1,4 +1,4 @@
-"""Moomin, the little house radio: complete geometry.
+"""Alfa, the little house radio: complete geometry.
 
 Millimetres, woodkit axes: X right (centred), Y up (floor y = 0), Z toward the
 viewer (front face z = 0, back face z = -depth). The roof is 45 degrees.
@@ -501,7 +501,7 @@ def pin_points(g, case):
 
 def wire_specs(g, case):
     """The working program's 27 nets, routed as gentle orthogonal planning lines."""
-    atlas = json.loads((PROJECT / "hardware-visualisation/src/data/setup.json").read_text())
+    atlas = json.loads((PROJECT / "web/hardware-visualisation/src/data/setup.json").read_text())
     pts = pin_points(g, case)
     wires = []
     for index, entry in enumerate(atlas["wires"]):
@@ -634,7 +634,7 @@ def cad_assembly(mode="assembled", wires=True, all_fasteners=True):
     solids = [panel_solid(s) for s in parts["panels"]]
     solids += [box_solid(b, "e_" + b.module + "__" if b.module not in ("hinge", "wood") else "") for b in parts["boxes"]]
     solids += [rod_solid(r) for r in parts["rods"]]
-    return compound(solids, f"Moomin_house_radio_{mode}")
+    return compound(solids, f"Alfa_house_radio_{mode}")
 
 
 # ------------------------------------------------------------------ facts

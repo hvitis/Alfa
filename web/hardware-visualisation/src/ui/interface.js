@@ -57,18 +57,18 @@ export function createInterface(actions) {
 
   q('keypad-close-up').onclick=()=>actions.focusModule();
   for(const pin of KEYPAD.pins)q('keypad-pin-'+pin.key).onclick=()=>actions.selectKeypadPin(pin.key);
-  const keypadPhoto=q('keypad-photo'),photoPath=(window.MOOMIN_LIVE_RELOAD?'/reference/':'../photos/')+KEYPAD.reference;keypadPhoto.src=photoPath;keypadPhoto.parentElement.href=photoPath;
+  const keypadPhoto=q('keypad-photo'),photoPath=(window.ALFA_LIVE_RELOAD?'/reference/':'../photos/')+KEYPAD.reference;keypadPhoto.src=photoPath;keypadPhoto.parentElement.href=photoPath;
   q('focus-adc').onclick=()=>actions.focusAdc();q('adc-close-up').onclick=()=>actions.adcCloseUp();
   for(const button of document.querySelectorAll('[data-adc-mode]'))button.onclick=()=>actions.setAdcMode(button.dataset.adcMode);
   for(const [index,file]of ADC.references.entries()){
-    const link=document.createElement('a'),photo=document.createElement('img');const path=(window.MOOMIN_LIVE_RELOAD?'/reference/':'../photos/')+file;
+    const link=document.createElement('a'),photo=document.createElement('img');const path=(window.ALFA_LIVE_RELOAD?'/reference/':'../photos/')+file;
     link.href=path;link.target='_blank';link.rel='noopener';photo.src=path;photo.alt=index===0?'but2: printed ADC pin labels and solder joints':'but1: ADC component side and fitted black header';photo.loading='lazy';link.append(photo);q('adc-photos').append(link);
   }
   q('focus-amplifier').onclick=()=>actions.focusAmplifier();q('amp-close-up').onclick=()=>actions.amplifierCloseUp();
   for(const button of document.querySelectorAll('[data-amp-mode]'))button.onclick=()=>actions.setAssemblyMode(button.dataset.ampMode);
   for(const button of document.querySelectorAll('[data-amp-pin]'))button.onclick=()=>actions.selectAmpPin(button.dataset.ampPin);
   for(const [index,file]of AMPLIFIER.references.entries()){
-    const link=document.createElement('a'),photo=document.createElement('img');const path=(window.MOOMIN_LIVE_RELOAD?'/reference/':'../photos/')+file;link.href=path;link.target='_blank';link.rel='noopener';
+    const link=document.createElement('a'),photo=document.createElement('img');const path=(window.ALFA_LIVE_RELOAD?'/reference/':'../photos/')+file;link.href=path;link.target='_blank';link.rel='noopener';
     photo.src=path;photo.alt=['max4: clear LRC-first header labels and speaker terminal leads','max1: angled view with yellow header and green terminal','max2: component side of your MAX98357A','max3: back of your MAX98357A, with unsoldered header legs'][index];photo.loading='lazy';link.append(photo);q('amp-photos').append(link);
   }
   q('focus-join').onclick=()=>actions.focusJoin();q('reset-camera').onclick=()=>actions.resetCamera();q('top-view').onclick=()=>actions.top();
@@ -155,7 +155,7 @@ export function createInterface(actions) {
         ['Stability',`tilts ${Math.min(...Object.values(house.tip_angles_deg)).toFixed(0)}° before tipping`],
         ['CAD checks',house.checks.passed?`all ${house.checks.count} pass`:'FAILING: rebuild and read verification.json']];
       q('radio-facts').replaceChildren(...rows.flatMap(([term,value])=>{const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=term;dd.textContent=value;return [dt,dd];}));
-      const docs=[['plan','Moomin.pdf: plan + 1:1 templates'],['assembly','Assembly booklet'],['templates','Cut templates, print 100 %'],['step','STEP CAD']];
+      const docs=[['plan','Alfa.pdf: plan + 1:1 templates'],['assembly','Assembly booklet'],['templates','Cut templates, print 100 %'],['step','STEP CAD']];
       q('radio-documents').replaceChildren(...docs.map(([key,text])=>{const a=document.createElement('a');a.href=house.documents[key];a.target='_blank';a.rel='noopener';a.textContent=text+' ↗';if(key==='step')a.download='';return a;}));
       q('radio-fasteners').replaceChildren(...listItems(house.fasteners.map(f=>`${f.id} · ${f.title}: ${f.count} × ${f.designation}`)));
       const select=q('radio-wire');select.replaceChildren();const none=document.createElement('option');none.value='';none.textContent='Select a wire…';select.append(none);

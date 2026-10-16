@@ -58,7 +58,7 @@ Future requirements:
 
 ## Existing Pico wiring proposal
 
-The project already contains a [Pico wiring visualization](../hardware-visualisation/src/data/picoSetup.js).
+The project already contains a [Pico wiring visualization](../web/hardware-visualisation/src/data/picoSetup.js).
 These are Pico GPIO numbers, not Raspberry Pi BCM numbers.
 
 | Module signal | Pico GPIO | Physical pin |

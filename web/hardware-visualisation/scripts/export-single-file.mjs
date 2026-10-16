@@ -48,5 +48,5 @@ html = html.replace('</head>', () => `${embeddedScript}</head>`);
 // Embedded shader templates contain vendor indentation; keep generated HTML clean.
 html = html.replace(/[ \t]+$/gm, '').replace(/^[ \t]+/gm, indent => indent.replaceAll('\t', '  '));
 await writeFile(resolve(root, 'viewer.html'), html);
-await writeFile(resolve(root, '../output/wiring-3d.html'), html);
+await writeFile(resolve(root, '../../output/wiring-3d.html'), html);
 console.log('Exported viewer.html with embedded CAD models and updated output/wiring-3d.html.');
