@@ -12,10 +12,7 @@
     "build:site": "python3 web/build.py _site"
   },
   "devDependencies": {
-    "markdown-it": "14.1.0",
-    "mermaid": "11.12.2",
-    "playwright": "1.61.1",
-    "three": "0.186.1",
-    "vite": "8.3.2"
+    "playwright": "1.64.0",
+    "three": "0.186.1"
   }
 }
