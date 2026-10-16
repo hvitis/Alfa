@@ -22,4 +22,4 @@ restore_service() {
 }
 trap restore_service EXIT
 sudo systemctl stop moomin.service
-"$python_bin" -m moomin --config config.alphabet.json gallery --fullscreen
+"$python_bin" -m app --config config.alphabet.json gallery --fullscreen

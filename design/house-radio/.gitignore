@@ -1,0 +1,16 @@
+# Local build logs, step models and scratch renders.
+/tmp/
+__pycache__/
+
+# Generated CAD, drawings, reports and images; rebuild with build_all.py.
+/STEP/
+/GLB/
+/PDF/
+/SVG/
+/DXF/
+/previews/
+/facts.json
+/routing.json
+/wiring.csv
+/hardware.csv
+/verification.json

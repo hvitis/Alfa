@@ -1,0 +1,17 @@
+{
+  "name": "moomin-repository-checks",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test:syntax": "node tests/check-syntax.mjs",
+    "test:smoke": "node tests/smoke-tests.mjs",
+    "test:viewer": "node --test web/hardware-visualisation/tests/*.test.js"
+  },
+  "devDependencies": {
+    "playwright": "1.61.1",
+    "three": "0.186.1"
+  }
+}

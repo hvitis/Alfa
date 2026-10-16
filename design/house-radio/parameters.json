@@ -1,0 +1,33 @@
+{
+  "units": "mm",
+  "name": "Moomin",
+  "title": "Little House Radio",
+  "revision": "1",
+  "plywood": 6,
+  "house": {"width": 150, "eave": 130, "depth": 100, "pitch_deg": 45},
+  "handle": {"dowel_d": 22, "above_peak": 48, "tab_half_width": 25, "dowel_material": "beech dowel 22 mm"},
+  "roof": {"overhang": 20, "end_clearance": 1, "open_deg": 45, "hinge_axis_offset": 1.0,
+           "note": "Two identical boards with square ends; they meet at the ridge and open in either order."},
+  "hinge": {"length": 25, "leaf": 10, "thickness": 0.8, "knuckle_d": 2, "hole_from_axis": 5, "hole_pitch": 15,
+            "z_centres": [-20, -80], "item": "brass butt hinge 25 × 20 mm (leaves 10 mm), holes drilled to 3.4 mm"},
+  "magnet": {"d": 10, "h": 3, "recess": 0.5, "grade": "N42", "wedge_leg": 16, "wedge_layers": 3,
+             "centre_below_ridge": 9.5, "z_centres": [-17, -83]},
+  "knob": {"d": 22, "h": 14, "from_ridge": 50},
+  "front": {"lcd_centre": [-34, 88], "keypad_centre": [32, 50], "speaker_centre": [0, 152]},
+  "pi": {"z_front": -20, "y_bottom": 25, "standoff": 8,
+         "note": "Portrait on the left wall, SD-card end up, GPIO edge toward the front."},
+  "battery": {"gap_to_back": 2, "note": "Stands on the floor against the back gable, USB-C port on top, held by hook-and-loop."},
+  "switch_cable": {
+    "product": "QUARKZMAN USB-C male to female extension with on/off switch, 0.28 m, 22 AWG 3 A, power only (Amazon.pl B0H1JMNHQT, pack of 2)",
+    "length": 280, "switch_envelope": [18, 40, 12], "switch_origin": [36, 98], "button_d": 12,
+    "provisional": true,
+    "note": "The listing gives no switch-body size or type: measure the body and button, then adjust the back-gable hole and spacers."
+  },
+  "pi_lead": "USB-C male to micro-USB male, up-angled micro plug, about 20 cm, 3 A",
+  "boards": {"amp": [-43, -30], "adc": [-19, -30], "divider": [-43, -50]},
+  "blocks": {"size": 12, "y": [6, 96]},
+  "electronics_mass_g": 340,
+  "plywood_density_g_cm3": 0.68,
+  "dowel_density_g_cm3": 0.72,
+  "a4_part_limit": [200, 287]
+}

@@ -28,7 +28,9 @@ The installer uses `.venv/bin/python` when available, or the installed `python3`
 It requires the existing Pi dependencies, SPI/I2C/audio setup, and button calibration.
 It does not download dependencies or change the wiring.
 It compiles the deployed cards into RGB565 frames and does a simulated startup check.
-It validates the generated unit with `systemd-analyze verify` before installation, then enables `moomin.service`.
+It also prepares a Moomin picture with the text “Starting…” for the early boot splash.
+It validates both service units with `systemd-analyze verify` before installation.
+It enables `moomin-splash.service` and `moomin.service`.
 It also starts the service immediately.
 After this update, reinstall the service to replace its old shutdown hook.
 
@@ -47,6 +49,52 @@ bash scripts/install-service.sh --dry-run --user pi
 ```
 
 ## Startup and recovery
+
+### Early boot splash
+
+The splash starts during early Linux initialization, before the normal app and without a wait for sound or cloud-init.
+It waits for access to SPI and GPIO, then sends one prepared frame to the LCD.
+The splash keeps the backlight on while the main app loads.
+The main app requests the display immediately before it claims the GPIOs.
+The splash releases SPI and GPIO before it acknowledges the request.
+The LCD can briefly go dark while the main app resets the display.
+
+The splash uses `DefaultDependencies=no` to avoid the normal wait for `sysinit.target` and `basic.target`.
+It requires only its filesystem mounts and display access.
+It has no dependency on audio, button calibration, a desktop, or the network.
+The splash stops after the display handoff and does not restart during app recovery.
+An inactive splash service after startup is normal.
+A splash failure does not prevent the main app from starting.
+
+The firmware and kernel still run before the splash can appear.
+The first image time requires a cold-boot measurement on the Pi.
+The splash log records when the image becomes visible, in seconds since kernel startup.
+
+After copying the updated files to the Pi, install both services:
+
+```bash
+cd ~/Code/moomin
+make restart
+sudo reboot
+```
+
+After reconnecting, read both service logs:
+
+```bash
+journalctl -b -u moomin-splash.service -u moomin.service -o short-monotonic --no-pager
+```
+
+To prepare a PNG preview without hardware, run:
+
+```bash
+python3 -m moomin.splash --prepare
+```
+
+The preview is `.state/boot-splash.png`.
+The installer prepares the matching RGB565 frame in `.state/boot-splash.bin`.
+Reinstall the services after a display rotation change to rebuild the frame.
+
+### Main app
 
 The service starts through `multi-user.target`.
 It has no dependency on network availability or a desktop session.

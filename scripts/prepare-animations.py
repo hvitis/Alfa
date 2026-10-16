@@ -8,8 +8,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from PIL import Image
-from moomin.hardware import rgb565
-from moomin.media import fit_image
+from app.hardware import rgb565
+from app.media import fit_image
 
 
 def prepare(source, destination):

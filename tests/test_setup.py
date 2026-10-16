@@ -7,13 +7,13 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from moomin.audio import audio_device
-from moomin.buttons import Debouncer, calibration_from_samples, classify, load_calibration
-from moomin.config import ROOT, Settings
-from moomin.hardware import ADS1x15, ST7789, adc_voltage, rgb565
-from moomin.media import atomic_json, fit_image, prepare_images
-from moomin.ui import Gallery
-from moomin.app import Keyboard
+from app.audio import audio_device
+from app.buttons import Debouncer, calibration_from_samples, classify, load_calibration
+from app.config import ROOT, Settings
+from app.hardware import ADS1x15, ST7789, adc_voltage, rgb565
+from app.media import atomic_json, fit_image, prepare_images
+from app.ui import Gallery
+from app.app import Keyboard
 
 
 class MediaTests(unittest.TestCase):
@@ -101,7 +101,7 @@ class ButtonTests(unittest.TestCase):
         self.assertEqual(button.update("right", 2.0), ("press", "right"))
 
     def test_adc_change_requires_new_calibration(self):
-        from moomin.buttons import adc_identity
+        from app.buttons import adc_identity
         with tempfile.TemporaryDirectory() as directory:
             settings = Settings(Path(directory), copy.deepcopy(Settings.load().data))
             atomic_json(settings.state / "buttons.json", {"version": 1, "adc": adc_identity(settings), "states": calibration_from_samples(self.samples())})
@@ -115,7 +115,7 @@ class HardwareTests(unittest.TestCase):
     def test_keyboard_keeps_split_arrow_sequence_until_complete(self):
         keyboard = Keyboard()
         keyboard.saved, keyboard.buffer = True, ""
-        with patch("moomin.app.select.select", return_value=([1], [], [])), patch("moomin.app.os.read", side_effect=[b"\x1b", b"[", b"D", b"q"]):
+        with patch("app.app.select.select", return_value=([1], [], [])), patch("app.app.os.read", side_effect=[b"\x1b", b"[", b"D", b"q"]):
             self.assertEqual(keyboard.read(), "")
             self.assertEqual(keyboard.read(), "")
             self.assertEqual(keyboard.read(), "a")
@@ -175,7 +175,7 @@ class HardwareTests(unittest.TestCase):
         display.cfg, display.size = {"rotation": 90}, (320, 240)
         display.dc, display.spi = Pin(), SPI()
         display.command = lambda *args: None
-        with patch("moomin.hardware.rgb565", wraps=rgb565) as encoder:
+        with patch("app.hardware.rgb565", wraps=rgb565) as encoder:
             display.show(Image.new("RGB", display.size, "blue"))
             self.assertEqual(encoder.call_args.args[0].size, (240, 320))
 

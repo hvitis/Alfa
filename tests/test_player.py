@@ -10,11 +10,11 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from moomin.app import main, run_gallery
-from moomin.audio import StreamingAudioPlayer, scale_pcm16
-from moomin.config import Settings
-from moomin.media import prepare_audio
-from moomin.player import PlayerSession
+from app.app import main, run_gallery
+from app.audio import StreamingAudioPlayer, scale_pcm16
+from app.config import Settings
+from app.media import prepare_audio
+from app.player import PlayerSession
 
 
 class PlayerTests(unittest.TestCase):
@@ -63,17 +63,18 @@ class PlayerTests(unittest.TestCase):
         self.assertEqual(audio.volume, 0)
         for _ in range(30):
             session.action("up")
-        self.assertEqual(audio.volume, 1)
+        self.assertEqual(audio.volume, self.settings.data["audio"]["max_volume"])
+        self.assertEqual(session.last_action, "Volume 50%")
         audio.close()
 
     def test_simulation_uses_recording_duration_and_shows_finished_state(self):
         audio = StreamingAudioPlayer(self.settings, simulate=True)
-        with patch("moomin.audio.time.monotonic", return_value=100):
+        with patch("app.audio.time.monotonic", return_value=100):
             audio.play(self.recording(48000))
-        with patch("moomin.audio.time.monotonic", return_value=100.5):
+        with patch("app.audio.time.monotonic", return_value=100.5):
             self.assertTrue(audio.playing)
             self.assertEqual(audio.position, .5)
-        with patch("moomin.audio.time.monotonic", return_value=101.1):
+        with patch("app.audio.time.monotonic", return_value=101.1):
             self.assertFalse(audio.playing)
             self.assertEqual(audio.position, 1)
         audio.close()
@@ -86,7 +87,7 @@ class PlayerTests(unittest.TestCase):
             def write(self, payload):
                 chunks.append(bytes(payload))
                 if len(chunks) == 1:
-                    audio.set_volume(.7)
+                    audio.set_volume(.45)
                 return len(payload)
             def close(self): self.closed = True
         class Process:
@@ -95,13 +96,13 @@ class PlayerTests(unittest.TestCase):
             def wait(self, **kwargs): self.done = True; return 0
             def poll(self): return 0 if self.done else None
         process = Process()
-        with patch("moomin.audio.audio_device", return_value="test"), patch("moomin.audio.subprocess.Popen", return_value=process) as spawn:
+        with patch("app.audio.audio_device", return_value="test"), patch("app.audio.subprocess.Popen", return_value=process) as spawn:
             audio.play(self.recording())
             audio._thread.join(2)
             self.assertFalse(audio.playing)
             self.assertEqual(spawn.call_count, 1)
             self.assertEqual(struct.unpack("<hh", chunks[0][:4]), (200, -200))
-            self.assertEqual(struct.unpack("<hh", chunks[1][:4]), (700, -700))
+            self.assertEqual(struct.unpack("<hh", chunks[1][:4]), (450, -450))
             self.assertEqual(sum(map(len, chunks)), 960 * 4)
             self.assertTrue(process.stdin.closed)
             self.assertIn("--buffer-time=100000", spawn.call_args.args[0])
@@ -121,7 +122,7 @@ class PlayerTests(unittest.TestCase):
             def terminate(self): self.done = True; stopped.set()
             def wait(self, **kwargs): return 0
         process = Process()
-        with patch("moomin.audio.audio_device", return_value="test"), patch("moomin.audio.subprocess.Popen", return_value=process):
+        with patch("app.audio.audio_device", return_value="test"), patch("app.audio.subprocess.Popen", return_value=process):
             audio.play(self.recording())
             self.assertTrue(writing.wait(2))
             worker = audio._thread
@@ -137,7 +138,7 @@ class PlayerTests(unittest.TestCase):
             stdin = io.BytesIO()
             def poll(self): return 1
             def wait(self, **kwargs): return 1
-        with patch("moomin.audio.audio_device", return_value="test"), patch("moomin.audio.subprocess.Popen", return_value=Process()):
+        with patch("app.audio.audio_device", return_value="test"), patch("app.audio.subprocess.Popen", return_value=Process()):
             audio.play(self.recording())
             audio._thread.join(2)
             with self.assertRaisesRegex(RuntimeError, "aplay exit 1"):
@@ -193,7 +194,7 @@ class PlayerTests(unittest.TestCase):
             def read(self): return next(self.batches)
         class Session(PlayerSession):
             def __init__(self, *args): super().__init__(*args); sessions.append(self)
-        with patch("moomin.app.prepare_images", return_value=paths), patch("moomin.app.prepare_audio", return_value=[sound]), patch("moomin.app.PreviewDisplay", return_value=display), patch("moomin.app.Keyboard", Keyboard), patch("moomin.app.PlayerSession", Session), patch("moomin.app.time.sleep"):
+        with patch("app.app.prepare_images", return_value=paths), patch("app.app.prepare_audio", return_value=[sound]), patch("app.app.PreviewDisplay", return_value=display), patch("app.app.Keyboard", Keyboard), patch("app.app.PlayerSession", Session), patch("app.app.time.sleep"):
             run_gallery(self.settings, simulate=True)
         self.assertEqual(sessions[0].gallery.index, 1)
         self.assertEqual(sessions[0].audio.volume, .2)
@@ -215,14 +216,14 @@ class PlayerTests(unittest.TestCase):
             audio.close()
 
     def test_fullscreen_cli_option_reaches_the_gallery(self):
-        with patch("moomin.app.run_gallery") as run:
+        with patch("app.app.run_gallery") as run:
             self.assertEqual(main(["--simulate", "gallery", "--fullscreen", "--once", "--no-audio"]), 0)
             self.assertTrue(run.call_args.args[4])
             self.assertTrue(run.call_args.args[5])
 
     def test_player_and_gallery_cli_names_use_the_same_player(self):
         for command in ("player", "gallery"):
-            with patch("moomin.app.run_gallery") as run:
+            with patch("app.app.run_gallery") as run:
                 self.assertEqual(main(["--simulate", command, "--once"]), 0)
                 self.assertTrue(run.call_args.args[1])
                 self.assertTrue(run.call_args.args[3])

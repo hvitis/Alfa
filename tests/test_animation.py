@@ -7,12 +7,12 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from moomin.animation import CharacterAnimation
-from moomin.app import run_gallery
-from moomin.audio import StreamingAudioPlayer
-from moomin.config import ROOT, Settings
-from moomin.hardware import ST7789, rgb565
-from moomin.player import PlayerSession
+from app.animation import CharacterAnimation
+from app.app import run_gallery
+from app.audio import StreamingAudioPlayer
+from app.config import ROOT, Settings
+from app.hardware import ST7789, rgb565
+from app.player import PlayerSession
 
 
 class AnimationTests(unittest.TestCase):
@@ -65,7 +65,7 @@ class AnimationTests(unittest.TestCase):
         self.assertEqual(self.session.gallery.index, 0)
         self.assertIsNone(self.animation.active)
 
-    def test_new_press_restarts_or_switches_the_loop_immediately(self):
+    def test_other_button_switches_and_same_button_lets_the_loop_finish(self):
         self.session.action("down")
         self.now += .401
         self.assertEqual(self.animation.index(), 2)
@@ -75,8 +75,12 @@ class AnimationTests(unittest.TestCase):
         serial = self.animation.serial
         self.now += .601
         self.session.action("up")
-        self.assertEqual(self.animation.index(), 0)
-        self.assertEqual(self.animation.serial, serial + 1)
+        self.assertEqual(self.animation.serial, serial, "Mashing UP must not restart the running loop")
+        self.assertEqual(self.animation.index(), 3)
+        self.now += 5
+        self.assertIsNone(self.animation.index())
+        self.session.action("up")
+        self.assertEqual((self.animation.serial, self.animation.index()), (serial + 1, 0))
 
     def test_bundled_png_raw_and_wire_frames_match_exactly(self):
         for name, frames in self.animation.clips.items():
@@ -135,7 +139,7 @@ class AnimationTests(unittest.TestCase):
         display = ST7789.__new__(ST7789)
         from unittest.mock import Mock
         display.spi, display.dc, display.command = Mock(), Mock(), Mock()
-        with patch("moomin.hardware.rgb565", side_effect=AssertionError("Unexpected runtime encoding")):
+        with patch("app.hardware.rgb565", side_effect=AssertionError("Unexpected runtime encoding")):
             display.show_rgb565(payload)
         display.spi.writebytes2.assert_called_once_with(payload)
         self.assertEqual(display.command.call_args_list[-1].args, (0x2C,))
@@ -190,7 +194,7 @@ class AnimationTests(unittest.TestCase):
         def make_animation(*args):
             return CharacterAnimation(*args, clock=lambda: elapsed[0])
         def sleep(seconds): elapsed[0] += seconds
-        with patch("moomin.app.prepare_images", return_value=self.photos), patch("moomin.app.display_resource", side_effect=lambda stack, *args: (stack.callback(display.close), display)[1]), patch("moomin.app.CharacterAnimation", side_effect=make_animation), patch("moomin.app.Keyboard", Keyboard), patch("moomin.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("moomin.app.time.sleep", side_effect=sleep):
+        with patch("app.app.prepare_images", return_value=self.photos), patch("app.app.display_resource", side_effect=lambda stack, *args: (stack.callback(display.close), display)[1]), patch("app.app.CharacterAnimation", side_effect=make_animation), patch("app.app.Keyboard", Keyboard), patch("app.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("app.app.time.sleep", side_effect=sleep):
             run_gallery(settings, simulate=True, no_audio=True)
         self.assertTrue(display.closed)
         self.assertGreaterEqual(len(sent), 4)

@@ -8,10 +8,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from PIL import Image, ImageDraw
 
-from moomin.config import ROOT
-from moomin.letter_lesson import LetterLesson
-from moomin.letter_paths import LetterCatalog
-from moomin.ui import font
+from app.config import ROOT
+from app.letter_lesson import LetterLesson
+from app.letter_paths import LetterCatalog
+from app.ui import font
 
 
 def preview(letter, destination, contact_sheet):

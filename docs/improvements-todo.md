@@ -19,8 +19,12 @@ Content pipeline (run on your laptop, not the Pi)
 Toddler-proofing
 
 14. Volume cap. Right now UP goes all the way to 100%. Cap it (say 50%) and take volume off his buttons. Check the loudness at ear distance with a phone sound-meter app.
+    - [x] Done 2026-10-14: `audio.max_volume` (default 0.5) is enforced inside the audio player, so no path can go louder; a start volume above the cap is a configuration error. In the alphabet/service mode UP and DOWN already play animations, so volume is off his buttons there.
+    - [ ] Measure the loudness at ear distance on the real speaker and adjust the cap.
 15. No accidental exit. He'll find "hold CENTER 2 s to quit" by accident. The button board can't reliably detect two buttons at once, so a two-button combo won't work. Use a 10-second hold, a hidden switch inside the case, or exit only over SSH.
+    - [x] Done 2026-10-14: manual runs (`make run`) now need a 10-second CENTER hold (`controls.exit_hold_seconds`, 0 = never). The service (`--standalone`) still never exits from buttons.
 16. Button mashing. Ignore presses for the first few hundred ms of a clip, and don't restart the clip on every press. If he sits on a button, count it as one press.
+    - [x] Done 2026-10-14: physical presses within 0.4 s of the last accepted one are ignored (`controls.press_guard_ms`; the SSH keyboard is not limited). CENTER no longer restarts a letter that is still being drawn, and TOP/BOTTOM let their running animation finish. A held button already counted once (the debouncer waits for a release); a test now locks that in.
 17. Bedtime mode. Add a 10–15 minute sleep timer that ends with a character saying goodnight. For a dimmable screen, switch the backlight (GPIO24) from OutputDevice to PWMOutputDevice.
 18. Start at boot. Run the player as a service that starts on power-on and restarts after a crash, with a splash screen within seconds.
 19. [ ] Configure the Raspberry Pi 3 SD card for read-only operation (chosen power-switch approach). Complete dependency installation, media preparation, service setup, and button calibration before enabling the RAM-backed overlay filesystem. Protect the boot partition from writes and keep temporary files and logs in RAM; do not add a writable activity-log partition for normal use. Verify offline startup, buttons, audio, and repeated power-off/power-on cycles on the actual Pi. Document how to enter writable maintenance mode for program updates and persistent calibration changes. This greatly reduces corruption risk when using a physical power switch. See [the standalone guide](raspberry-pi-standalone.md#power-switch-operation).
@@ -35,3 +39,25 @@ Toddler-proofing
 3. Big arcade buttons (30 mm, lit). Wire them in parallel with the button board's tiny switches. The board's voltages stay the same, so you only need to run calibrate-buttons again. If you wire the LEDs to GPIO pins, the game can light up the button he should press.
 4. Battery with safe shutdown. Use a battery board that fits your Pi model, such as a PiSugar, with a protected cell, a power button and safe shutdown. Make sure it can supply the amp's peak current at high volume. Check its I²C address doesn't clash with 0x48.
 5. Microphone for "say it back". Record his attempt and play it back, maybe pitch-shifted so it "sounds like Moomin". Use a USB mini mic, because the amp already uses the Pi's I²S audio port. Keep the recordings on the device.
+
+Findings from the house-radio design review (2026-10-14)
+
+Fix first
+21. [ ] Correct the wrong shutdown advice. The app no longer shuts down when idle, but these still say it does or tell you to wait for sleep: the power page and roof-page step 1 in `design/house-radio/src/plans.py` (Moomin.pdf), the charging page in `design/house-radio/src/booklet.py` (Moomin-assembly.pdf), the charging paragraph in `design/house-radio/README.md`, and the "five-minute inactivity shutdown" paragraph in `design/wooden-case/README.md`. Until 22 or 23 is done, cutting power with the switch can corrupt the SD card.
+22. [ ] Make the SD card read-only (item 19). With a physical switch and no shutdown, this is the most important change.
+23. [ ] Or replace the power bank with a battery board that shuts down safely (hardware add-on 4, e.g. PiSugar-type). It gives a power button, safe shutdown and a charging socket, and would make the QUARKZMAN cable and opening the roof to charge unnecessary. The house's back gable would need a new layout.
+
+Before cutting wood
+24. [ ] Measure the provisional parts and put the numbers into `design/house-radio/parameters.json`, then rebuild (`bash design/house-radio/run-cad.sh python build_all.py`): QUARKZMAN switch body and button (now 18 × 40 × 12 mm, Ø12 hole, 12 mm spacers), USB-C plug overmoulds, the Baseus USB-C socket position (assumed centred on top), the LCD fastener size, and the keypad and small-board mounting holes (transfer marks on the templates).
+25. [ ] Bench-test the power chain: Baseus → QUARKZMAN → USB-C to up-angled micro-USB lead → Pi. The Pi must boot and `vcgencmd get_throttled` must print 0x0 with the LCD and loud audio running. The QUARKZMAN cable has only two wires; some banks will not switch on through it. Keep the second cable as a spare.
+26. [ ] Run a long test with the box closed and check the Pi and bank temperatures; the vents are unmeasured proposals.
+
+For a small child
+27. [x] Items 14, 15 and 16 (volume cap, 10-second exit hold, mashing guard). Done 2026-10-14.
+28. [ ] Big 30 mm arcade buttons (hardware add-on 3) as a variant of the house's "door": the 12 mm caps are small for toddler fingers. With woodkit this is a front-gable change plus a rebuild.
+29. [ ] A rotary "tuning" knob (hardware add-on 1), e.g. through a side wall of the house.
+
+Project upkeep
+30. [x] The standalone hardware viewer (`hardware-visualisation/viewer.html`, `output/wiring-3d.html`) embeds GLB assets and radio images via `scripts/export-single-file.mjs` so the Wooden Case and Wooden Radio tabs load completely offline and in webservers. Done 2026-10-16.
+31. [ ] Commit the radio work in logical commits and add CI: `pnpm test`, the server tests and `make test`. The CAD builds are byte-identical, so CI can also check that the synced viewer data matches a fresh build.
+32. [ ] Move the wooden case onto `design/woodkit` and `hardware-visualisation/src/scene/workshopScene.js`. Duplicated scene code is how the Wooden Case tab's click crash went unnoticed.

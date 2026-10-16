@@ -4,8 +4,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from moomin.audio import AudioPlayer
-from moomin.config import Settings
+from app.audio import AudioPlayer
+from app.config import Settings
 
 
 class AudioPlayerTests(unittest.TestCase):
@@ -17,7 +17,7 @@ class AudioPlayerTests(unittest.TestCase):
             class Process:
                 codes = iter([None, 0])
                 def poll(self): return next(self.codes)
-            with patch("moomin.audio.run_tool") as convert, patch("moomin.audio.subprocess.Popen", return_value=Process()) as spawn:
+            with patch("app.audio.run_tool") as convert, patch("app.audio.subprocess.Popen", return_value=Process()) as spawn:
                 player.play(Path("file with spaces.wav"))
                 self.assertTrue(player.playing)
                 self.assertFalse(player.playing)
@@ -35,7 +35,7 @@ class AudioPlayerTests(unittest.TestCase):
             player = AudioPlayer(settings, device="plughw:CARD=max98357a,DEV=0", report=lambda message: None)
             class Process:
                 def poll(self): return 7
-            with patch("moomin.audio.run_tool"), patch("moomin.audio.subprocess.Popen", return_value=Process()):
+            with patch("app.audio.run_tool"), patch("app.audio.subprocess.Popen", return_value=Process()):
                 player.play(Path("sound.wav"))
                 player.log.write("Device or resource busy")
                 with self.assertRaisesRegex(RuntimeError, "aplay exit 7.*resource busy"):

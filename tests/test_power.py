@@ -11,9 +11,9 @@ from unittest.mock import Mock, patch
 
 from PIL import Image
 
-from moomin.app import main
-from moomin.config import Settings
-from moomin.player import PlayerSession
+from app.app import main
+from app.config import Settings
+from app.player import PlayerSession
 
 
 class PowerTests(unittest.TestCase):
@@ -59,19 +59,19 @@ class PowerTests(unittest.TestCase):
             arguments.insert(0, "--simulate")
         if standalone:
             arguments.append("--standalone")
-        with patch("moomin.app.Settings.load", return_value=self.settings), \
-             patch("moomin.app.prepare_images", return_value=self.photos), \
-             patch("moomin.app.StreamingAudioPlayer", return_value=audio), \
-             patch("moomin.app.ST7789", return_value=display), \
-             patch("moomin.app.PreviewDisplay", return_value=display), \
-             patch("moomin.app.ADS1x15", return_value=adc), \
-             patch("moomin.app.load_calibration", return_value={}), \
-             patch("moomin.app.classify", return_value="idle"), \
-             patch("moomin.app.Keyboard", Keyboard), \
-             patch("moomin.app.PlayerSession", Session), \
-             patch("moomin.app.time.monotonic", side_effect=lambda: clock[0]), \
-             patch("moomin.app.time.sleep"), \
-             patch("moomin.app.subprocess.run") as command, redirect_stdout(io.StringIO()):
+        with patch("app.app.Settings.load", return_value=self.settings), \
+             patch("app.app.prepare_images", return_value=self.photos), \
+             patch("app.app.StreamingAudioPlayer", return_value=audio), \
+             patch("app.app.ST7789", return_value=display), \
+             patch("app.app.PreviewDisplay", return_value=display), \
+             patch("app.app.ADS1x15", return_value=adc), \
+             patch("app.app.load_calibration", return_value={}), \
+             patch("app.app.classify", return_value="idle"), \
+             patch("app.app.Keyboard", Keyboard), \
+             patch("app.app.PlayerSession", Session), \
+             patch("app.app.time.monotonic", side_effect=lambda: clock[0]), \
+             patch("app.app.time.sleep"), \
+             patch("app.app.subprocess.run") as command, redirect_stdout(io.StringIO()):
             status = main(arguments)
         command.assert_not_called()
         return status, consumed, closed, sessions[0]

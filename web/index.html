@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="An offline Raspberry Pi radio with five buttons, a small screen, and Polish letter lessons.">
+  <meta name="color-scheme" content="light dark">
+  <title>Moomin Radio · A small radio, made to explore</title>
+  <link rel="icon" href="./device.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="topbar"><a class="wordmark" href="./">M / RADIO LAB</a><nav aria-label="Main navigation"><a href="#explore">Explore</a><a href="#hardware">Hardware</a><a href="./hardware-visualisation/viewer.html">3D Viewer ↗</a><a href="https://github.com/hvitis/moomin">Source ↗</a><button id="theme" aria-label="Switch color theme">◐</button></nav></header>
+  <main>
+    <section class="hero">
+      <div><p class="eyebrow">A RASPBERRY PI PROJECT / BUILT FOR CURIOUS HANDS</p><h1>A small radio.<br>A world to explore.</h1><p class="intro">Five buttons, a little screen, and something new to learn. An offline player and Polish alphabet companion you can build, understand, and adapt.</p><div class="actions"><a class="primary" href="#explore">Try the controls ↓</a><a href="https://github.com/hvitis/moomin/releases/latest">Get the build kit ↗</a></div><p class="small">Python · Raspberry Pi 3 · MIT code</p></div>
+      <figure class="hero-device"><img src="./device.svg" alt="Geometric illustration of a wooden radio with a small screen and five round buttons"><figcaption>01 / THE IDEA — A LITTLE BOX WITH ROOM TO LEARN</figcaption></figure>
+    </section>
+    <section id="explore" class="explore">
+      <div><p class="eyebrow">01 / PRESS A BUTTON</p><h2>Meet the alphabet.</h2><p>Move between 32 Polish letters. Turn the volume up or down. Press the center to change the playback indicator.</p><p class="small">This browser demo shows control behavior. The Python app drives the physical screen, audio, and stroke animations.</p><dl id="specs" class="specs"></dl></div>
+      <div class="demo"><div class="lcd" aria-live="polite"><span class="lcd-label">POLSKI ALFABET</span><span id="letter">A</span><span id="playback">Stopped</span><label for="volume">Volume <output id="volume-label">20%</output></label><progress id="volume" max="50" value="20">20%</progress></div><div class="keypad" aria-label="Radio controls"><button data-action="up" aria-label="Increase volume">↑</button><button data-action="previous" aria-label="Previous letter">←</button><button data-action="toggle" aria-label="Play or stop" aria-pressed="false">●</button><button data-action="next" aria-label="Next letter">→</button><button data-action="down" aria-label="Decrease volume">↓</button></div><p class="small">← → letters / ↑ ↓ volume / space play</p></div>
+    </section>
+    <section id="hardware"><p class="eyebrow">02 / INSIDE THE BOX</p><div class="section-heading"><h2>Small parts.<br>Understandable connections.</h2><p>SPI for the display, I²S for the speaker, and I²C for the button reader. The wiring guide connects the whole system.</p></div><div class="table-wrap"><table><caption>Core electronics</caption><thead><tr><th scope="col">Part</th><th scope="col">Qty</th><th scope="col">Connection</th></tr></thead><tbody id="hardware-list"></tbody></table></div></section>
+    <section class="build"><p class="eyebrow">03 / MAKE IT YOURS</p><h2>Start on your computer.<br>Bring it to the Pi.</h2><p>The hardware-free simulator saves a screen preview. The build kit includes a neutral demo card, source code, and wiring instructions.</p><pre><code>python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m app --simulate player --once --no-audio</code></pre><div class="actions"><a class="primary" href="https://github.com/hvitis/moomin#quick-start">Read the build guide ↗</a><a href="https://github.com/hvitis/moomin/blob/main/docs/wiring.md">Wiring reference ↗</a></div></section>
+    <p id="load-status" role="status">Loading project specifications…</p>
+  </main><footer><span>M / RADIO LAB · An independent hardware project</span><a href="https://github.com/hvitis/moomin/blob/main/THIRD_PARTY_NOTICES.md">Code &amp; asset licenses ↗</a></footer>
+</body>
+</html>

@@ -1,0 +1,1479 @@
+{
+ "name": "Moomin",
+ "title": "Little House Radio",
+ "revision": "1",
+ "outer_mm": [
+  178.3,
+  278.0,
+  100
+ ],
+ "handle": {
+  "grip_length": 88,
+  "finger_gap": 41.2,
+  "grip_diameter": 22
+ },
+ "wood_colors": [
+  "#d8b384",
+  "#b38f62",
+  "#b4553e"
+ ],
+ "modules": {
+  "lcd": {
+   "min": [
+    -51.5,
+    59,
+    -19.6
+   ],
+   "max": [
+    -16.5,
+    117,
+    -6
+   ]
+  },
+  "keypad": {
+   "min": [
+    17,
+    17.5,
+    -12.1
+   ],
+   "max": [
+    67,
+    82.5,
+    -1
+   ]
+  },
+  "speaker": {
+   "min": [
+    -20,
+    132,
+    -8.2
+   ],
+   "max": [
+    20,
+    172,
+    -7
+   ]
+  },
+  "pi": {
+   "min": [
+    -69.0,
+    23,
+    -80
+   ],
+   "max": [
+    -36.9,
+    110,
+    -20
+   ]
+  },
+  "battery": {
+   "min": [
+    -34.5,
+    6,
+    -94
+   ],
+   "max": [
+    34.5,
+    112,
+    -78
+   ]
+  },
+  "power": {
+   "min": [
+    -6,
+    112,
+    -88.25
+   ],
+   "max": [
+    6,
+    134,
+    -81.75
+   ]
+  },
+  "switch": {
+   "min": [
+    28,
+    98,
+    -98
+   ],
+   "max": [
+    62,
+    138,
+    -82
+   ]
+  },
+  "amp": {
+   "min": [
+    -43,
+    6,
+    -45
+   ],
+   "max": [
+    -23,
+    14,
+    -30
+   ]
+  },
+  "adc": {
+   "min": [
+    -19,
+    6,
+    -59
+   ],
+   "max": [
+    -10,
+    14,
+    -30
+   ]
+  },
+  "divider": {
+   "min": [
+    -43,
+    6,
+    -70
+   ],
+   "max": [
+    -27,
+    14,
+    -50
+   ]
+  },
+  "handle": {
+   "min": [
+    -11.0,
+    242.0,
+    -100
+   ],
+   "max": [
+    11.0,
+    264.0,
+    0
+   ]
+  }
+ },
+ "modes": [
+  "assembled",
+  "roof_open",
+  "inside",
+  "exploded"
+ ],
+ "wires": [
+  {
+   "id": "L1",
+   "group": "LCD",
+   "from": "P1",
+   "to": "LVCC",
+   "title": "VCC \u2192 Pi 1 \u00b7 purple",
+   "color": "#8050be",
+   "route": [
+    [
+     -36.9,
+     102.5,
+     -24.77
+    ],
+    [
+     -33.9,
+     102.5,
+     -24.77
+    ],
+    [
+     -33.9,
+     115.6,
+     -24.77
+    ],
+    [
+     -33.9,
+     115.6,
+     -19.6
+    ],
+    [
+     -25.11,
+     115.6,
+     -19.6
+    ],
+    [
+     -25.11,
+     114.6,
+     -19.6
+    ]
+   ],
+   "route_length_mm": 31.1,
+   "suggested_length_mm": 150
+  },
+  {
+   "id": "L2",
+   "group": "LCD",
+   "from": "P6",
+   "to": "LGND",
+   "title": "GND \u2192 Pi 6 \u00b7 white",
+   "color": "#f4f4f0",
+   "route": [
+    [
+     -36.9,
+     97.42,
+     -22.23
+    ],
+    [
+     -33.35,
+     97.42,
+     -22.23
+    ],
+    [
+     -33.35,
+     116.0,
+     -22.23
+    ],
+    [
+     -33.35,
+     116.0,
+     -19.6
+    ],
+    [
+     -27.65,
+     116.0,
+     -19.6
+    ],
+    [
+     -27.65,
+     114.6,
+     -19.6
+    ]
+   ],
+   "route_length_mm": 31.9,
+   "suggested_length_mm": 150
+  },
+  {
+   "id": "L3",
+   "group": "LCD",
+   "from": "P19",
+   "to": "LDIN",
+   "title": "DIN \u2192 Pi 19 \u00b7 green",
+   "color": "#157c6e",
+   "route": [
+    [
+     -36.9,
+     79.64,
+     -24.77
+    ],
+    [
+     -32.8,
+     79.64,
+     -24.77
+    ],
+    [
+     -32.8,
+     116.39999999999999,
+     -24.77
+    ],
+    [
+     -32.8,
+     116.39999999999999,
+     -19.6
+    ],
+    [
+     -30.189999999999998,
+     116.39999999999999,
+     -19.6
+    ],
+    [
+     -30.189999999999998,
+     114.6,
+     -19.6
+    ]
+   ],
+   "route_length_mm": 50.4,
+   "suggested_length_mm": 200
+  },
+  {
+   "id": "L4",
+   "group": "LCD",
+   "from": "P23",
+   "to": "LCLK",
+   "title": "CLK \u2192 Pi 23 \u00b7 orange",
+   "color": "#ef7b19",
+   "route": [
+    [
+     -36.9,
+     74.56,
+     -24.77
+    ],
+    [
+     -32.25,
+     74.56,
+     -24.77
+    ],
+    [
+     -32.25,
+     116.8,
+     -24.77
+    ],
+    [
+     -32.25,
+     116.8,
+     -19.6
+    ],
+    [
+     -32.73,
+     116.8,
+     -19.6
+    ],
+    [
+     -32.73,
+     114.6,
+     -19.6
+    ]
+   ],
+   "route_length_mm": 54.7,
+   "suggested_length_mm": 200
+  },
+  {
+   "id": "L5",
+   "group": "LCD",
+   "from": "P24",
+   "to": "LCS",
+   "title": "CS \u2192 Pi 24 \u00b7 yellow",
+   "color": "#ecc52b",
+   "route": [
+    [
+     -36.9,
+     74.56,
+     -22.23
+    ],
+    [
+     -31.7,
+     74.56,
+     -22.23
+    ],
+    [
+     -31.7,
+     117.19999999999999,
+     -22.23
+    ],
+    [
+     -31.7,
+     117.19999999999999,
+     -19.6
+    ],
+    [
+     -35.269999999999996,
+     117.19999999999999,
+     -19.6
+    ],
+    [
+     -35.269999999999996,
+     114.6,
+     -19.6
+    ]
+   ],
+   "route_length_mm": 56.6,
+   "suggested_length_mm": 200
+  },
+  {
+   "id": "L6",
+   "group": "LCD",
+   "from": "P22",
+   "to": "LDC",
+   "title": "DC \u2192 Pi 22 \u00b7 blue",
+   "color": "#2f51b5",
+   "route": [
+    [
+     -36.9,
+     77.1,
+     -22.23
+    ],
+    [
+     -31.15,
+     77.1,
+     -22.23
+    ],
+    [
+     -31.15,
+     117.6,
+     -22.23
+    ],
+    [
+     -31.15,
+     117.6,
+     -19.6
+    ],
+    [
+     -37.81,
+     117.6,
+     -19.6
+    ],
+    [
+     -37.81,
+     114.6,
+     -19.6
+    ]
+   ],
+   "route_length_mm": 58.5,
+   "suggested_length_mm": 200
+  },
+  {
+   "id": "L7",
+   "group": "LCD",
+   "from": "P13",
+   "to": "LRST",
+   "title": "RST \u2192 Pi 13 \u00b7 brown",
+   "color": "#93522d",
+   "route": [
+    [
+     -36.9,
+     87.26,
+     -24.77
+    ],
+    [
+     -30.599999999999998,
+     87.26,
+     -24.77
+    ],
+    [
+     -30.599999999999998,
+     118.0,
+     -24.77
+    ],
+    [
+     -30.599999999999998,
+     118.0,
+     -19.6
+    ],
+    [
+     -40.35,
+     118.0,
+     -19.6
+    ],
+    [
+     -40.35,
+     114.6,
+     -19.6
+    ]
+   ],
+   "route_length_mm": 55.4,
+   "suggested_length_mm": 200
+  },
+  {
+   "id": "L8",
+   "group": "LCD",
+   "from": "P18",
+   "to": "LBL",
+   "title": "BL \u2192 Pi 18 \u00b7 gray",
+   "color": "#a2a6a8",
+   "route": [
+    [
+     -36.9,
+     82.18,
+     -22.23
+    ],
+    [
+     -30.049999999999997,
+     82.18,
+     -22.23
+    ],
+    [
+     -30.049999999999997,
+     118.39999999999999,
+     -22.23
+    ],
+    [
+     -30.049999999999997,
+     118.39999999999999,
+     -19.6
+    ],
+    [
+     -42.89,
+     118.39999999999999,
+     -19.6
+    ],
+    [
+     -42.89,
+     114.6,
+     -19.6
+    ]
+   ],
+   "route_length_mm": 62.3,
+   "suggested_length_mm": 200
+  },
+  {
+   "id": "S1",
+   "group": "Audio",
+   "from": "P2",
+   "to": "MVIN",
+   "title": "VIN \u2192 Pi 2",
+   "color": "#d43235",
+   "route": [
+    [
+     -36.9,
+     102.5,
+     -22.23
+    ],
+    [
+     -29.5,
+     102.5,
+     -22.23
+    ],
+    [
+     -29.5,
+     24.0,
+     -22.23
+    ],
+    [
+     -29.5,
+     24.0,
+     -43.0
+    ],
+    [
+     -25.379999999999995,
+     24.0,
+     -43.0
+    ],
+    [
+     -25.379999999999995,
+     14.0,
+     -43.0
+    ]
+   ],
+   "route_length_mm": 120.8,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "S2",
+   "group": "Audio",
+   "from": "P9",
+   "to": "MGND",
+   "title": "GND \u2192 Pi 9",
+   "color": "#293440",
+   "route": [
+    [
+     -36.9,
+     92.34,
+     -24.77
+    ],
+    [
+     -33.9,
+     92.34,
+     -24.77
+    ],
+    [
+     -33.9,
+     20.0,
+     -24.77
+    ],
+    [
+     -33.9,
+     20.0,
+     -43.0
+    ],
+    [
+     -27.919999999999998,
+     20.0,
+     -43.0
+    ],
+    [
+     -27.919999999999998,
+     14.0,
+     -43.0
+    ]
+   ],
+   "route_length_mm": 105.6,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "S3",
+   "group": "Audio",
+   "from": "P12",
+   "to": "MBCLK",
+   "title": "BCLK \u2192 Pi 12",
+   "color": "#247cc4",
+   "route": [
+    [
+     -36.9,
+     89.8,
+     -22.23
+    ],
+    [
+     -33.35,
+     89.8,
+     -22.23
+    ],
+    [
+     -33.35,
+     20.5,
+     -22.23
+    ],
+    [
+     -33.35,
+     20.5,
+     -43.0
+    ],
+    [
+     -38.08,
+     20.5,
+     -43.0
+    ],
+    [
+     -38.08,
+     14.0,
+     -43.0
+    ]
+   ],
+   "route_length_mm": 104.8,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "S4",
+   "group": "Audio",
+   "from": "P35",
+   "to": "MLRC",
+   "title": "LRC \u2192 Pi 35",
+   "color": "#229a69",
+   "route": [
+    [
+     -36.9,
+     59.32,
+     -24.77
+    ],
+    [
+     -32.8,
+     59.32,
+     -24.77
+    ],
+    [
+     -32.8,
+     21.0,
+     -24.77
+    ],
+    [
+     -32.8,
+     21.0,
+     -43.0
+    ],
+    [
+     -40.62,
+     21.0,
+     -43.0
+    ],
+    [
+     -40.62,
+     14.0,
+     -43.0
+    ]
+   ],
+   "route_length_mm": 75.5,
+   "suggested_length_mm": 200
+  },
+  {
+   "id": "S5",
+   "group": "Audio",
+   "from": "P40",
+   "to": "MDIN",
+   "title": "DIN \u2192 Pi 40",
+   "color": "#8850c7",
+   "route": [
+    [
+     -36.9,
+     54.24,
+     -22.23
+    ],
+    [
+     -32.25,
+     54.24,
+     -22.23
+    ],
+    [
+     -32.25,
+     21.5,
+     -22.23
+    ],
+    [
+     -32.25,
+     21.5,
+     -43.0
+    ],
+    [
+     -35.54,
+     21.5,
+     -43.0
+    ],
+    [
+     -35.54,
+     14.0,
+     -43.0
+    ]
+   ],
+   "route_length_mm": 69.0,
+   "suggested_length_mm": 200
+  },
+  {
+   "id": "S6",
+   "group": "Audio",
+   "from": "M+",
+   "to": "S+",
+   "title": "OUT+ \u2192 speaker +",
+   "color": "#ecc52b",
+   "route": [
+    [
+     -29.0,
+     12.0,
+     -32.0
+    ],
+    [
+     -29.0,
+     12.0,
+     -30.2
+    ],
+    [
+     -29.0,
+     128.0,
+     -30.2
+    ],
+    [
+     4.0,
+     128.0,
+     -30.2
+    ],
+    [
+     4.0,
+     128.0,
+     -12.0
+    ],
+    [
+     4.0,
+     133.0,
+     -12.0
+    ]
+   ],
+   "route_length_mm": 174.0,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "S7",
+   "group": "Audio",
+   "from": "M-",
+   "to": "S-",
+   "title": "OUT- \u2192 speaker - (not GND)",
+   "color": "#157c6e",
+   "route": [
+    [
+     -37.0,
+     12.0,
+     -32.0
+    ],
+    [
+     -37.0,
+     12.0,
+     -30.5
+    ],
+    [
+     -37.0,
+     128.0,
+     -30.5
+    ],
+    [
+     -4.0,
+     128.0,
+     -30.5
+    ],
+    [
+     -4.0,
+     128.0,
+     -12.0
+    ],
+    [
+     -4.0,
+     133.0,
+     -12.0
+    ]
+   ],
+   "route_length_mm": 174.0,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "A1",
+   "group": "ADC",
+   "from": "P17",
+   "to": "AVDD",
+   "title": "V (VDD) \u2192 Pi 17 (3.3 V)",
+   "color": "#dc8119",
+   "route": [
+    [
+     -36.9,
+     82.18,
+     -24.77
+    ],
+    [
+     -30.599999999999998,
+     82.18,
+     -24.77
+    ],
+    [
+     -30.599999999999998,
+     23.0,
+     -24.77
+    ],
+    [
+     -30.599999999999998,
+     23.0,
+     -33.07
+    ],
+    [
+     -11.5,
+     23.0,
+     -33.07
+    ],
+    [
+     -11.5,
+     14.0,
+     -33.07
+    ]
+   ],
+   "route_length_mm": 101.9,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "A2",
+   "group": "ADC",
+   "from": "P20",
+   "to": "GND_JOIN",
+   "title": "Controller GND \u2192 ADC ground join (Pi 20)",
+   "color": "#e3b51f",
+   "route": [
+    [
+     -36.9,
+     79.64,
+     -22.23
+    ],
+    [
+     -30.049999999999997,
+     79.64,
+     -22.23
+    ],
+    [
+     -30.049999999999997,
+     23.5,
+     -22.23
+    ],
+    [
+     -30.049999999999997,
+     23.5,
+     -55.0
+    ],
+    [
+     -29.0,
+     23.5,
+     -55.0
+    ],
+    [
+     -29.0,
+     14.0,
+     -55.0
+    ]
+   ],
+   "route_length_mm": 106.3,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "A3",
+   "group": "ADC",
+   "from": "P3",
+   "to": "ASDA",
+   "title": "SDA \u2192 Pi 3",
+   "color": "#247cc4",
+   "route": [
+    [
+     -36.9,
+     99.96,
+     -24.77
+    ],
+    [
+     -29.5,
+     99.96,
+     -24.77
+    ],
+    [
+     -29.5,
+     24.0,
+     -24.77
+    ],
+    [
+     -29.5,
+     24.0,
+     -40.69
+    ],
+    [
+     -11.5,
+     24.0,
+     -40.69
+    ],
+    [
+     -11.5,
+     14.0,
+     -40.69
+    ]
+   ],
+   "route_length_mm": 127.3,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "A4",
+   "group": "ADC",
+   "from": "P5",
+   "to": "ASCL",
+   "title": "SCL \u2192 Pi 5",
+   "color": "#229a69",
+   "route": [
+    [
+     -36.9,
+     97.42,
+     -24.77
+    ],
+    [
+     -33.9,
+     97.42,
+     -24.77
+    ],
+    [
+     -33.9,
+     20.0,
+     -24.77
+    ],
+    [
+     -33.9,
+     20.0,
+     -38.15
+    ],
+    [
+     -11.5,
+     20.0,
+     -38.15
+    ],
+    [
+     -11.5,
+     14.0,
+     -38.15
+    ]
+   ],
+   "route_length_mm": 122.2,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "A5",
+   "group": "ADC",
+   "from": "AADDR",
+   "to": "GND_JOIN",
+   "title": "ADDR \u2192 ground join (0x48)",
+   "color": "#e3b51f",
+   "route": [
+    [
+     -11.5,
+     14.0,
+     -43.230000000000004
+    ],
+    [
+     -11.5,
+     18.4,
+     -43.230000000000004
+    ],
+    [
+     -29.0,
+     18.4,
+     -43.230000000000004
+    ],
+    [
+     -29.0,
+     18.4,
+     -55.0
+    ],
+    [
+     -29.0,
+     14.0,
+     -55.0
+    ]
+   ],
+   "route_length_mm": 38.1,
+   "suggested_length_mm": 100
+  },
+  {
+   "id": "K1",
+   "group": "Keypad",
+   "from": "P4",
+   "to": "KVCC",
+   "title": "VCC \u2192 Pi 4 (5 V)",
+   "color": "#d43235",
+   "route": [
+    [
+     -36.9,
+     99.96,
+     -22.23
+    ],
+    [
+     -32.8,
+     99.96,
+     -22.23
+    ],
+    [
+     -32.8,
+     33.96,
+     -22.23
+    ],
+    [
+     67.8,
+     33.96,
+     -22.23
+    ],
+    [
+     67.8,
+     33.96,
+     -10.1
+    ],
+    [
+     67.0,
+     33.96,
+     -10.1
+    ]
+   ],
+   "route_length_mm": 183.6,
+   "suggested_length_mm": 300
+  },
+  {
+   "id": "K2",
+   "group": "Keypad",
+   "from": "P14",
+   "to": "KGND",
+   "title": "GND \u2192 Pi 14",
+   "color": "#293440",
+   "route": [
+    [
+     -36.9,
+     87.26,
+     -22.23
+    ],
+    [
+     -32.25,
+     87.26,
+     -22.23
+    ],
+    [
+     -32.25,
+     31.42,
+     -22.23
+    ],
+    [
+     67.95,
+     31.42,
+     -22.23
+    ],
+    [
+     67.95,
+     31.42,
+     -10.1
+    ],
+    [
+     67.0,
+     31.42,
+     -10.1
+    ]
+   ],
+   "route_length_mm": 173.8,
+   "suggested_length_mm": 300
+  },
+  {
+   "id": "K3",
+   "group": "Keypad",
+   "from": "KOUT",
+   "to": "RIN",
+   "title": "OUT \u2192 R1 input",
+   "color": "#b79510",
+   "route": [
+    [
+     67.0,
+     36.5,
+     -10.1
+    ],
+    [
+     67.8,
+     36.5,
+     -10.1
+    ],
+    [
+     67.8,
+     36.5,
+     -24.0
+    ],
+    [
+     67.8,
+     20.0,
+     -24.0
+    ],
+    [
+     67.8,
+     20.0,
+     -55.0
+    ],
+    [
+     -41.0,
+     20.0,
+     -55.0
+    ],
+    [
+     -41.0,
+     14.0,
+     -55.0
+    ]
+   ],
+   "route_length_mm": 177.0,
+   "suggested_length_mm": 250
+  },
+  {
+   "id": "K4",
+   "group": "Keypad",
+   "from": "J",
+   "to": "AA0",
+   "title": "R1/R2 junction \u2192 ADC A0",
+   "color": "#8850c7",
+   "route": [
+    [
+     -35.0,
+     14.0,
+     -62.0
+    ],
+    [
+     -35.0,
+     20.0,
+     -62.0
+    ],
+    [
+     -11.5,
+     20.0,
+     -62.0
+    ],
+    [
+     -11.5,
+     20.0,
+     -48.31
+    ],
+    [
+     -11.5,
+     14.0,
+     -48.31
+    ]
+   ],
+   "route_length_mm": 49.2,
+   "suggested_length_mm": 100
+  },
+  {
+   "id": "K5",
+   "group": "Keypad",
+   "from": "RGND",
+   "to": "GND_JOIN",
+   "title": "R2 lower lead \u2192 ground join",
+   "color": "#e3b51f",
+   "route": [
+    [
+     -29.0,
+     14.0,
+     -68.0
+    ],
+    [
+     -29.0,
+     20.4,
+     -68.0
+    ],
+    [
+     -29.0,
+     20.4,
+     -55.0
+    ],
+    [
+     -29.0,
+     14.0,
+     -55.0
+    ]
+   ],
+   "route_length_mm": 25.8,
+   "suggested_length_mm": 100
+  },
+  {
+   "id": "USB",
+   "group": "Power",
+   "from": "POWER",
+   "to": "USB",
+   "title": "5 V micro-USB power \u2192 Pi power socket",
+   "color": "#293440",
+   "route": [
+    [
+     0.0,
+     134.0,
+     -85.0
+    ],
+    [
+     0.0,
+     142.0,
+     -85.0
+    ],
+    [
+     45.0,
+     142.0,
+     -88.0
+    ],
+    [
+     45.0,
+     138.0,
+     -88.0
+    ],
+    [
+     45.0,
+     98.0,
+     -88.0
+    ],
+    [
+     45.0,
+     94.0,
+     -88.0
+    ],
+    [
+     45.0,
+     94.0,
+     -70.0
+    ],
+    [
+     -31.4,
+     94.0,
+     -70.0
+    ],
+    [
+     -31.4,
+     99.4,
+     -75.0
+    ],
+    [
+     -39.4,
+     99.4,
+     -75.0
+    ]
+   ],
+   "route_length_mm": 210.9,
+   "suggested_length_mm": 350
+  },
+  {
+   "id": "A6",
+   "group": "ADC",
+   "from": "AGND",
+   "to": "GND_JOIN",
+   "title": "G \u2192 shared ground join",
+   "color": "#e3b51f",
+   "route": [
+    [
+     -11.5,
+     14.0,
+     -35.61
+    ],
+    [
+     -11.5,
+     21.2,
+     -35.61
+    ],
+    [
+     -29.0,
+     21.2,
+     -35.61
+    ],
+    [
+     -29.0,
+     21.2,
+     -55.0
+    ],
+    [
+     -29.0,
+     14.0,
+     -55.0
+    ]
+   ],
+   "route_length_mm": 51.3,
+   "suggested_length_mm": 100
+  }
+ ],
+ "fasteners": [
+  {
+   "id": "A",
+   "title": "Back gable to corner blocks",
+   "designation": "M3 \u00d7 25 countersunk (ISO 10642)",
+   "count": 4
+  },
+  {
+   "id": "B",
+   "title": "Hinge leaf to wall",
+   "designation": "M3 \u00d7 12 countersunk (ISO 10642)",
+   "count": 8
+  },
+  {
+   "id": "C",
+   "title": "Hinge leaf to roof eave",
+   "designation": "M3 \u00d7 10 countersunk (ISO 10642)",
+   "count": 8
+  },
+  {
+   "id": "D",
+   "title": "Knob to roof board",
+   "designation": "wood screw 3 \u00d7 16 countersunk",
+   "count": 2
+  },
+  {
+   "id": "E",
+   "title": "Dowel handle ends",
+   "designation": "wood screw 4 \u00d7 25 pan head",
+   "count": 2
+  },
+  {
+   "id": "F",
+   "title": "LCD to front gable",
+   "designation": "M2.5 \u00d7 16 countersunk (ISO 10642)",
+   "count": 4
+  },
+  {
+   "id": "G",
+   "title": "Speaker to front gable",
+   "designation": "M3 \u00d7 12 countersunk (ISO 10642)",
+   "count": 4
+  },
+  {
+   "id": "H",
+   "title": "Keypad to front gable tabs",
+   "designation": "M2.5 \u00d7 12 countersunk (ISO 10642)",
+   "count": 4
+  },
+  {
+   "id": "I",
+   "title": "Pi standoffs to left wall",
+   "designation": "M2.5 \u00d7 10 countersunk (ISO 10642)",
+   "count": 4
+  },
+  {
+   "id": "J",
+   "title": "Pi board to standoffs",
+   "designation": "M2.5 \u00d7 5 pan head (ISO 7045)",
+   "count": 4
+  },
+  {
+   "id": "K",
+   "title": "Small boards to floor",
+   "designation": "M2.5 \u00d7 16 nylon pan head (ISO 7045)",
+   "count": 6
+  },
+  {
+   "id": "L",
+   "title": "Switch clamp through back gable",
+   "designation": "M3 \u00d7 30 countersunk (ISO 10642)",
+   "count": 2
+  }
+ ],
+ "cut_list": [
+  {
+   "part": "front_gable",
+   "title": "FRONT GABLE",
+   "size_mm": [
+    150.0,
+    278.0
+   ],
+   "quantity": 1
+  },
+  {
+   "part": "back_gable",
+   "title": "BACK GABLE",
+   "size_mm": [
+    150.0,
+    278.0
+   ],
+   "quantity": 1
+  },
+  {
+   "part": "left_wall",
+   "title": "LEFT WALL",
+   "size_mm": [
+    88,
+    121.5
+   ],
+   "quantity": 1
+  },
+  {
+   "part": "right_wall",
+   "title": "RIGHT WALL",
+   "size_mm": [
+    88,
+    121.5
+   ],
+   "quantity": 1
+  },
+  {
+   "part": "floor",
+   "title": "FLOOR",
+   "size_mm": [
+    88,
+    138.0
+   ],
+   "quantity": 1
+  },
+  {
+   "part": "corner_block",
+   "title": "BLOCK PAD",
+   "size_mm": [
+    12,
+    12
+   ],
+   "quantity": 8
+  },
+  {
+   "part": "battery_fence",
+   "title": "BATTERY FENCE",
+   "size_mm": [
+    12,
+    69.0
+   ],
+   "quantity": 1
+  },
+  {
+   "part": "switch_clamp",
+   "title": "SWITCH CLAMP",
+   "size_mm": [
+    18,
+    38
+   ],
+   "quantity": 1
+  },
+  {
+   "part": "roof_board",
+   "title": "ROOF BOARD",
+   "size_mm": [
+    86,
+    120.1
+   ],
+   "quantity": 2
+  },
+  {
+   "part": "magnet_wedge",
+   "title": "MAGNET WEDGE",
+   "size_mm": [
+    16,
+    16
+   ],
+   "quantity": 12
+  }
+ ],
+ "checks": {
+  "passed": true,
+  "count": 50
+ },
+ "mass_g": 829,
+ "tip_angles_deg": {
+  "left": 38.0,
+  "right": 39.3,
+  "back": 25.4,
+  "front": 30.6
+ },
+ "documents": {
+  "plan": "/design/house-radio/PDF/Moomin.pdf",
+  "assembly": "/design/house-radio/PDF/Moomin-assembly.pdf",
+  "templates": "/design/house-radio/PDF/Moomin-cut-templates.pdf",
+  "step": "/design/house-radio/STEP/house_assembled.step"
+ }
+}

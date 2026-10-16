@@ -9,15 +9,15 @@ from unittest.mock import Mock, patch
 
 from PIL import Image, ImageChops, ImageColor
 
-from moomin.animation import CharacterAnimation
-from moomin.app import run_gallery
-from moomin.audio import LetterRecordings, StreamingAudioPlayer
-from moomin.config import ROOT, Settings
-from moomin.frames import AnimationPresenter
-from moomin.hardware import ST7789, rgb565
-from moomin.letter_lesson import LetterLesson
-from moomin.letter_paths import LetterCatalog, Stroke
-from moomin.player import PlayerSession
+from app.animation import CharacterAnimation
+from app.app import run_gallery
+from app.audio import LetterRecordings, StreamingAudioPlayer
+from app.config import ROOT, Settings
+from app.frames import AnimationPresenter
+from app.hardware import ST7789, rgb565
+from app.letter_lesson import LetterLesson
+from app.letter_paths import LetterCatalog, Stroke
+from app.player import PlayerSession
 
 
 class LetterDrawingTests(unittest.TestCase):
@@ -125,7 +125,7 @@ class LetterDrawingTests(unittest.TestCase):
                     [['M', 1, 2], ['M', 3, 4]], [['M', 1, 2], ['X', 3, 4]]):
             with self.assertRaises(ValueError): Stroke.from_commands(bad)
 
-    def test_center_draws_selected_card_restarts_and_restores_the_same_image(self):
+    def test_center_draws_selected_card_ignores_repeats_and_restores_the_same_image(self):
         self.session.action("right")
         self.session.action("center")
         self.assertEqual(self.lesson.active, "Ż")
@@ -141,12 +141,15 @@ class LetterDrawingTests(unittest.TestCase):
         self.now += .06
         self.assertNotEqual(self.session.render_key(), first_key)
         self.session.action("center")
-        self.assertEqual(self.lesson.serial, 2)
-        self.assertEqual(self.lesson.state()[0], "intro")
+        self.assertEqual(self.lesson.serial, 1, "Pressing again mid-drawing must not restart the letter")
+        self.assertEqual(self.lesson.state()[0], "draw")
+        self.assertEqual(self.session.last_action, "Still drawing Ż")
         self.now = self.lesson.started + self.lesson.duration + .001
         self.assertEqual(self.session.frame().tobytes(), Image.new("RGB", (240, 320), "blue").tobytes())
         self.assertIsNone(self.lesson.active)
         self.assertIsNone(self.lesson.renderer.guide)
+        self.session.action("center")
+        self.assertEqual((self.lesson.serial, self.lesson.state()[0]), (2, "intro"), "After it finishes, CENTER draws again")
 
     def test_every_stroke_pause_finish_and_celebration_boundary(self):
         self.lesson.start("Ą")
@@ -198,6 +201,7 @@ class LetterDrawingTests(unittest.TestCase):
         self.assertGreater(self.lesson.duration, self.audio.duration)
         self.now = self.lesson.started + 10
         self.assertEqual(self.lesson.state()[0], "hold")
+        self.now = self.lesson.started + self.lesson.duration + .01
         self.session.letter_recordings.enabled = False
         self.session.action("center")
         self.assertFalse(self.audio.playing)
@@ -268,7 +272,7 @@ class LetterDrawingTests(unittest.TestCase):
             def __init__(self, *args): super().__init__(*args); sessions.append(self)
         def make_lesson(*args, **kwargs): return LetterLesson(*args, **kwargs, clock=lambda: elapsed[0])
         def sleep(seconds): elapsed[0] += seconds
-        with patch("moomin.app.prepare_images", return_value=self.paths), patch("moomin.app.prepare_audio", side_effect=AssertionError("Unrelated audio conversion")), patch("moomin.app.display_resource", side_effect=lambda stack, *args: (stack.callback(display.close), display)[1]), patch("moomin.app.Keyboard", Keyboard), patch("moomin.app.PlayerSession", Session), patch("moomin.app.LetterLesson", side_effect=make_lesson), patch("moomin.app.WireFrames") as wire, patch("moomin.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("moomin.app.time.sleep", side_effect=sleep):
+        with patch("app.app.prepare_images", return_value=self.paths), patch("app.app.prepare_audio", side_effect=AssertionError("Unrelated audio conversion")), patch("app.app.display_resource", side_effect=lambda stack, *args: (stack.callback(display.close), display)[1]), patch("app.app.Keyboard", Keyboard), patch("app.app.PlayerSession", Session), patch("app.app.LetterLesson", side_effect=make_lesson), patch("app.app.WireFrames") as wire, patch("app.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("app.app.time.sleep", side_effect=sleep):
             wire.return_value.frame.return_value = bytes(153600)
             run_gallery(settings, simulate=True, no_audio=True, autoplay=True)
         self.assertTrue(display.closed)
@@ -290,13 +294,14 @@ class LetterDrawingTests(unittest.TestCase):
         settings.data["display"]["rotation"] = 90
         with self.assertRaisesRegex(ValueError, "portrait"): settings.validate()
 
-    def test_physical_center_starts_on_press_even_when_held_then_restarts_on_next_press(self):
+    def test_physical_center_starts_on_press_even_when_held_and_draws_again_once_finished(self):
         settings = Settings.load(ROOT / "config.alphabet.json")
         elapsed, level, sessions, snapshots = [0.0], ["idle"], [], []
-        # The real debouncer receives idle, a >2s hold, release, then a short tap.
+        # The real debouncer receives idle, a >2s hold, release, a tap mid-lesson, then a tap after it.
         batches = iter(((0, "idle"), (.1, "idle"), (.2, "center"), (.3, "center"),
                         (3, "center"), (3.1, "idle"), (3.2, "idle"),
-                        (3.3, "center"), (3.4, "center"), (3.5, "idle"), (3.6, "idle")))
+                        (3.3, "center"), (3.4, "center"), (3.5, "idle"), (3.6, "idle"),
+                        (30, "center"), (30.1, "center"), (30.2, "idle"), (30.3, "idle")))
         class Keyboard:
             def __enter__(self): return self
             def __exit__(self, *args): pass
@@ -312,12 +317,13 @@ class LetterDrawingTests(unittest.TestCase):
             def __init__(self, *args): super().__init__(*args); sessions.append(self)
         def make_lesson(*args, **kwargs): return LetterLesson(*args, **kwargs, clock=lambda: elapsed[0])
         display = Mock(spec=["show", "close"])
-        with patch("moomin.app.prepare_images", return_value=self.paths), patch("moomin.app.display_resource", return_value=display), patch("moomin.app.adc_resource", return_value=Mock()), patch("moomin.app.load_calibration", return_value={}), patch("moomin.app.classify", side_effect=lambda *_: level[0]), patch("moomin.app.Keyboard", Keyboard), patch("moomin.app.PlayerSession", Session), patch("moomin.app.LetterLesson", side_effect=make_lesson), patch("moomin.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("moomin.app.time.sleep"):
+        with patch("app.app.prepare_images", return_value=self.paths), patch("app.app.display_resource", return_value=display), patch("app.app.adc_resource", return_value=Mock()), patch("app.app.load_calibration", return_value={}), patch("app.app.classify", side_effect=lambda *_: level[0]), patch("app.app.Keyboard", Keyboard), patch("app.app.PlayerSession", Session), patch("app.app.LetterLesson", side_effect=make_lesson), patch("app.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("app.app.time.sleep"):
             with self.assertRaises(KeyboardInterrupt):
                 run_gallery(settings, simulate=False, no_audio=True, standalone=True)
         self.assertIn((.3, 1, "A"), snapshots, "The lesson must start before the button is released")
         self.assertIn((3, 1, "A"), snapshots, "Holding CENTER must not suppress or restart the lesson")
-        self.assertIn((3.4, 2, "A"), snapshots)
+        self.assertIn((3.4, 1, "A"), snapshots, "A tap while the letter is still drawing must not restart it")
+        self.assertIn((30.1, 2, "A"), snapshots)
         self.assertEqual(sessions[0].drawing.serial, 2, "Release must not trigger a second lesson")
 
 

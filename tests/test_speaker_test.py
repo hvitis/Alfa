@@ -8,10 +8,10 @@ from contextlib import redirect_stdout, redirect_stderr
 from pathlib import Path
 from unittest.mock import patch
 
-from moomin.app import main, parser
-from moomin.config import Settings
-from moomin.speaker_test import inspect_wav, make_test_tone, run_speaker_test
-from moomin.ui import speaker_status_frame
+from app.app import main, parser
+from app.config import Settings
+from app.speaker_test import inspect_wav, make_test_tone, run_speaker_test
+from app.ui import speaker_status_frame
 
 
 class SpeakerTestTests(unittest.TestCase):
@@ -43,7 +43,7 @@ class SpeakerTestTests(unittest.TestCase):
         self.assertFalse((self.settings.root / "sounds").exists())
 
     def test_simulation_repeats_and_saves_lcd_frames_without_hardware_access(self):
-        with patch("moomin.speaker_test.audio_device", side_effect=AssertionError("hardware access")), patch("moomin.speaker_test.shutil.which", return_value="/tool"):
+        with patch("app.speaker_test.audio_device", side_effect=AssertionError("hardware access")), patch("app.speaker_test.shutil.which", return_value="/tool"):
             code = run_speaker_test(self.settings, simulate=True, with_screen=True, verbose=True, tone=True, repeat=2, pause=0, hold=0)
         self.assertEqual(code, 0)
         report = self.report()
@@ -68,7 +68,7 @@ class SpeakerTestTests(unittest.TestCase):
             def play(self, path): raise RuntimeError("aplay exit 1: Device or resource busy")
             def stop(self): pass
             def close(self): type(self).closed = True
-        with patch("moomin.speaker_test.ST7789", Display), patch("moomin.speaker_test.AudioPlayer", Player), patch("moomin.speaker_test.audio_device", return_value="plughw:CARD=max98357a,DEV=0"), patch("moomin.speaker_test.shutil.which", return_value="/tool"):
+        with patch("app.speaker_test.ST7789", Display), patch("app.speaker_test.AudioPlayer", Player), patch("app.speaker_test.audio_device", return_value="plughw:CARD=max98357a,DEV=0"), patch("app.speaker_test.shutil.which", return_value="/tool"):
             code = run_speaker_test(self.settings, with_screen=True, tone=True, hold=0)
         self.assertEqual(code, 1)
         self.assertTrue(Display.closed)
@@ -87,7 +87,7 @@ class SpeakerTestTests(unittest.TestCase):
             output.setsampwidth(2)
             output.setframerate(48000)
             output.writeframes(bytes(1920))
-        with patch("moomin.speaker_test.prepare_audio", return_value=[path]), patch("moomin.speaker_test.AudioPlayer") as player, patch("moomin.speaker_test.shutil.which", return_value="/tool"):
+        with patch("app.speaker_test.prepare_audio", return_value=[path]), patch("app.speaker_test.AudioPlayer") as player, patch("app.speaker_test.shutil.which", return_value="/tool"):
             code = run_speaker_test(self.settings, simulate=True, hold=0)
         self.assertEqual(code, 1)
         player.assert_not_called()
@@ -99,7 +99,7 @@ class SpeakerTestTests(unittest.TestCase):
             def __init__(self, *args, **kwargs): pass
             def play(self, path): raise KeyboardInterrupt
             def close(self): type(self).closed = True
-        with patch("moomin.speaker_test.AudioPlayer", Player), patch("moomin.speaker_test.shutil.which", return_value="/tool"):
+        with patch("app.speaker_test.AudioPlayer", Player), patch("app.speaker_test.shutil.which", return_value="/tool"):
             code = run_speaker_test(self.settings, simulate=True, tone=True, hold=0)
         self.assertEqual(code, 130)
         self.assertTrue(Player.closed)
@@ -107,7 +107,7 @@ class SpeakerTestTests(unittest.TestCase):
 
     def test_invalid_arguments_do_not_start_hardware_or_create_reports(self):
         for arguments in ({"repeat": 0}, {"volume": float("nan")}, {"pause": -1}, {"hold": float("inf")}, {"track": -1}):
-            with self.subTest(arguments=arguments), self.assertRaises(ValueError), patch("moomin.speaker_test.ST7789") as display:
+            with self.subTest(arguments=arguments), self.assertRaises(ValueError), patch("app.speaker_test.ST7789") as display:
                 run_speaker_test(self.settings, **arguments)
                 display.assert_not_called()
         self.assertFalse(self.settings.state.exists())
@@ -132,7 +132,7 @@ class SpeakerTestTests(unittest.TestCase):
             def stop(self): type(self).stopped = True
             def close(self): type(self).closed = True
         clock = Clock()
-        with patch("moomin.speaker_test.AudioPlayer", Player), patch("moomin.speaker_test.audio_device", return_value="plughw:CARD=max98357a,DEV=0"), patch("moomin.speaker_test.shutil.which", return_value="/tool"), patch("moomin.speaker_test.time.monotonic", clock.now), patch("moomin.speaker_test.time.sleep", clock.sleep):
+        with patch("app.speaker_test.AudioPlayer", Player), patch("app.speaker_test.audio_device", return_value="plughw:CARD=max98357a,DEV=0"), patch("app.speaker_test.shutil.which", return_value="/tool"), patch("app.speaker_test.time.monotonic", clock.now), patch("app.speaker_test.time.sleep", clock.sleep):
             code = run_speaker_test(self.settings, tone=True, hold=0)
         self.assertEqual(code, 1)
         self.assertTrue(Player.stopped)
@@ -140,7 +140,7 @@ class SpeakerTestTests(unittest.TestCase):
         self.assertIn("timed out", self.report()["error"])
 
     def test_cli_passes_options_and_propagates_playback_failure(self):
-        with patch("moomin.app.run_speaker_test", return_value=1) as runner:
+        with patch("app.app.run_speaker_test", return_value=1) as runner:
             code = main(["speaker-test", "--with-screen", "--verbose", "--repeat", "3", "--volume", "0.1", "--tone"])
         self.assertEqual(code, 1)
         self.assertTrue(runner.call_args.kwargs["with_screen"])

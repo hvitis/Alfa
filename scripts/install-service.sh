@@ -20,7 +20,8 @@ if [[ ! -x "$python_bin" ]]; then
 fi
 cd -- "$project_dir"
 if "$dry_run"; then
-    "$python_bin" -m moomin.service --project "$project_dir" --user "$service_user" --python "$python_bin" ${audio_args[@]+"${audio_args[@]}"}
+    "$python_bin" -m app.service --project "$project_dir" --user "$service_user" --python "$python_bin" ${audio_args[@]+"${audio_args[@]}"}
+    "$python_bin" -m app.service --project "$project_dir" --user "$service_user" --python "$python_bin" --splash
     exit 0
 fi
 if [[ "$(uname -s)" != Linux ]] || [[ ! -f /proc/device-tree/model ]] || ! tr -d '\0' < /proc/device-tree/model | grep -q 'Raspberry Pi'; then
@@ -32,17 +33,21 @@ if [[ "$service_user" == root ]] || ! id "$service_user" >/dev/null 2>&1; then
     exit 1
 fi
 "$python_bin" -c 'import PIL, gpiozero, lgpio, spidev, smbus2'
-"$python_bin" -c 'from moomin.config import Settings; from moomin.buttons import load_calibration; load_calibration(Settings.load("config.standalone.json"))'
-"$python_bin" -m moomin --config config.standalone.json prepare --wire-only
-"$python_bin" -m moomin --config config.standalone.json --simulate player --fullscreen --prepared-only --once ${audio_args[@]+"${audio_args[@]}"}
+"$python_bin" -c 'from app.config import Settings; from app.buttons import load_calibration; load_calibration(Settings.load("config.standalone.json"))'
+"$python_bin" -m app --config config.standalone.json prepare --wire-only
+"$python_bin" -m app.splash --config config.standalone.json --prepare
+"$python_bin" -m app --config config.standalone.json --simulate player --fullscreen --prepared-only --once ${audio_args[@]+"${audio_args[@]}"}
 
 unit_dir="$(mktemp -d)"
 unit_path="$unit_dir/moomin.service"
-trap 'rm -f -- "$unit_path"; rmdir -- "$unit_dir"' EXIT
-"$python_bin" -m moomin.service --project "$project_dir" --user "$service_user" --python "$python_bin" ${audio_args[@]+"${audio_args[@]}"} > "$unit_path"
-systemd-analyze verify "$unit_path"
+splash_unit_path="$unit_dir/moomin-splash.service"
+trap 'rm -f -- "$unit_path" "$splash_unit_path"; rmdir -- "$unit_dir"' EXIT
+"$python_bin" -m app.service --project "$project_dir" --user "$service_user" --python "$python_bin" ${audio_args[@]+"${audio_args[@]}"} > "$unit_path"
+"$python_bin" -m app.service --project "$project_dir" --user "$service_user" --python "$python_bin" --splash > "$splash_unit_path"
+systemd-analyze verify "$unit_path" "$splash_unit_path"
 sudo install -m 0644 "$unit_path" /etc/systemd/system/moomin.service
+sudo install -m 0644 "$splash_unit_path" /etc/systemd/system/moomin-splash.service
 sudo systemctl daemon-reload
-sudo systemctl enable moomin.service
+sudo systemctl enable moomin.service moomin-splash.service
 sudo systemctl restart moomin.service
 sudo systemctl --no-pager status moomin.service

@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 import unittest
 
-from moomin.config import ROOT
+from app.config import ROOT
 
 
 @unittest.skipUnless(shutil.which("make"), "Make is required for the maintenance commands")
@@ -49,7 +49,7 @@ esac
 ''')
         self.executable(self.root / ".venv/bin/python", '''#!/bin/sh
 printf 'python %s\n' "$*" >> "$STUB_CALLS"
-if test "$2" = moomin; then exit "${STUB_FAIL_RUN:-0}"; fi
+if test "$2" = moomin || test "$2" = app; then exit "${STUB_FAIL_RUN:-0}"; fi
 exit 0
 ''')
         self.executable(self.root / "scripts/install-service.sh", '''#!/bin/sh
@@ -128,7 +128,7 @@ sudo systemctl --no-pager status moomin.service
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(events, ["systemctl is-active --quiet moomin.service",
             "systemctl stop moomin.service",
-            "python -m moomin --config config.alphabet.json gallery --fullscreen",
+            "python -m app --config config.alphabet.json gallery --fullscreen",
             "systemctl reset-failed moomin.service", "systemctl start moomin.service"])
         self.assertEqual(self.state.read_text(), "active")
 

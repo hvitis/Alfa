@@ -9,9 +9,9 @@ from unittest.mock import patch
 
 from PIL import Image
 
-from moomin.app import doctor, main
-from moomin.config import ROOT, Settings
-from moomin.media import atomic_json, image_sources, prepare_images
+from app.app import doctor, main
+from app.config import ROOT, Settings
+from app.media import atomic_json, image_sources, prepare_images
 
 
 class DeploymentTests(unittest.TestCase):
@@ -32,12 +32,12 @@ class DeploymentTests(unittest.TestCase):
         self.assertEqual(prepare_images(self.settings), files)
         self.assertEqual(prepare_images(self.settings, force=True), files)
         self.assertEqual({p.name: p.read_bytes() for p in files}, before)
-        with patch("moomin.app.shutil.which", return_value="/tool"), redirect_stdout(io.StringIO()) as output:
+        with patch("app.app.shutil.which", return_value="/tool"), redirect_stdout(io.StringIO()) as output:
             self.assertEqual(doctor(self.settings, simulate=True), 0)
         self.assertIn("6 prepared photos", output.getvalue())
 
     def test_clone_player_preview_starts_without_imgs_or_hardware(self):
-        with patch("moomin.app.Settings.load", return_value=self.settings), patch("moomin.app.adc_resource", side_effect=AssertionError("ADC accessed")):
+        with patch("app.app.Settings.load", return_value=self.settings), patch("app.app.adc_resource", side_effect=AssertionError("ADC accessed")):
             self.assertEqual(main(["--simulate", "player", "--once", "--no-audio"]), 0)
         with Image.open(self.settings.state / "preview/current.png") as frame:
             self.assertEqual(frame.size, (240, 320))
@@ -67,7 +67,7 @@ class DeploymentTests(unittest.TestCase):
             prepare_images(self.settings)
 
     def test_doctor_reports_missing_i2c_and_delays_calibration(self):
-        with patch("moomin.app.importlib.util.find_spec", return_value=object()), patch("moomin.app.shutil.which", return_value="/tool"), patch("moomin.app.os.access", side_effect=lambda path, mode: str(path) != "/dev/i2c-1"), patch("moomin.app.audio_device", return_value="MAX98357A"), patch("moomin.app.adc_resource", side_effect=FileNotFoundError("/dev/i2c-1")), redirect_stdout(io.StringIO()) as output:
+        with patch("app.app.importlib.util.find_spec", return_value=object()), patch("app.app.shutil.which", return_value="/tool"), patch("app.app.os.access", side_effect=lambda path, mode: str(path) != "/dev/i2c-1"), patch("app.app.audio_device", return_value="MAX98357A"), patch("app.app.adc_resource", side_effect=FileNotFoundError("/dev/i2c-1")), redirect_stdout(io.StringIO()) as output:
             self.assertEqual(doctor(self.settings), 1)
         text = output.getvalue()
         self.assertIn("6 prepared photos", text)

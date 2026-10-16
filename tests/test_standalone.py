@@ -14,13 +14,13 @@ import wave
 
 from PIL import Image
 
-from moomin.app import main, run_gallery
-from moomin.audio import StreamingAudioPlayer
-from moomin.config import ROOT, Settings
-from moomin.frames import prepare_wire_images, WireFrames
-from moomin.hardware import rgb565
-from moomin.media import prepared_audio, atomic_json
-from moomin.service import ServiceWatchdog, render_unit
+from app.app import main, run_gallery
+from app.audio import StreamingAudioPlayer
+from app.config import ROOT, Settings
+from app.frames import prepare_wire_images, WireFrames
+from app.hardware import rgb565
+from app.media import prepared_audio, atomic_json
+from app.service import ServiceWatchdog, render_unit
 
 
 class StandaloneTests(unittest.TestCase):
@@ -43,7 +43,7 @@ class StandaloneTests(unittest.TestCase):
         atomic_json(self.audio_dir / "manifest.json", {"items": [{"file": self.sound.name}]})
 
     def test_prepared_startup_does_not_hash_resize_or_convert_originals(self):
-        with patch("moomin.app.Settings.load", return_value=self.settings), patch("moomin.app.prepare_images", side_effect=AssertionError("Original images accessed")), patch("moomin.app.prepare_audio", side_effect=AssertionError("ffmpeg accessed")), redirect_stdout(io.StringIO()):
+        with patch("app.app.Settings.load", return_value=self.settings), patch("app.app.prepare_images", side_effect=AssertionError("Original images accessed")), patch("app.app.prepare_audio", side_effect=AssertionError("ffmpeg accessed")), redirect_stdout(io.StringIO()):
             self.assertEqual(main(["--simulate", "player", "--prepared-only", "--fullscreen", "--once"]), 0)
         with Image.open(self.settings.state / "preview/current.png") as frame:
             with Image.open(ROOT / "media/images/000-moomin_0.png") as expected:
@@ -74,7 +74,7 @@ class StandaloneTests(unittest.TestCase):
     def test_standalone_autoplays_and_survives_quit_key_and_held_center(self):
         display = Mock(spec=["show"])
         sessions = []
-        from moomin.player import PlayerSession
+        from app.player import PlayerSession
         class Session(PlayerSession):
             def __init__(self, *args):
                 super().__init__(*args)
@@ -95,7 +95,7 @@ class StandaloneTests(unittest.TestCase):
         debounce = Mock()
         debounce.update.side_effect = [("press", "center"), None, None]
         audio = StreamingAudioPlayer(self.settings, simulate=True)
-        with patch("moomin.app.StreamingAudioPlayer", return_value=audio), patch("moomin.app.display_resource", return_value=display), patch("moomin.app.adc_resource", return_value=Mock()), patch("moomin.app.load_calibration", return_value={}), patch("moomin.app.classify", return_value="center"), patch("moomin.app.Debouncer", return_value=debounce), patch("moomin.app.Keyboard", Keyboard), patch("moomin.app.PlayerSession", Session), patch("moomin.app.time.monotonic", side_effect=clock), patch("moomin.app.time.sleep") as sleep, redirect_stdout(io.StringIO()):
+        with patch("app.app.StreamingAudioPlayer", return_value=audio), patch("app.app.display_resource", return_value=display), patch("app.app.adc_resource", return_value=Mock()), patch("app.app.load_calibration", return_value={}), patch("app.app.classify", return_value="center"), patch("app.app.Debouncer", return_value=debounce), patch("app.app.Keyboard", Keyboard), patch("app.app.PlayerSession", Session), patch("app.app.time.monotonic", side_effect=clock), patch("app.app.time.sleep") as sleep, redirect_stdout(io.StringIO()):
             with self.assertRaises(KeyboardInterrupt):
                 run_gallery(self.settings, simulate=False, fullscreen=True, standalone=True, prepared_only=True, autoplay=True)
         self.assertEqual(sessions[0].last_action, "Playing")
@@ -108,13 +108,13 @@ class StandaloneTests(unittest.TestCase):
         with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as server:
             server.bind(address)
             server.settimeout(1)
-            with patch.dict(os.environ, {"NOTIFY_SOCKET": address, "WATCHDOG_USEC": "30000000", "WATCHDOG_PID": str(os.getpid()), "MOOMIN_RUNTIME_DIR": str(self.root / "runtime")}), patch("moomin.service.time.monotonic", return_value=100):
+            with patch.dict(os.environ, {"NOTIFY_SOCKET": address, "WATCHDOG_USEC": "30000000", "WATCHDOG_PID": str(os.getpid()), "MOOMIN_RUNTIME_DIR": str(self.root / "runtime")}), patch("app.service.time.monotonic", return_value=100):
                 watchdog = ServiceWatchdog()
                 watchdog.ready()
                 self.assertIn(b"READY=1", server.recv(128))
                 self.assertEqual(self.settings.runtime_state, self.root / "runtime")
                 self.assertEqual(self.settings.state, self.root / ".state")
-            with patch("moomin.service.time.monotonic", return_value=106):
+            with patch("app.service.time.monotonic", return_value=106):
                 watchdog.tick()
                 self.assertEqual(server.recv(128), b"WATCHDOG=1")
 
@@ -145,7 +145,7 @@ class StandaloneTests(unittest.TestCase):
             user = "nobody"
         project = self.root / 'project with spaces%'
         project.mkdir()
-        unit = self.root / "moomin.service"
+        unit = self.root / "app.service"
         unit.write_text(render_unit(project, user, "/bin/true"))
         result = subprocess.run(["systemd-analyze", "verify", str(unit)], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)

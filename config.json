@@ -43,6 +43,11 @@
     "prepared": "media/sounds",
     "device": "auto",
     "volume": 0.2,
+    "max_volume": 0.5,
     "clip_seconds": 5.0
+  },
+  "controls": {
+    "exit_hold_seconds": 10,
+    "press_guard_ms": 400
   }
 }

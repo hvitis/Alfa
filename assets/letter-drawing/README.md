@@ -25,10 +25,10 @@ The original character card returns when the fireworks finish.
 | LEFT / RIGHT | Interrupt the lesson and select the previous or next letter |
 | UP | Interrupt the lesson and show the listening animation |
 | DOWN | Interrupt the lesson and show the repeating animation |
-| Press CENTER / Space | Start or restart the selected letter lesson |
+| Press CENTER / Space | Start the selected letter lesson; a press while it is still drawing is ignored |
 
 The normal exit control still applies outside standalone mode.
-Hold CENTER for two seconds, or press Q, to exit.
+Hold CENTER for ten seconds, or press Q, to exit (`controls.exit_hold_seconds`).
 
 The default lesson lasts about 8–9 seconds.
 It has a 0.5-second introduction, 5 seconds of tracing, and 0.22-second pauses between strokes.
