@@ -1,6 +1,9 @@
 import mermaid from 'mermaid';
 
-export async function renderArchitecture(container, definition) {
+export async function renderArchitecture(container, definition, {
+  id = 'radio-software-architecture',
+  label = 'Raspberry Pi software architecture: startup, calibrated input, player state, display, audio, simulation, and service supervision.',
+} = {}) {
   mermaid.initialize({
     startOnLoad: false,
     securityLevel: 'strict',
@@ -13,12 +16,12 @@ export async function renderArchitecture(container, definition) {
     },
     flowchart: { htmlLabels: false, curve: 'basis', padding: 17, nodeSpacing: 25, rankSpacing: 38 },
   });
-  const { svg, bindFunctions } = await mermaid.render('radio-software-architecture', definition);
+  const { svg, bindFunctions } = await mermaid.render(id, definition);
   container.innerHTML = svg;
   bindFunctions?.(container);
   const graphic = container.querySelector('svg');
   graphic.setAttribute('role', 'img');
-  graphic.setAttribute('aria-label', 'Raspberry Pi software architecture: startup, calibrated input, player state, display, audio, simulation, and service supervision.');
+  graphic.setAttribute('aria-label', label);
   container.setAttribute('aria-busy', 'false');
   container.dataset.rendered = 'true';
 }

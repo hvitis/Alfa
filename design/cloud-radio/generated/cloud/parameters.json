@@ -1,5 +1,5 @@
 {
-  "revision": "prototype-5",
+  "revision": "prototype-6",
   "units": "mm",
   "material": "PETG",
   "uncertain_dimension_allowance_mm": 5,
@@ -14,7 +14,7 @@
       220
     ],
     "print_limit": [
-      210,
+      216,
       210
     ],
     "edge_radius": 1.4
@@ -116,7 +116,7 @@
       ],
       "uncertain": true,
       "source": "https://sklep.msalamon.pl/produkt/modul-ad-key-klawiatura-5-przyciskow/",
-      "note": "Supplier says 68 x 26 with inconsistent 61 x 26 hole pitch; reserve 68 x 30 plus allowance. User hole offset 4.5 diagonally. Button positions/height are illustrative.",
+      "note": "Supplier says 68 x 26 with inconsistent 61 x 26 hole pitch; reserve 68 x 30 plus allowance. User hole offset 4.5 diagonally. Button positions/height are illustrative. User-confirmed isolated-button zone 16 mm from short PCB edge, then 9 mm clear gap. A 4 mm face bridge leaves 2.5 mm on each side.",
       "color": "#303a42",
       "rotation_deg": 90
     },
@@ -364,5 +364,34 @@
       78,
       121
     ]
-  ]
+  ],
+  "keypad_bridge": {
+    "single_button_zone": 16,
+    "clear_gap": 9,
+    "width": 4,
+    "source": "User measurement from isolated-button short PCB edge; remaining button centres and cap diameters provisional",
+    "root_radius": 8
+  },
+  "side_relief": {
+    "protrusion": 2.5,
+    "anchor": 0.6,
+    "rows": [
+      26,
+      51,
+      77,
+      103,
+      123
+    ],
+    "front_depths": [
+      14,
+      27
+    ],
+    "rear_depths": [
+      60,
+      73
+    ],
+    "radius": 14,
+    "protected_from_y": 140,
+    "style": "Additive rounded cumulus caps; closed core and handle unchanged"
+  }
 }

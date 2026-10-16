@@ -1,6 +1,6 @@
 const PARTS = [['front','Front shell'],['rear','Rear shell'],['battery_door','Battery door']];
 const PALETTES = [
-  ['Cloud blue',['#dae9ed','#b7d2da','#f3c96d']],
+  ['Cloud blue',['#86bfea','#70acd9','#fff0b5']],
   ['Candy cloud',['#ffd6e6','#d7c6f5','#fff0b5']],
   ['Mint arcade',['#bcebd8','#a9cde7','#ffd2a8']],
   ['Lavender dream',['#d9ccf3','#b7c7ed','#f6c8dc']],
@@ -18,7 +18,9 @@ const STORAGE='alfa.cloud-colors.v1';
 export function createCloudColorControls(container,onChange) {
   const colors=Object.fromEntries(PARTS.map(([id],i)=>[id,PALETTES[0][1][i]]));
   try {
-    const saved=JSON.parse(localStorage.getItem(STORAGE));
+    let saved=JSON.parse(localStorage.getItem(STORAGE));
+    const legacyDefaults=[['#dae9ed','#b7d2da','#f3c96d'],['#b9dcf5','#a9cde7','#fff0b5']];
+    if(legacyDefaults.some(palette=>PARTS.every(([id],i)=>saved?.[id]?.toLowerCase()===palette[i])))saved=null;
     for(const [id] of PARTS) if(/^#[\da-f]{6}$/i.test(saved?.[id])) colors[id]=saved[id].toLowerCase();
   } catch { /* Preview controls also work when browser storage is unavailable. */ }
   container.innerHTML='<div class="color-heading"><p class="eyebrow">MAKE IT YOURS</p><h3>Pick your cloud colors.</h3><p>Choose filament to match your preview.</p></div><div class="color-controls"><details class="palette-picker"><summary><span class="palette-current"></span><span class="palette-name"></span><span aria-hidden="true">⌄</span></summary><div class="palette-options" aria-label="Preset color palettes"></div></details><div class="part-colors"></div></div>';

@@ -1,10 +1,44 @@
 {
-  "revision": "prototype-5",
+  "revision": "prototype-6",
   "outer_mm": [
-    210.0,
+    214.97,
     190.0,
     86
   ],
+  "core_mm": [
+    210,
+    190,
+    86
+  ],
+  "side_relief": {
+    "protrusion": 2.5,
+    "anchor": 0.6,
+    "rows": [
+      26,
+      51,
+      77,
+      103,
+      123
+    ],
+    "front_depths": [
+      14,
+      27
+    ],
+    "rear_depths": [
+      60,
+      73
+    ],
+    "radius": 14,
+    "protected_from_y": 140,
+    "style": "Additive rounded cumulus caps; closed core and handle unchanged"
+  },
+  "keypad_bridge": {
+    "single_button_zone": 16,
+    "clear_gap": 9,
+    "width": 4,
+    "source": "User measurement from isolated-button short PCB edge; remaining button centres and cap diameters provisional",
+    "root_radius": 8
+  },
   "allowance_mm": 5,
   "material": "PETG",
   "components": [
@@ -75,7 +109,7 @@
       ],
       "uncertain": true,
       "source": "https://sklep.msalamon.pl/produkt/modul-ad-key-klawiatura-5-przyciskow/",
-      "note": "Supplier says 68 x 26 with inconsistent 61 x 26 hole pitch; reserve 68 x 30 plus allowance. User hole offset 4.5 diagonally. Button positions/height are illustrative.",
+      "note": "Supplier says 68 x 26 with inconsistent 61 x 26 hole pitch; reserve 68 x 30 plus allowance. User hole offset 4.5 diagonally. Button positions/height are illustrative. User-confirmed isolated-button zone 16 mm from short PCB edge, then 9 mm clear gap. A 4 mm face bridge leaves 2.5 mm on each side.",
       "color": "#303a42",
       "rotation_deg": 90
     },
@@ -292,7 +326,7 @@
     "pi": "4 x M2.5 x 6 thread-forming screws",
     "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README"
   },
-  "checks_count": 195,
+  "checks_count": 205,
   "passed": true,
   "files": [
     "front.stl",
@@ -424,6 +458,21 @@
       "size": [
         4.8,
         4.8,
+        3.0
+      ]
+    },
+    {
+      "id": "F-K05",
+      "title": "Rounded keypad bridge \u00b7 4 mm / R8",
+      "part": "front",
+      "origin": [
+        -76.0,
+        55.5,
+        0.0
+      ],
+      "size": [
+        28.0,
+        20.0,
         3.0
       ]
     },
@@ -1025,6 +1074,36 @@
         137.0041,
         37.9989,
         19.85
+      ]
+    },
+    {
+      "id": "F-C01",
+      "title": "Rounded cumulus side relief",
+      "part": "front",
+      "origin": [
+        -107.4866,
+        17.5813,
+        5.7084
+      ],
+      "size": [
+        214.9697,
+        113.5222,
+        29.5831
+      ]
+    },
+    {
+      "id": "R-C01",
+      "title": "Rounded cumulus side relief",
+      "part": "rear",
+      "origin": [
+        -107.4866,
+        17.5813,
+        52.0
+      ],
+      "size": [
+        214.9697,
+        113.5222,
+        29.0
       ]
     }
   ],

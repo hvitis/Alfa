@@ -3,8 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Explore the plywood enclosure, Raspberry Pi and Pico wiring, and software architecture of Alfa.">
+  <meta name="description" content="Little radio. Big imagination. Build a pastel cloud radio with offline music, Polish letter lessons, and a Raspberry Pi.">
   <meta name="theme-color" content="#fdf7ed">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Alfa · A little radio lab">
+  <meta property="og:title" content="Alfa · Little radio. Big imagination.">
+  <meta property="og:description" content="An offline music and alphabet companion. Explore the pastel cloud, download the print files, and build your own.">
+  <meta property="og:url" content="https://hvitis.github.io/Alfa/">
+  <meta property="og:image" content="https://hvitis.github.io/Alfa/og-cloud.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Pastel blue Alfa cloud radio with yellow buttons, Greek alpha logo, and playful pastel decorations.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Alfa · Little radio. Big imagination.">
+  <meta name="twitter:description" content="An offline music and alphabet companion. Made by you.">
+  <meta name="twitter:image" content="https://hvitis.github.io/Alfa/og-cloud.png">
+  <meta name="twitter:image:alt" content="Pastel blue Alfa cloud radio, rendered from its printable CAD assembly.">
+  <link rel="canonical" href="https://hvitis.github.io/Alfa/">
   <title>Alfa · Build atlas</title>
   <link rel="icon" href="./alpha.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css">
@@ -39,13 +55,14 @@
       <div class="wiring-heading"><div><p class="eyebrow">THE COMPLETE WIRING ATLAS</p><h3>Every connection, both ends.</h3></div><span id="wire-count" class="count"></span></div><div class="table-wrap"><table id="wiring-table"><caption id="wiring-caption">Raspberry Pi 3 wiring · controller numbers are physical header pins.</caption><thead><tr><th scope="col">Wire</th><th scope="col">Circuit / signal</th><th scope="col">From</th><th scope="col">To</th></tr></thead><tbody id="wiring-body"></tbody></table></div>
     </section>
     <section id="panel-software" role="tabpanel" aria-labelledby="tab-software" hidden>
-      <div class="section-bar"><div><p class="eyebrow">THE SOFTWARE</p><h2>From a button press to a response.</h2></div><label class="select-field" for="software-view">Document<select id="software-view"><option value="design">Design</option><option value="implementation">Implementation</option></select></label></div>
-      <div id="software-design" class="document-layout"><aside class="document-meta"><span class="section-number">04 / DESIGN</span><h3>The decisions behind the code.</h3><p>An architecture decision record for the existing offline Python application.</p><div class="document-tag">ADR 0001 <span>RECORDED</span></div><a href="./docs/adr.md" download class="text-link">Download ADR source ↙</a></aside><article id="adr-content" class="prose" aria-label="Architecture decision record"></article></div>
+      <div class="section-bar"><div><p class="eyebrow">THE SOFTWARE</p><h2>From a button press to a response.</h2></div><label class="select-field" for="software-view">Document<select id="software-view"><option value="design">Design</option><option value="implementation">Implementation</option><option value="teaching">Teaching example (MDR)</option></select></label></div>
+      <div id="software-design" class="document-layout"><aside class="document-meta"><span class="section-number">04 / DESIGN</span><h3>The decisions behind the code.</h3><p>An architecture decision record for the existing offline Python application.</p><div class="document-tag">ADR 0001 <span>RECORDED</span></div><a href="./docs/adr.pdf" download class="text-link">Illustrated ADR <small>PDF ↙</small></a><br><a href="./docs/adr.md" download class="text-link">Download ADR source ↙</a></aside><article id="adr-content" class="prose" aria-label="Architecture decision record"></article></div>
       <div id="software-implementation" hidden><div class="diagram-heading"><div><span class="section-number">04 / IMPLEMENTATION</span><h3>One loop. Explicit hardware boundaries.</h3><p>The current Raspberry Pi application, from startup and media preparation to input, display, audio, and cleanup.</p></div><a href="./docs/architecture.mmd" download class="text-link">Mermaid source ↙</a></div><div class="diagram-scroll" tabindex="0" role="region" aria-label="Software architecture diagram"><div id="architecture-diagram" aria-busy="true"></div></div><div class="diagram-legend"><span><i class="swatch runtime"></i> Control flow</span><span><i class="swatch physical"></i> Physical hardware</span><span><i class="swatch simulation"></i> Simulation</span></div><details class="diagram-source"><summary>Read the Mermaid definition</summary><pre><code id="mermaid-source"></code></pre></details></div>
+      <div id="software-teaching" class="document-layout" hidden><aside class="document-meta"><span class="section-number">04 / TEACHING</span><h3>How to write an ADR for medical device software.</h3><p>A fictional worked example for training. It shows what the MDR, IEC 62304, and ISO 14971 add to an ordinary ADR.</p><div class="document-tag">AL-ADR-0001 <span>FICTIONAL</span></div><p class="teaching-notice"><b>Teaching material.</b> Not a medical device. For educational purposes only.</p><a href="./docs/teaching-material-adr-example-not-a-medical-device.pdf" download class="text-link">Teaching ADR <small>PDF ↙</small></a><br><a href="./docs/teaching-material-adr-example-not-a-medical-device.md" download class="text-link">Download ADR source ↙</a></aside><article id="teaching-adr-content" class="prose teaching-document" aria-label="Teaching material: a fictional architecture decision record. Not a medical device."></article></div>
     </section>
     <div id="viewer-card" class="viewer-card" hidden><div class="viewport-top"><span id="scene-label" class="scene-badge">PLYWOOD / 3D MODEL</span><button id="reset-camera" class="camera-button" aria-label="Reset camera">↺ <span>Reset view</span></button></div><div id="viewport" role="region" aria-label="Interactive 3D project viewer"></div><div id="viewer-status" role="status">Loading the 3D model…</div><div class="viewport-bottom"><span><b>Drag</b> to orbit <span class="separator">/</span> <b>Scroll</b> to zoom</span><span class="viewer-indicator"><i></i> Interactive 3D</span></div></div>
     <p id="app-status" class="app-status" role="status">Loading project data…</p>
   </main>
-  <footer><span class="footer-brand"><span aria-hidden="true">α</span> Little radio. Big imagination.</span><div><a href="./THIRD-PARTY-LICENSES.txt">Library licenses</a><a href="https://github.com/hvitis/Alfa/blob/main/LICENSE">Made to be shared ↗</a></div></footer>
+  <footer><span class="footer-brand"><span aria-hidden="true">α</span> Little radio. Big imagination.</span><p class="footer-notice">Not a medical device. For educational purposes only.</p><div><a href="./THIRD-PARTY-LICENSES.txt">Library licenses</a><a href="https://github.com/hvitis/Alfa/blob/main/LICENSE">Made to be shared ↗</a></div></footer>
 </body>
 </html>

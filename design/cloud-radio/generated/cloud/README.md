@@ -1,9 +1,9 @@
-# Alfa cloud radio — PETG prototype 5
+# Alfa cloud radio — PETG prototype 6
 
 This enclosure has two snap-together shells and a separate battery door.
 Three M3 screws secure the rear shell. One M3 screw secures the battery door.
 The battery door has two retaining tabs. It lifts out after removal of its screw.
-The cloud has a flat base and smooth, tangent-connected lobes. Its nominal outside dimensions are 210 × 190 × 86 mm.
+The cloud has a flat base and smooth, tangent-connected lobes. Its core dimensions remain 210 × 190 × 86 mm. Rounded side relief adds up to 2.5 mm per side; the print field is 216 × 210 mm.
 The front and rear rims have a 1.4 mm radius. The integrated handle has a 64 × 22 mm through-opening.
 The handle follows the existing crown. Its raised grip is 20 mm deep and centered on the joint between the shells.
 Each shell forms 9.85 mm of the grip, with a 0.3 mm joint gap.
@@ -23,6 +23,10 @@ The exploded view exposes the internal frame features.
 Viewed from the front, the LCD is on the left and the keypad is vertical on the right.
 Native CAD +X points left in that front view. Y points up and Z goes into the case.
 
+The side walls have shallow rounded cumulus caps. The core cavity, handle, shoulders, joint, snaps, and screw access stay unchanged.
+The caps are integral with each shell. They do not create ventilation holes or extra parts.
+Enable build-plate supports for the downward-facing cap curves as required by the slicer.
+
 ## Status and dimensions
 
 This is a fit prototype. Physical strength, fatigue, drops, and operating temperatures are not yet measured.
@@ -41,7 +45,11 @@ Actual hand size and comfortable grip vary. An adult must check the printed grip
 The remaining modules have incomplete mechanical documentation.
 The [amplifier supplier](https://www.gotronik.pl/modul-wzmacniacza-audio-i2s-3w-klasa-d-dacmax98357-p-13866.html) gives an approximate 19 × 19 mm outline.
 The [keypad supplier](https://sklep.msalamon.pl/produkt/modul-ad-key-klawiatura-5-przyciskow/) gives a 68 × 26 mm outline and an inconsistent 61 × 26 mm mounting pattern.
-The keypad envelope reserves 68 × 30 mm. A shared window avoids five unverified button openings.
+The keypad envelope reserves 68 × 30 mm. Two shared windows avoid five unverified button openings.
+The isolated-button zone extends 16 mm from its short PCB edge, followed by a 9 mm clear gap.
+A flush 4 mm front bridge crosses that gap between the two long sides, with 2.5 mm clearance on each side.
+The four opening corners beside the bridge have 8 mm radii, adding cover material at its roots.
+The individual button centres, cap diameters, and travel still need a physical fit check.
 The ADC envelope reserves 9 × 29 mm. The QUARKZMAN body reserves 18 × 40 × 12 mm.
 These dimensions and populated heights remain provisional.
 
@@ -97,7 +105,7 @@ The ZIP can be used for printing without that script.
 6. Use millimeters and 100% scale.
 7. Use PETG, a 0.4 mm nozzle, and a 0.2 mm layer height.
 8. Use at least five perimeters, six top/bottom layers, and 25% infill.
-9. Add a 4 mm brim if the plate permits it.
+9. Use a 2 mm brim on a 220 × 220 mm bed; include the brim when checking slicer placement.
 10. Enable supports from the build plate for internal towers, rebates, and snap overhangs.
 11. Block supports in small pilot holes and nut pockets.
 12. Inspect the sliced toolpaths before printing.

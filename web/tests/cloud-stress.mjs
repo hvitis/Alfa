@@ -33,6 +33,8 @@ try {
   await page.goto(`${base}#3dprint`);
   await waitCloud('assembled');
   await page.reload(); await waitCloud('assembled');
+  assert.equal(await page.locator('#cloud-color-front').inputValue(),'#86bfea');
+  assert.equal(await page.locator('#cloud-color-rear').inputValue(),'#70acd9');
   const colorPanel=await page.locator('#cloud-colors').boundingBox();
   const downloads=await page.locator('.cloud-downloads').boundingBox();
   assert(colorPanel.width<=downloads.width/2+.5,'Desktop color panel must use at most half the page width');
@@ -66,6 +68,7 @@ try {
   assert.equal(await page.locator('#cloud-color-rear').inputValue(),'#d7c6f5');
   await page.locator('.palette-picker summary').click();
   await page.getByRole('button',{name:'Cloud blue',exact:true}).click();
+  assert.equal(await page.locator('#cloud-color-front').inputValue(),'#86bfea');
   const checks = await (await page.request.get(`${base}cloud/verification.json`)).json();
   assert(checks.passed); assert(checks.checks.length > 100);
   const manifest = await (await page.request.get(`${base}cloud/manifest.json`)).json();

@@ -61,3 +61,51 @@ Project upkeep
 30. [x] The standalone hardware viewer (`hardware-visualisation/viewer.html`, `output/wiring-3d.html`) embeds GLB assets and radio images via `scripts/export-single-file.mjs` so the Wooden Case and Wooden Radio tabs load completely offline and in webservers. Done 2026-10-16.
 31. [ ] Commit the radio work in logical commits and add CI: `pnpm test`, the server tests and `make test`. The CAD builds are byte-identical, so CI can also check that the synced viewer data matches a fresh build.
 32. [ ] Move the wooden case onto `design/woodkit` and `hardware-visualisation/src/scene/workshopScene.js`. Duplicated scene code is how the Wooden Case tab's click crash went unnoticed.
+
+
+
+Hardware
+
+1. Use big buttons, placed where their meaning is obvious. Wire 30 mm lit arcade buttons in parallel with the keypad's switches; you only need to recalibrate. Placement matters most:
+   - LEFT goes to the left of the screen and RIGHT to the right, so the child presses the side they want to go to.
+   - A big CENTER button goes under the window.
+   - UP and DOWN get ear and mouth icons.
+   - Connect the button lights to free GPIO pins so a game can light the button to press.
+2. Add an NFC "porch" for figures. This is the biggest hardware improvement.
+   - A PN532 board in I²C mode uses address 0x24, so it shares the bus with the ADS1115 at 0x48.
+   - Put NTAG213 stickers under Moomin figures. Standing a figure on the porch jumps to its letter and the character speaks.
+   - This is how the Toniebox works, and it's the most proven way toddlers play with this kind of toy. The game then becomes "find Ryjek and put him on the porch".
+3. Add a USB microphone for "say it back". Record a 2-second attempt and play it back pitched up like a chipmunk; kids love hearing themselves. It has to be USB because the amplifier already uses the Pi's I²S port. Keep the recordings on the device.
+4. Add a tuning knob. A KY-040 rotary encoder on GPIO 5/6/13, with radio static between letters, fits the radio idea. It could also move the pencil: turn the knob to draw.
+5. Fix power and amplifier noise.
+   - Use a battery board with safe shutdown (PiSugar-type) or make the SD card read-only.
+   - Connect the MAX98357A's SD pin to a GPIO so the amplifier is fully off while asleep. That means no hiss and longer battery life.
+6. Later, a bigger screen. A 2.8" 240×320 ST7789 module keeps the same driver and resolution with bigger pixels. Measure the window before cutting.
+
+
+Learning games
+
+1. Sound blender. Polish words are spelled the way they sound, so the child can build words. Tap K, O, T and the radio says "k… o… t… KOT!" and shows a cat. Made-up words get sounded out too, which is half the fun. It needs the per-letter sound clips from todo 1. Add cards for SZ, CZ, CH, RZ and DZ so real words work.
+2. "Bring me something that starts with M." Put stickers on real toys and household objects. Each tag stores its word (miś), not its letter. The radio asks for a letter, the child goes hunting around the flat, and the radio checks the first letter. A wrong pick gets a friendly correction, in the no-failure style of todo 5: "Łyżka starts with Ł! We're looking for M."
+3. Sound memory. All the cards have the same back. Tap one to hear its sound and see the letter for 2 s. Tap a second card with the same sound and the existing fireworks play. The radio flips the cards, so the whole family can play.
+4. Two-choice game with real cards. This is todo 5 with cards on the table instead of the small buttons. The voice asks "Where's the M?" and the child taps a card.
+
+Collecting and progress
+
+5. Letters as gifts. Todo 3 says to add a new letter when the child asks for more. Make the card the unlock: LEFT/RIGHT only moves through letters whose card has been tapped. A new letter becomes a present, maybe wrapped and from grandma.
+6. Progress stored on a "passport" card. Once the SD card is read-only (todo 19/22), the Pi can't keep play history. An NTAG215 tag holds 504 bytes, which is enough for play and correct-answer counts for all 32 letters. The child taps their passport at the start. Alfa reads it, uses it for quiet repetition (todo 6), and writes the updated counts back. Siblings each get their own card. Use a versioned record with a CRC, and only write while the tag is still on the reader.
+
+Characters and family
+
+7. Guest host. Stand a tagged figure on a small dock on top of the cloud and that character takes over: its animations, its voice, its favourite letters. Lift it off and the radio goes back to normal. This one uses presence, not a tap.
+8. Voice postcards. Tap a photo card of grandma to hear a message she recorded. The tag only stores a clip ID, so the audio stays offline on the Pi. Messages could be added through the parent page (todo 20) during maintenance mode.
+
+Grown-up controls (these fix open todos)
+
+9. Moon card for a safe goodnight. Tapping the moon starts the sleep timer (todo 17). When it ends, a character says Dobranoc, the backlight fades, and the Pi shuts down properly. Cutting power with the switch can corrupt the SD card (todo 21–23), and this turns the safe shutdown into a bedtime ritual the child does themselves. The service will need a sudoers or polkit rule to allow poweroff.
+10. Parent key. A tag on your keyring opens a hidden menu with volume (still under the cap), today's letters, timer length and exit. This replaces the "hidden switch" option in todo 15 and takes volume off the child's buttons completely.
+
+Physical pieces
+
+11. 3D-printed letter tokens with the tag inside. Extend the CAD pipeline to generate 32 tokens with raised letters and a pocket for an NFC tag. The manifest would record which layer to pause the print at so you can drop the tag in. Kids can trace the raised letter with a finger, like Montessori sandpaper letters, and then watch the drawing lesson trace it on screen. Each token can use its letter's colour. Choking hazard: a 25 mm tag disc on its own is small enough for a toddler to swallow (smaller than the 31.7 mm small-parts test tube). Keep tokens at least 45 mm, or embed tags in laminated cards.
+12. Mailbox slot. The child posts the token into a slot in the cloud, it plays, and it comes back out of a hatch at the back. Toddlers love posting things. This is the speculative one: the battery and Pi fill most of the 86 mm depth, so it needs a layout study first.

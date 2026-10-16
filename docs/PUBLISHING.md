@@ -97,4 +97,11 @@ After downloading a release, run `sha256sum --check SHA256SUMS` on Linux or `sha
 
 Upload `.github/social-preview.png` in **Settings → General → Social preview**.
 GitHub does not automatically select an image from this path.
-Regenerate the image with `python web/social_preview.py` in the development environment.
+Start `make serve`, then run `npm run render:assets` (or `python web/social_preview.py`).
+The GitHub card is 1280 × 640. The website card is `web/assets/og-cloud.png`, at 1200 × 630.
+Both use the verified pastel-blue CAD model and the current page style.
+`make site` copies the website card to `og-cloud.png` and generates `docs/adr.pdf`.
+The PDF uses the same cover style and the complete Markdown ADR.
+It also exports the fictional teaching ADR as `docs/teaching-material-adr-example-not-a-medical-device.pdf` and `.md`.
+Every page of that PDF shows a diagonal "TEACHING MATERIAL" watermark and the footer "Not a medical device · For educational purposes only".
+The absolute social URLs in `web/index.html` target `https://hvitis.github.io/Alfa/`. Update them if the deployment URL changes.

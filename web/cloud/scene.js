@@ -13,7 +13,7 @@ export function createCloudScene() {
   const labels = new THREE.Group(), clearances = new THREE.Group();
   root.add(labels, clearances);
   const pickables = [], shells = {}, data = { components: [] }, labelAnchors = [];
-  const partMaterials = {}, colors = {front:'#dae9ed',rear:'#b7d2da',battery_door:'#f3c96d'};
+  const partMaterials = {}, colors = {front:'#86bfea',rear:'#70acd9',battery_door:'#fff0b5'};
   function applyColors() { for(const [part,materials] of Object.entries(partMaterials)) for(const material of materials) material.color.set(colors[part]); }
   let mode = 'assembled', showLabels = false, showClearances = false, request = 0;
   function apply() {

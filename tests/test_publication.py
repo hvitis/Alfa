@@ -11,7 +11,7 @@ from pathlib import Path
 from web.build import export_site
 from web.archives import CLOUD, MEMBERS, create_cloud_archive
 from scripts.package import KIT_NAME, REQUIRED, create_kit, digest, validate_release_kit
-from scripts.project import write_json
+from scripts.project import ROOT, write_json
 from scripts.verify_release_ref import SEMVER, verify
 
 
@@ -80,7 +80,7 @@ class PackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             export_site(directory)
             files = {p.relative_to(directory).as_posix() for p in Path(directory).rglob("*") if p.is_file()}
-            self.assertTrue({"index.html", ".nojekyll", "data/manifest.json", "docs/adr.md", "docs/architecture.mmd", "THIRD-PARTY-LICENSES.txt"}.issubset(files))
+            self.assertTrue({"index.html", ".nojekyll", "data/manifest.json", "docs/adr.md", "docs/architecture.mmd", "THIRD-PARTY-LICENSES.txt", "docs/adr.pdf", "og-cloud.png"}.issubset(files))
             self.assertIn("cloud/cloud-radio.zip", files)
             with zipfile.ZipFile(Path(directory)/"cloud/cloud-radio.zip") as archive:
                 self.assertEqual(set(archive.namelist()), set(MEMBERS))
@@ -88,7 +88,18 @@ class PackageTests(unittest.TestCase):
                 self.assertTrue(json.loads(archive.read("verification.json"))["passed"])
             self.assertTrue(any(name.endswith(".glb") for name in files))
             self.assertTrue(any(name.endswith(".js") for name in files))
-            self.assertFalse(any(name.endswith((".png", ".jpg", ".wav", ".gif")) for name in files))
+            # Only the original CAD render and social card are public raster assets.
+            pngs={name for name in files if name.endswith(".png")}
+            self.assertEqual(pngs,{"og-cloud.png"})
+            self.assertFalse(any(name.endswith((".jpg", ".wav", ".gif")) for name in files))
+            self.assertTrue((Path(directory)/"docs/adr.pdf").read_bytes().startswith(b"%PDF-"))
+            # The fictional MDR example ships only as clearly marked teaching material.
+            teaching = Path(directory)/"docs/teaching-material-adr-example-not-a-medical-device"
+            self.assertTrue(teaching.with_suffix(".pdf").read_bytes().startswith(b"%PDF-"))
+            notice = teaching.with_suffix(".md").read_text(encoding="utf-8")
+            for phrase in ("TEACHING MATERIAL · NOT A MEDICAL DEVICE · FOR EDUCATIONAL PURPOSES ONLY", "Alfa is not a medical device", "Nobody signed anything", "## End of teaching example"):
+                self.assertIn(phrase, notice)
+            self.assertEqual((Path(directory)/"og-cloud.png").read_bytes(),(ROOT/"web/assets/og-cloud.png").read_bytes())
             data = json.loads((Path(directory) / "data/manifest.json").read_text())
             self.assertEqual(len(data["alphabet"]), 32)
             self.assertLessEqual(data["audio"]["initial_volume"], data["audio"]["max_volume"])

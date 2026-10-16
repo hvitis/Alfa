@@ -64,6 +64,26 @@ export function cloudDevelopment(root) {
           response.end(await readFile(archivePath));
         } catch(error){next(error)}
       });
+      let pdfJob;
+      // The preview and static site use the same original social card and PDF.
+      server.middlewares.use(async(request,response,next)=>{
+        const url=request.url?.split('?')[0];
+        const files={
+          '/og-cloud.png':['web/assets/og-cloud.png','image/png'],
+          '/docs/adr.pdf':['web/.generated/adr.pdf','application/pdf'],
+        };
+        if(!files[url])return next();
+        try{
+          const [file,type]=files[url];
+          if(url==='/docs/adr.pdf'){
+            const {exportAdr}=await import('../export-pdf.mjs');
+            pdfJob ||= exportAdr(resolve(root,file)).finally(()=>{pdfJob=undefined});
+            await pdfJob;
+          }
+          response.setHeader('Content-Type',type);
+          response.end(await readFile(resolve(root,file)));
+        }catch(error){next(error)}
+      });
       // Match the production manifest URL during Vite development.
       server.middlewares.use(async (request, response, next) => {
         if (request.url?.split('?')[0] !== '/data/manifest.json') return next();

@@ -5,7 +5,7 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 
 const root = path.resolve(process.env.SMOKE_SITE_DIR || '_site');
-const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.glb': 'model/gltf-binary', '.md': 'text/plain', '.mmd': 'text/plain', '.txt': 'text/plain' };
+const mime = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.glb': 'model/gltf-binary', '.md': 'text/plain', '.mmd': 'text/plain', '.txt': 'text/plain', '.png':'image/png', '.pdf':'application/pdf' };
 const server = http.createServer(async (req, res) => {
   try {
     let pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
@@ -44,9 +44,15 @@ try {
       await page.goto(`${origin}${prefix}`, { waitUntil: 'networkidle' });
       await page.waitForSelector('html[data-ready="true"]');
       assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['Plywood', '3DPrint', 'Hardware', 'Software']);
+      assert.equal(await page.locator('meta[property="og:image"]').getAttribute('content'),'https://hvitis.github.io/Alfa/og-cloud.png');
+      assert.equal(await page.locator('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
+      const pdf=await page.request.get(`${origin}${prefix}docs/adr.pdf`);
+      assert((await pdf.body()).subarray(0,5).equals(Buffer.from('%PDF-')),'ADR download must be a real PDF');
+      const card=await page.request.get(`${origin}${prefix}og-cloud.png`);
+      const png=await card.body();
+      assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),630);
       await scene('house', 'assembled');
       await noOverflow();
-      if (prefix === '/' && viewport.width === 1440 && process.env.SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.SMOKE_SCREENSHOT, fullPage: true });
       for (const mode of ['roof_open', 'inside', 'exploded', 'assembled']) {
         await page.selectOption('#assembly-mode', mode); await scene('house', mode);
       }
@@ -57,6 +63,7 @@ try {
       await page.selectOption('#assembly-mode', 'exploded'); await scene('case', 'exploded');
       await page.getByRole('tab', { name: '3DPrint' }).click();
       await scene('cloud', 'assembled');
+      if (prefix === '/' && viewport.width === 1440 && process.env.SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.SMOKE_SCREENSHOT, fullPage: true });
       assert((await page.locator('#cloud-facts').textContent()).includes('PETG'));
       for (const mode of ['exploded', 'inside', 'battery_open', 'assembled']) {
         await page.selectOption('#cloud-mode', mode); await scene('cloud', mode);
@@ -101,7 +108,19 @@ try {
         await mkdir(directory, { recursive: true });
         await page.screenshot({ path: path.join(directory, 'software-architecture.png'), fullPage: true });
       }
-      for (const asset of ['docs/adr.md', 'docs/architecture.mmd', 'THIRD-PARTY-LICENSES.txt']) assert((await page.request.get(`${origin}${prefix}${asset}`)).ok());
+      // The fictional MDR example must never ship without its notice, watermark, and disclaimer footer.
+      await page.selectOption('#software-view', 'teaching');
+      await page.waitForSelector('#teaching-adr-content .teaching-diagram[data-rendered="true"] svg');
+      const teaching = await page.locator('#teaching-adr-content').textContent();
+      for (const phrase of ['TEACHING MATERIAL · NOT A MEDICAL DEVICE · FOR EDUCATIONAL PURPOSES ONLY', 'Read this first', 'Alfa is not a medical device', 'Alfa-L does not exist', 'Nobody signed anything']) assert(teaching.includes(phrase), phrase);
+      assert((await page.locator('#teaching-adr-content').evaluate(element => getComputedStyle(element, '::after').backgroundImage)).includes('TEACHING'), 'Teaching ADR watermark');
+      assert(await page.locator('#teaching-adr-content').isVisible());
+      assert((await page.locator('footer').textContent()).includes('Not a medical device. For educational purposes only.'));
+      await noOverflow();
+      const teachingPdf = await page.request.get(`${origin}${prefix}docs/teaching-material-adr-example-not-a-medical-device.pdf`);
+      assert((await teachingPdf.body()).subarray(0, 5).equals(Buffer.from('%PDF-')), 'Teaching ADR download must be a real PDF');
+      assert((await (await page.request.get(`${origin}${prefix}docs/teaching-material-adr-example-not-a-medical-device.md`)).text()).includes('NOT A MEDICAL DEVICE'));
+      for (const asset of ['docs/adr.md', 'docs/adr.pdf', 'og-cloud.png', 'docs/architecture.mmd', 'THIRD-PARTY-LICENSES.txt']) assert((await page.request.get(`${origin}${prefix}${asset}`)).ok());
       // Direct links and refreshes must work without server-side routing.
       await page.goto(`${origin}${prefix}#hardware`, { waitUntil: 'networkidle' });
       await scene('pico'); // Hash navigation retains the selected controller.

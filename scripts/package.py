@@ -50,7 +50,10 @@ def validate_release_kit(directory):
             if any(part in {".git", ".state", ".venv", "node_modules", "photos", "imgs", "animations", "alphabet"} for part in path.parts):
                 raise ValueError(f"Private or unreviewed content in release kit: {name}")
             viewer_mesh = re.fullmatch(r"site/assets/(?:enclosure|internals|exploded|house_(?:assembled|roof_open|inside|exploded))-[A-Za-z0-9_-]+\.glb", name)
-            if name.endswith((".wav", ".mp3", ".jpg", ".jpeg", ".gif", ".pdf")) or (name.endswith(".glb") and not viewer_mesh):
+            reviewed_pdf = name in {"site/docs/adr.pdf", "site/docs/teaching-material-adr-example-not-a-medical-device.pdf"}
+            cloud_mesh = name == "site/cloud/cloud-radio.glb"
+            if (name.endswith((".wav", ".mp3", ".jpg", ".jpeg", ".gif")) or (name.endswith(".pdf") and not reviewed_pdf)
+                    or (name.endswith(".glb") and not (viewer_mesh or cloud_mesh))):
                 raise ValueError(f"Unreviewed binary media in release kit: {name}")
         checksums = json.loads(kit.read("checksums.json"))
         if set(checksums) != set(names) - {"checksums.json"}:

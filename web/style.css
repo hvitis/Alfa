@@ -212,3 +212,18 @@ footer div { display: flex; gap: 22px; }
   #viewer-status { left: 13px; right: 13px; bottom: 63px; font-size: 9px; }
 }
 @media (prefers-reduced-motion:reduce) { .tabs button { transition: none; } }
+
+/* Warm paper behind the vivid Cloud blue preview. */
+#print-slot .viewer-card { background: #fff2c6; }
+
+/* Teaching ADR: a large diagonal watermark repeats down the whole fictional document. */
+.teaching-document { position: relative; overflow: hidden; }
+.teaching-document::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560'%3E%3Ctext x='280' y='280' fill='%23b42318' fill-opacity='.11' font-family='Arial,Helvetica,sans-serif' font-size='52' font-weight='800' letter-spacing='3' text-anchor='middle' dominant-baseline='middle' transform='rotate(-45 280 280)'%3ETEACHING MATERIAL%3C/text%3E%3C/svg%3E") center top / min(560px, 100%) auto repeat; }
+.teaching-document blockquote { margin: 0 0 22px; padding: 14px 18px; border: 2px solid #b42318; border-radius: 14px; background: #fdecea; color: #7a1f16; }
+.teaching-document th, .teaching-document td { padding: 8px 10px; vertical-align: top; }
+.teaching-document .id { white-space: nowrap; color: inherit; }
+.teaching-document h3 { font-size: 18px; margin: 22px 0 8px; }
+.teaching-diagram svg { display: block; margin: 10px auto; max-width: 100%; height: auto; }
+.teaching-notice { padding: 11px 12px; border: 1.5px solid #b42318; border-radius: 12px; background: #fdecea; color: #7a1f16 !important; font-size: 11px !important; }
+.footer-notice { margin: 0; font-weight: 700; color: #b42318; }
+@media (max-width:760px) { .teaching-document table { display: block; overflow-x: auto; } }

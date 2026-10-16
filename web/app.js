@@ -1,4 +1,5 @@
 import adrHTML from './.generated/adr.html?raw';
+import teachingHTML from './.generated/teaching-adr.html?raw';
 import './cloud/style.css';
 import {createCloudColorControls} from './cloud/colors.js';
 import architecture from './content/architecture.mmd?raw';
@@ -16,7 +17,7 @@ const models = {
 };
 const picoData = createPicoData();
 let cloudColorControls;
-let activeTab = 'plywood', viewerPromise, viewer, diagramPromise, transition = 0, selectedWire = '', repository;
+let activeTab = 'plywood', viewerPromise, viewer, diagramPromise, teachingPromise, transition = 0, selectedWire = '', repository;
 
 function fail(error) {
   status.textContent = `Unable to complete this view: ${error.message}`;
@@ -163,12 +164,27 @@ function renderWires() {
   }
 }
 
+// The teaching ADR keeps its diagram as Mermaid source; draw it on first view.
+async function renderTeachingDiagram() {
+  const source = $('#teaching-adr-content code.language-mermaid');
+  if (!source) return;
+  const container = document.createElement('div');
+  container.className = 'teaching-diagram'; container.setAttribute('aria-busy', 'true');
+  source.parentElement.replaceWith(container);
+  const { renderArchitecture } = await import('./software.js');
+  await renderArchitecture(container, source.textContent, { id: 'teaching-architecture', label: 'Fictional Alfa-L architecture: a class B Practice App sends frames to a class C Output Guard, which alone drives the display.' });
+}
+
 async function showSoftware() {
-  const implementation = $('#software-view').value === 'implementation';
-  $('#software-design').hidden = implementation; $('#software-implementation').hidden = !implementation;
-  if (implementation) {
+  const view = $('#software-view').value;
+  for (const name of ['design', 'implementation', 'teaching']) $(`#software-${name}`).hidden = view !== name;
+  if (view === 'implementation') {
     diagramPromise ??= import('./software.js').then(({ renderArchitecture }) => renderArchitecture($('#architecture-diagram'), architecture));
     await diagramPromise;
+  }
+  if (view === 'teaching') {
+    teachingPromise ??= renderTeachingDiagram();
+    await teachingPromise;
   }
 }
 
@@ -194,6 +210,7 @@ async function start() {
   if (!response.ok) throw new Error(`Specifications returned HTTP ${response.status}`);
   repository = (await response.json()).repository;
   $('#adr-content').innerHTML = adrHTML; // Build-time Markdown rendering, with raw HTML disabled.
+  $('#teaching-adr-content').innerHTML = teachingHTML;
   $('#mermaid-source').textContent = architecture;
   fillPlywood(); renderWires();
   tabs.forEach((tab, index) => {

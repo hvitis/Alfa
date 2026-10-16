@@ -83,6 +83,7 @@ export function createViewer(container, onSelect) {
     await model.readyPromise;
     if (token !== request) return null;
     for (const [key, value] of scenes) value.root.visible = key === id;
+    world.background.set(id === 'cloud' ? '#fff2c6' : '#edf1fc');
     current = model; sceneId = id; wireId = ''; filter = 'all';
     filterWires();
     reset();

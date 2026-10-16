@@ -1,4 +1,6 @@
 import { build } from 'vite';
+import { exportAdr } from './export-pdf.mjs';
+import { exportTeachingAdr, renderTeaching, teachingMarkdown, TEACHING_FILE } from './export-teaching.mjs';
 import MarkdownIt from 'markdown-it';
 import { readFile, writeFile, mkdir, copyFile, readdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -10,13 +12,20 @@ const destination = resolve(process.argv[2] || resolve(root, '_site'));
 const markdown = new MarkdownIt({ html: false, linkify: false, typographer: false });
 await mkdir(resolve(web, '.generated'), { recursive: true });
 await writeFile(resolve(web, '.generated/adr.html'), markdown.render(await readFile(resolve(web, 'content/adr.md'), 'utf8')));
+// teachingMarkdown() stops the build if the fictional example loses any part of its disclaimer.
+await writeFile(resolve(web, '.generated/teaching-adr.html'), renderTeaching(await teachingMarkdown()));
 await build({ configFile: resolve(web, 'vite.config.js'), logLevel: 'warn', build: { outDir: destination } });
 await mkdir(resolve(destination, 'data'), { recursive: true });
 await mkdir(resolve(destination, 'docs'), { recursive: true });
 await copyFile(resolve(web, '.generated/manifest.json'), resolve(destination, 'data/manifest.json'));
 await copyFile(resolve(web, 'content/adr.md'), resolve(destination, 'docs/adr.md'));
+await copyFile(resolve(web, 'content/teaching-adr.md'), resolve(destination, `docs/${TEACHING_FILE}.md`));
 await copyFile(resolve(web, 'content/architecture.mmd'), resolve(destination, 'docs/architecture.mmd'));
 await writeFile(resolve(destination, '.nojekyll'), '');
+await copyFile(resolve(web, 'assets/og-cloud.png'), resolve(destination, 'og-cloud.png'));
+await exportAdr(resolve(destination, 'docs/adr.pdf'));
+await copyFile(resolve(destination, 'docs/adr.pdf'),resolve(web,'.generated/adr.pdf'));
+await exportTeachingAdr(resolve(destination, `docs/${TEACHING_FILE}.pdf`));
 // Retain notices for installed packages, including dependencies bundled by Mermaid.
 const lock = JSON.parse(await readFile(resolve(root, 'package-lock.json'), 'utf8'));
 const notices = ['Third-party package notices for the static website.\nOriginal project code: MIT.\n'];

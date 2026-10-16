@@ -19,7 +19,7 @@ from cadgen import build123d as b
 
 ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT / "generated" / "cloud"
-COLORS = {"front": "#dae9ed", "rear": "#b7d2da", "battery_door": "#f3c96d"}
+COLORS = {"front": "#86bfea", "rear": "#70acd9", "battery_door": "#fff0b5"}
 
 
 def box(x, y, z, w, h, d):
@@ -234,7 +234,7 @@ def make(p):
         front += record(cylinder(x,y,t,2.4,lz-t),f"F-L{index:02}","LCD mounting post","front")
         front -= cylinder(x, y, 1, 1.1, lz+1)
 
-    # One window avoids assuming a precise five-button pattern.
+    # Two shared windows keep the unmeasured four-button pattern provisional.
     key = items["keypad"]
     kx, ky, kz = key["origin"]
     kw, kh, _ = key["size"]
@@ -244,7 +244,25 @@ def make(p):
                          (32,9),(27,9),(27,14),(-27,14),(-27,9),(-32,9),(-32,-9),(-27,-9)]], align=None)
     window = b.Pos(cx,cy)*b.Rot(0,0,angle)*window
     window = b.fillet(window.vertices(), radius=1)
-    front -= slab(window, -1, t+2)
+    bridge=p["keypad_bridge"]
+    gap_start=-kh/2+bridge["single_button_zone"]
+    bridge_center=gap_start+bridge["clear_gap"]/2
+    strip=b.Pos(cx,cy)*b.Rot(0,0,angle)*rr(bridge_center-bridge["width"]/2,-kw/2-2,bridge["width"],kw+4,.7)
+    # Preserve the face across the measured gap instead of inserting a loose part.
+    cutouts=window-strip
+    a=math.radians(angle)
+    roots=[]
+    for vertex in cutouts.vertices():
+        dx,dy=vertex.X-cx,vertex.Y-cy
+        along=dx*math.cos(a)+dy*math.sin(a)
+        across=-dx*math.sin(a)+dy*math.cos(a)
+        if abs(abs(along-bridge_center)-bridge["width"]/2)<.001 and abs(abs(across)-14)<.001:
+            roots.append(vertex)
+    if len(roots)!=4:raise ValueError("Expected four keypad bridge roots")
+    # Fillet the openings, adding front-face material at all four junctions.
+    cutouts=b.fillet(roots,radius=bridge["root_radius"])
+    front -= slab(cutouts,-1,t+2)
+    record(slab(window-cutouts,0,t),"F-K05","Rounded keypad bridge · 4 mm / R8","front")
     diagonal = 4.5 / math.sqrt(2)
     for index,(x,y) in enumerate(((x,y) for x in (kx+diagonal,kx+kw-diagonal) for y in (ky+diagonal,ky+kh-diagonal)),1):
         front += record(slotted_pad(x,y,kz,"y" if angle==90 else "x"),f"F-K{index:02}","Keypad mounting slot","front")
@@ -398,6 +416,39 @@ def make(p):
             if missing:b.export_brep(missing,debug/f"{name}-missing.brep")
             if added:b.export_brep(added,debug/f"{name}-added.brep")
             raise ValueError(f"{name}: shoulder changed lower frame (missing {missing_volume}, added {added_volume} mm3)")
+    # Rounded caps only add material outside the original core. The shallow
+    # anchor stays within the existing wall; shoulders and the joint are masked.
+    relief=p["side_relief"]
+    protected=slab(b.offset(outer,amount=-relief["anchor"]),-1,depth+2)
+    wire=outer.outer_wire()
+    samples=[wire.position_at(i/1600) for i in range(1601)]
+    core_parts={"front":front,"rear":rear}
+    for name,depths in (("front",relief["front_depths"]),("rear",relief["rear_depths"])):
+        shape=core_parts[name]
+        mask=box(-110,8,5 if name=="front" else 52,220,126,32 if name=="front" else 29)
+        for side in (-1,1):
+            for row,y in enumerate(relief["rows"]):
+                point=min((v for v in samples if side*v.X>75),key=lambda v:abs(v.Y-y))
+                # Outward normal from neighbouring points on the native wire.
+                u=min(range(len(samples)),key=lambda i:(samples[i]-point).length)
+                tangent=samples[min(u+1,1600)]-samples[max(0,u-1)]
+                nx,ny=tangent.Y,-tangent.X
+                length=math.hypot(nx,ny);nx/=length;ny/=length
+                if nx*side<0:nx,ny=-nx,-ny
+                for z in depths:
+                    r=relief["radius"]+(row%2)
+                    cap=b.Pos(point.X-nx*(r-relief["protrusion"]),point.Y-ny*(r-relief["protrusion"]),z)*b.Sphere(r)
+                    cap=(cap-protected) & mask
+                    shape=shape.fuse(cap)
+            # One ID per side keeps the frame reference readable.
+        addition=shape-core_parts[name]
+        if overlap(addition,protected)>.02:
+            raise ValueError("Side relief entered the protected core")
+        if overlap(addition,box(-120,140,-1,240,70,depth+2))>.02:
+            raise ValueError("Side relief changed the handle or shoulders")
+        record(addition,"F-C01" if name=="front" else "R-C01","Rounded cumulus side relief",name)
+        if name=="front":front=shape
+        else:rear=shape
     parts = {"front": front, "rear": rear, "battery_door": door}
     for name, shape in parts.items():
         color(shape, name, COLORS[name])
@@ -436,7 +487,7 @@ def make(p):
     extras = {}
     extras["screen"] = color(box(lx+2.2, ly+10.8, .6, 30.6, 40.8, 4.8), "screen", "#162f40")
     # Illustrative caps; use shared opening until actual centres are measured.
-    for i, (xx, yy) in enumerate([(-25,0),(-4,0),(13,7),(13,-7),(25,0)]):
+    for i, (xx, yy) in enumerate([(gap_start-5.5,0),(gap_start+bridge["clear_gap"]+5.5,0),(13,7),(13,-7),(25,0)]):
         a=math.radians(angle)
         bx,by=cx+xx*math.cos(a)-yy*math.sin(a),cy+xx*math.sin(a)+yy*math.cos(a)
         extras[f"button_{i}"] = color(cylinder(bx, by, .3, 5.5, 5.6), f"button_{i}", "#f2c75c")
@@ -511,7 +562,7 @@ def verify(p, parts, electronics, outer, features):
         if name in ("front","rear"):
             check(name+": retains full lower frame",bb.min.Y<.01 and bb.min.X < -104.9 and bb.max.X>104.9,
                   [round(v,3) for v in bb.size])
-        check(name+": fits 210 x 210 print field", bb.size.X <= 210.01 and bb.size.Y <= 210.01,
+        check(name+": fits configured print field", bb.size.X <= p["case"]["print_limit"][0]+.01 and bb.size.Y <= p["case"]["print_limit"][1]+.01,
               [round(v,3) for v in bb.size])
     for (na,a),(nc,c) in combinations(parts.items(),2):
         vol = overlap(a,c)
@@ -595,6 +646,22 @@ def verify(p, parts, electronics, outer, features):
     for index,(x,y) in enumerate(p["exterior_screws"],1):
         distance=outer.outer_wire().distance_to(b.Vertex(x,y,0))
         check(f"Case screw {index} beside perimeter wall",5.2<=distance<=p["case"]["wall"]+5.2,round(distance,3))
+    key=items["keypad"]; bx=key["origin"][0];by=key["origin"][1]+p["keypad_bridge"]["single_button_zone"]
+    gap=p["keypad_bridge"]["clear_gap"];width=p["keypad_bridge"]["width"]
+    probe=box(bx+.1,by+(gap-width)/2+.1,.1,key["size"][0]-.2,width-.2,p["case"]["wall"]-.2)
+    check("Keypad bridge fills the measured gap across both long sides",abs(overlap(parts["front"],probe)-probe.volume)<.02)
+    check("Keypad bridge leaves 2.5 mm each side",(gap-width)/2>=2.5)
+    # The large opening fillets fill all four former square corners.
+    for x in (bx+1.5,bx+key["size"][0]-1.5):
+        for y in (by+(gap-width)/2-.5,by+(gap+width)/2+.5):
+            root_probe=box(x-.1,y-.1,.1,.2,.2,p["case"]["wall"]-.2)
+            check("Rounded bridge root adds cover material",abs(overlap(parts["front"],root_probe)-root_probe.volume)<.001)
+    for y in (by-5.5,by+gap+5.5):
+        keep=cylinder(bx+key["size"][0]/2,y,-.1,8,p["case"]["wall"]+.2)
+        gap_probe=box(bx-1,by,-.1,key["size"][0]+2,gap,p["case"]["wall"]+.2)
+        check("Keypad bridge and roots clear nearest cap plus 2.5 mm",overlap(parts["front"],keep & gap_probe)<.02)
+        cap=cylinder(bx+key["size"][0]/2,y,-.1,5.5,p["case"]["wall"]+.2)
+        check("Keypad nominal cap clears front face",overlap(parts["front"],cap)<.02)
     check("Frame feature IDs unique",len({f["id"] for f in features})==len(features))
     return {"revision": p["revision"], "checks": checks, "passed": all(c["pass"] for c in checks),
             "limitations": ["Not FEA. PETG print strength and fatigue require physical testing.",
@@ -665,6 +732,7 @@ def build(check_only=False):
             print("Verification failed; last good published files retained.",flush=True)
             return False
         manifest={"revision":p["revision"],"outer_mm":[round(v,2) for v in parts["front"].bounding_box().size][:2]+[p["case"]["depth"]],
+                  "core_mm":[210,190,p["case"]["depth"]],"side_relief":p["side_relief"],"keypad_bridge":p["keypad_bridge"],
                   "allowance_mm":5,"material":p["material"],"components":p["components"],"keepouts":p["keepouts"],"handle":p["handle"],
                   "fasteners":p["fasteners"],"checks_count":len(report["checks"]),"passed":True,"files":["front.stl","rear.stl","battery_door.stl","cloud-radio.step","cloud-radio.zip"],
                   "print_parts":list(parts),"frame_features":features,

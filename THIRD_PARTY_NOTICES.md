@@ -20,7 +20,9 @@ Record the source, owner, license, and evidence of permission for each retained 
 Remove or replace files whose permission remains unresolved. Review Git history as well as the current tree.
 
 The `_site/` atlas uses project CSS, SVG, routing data, and CAD viewer meshes. Its export does not copy character artwork, reference photos, or recordings.
-The release kit uses an original geometric demo card. Existing character media, fabrication files, and the legacy viewer are excluded. The static atlas includes the committed geometric viewer meshes.
+The README and social cards use original renders of the verified cloud CAD model.
+The illustrated ADR PDF contains the project architecture text and the same original CAD render.
+The release kit uses an original geometric demo card. Existing character media and the legacy viewer are excluded. The website includes the verified cloud print downloads. The static atlas includes the committed geometric viewer meshes.
 
 ## Dependencies
 

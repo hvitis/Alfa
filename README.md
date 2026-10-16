@@ -1,27 +1,39 @@
 **English** · [Polski](README.pl.md)
 
-# Alfa
+# α Alfa
 
-![Alfa: an offline Raspberry Pi player and Polish alphabet companion](.github/social-preview.png)
+![Alfa: an offline Raspberry Pi player and Polish alphabet companion](docs/images/readme-banner.png)
 
 [![CI](https://github.com/hvitis/Alfa/actions/workflows/ci.yml/badge.svg)](https://github.com/hvitis/Alfa/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-green)](LICENSE)
 
-An offline Raspberry Pi player with a small screen, five buttons, and Polish letter lessons.
+**Little radio. Big imagination.**
+
+A pastel cloud, five yellow buttons, and 32 Polish letters to explore. Alfa plays music and letter lessons offline on a Raspberry Pi.
+Print the cloud in your favorite colors, fit the electronics, and make it your own.
 
 [Live showcase](https://hvitis.github.io/Alfa/) · [Latest build kit](https://github.com/hvitis/Alfa/releases/latest) · [Hardware guide](docs/HARDWARE-GUIDE.md)
 
-The showcase and release links become available after the first successful deployment and tagged release.
-The original code and technical documentation use MIT. Existing character artwork and recordings require a separate rights review before public visibility.
-See [asset notices](THIRD_PARTY_NOTICES.md) and the [publication checklist](docs/PUBLISHING.md).
+## A little look around
 
-## Gallery
+| Make a cloud | Peek inside |
+| --- | --- |
+| ![Pastel blue cloud radio with its integrated handle, LCD and five buttons](docs/images/cloud-assembled.png) | ![Exploded CAD assembly showing the two shells, electronics and battery door](docs/images/cloud-exploded.png) |
+| [Choose colors and download the print files](https://hvitis.github.io/Alfa/#3dprint) | [Assembly, dimensions and physical checks](design/cloud-radio/README.md) |
 
-| Interactive showcase |
-| --- |
-| ![Showcase with the project tabs](docs/images/showcase.png) |
+![Three printed parts: two cloud shells and a battery door](docs/images/cloud-assembly.png)
 
-The [CAD folders](design/) contain separate enclosure designs and their build instructions.
+**Explore the build atlas:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Plywood](https://hvitis.github.io/Alfa/#plywood) · [Hardware](https://hvitis.github.io/Alfa/#hardware) · [Software](https://hvitis.github.io/Alfa/#software)
+
+<details>
+<summary>See the interactive workshop and software map</summary>
+
+![The Alfa workshop in the pastel website style](docs/images/showcase.png)
+![The software architecture in the pastel website style](docs/images/software-architecture.png)
+
+</details>
+
+The [CAD folders](design/) contain the enclosure sources. The website includes the illustrated ADR PDF under **Software → Design**.
 
 ## Specifications
 
@@ -49,7 +61,7 @@ The [CAD folders](design/) contain separate enclosure designs and their build in
 - <!-- feature:hardware-simulation --> **Hardware simulation:** Save display previews on your computer without GPIO, SPI, or I²C devices.
 - <!-- feature:static-showcase --> **Static showcase:** Explore Plywood, 3DPrint, Hardware, and Software tabs, with 3D models, controller wiring, an ADR, and rendered Mermaid.
 - <!-- feature:verified-distribution --> **Verified distribution:** Build a runtime kit with a neutral demo card, checksums, validation reports, and an electronics BOM.
-- <!-- feature:enclosure-research --> **Enclosure research:** Inspect both plywood projects in the static atlas. CAD generation has separate build instructions.
+- <!-- feature:enclosure-research --> **Enclosure research:** Inspect the printable cloud and both plywood projects. Cloud downloads include STL, STEP, snap coupons, and the assembly guide.
 
 ## Quick start
 
@@ -81,9 +93,10 @@ Read [BUILD-GUIDE.md](docs/BUILD-GUIDE.md) for Linux prerequisites and environme
 
 `make check` runs configuration checks, Python tests, JavaScript syntax checks, viewer data tests, and bilingual documentation checks.
 CI exports the static showcase and runs Chromium checks at the domain root and a repository subpath, on desktop and mobile.
-Browser checks cover both plywood models, the blank 3DPrint tab, both wiring atlases, the ADR, rendered Mermaid, and local assets.
+Browser checks cover both plywood models, the printable cloud, both wiring atlases, the illustrated ADR PDF, rendered Mermaid, social images, and local assets.
 `make build` also runs the packaged simulator and verifies archive contents and SHA-256 checksums.
 
+The cloud is a fit prototype. Its digital geometry checks do not replace physical print, grip, snap, drop, and temperature tests.
 Physical wiring, acoustic volume, enclosure fit, and media redistribution rights require separate review.
 The software pipeline does not certify those properties.
 
@@ -96,7 +109,7 @@ make build
 
 The kit is `output/Alfa-Build-Kit.zip`. Reports are in `output/reports/`.
 The kit includes the Python runtime, wiring guide, neutral demo image, and static atlas with its viewer meshes.
-It excludes character media, recordings, the legacy viewer, and fabrication deliverables. Website sources and generation live in [web/](web/README.md).
+It excludes character media, recordings, and the legacy viewer. The static site includes the cloud print downloads. Website sources and generation live in [web/](web/README.md).
 Read [release contents](docs/RELEASE-CONTENTS.md), [pipeline details](docs/PIPELINE.md), and [publication steps](docs/PUBLISHING.md).
 
 CI validates pull requests. GitHub Pages deploys after successful checks on `main`.
@@ -108,3 +121,8 @@ Read [CONTRIBUTING.md](docs/CONTRIBUTING.md) for the development workflow.
 Use [SECURITY.md](SECURITY.md) for security reports.
 The [MIT license](LICENSE) covers original code and technical documentation.
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) records asset exclusions and dependency notices.
+Existing character artwork and recordings require a separate rights review before public visibility.
+Read the [publication checklist](docs/PUBLISHING.md). The README and social cards use original CAD renders.
+
+To recreate these images, run `make serve`, then `npm run render:assets`. Run `make site` to export the illustrated ADR PDF.
+The GitHub social card is [.github/social-preview.png](.github/social-preview.png).

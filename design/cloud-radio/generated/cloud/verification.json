@@ -1,28 +1,28 @@
 {
-  "revision": "prototype-5",
+  "revision": "prototype-6",
   "checks": [
     {
       "check": "front: valid connected solid",
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 205030.63
+        "volume_mm3": 211136.27
       }
     },
     {
       "check": "front: retains full lower frame",
       "pass": true,
       "detail": [
-        210.0,
+        214.97,
         189.999,
         79.5
       ]
     },
     {
-      "check": "front: fits 210 x 210 print field",
+      "check": "front: fits configured print field",
       "pass": true,
       "detail": [
-        210.0,
+        214.97,
         189.999,
         79.5
       ]
@@ -32,23 +32,23 @@
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 167386.48
+        "volume_mm3": 172943.71
       }
     },
     {
       "check": "rear: retains full lower frame",
       "pass": true,
       "detail": [
-        210.0,
+        214.97,
         189.999,
         42.7
       ]
     },
     {
-      "check": "rear: fits 210 x 210 print field",
+      "check": "rear: fits configured print field",
       "pass": true,
       "detail": [
-        210.0,
+        214.97,
         189.999,
         42.7
       ]
@@ -62,7 +62,7 @@
       }
     },
     {
-      "check": "battery_door: fits 210 x 210 print field",
+      "check": "battery_door: fits configured print field",
       "pass": true,
       "detail": [
         147.0,
@@ -982,6 +982,56 @@
       "detail": 7.084
     },
     {
+      "check": "Keypad bridge fills the measured gap across both long sides",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad bridge leaves 2.5 mm each side",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Rounded bridge root adds cover material",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Rounded bridge root adds cover material",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Rounded bridge root adds cover material",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Rounded bridge root adds cover material",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad bridge and roots clear nearest cap plus 2.5 mm",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad nominal cap clears front face",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad bridge and roots clear nearest cap plus 2.5 mm",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad nominal cap clears front face",
+      "pass": true,
+      "detail": null
+    },
+    {
       "check": "Frame feature IDs unique",
       "pass": true,
       "detail": null
@@ -990,10 +1040,10 @@
       "check": "front: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 36266,
+        "triangles": 45378,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 200749.69,
+        "volume_mm3": 207970.31,
         "removed_degenerate_triangles": 2
       }
     },
@@ -1001,10 +1051,10 @@
       "check": "rear: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 29482,
+        "triangles": 38044,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 162485.5,
+        "volume_mm3": 169508.5,
         "removed_degenerate_triangles": 0
       }
     },
@@ -1063,17 +1113,17 @@
   ],
   "meshes": {
     "front": {
-      "triangles": 36266,
+      "triangles": 45378,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 200749.69,
+      "volume_mm3": 207970.31,
       "removed_degenerate_triangles": 2
     },
     "rear": {
-      "triangles": 29482,
+      "triangles": 38044,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 162485.5,
+      "volume_mm3": 169508.5,
       "removed_degenerate_triangles": 0
     },
     "battery_door": {
@@ -1105,5 +1155,5 @@
       "removed_degenerate_triangles": 0
     }
   },
-  "checks_count": 195
+  "checks_count": 205
 }
