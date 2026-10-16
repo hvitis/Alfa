@@ -1,0 +1,167 @@
+{
+  "status": "Eight cards regenerated with the built-in image generator to swap characters between Ć and D, Ą and A, Ż and G, E and Ę.",
+  "masterSize": [
+    960,
+    1280
+  ],
+  "displaySize": [
+    240,
+    320
+  ],
+  "typography": "Generated bold literacy sans-serif lettering inspired by Andika Bold; not a rasterization of an embedded font file.",
+  "cards": [
+    {
+      "letter": "A",
+      "master": "assets/alphabet/00-A.png",
+      "editReference": "assets/alphabet/01-Ą.png",
+      "referenceState": "Original card before the character swaps; references were supplied together in each edit.",
+      "prompt": "Use case: compositing. Asset type: Polish alphabet educational illustration card. Input image 1 is the EDIT TARGET with the letter A. Input image 2 is a CHARACTER REFERENCE only. Replace ONLY the character in image 1 with the white round-snouted creature with upright ears and a tufted tail, without clothes or hair from image 2. Remove image 1's previous character completely. Keep the exact large dark navy uppercase glyph \"A\" from image 1, including every diacritic, shape, size, location and stroke, fully readable. Keep the original portrait 3:4 aspect ratio, ivory paper background, faint mint watercolor wash, ink-and-watercolor illustration style, scale and margins. Depict just the single reference character naturally peeking from behind and lightly holding the right/top edge of the existing letter, with their face clearly visible. Preserve the reference character's identity, colors, clothing and distinctive details. Adapt hands and pose naturally to the target letter. No other letters, words, captions, borders, extra characters or objects. Return ONE complete portrait card, ideally 960 x 1280 pixels."
+    },
+    {
+      "letter": "Ą",
+      "master": "assets/alphabet/01-Ą.png",
+      "editReference": "assets/alphabet/00-A.png",
+      "referenceState": "Original card before the character swaps; references were supplied together in each edit.",
+      "prompt": "Use case: compositing. Asset type: Polish alphabet educational illustration card. Input image 1 is the EDIT TARGET with the letter Ą. Input image 2 is a CHARACTER REFERENCE only. Replace ONLY the character in image 1 with the blonde human girl with long straight hair, red dress, cream blouse, gold pendant and brown boots from image 2. Remove image 1's previous character completely. Keep the exact large dark navy uppercase glyph \"Ą\" from image 1, including every diacritic, shape, size, location and stroke, fully readable. Keep the original portrait 3:4 aspect ratio, ivory paper background, faint mint watercolor wash, ink-and-watercolor illustration style, scale and margins. Depict just the single reference character naturally peeking from behind and lightly holding the right/top edge of the existing letter, with their face clearly visible. Preserve the reference character's identity, colors, clothing and distinctive details. Adapt hands and pose naturally to the target letter. No other letters, words, captions, borders, extra characters or objects. Return ONE complete portrait card, ideally 960 x 1280 pixels."
+    },
+    {
+      "letter": "B",
+      "master": "assets/alphabet/02-B.png"
+    },
+    {
+      "letter": "C",
+      "master": "assets/alphabet/03-C.png"
+    },
+    {
+      "letter": "Ć",
+      "master": "assets/alphabet/04-Ć.png",
+      "editReference": "assets/alphabet/05-D.png",
+      "referenceState": "Original card before the character swaps; references were supplied together in each edit.",
+      "prompt": "Use case: compositing. Asset type: Polish alphabet educational illustration card. Input image 1 is the EDIT TARGET with the letter Ć. Input image 2 is a CHARACTER REFERENCE only. Replace ONLY the character in image 1 with the white flowing sheet ghost with two oval eyes and small hands from image 2. Remove image 1's previous character completely. Keep the exact large dark navy uppercase glyph \"Ć\" from image 1, including every diacritic, shape, size, location and stroke, fully readable. Keep the original portrait 3:4 aspect ratio, ivory paper background, faint mint watercolor wash, ink-and-watercolor illustration style, scale and margins. Depict just the single reference character naturally peeking from behind and lightly holding the right/top edge of the existing letter, with their face clearly visible. Preserve the reference character's identity, colors, clothing and distinctive details. Adapt hands and pose naturally to the target letter. No other letters, words, captions, borders, extra characters or objects. Return ONE complete portrait card, ideally 960 x 1280 pixels."
+    },
+    {
+      "letter": "D",
+      "master": "assets/alphabet/05-D.png",
+      "editReference": "assets/alphabet/04-Ć.png",
+      "referenceState": "Original card before the character swaps; references were supplied together in each edit.",
+      "prompt": "Use case: compositing. Asset type: Polish alphabet educational illustration card. Input image 1 is the EDIT TARGET with the letter D. Input image 2 is a CHARACTER REFERENCE only. Replace ONLY the character in image 1 with the small orange-haired girl with a tall topknot, red dress, pink neck bow and black boots from image 2. Remove image 1's previous character completely. Keep the exact large dark navy uppercase glyph \"D\" from image 1, including every diacritic, shape, size, location and stroke, fully readable. Keep the original portrait 3:4 aspect ratio, ivory paper background, faint mint watercolor wash, ink-and-watercolor illustration style, scale and margins. Depict just the single reference character naturally peeking from behind and lightly holding the right/top edge of the existing letter, with their face clearly visible. Preserve the reference character's identity, colors, clothing and distinctive details. Adapt hands and pose naturally to the target letter. No other letters, words, captions, borders, extra characters or objects. Return ONE complete portrait card, ideally 960 x 1280 pixels."
+    },
+    {
+      "letter": "E",
+      "master": "assets/alphabet/06-E.png",
+      "editReference": "assets/alphabet/07-Ę.png",
+      "referenceState": "Original card before the character swaps; references were supplied together in each edit.",
+      "prompt": "Use case: compositing. Asset type: Polish alphabet educational card. Image 1 is the edit target with letter E; image 2 is the character reference. Replace only the character in image 1 with the white round-snouted mother with upright ears, eyelashes, red-and-white striped apron with a red bow, black handbag and tufted tail from image 2. Remove the old character entirely. Keep the exact large dark navy uppercase letter \"E\" from image 1, with its original shape, size and location; do not add any diacritic or hook to E. Preserve the character identity, clothing, colors and distinctive features from image 2. Adapt its hands and pose to naturally peek from behind and hold the right/top edge of the foreground letter, with face visible. Preserve the portrait 3:4 composition, ivory paper background, soft mint watercolor wash, fine ink contours and watercolor style, scale and margins. One character only. No added text, letters, captions, borders or objects. Return one complete portrait card, ideally 960 x 1280 pixels."
+    },
+    {
+      "letter": "Ę",
+      "master": "assets/alphabet/07-Ę.png",
+      "editReference": "assets/alphabet/06-E.png",
+      "referenceState": "Original card before the character swaps; references were supplied together in each edit.",
+      "prompt": "Use case: compositing. Asset type: Polish alphabet educational card. Image 1 is the edit target with letter Ę; image 2 is the character reference. Replace only the character in image 1 with the gray long-pointed-snouted elderly lady with a gray hair bun, round spectacles, pink patterned fringed shawl, gold brooch and lavender dress from image 2. Remove the old character entirely. Keep the exact large dark navy uppercase letter \"Ę\" from image 1, with its original shape, size and location; preserve the large clearly visible ogonek hook attached to the bottom of Ę. Preserve the character identity, clothing, colors and distinctive features from image 2. Adapt its hands and pose to naturally peek from behind and hold the right/top edge of the foreground letter, with face visible. Preserve the portrait 3:4 composition, ivory paper background, soft mint watercolor wash, fine ink contours and watercolor style, scale and margins. One character only. No added text, letters, captions, borders or objects. Return one complete portrait card, ideally 960 x 1280 pixels."
+    },
+    {
+      "letter": "F",
+      "master": "assets/alphabet/08-F.png"
+    },
+    {
+      "letter": "G",
+      "master": "assets/alphabet/09-G.png",
+      "editReference": "assets/alphabet/31-Ż.png",
+      "referenceState": "Original card before the character swaps; references were supplied together in each edit.",
+      "prompt": "Use case: compositing. Asset type: Polish alphabet educational illustration card. Input image 1 is the EDIT TARGET with the letter G. Input image 2 is a CHARACTER REFERENCE only. Replace ONLY the character in image 1 with the pale white round-snouted Snork with upright ears, blonde curled forelock and tufted tail, without clothes from image 2. Remove image 1's previous character completely. Keep the exact large dark navy uppercase glyph \"G\" from image 1, including every diacritic, shape, size, location and stroke, fully readable. Keep the original portrait 3:4 aspect ratio, ivory paper background, faint mint watercolor wash, ink-and-watercolor illustration style, scale and margins. Depict just the single reference character naturally peeking from behind and lightly holding the right/top edge of the existing letter, with their face clearly visible. Preserve the reference character's identity, colors, clothing and distinctive details. Adapt hands and pose naturally to the target letter. No other letters, words, captions, borders, extra characters or objects. Return ONE complete portrait card, ideally 960 x 1280 pixels."
+    },
+    {
+      "letter": "H",
+      "master": "assets/alphabet/10-H.png"
+    },
+    {
+      "letter": "I",
+      "master": "assets/alphabet/11-I.png"
+    },
+    {
+      "letter": "J",
+      "master": "assets/alphabet/12-J.png"
+    },
+    {
+      "letter": "K",
+      "master": "assets/alphabet/13-K.png"
+    },
+    {
+      "letter": "L",
+      "master": "assets/alphabet/14-L.png"
+    },
+    {
+      "letter": "Ł",
+      "master": "assets/alphabet/15-Ł.png"
+    },
+    {
+      "letter": "M",
+      "master": "assets/alphabet/16-M.png"
+    },
+    {
+      "letter": "N",
+      "master": "assets/alphabet/17-N.png"
+    },
+    {
+      "letter": "Ń",
+      "master": "assets/alphabet/18-Ń.png"
+    },
+    {
+      "letter": "O",
+      "master": "assets/alphabet/19-O.png"
+    },
+    {
+      "letter": "Ó",
+      "master": "assets/alphabet/20-Ó.png"
+    },
+    {
+      "letter": "P",
+      "master": "assets/alphabet/21-P.png"
+    },
+    {
+      "letter": "R",
+      "master": "assets/alphabet/22-R.png"
+    },
+    {
+      "letter": "S",
+      "master": "assets/alphabet/23-S.png"
+    },
+    {
+      "letter": "Ś",
+      "master": "assets/alphabet/24-Ś.png"
+    },
+    {
+      "letter": "T",
+      "master": "assets/alphabet/25-T.png"
+    },
+    {
+      "letter": "U",
+      "master": "assets/alphabet/26-U.png"
+    },
+    {
+      "letter": "W",
+      "master": "assets/alphabet/27-W.png"
+    },
+    {
+      "letter": "Y",
+      "master": "assets/alphabet/28-Y.png"
+    },
+    {
+      "letter": "Z",
+      "master": "assets/alphabet/29-Z.png"
+    },
+    {
+      "letter": "Ź",
+      "master": "assets/alphabet/30-Ź.png"
+    },
+    {
+      "letter": "Ż",
+      "master": "assets/alphabet/31-Ż.png",
+      "editReference": "assets/alphabet/09-G.png",
+      "referenceState": "Original card before the character swaps; references were supplied together in each edit.",
+      "prompt": "Use case: compositing. Asset type: Polish alphabet educational illustration card. Input image 1 is the EDIT TARGET with the letter Ż. Input image 2 is a CHARACTER REFERENCE only. Replace ONLY the character in image 1 with the elegant white round-snouted lady with pink hair, purple flower-trimmed hat, purple dress, gold brooch and dark handbag from image 2. Remove image 1's previous character completely. Keep the exact large dark navy uppercase glyph \"Ż\" from image 1, including every diacritic, shape, size, location and stroke, fully readable. Keep the original portrait 3:4 aspect ratio, ivory paper background, faint mint watercolor wash, ink-and-watercolor illustration style, scale and margins. Depict just the single reference character naturally peeking from behind and lightly holding the right/top edge of the existing letter, with their face clearly visible. Preserve the reference character's identity, colors, clothing and distinctive details. Adapt hands and pose naturally to the target letter. No other letters, words, captions, borders, extra characters or objects. Return ONE complete portrait card, ideally 960 x 1280 pixels."
+    }
+  ],
+  "generationMode": "built-in image_gen"
+}

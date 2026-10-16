@@ -1,0 +1,41 @@
+{
+  "source": "Verified cloud-radio.glb; web/render.js; default Cloud blue palette",
+  "renders": {
+    "assembled": {
+      "colors": {
+        "front": "#86bfea",
+        "rear": "#70acd9",
+        "battery_door": "#fff0b5"
+      },
+      "revision": "prototype-6",
+      "checks": 205
+    },
+    "exploded": {
+      "colors": {
+        "front": "#86bfea",
+        "rear": "#70acd9",
+        "battery_door": "#fff0b5"
+      },
+      "revision": "prototype-6",
+      "checks": 205
+    },
+    "rear": {
+      "colors": {
+        "front": "#86bfea",
+        "rear": "#70acd9",
+        "battery_door": "#fff0b5"
+      },
+      "revision": "prototype-6",
+      "checks": 205
+    },
+    "side": {
+      "colors": {
+        "front": "#86bfea",
+        "rear": "#70acd9",
+        "battery_door": "#fff0b5"
+      },
+      "revision": "prototype-6",
+      "checks": 205
+    }
+  }
+}

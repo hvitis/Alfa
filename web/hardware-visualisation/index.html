@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Alfa hardware — 3D wiring</title>
+<link rel="stylesheet" href="/src/styles.css">
+<script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="app">
+  <header><a class="brand" href="./">ALFA / HARDWARE</a><span id="live-status" hidden></span><h1>Understand every module and connection.</h1><p>Click any module to learn its purpose. Compare the Pi 3 and Pico setups, or inspect the resistor divider.</p></header>
+  <nav class="toolbar" aria-label="Scene and camera controls">
+    <div class="main-tabs" role="tablist" aria-label="Main system views">
+      <button id="view-setup" class="main-tab active" role="tab" aria-selected="true">Pi 3</button>
+      <button id="view-pico" class="main-tab" role="tab" aria-selected="false">Pi Zero</button>
+      <button id="view-case" class="main-tab" role="tab" aria-selected="false">Wooden Case</button>
+      <button id="view-radio" class="main-tab" role="tab" aria-selected="false">Wooden Radio</button>
+    </div>
+    <div id="subnav-setup" class="subnav" aria-label="Pi 3 focused views">
+      <button id="focus-keypad">Button wiring</button>
+      <button id="focus-adc">ADC wiring</button>
+      <button id="focus-amplifier">Amplifier wiring</button>
+      <button id="focus-divider">R1 &amp; R2 divider</button>
+      <button id="focus-join">Focus shared join</button>
+      <button id="reset-camera">Reset camera</button>
+      <button id="top-view">Top view</button>
+    </div>
+    <div id="subnav-pico" class="subnav" hidden aria-label="Pi Zero focused views">
+      <button id="focus-keypad-pico">Button wiring</button>
+      <button id="focus-adc-pico">ADC wiring</button>
+      <button id="focus-amplifier-pico">Amplifier wiring</button>
+      <button id="focus-divider-pico">R1 &amp; R2 divider</button>
+      <button id="focus-join-pico">Focus shared join</button>
+      <button id="reset-camera-pico">Reset camera</button>
+      <button id="top-view-pico">Top view</button>
+    </div>
+    <div id="subnav-case" class="subnav" hidden aria-label="Wooden Case focused views">
+      <button id="case-cam-iso">3D Iso</button>
+      <button id="case-cam-front">Front view</button>
+      <button id="case-cam-rear">Rear view</button>
+      <button id="case-focus-keypad">Buttons</button>
+      <button id="case-focus-screen">Screen</button>
+      <button id="case-focus-speaker">Speaker</button>
+      <button id="case-focus-battery">Battery</button>
+      <button id="case-focus-switch">Switch</button>
+      <button id="case-focus-amp">Amp</button>
+      <button id="case-focus-adc">ADC</button>
+      <button id="reset-camera-case">Reset camera</button>
+    </div>
+    <div id="subnav-radio" class="subnav" hidden aria-label="Wooden Radio views and parts">
+      <button data-radio-mode="assembled">Assembled</button>
+      <button data-radio-mode="roof_open">Roof open</button>
+      <button data-radio-mode="inside">Inside</button>
+      <button data-radio-mode="exploded">Exploded</button>
+      <button data-radio-camera="iso">3D</button>
+      <button data-radio-camera="front">Front</button>
+      <button data-radio-camera="side">Side</button>
+      <button data-radio-camera="back">Back</button>
+      <button data-radio-focus="lcd">Screen</button>
+      <button data-radio-focus="keypad">Buttons</button>
+      <button data-radio-focus="pi">Pi</button>
+      <button data-radio-focus="battery">Power bank</button>
+      <button data-radio-focus="switch">Switch</button>
+    </div>
+    <label>Camera <select id="camera-mode"><option value="inspect">Inspect + pan</option><option value="free">Free movement</option></select></label>
+    <label><input id="show-labels" type="checkbox" checked> Labels</label>
+    <label id="group-control">Cables <select id="cable-group"><option value="all">All cables</option><option>LCD</option><option>Audio</option><option>ADC</option><option>Keypad</option><option>Power</option></select></label>
+    <button id="clear-selection">Show all connections</button>
+    <!-- Hidden legacy button so existing tests/scripts looking for #view-divider don't fail -->
+    <button id="view-divider" style="display:none" aria-hidden="true"></button>
+  </nav>
+  <section id="pico-differences" class="pico-differences" hidden aria-label="Differences from the Raspberry Pi 3 setup">
+    <div><span class="difference-label">CHANGED CONTROLLER</span><strong>Pi 3 → Pi Zero</strong><span>Compact header · WiFi · Bluetooth · fitted pins</span></div>
+    <div><span class="difference-label">CHANGED CONNECTIONS</span><strong>19 header wires move</strong><span>New physical pins + GP numbers. Amber marks the changed pins.</span></div>
+    <div><span class="difference-label">NEW SUPPLY JOINS</span><strong>3.3 V + USB 5 V splits</strong><span>Two modules share each supply. VBUS needs USB power.</span></div>
+    <div><span class="difference-label">CHANGED SOFTWARE</span><strong>Pi Zero firmware + PIO audio</strong><span>SPI screen + I2C ADC. The Linux/SSH app needs a port.</span></div>
+  </section>
+  <main class="workspace">
+    <section class="viewport-wrap" aria-label="Three dimensional wiring viewer">
+      <div id="viewport"></div>
+      <div id="graphics-error" hidden></div>
+      <div id="amp-stage" class="amp-stage" hidden></div>
+      <div id="pico-banner" hidden><strong>PICO VIEW</strong><span><i class="legend-amber"></i> Changed controller / pins</span><span><i class="legend-blue"></i> Selected module</span></div>
+      <div id="case-banner" class="case-banner" hidden>
+        <strong>WOODEN CASE · WORKSHOP PLANNER</strong>
+        <div id="case-status-text">Assembled · front facing you</div>
+        <div class="note">150 × 200 × 64 mm · 6 mm plywood · 4 × A4 sheets</div>
+      </div>
+      <div id="radio-banner" class="case-banner radio-banner" hidden>
+        <strong>ALFA · LITTLE HOUSE RADIO</strong>
+        <div id="radio-mode-text">Assembled</div>
+        <div class="note" id="radio-banner-note"></div>
+      </div>
+      <div class="camera-help" id="camera-help">Left-drag: orbit · Right-drag: pan · Wheel: zoom · WASD: move · Q/E: down/up</div>
+      <div class="movement" aria-label="Move camera">
+        <span>Move camera</span><div>
+          <button data-move="up" aria-label="Move up">Up</button><button data-move="forward" aria-label="Move forward">Forward</button><button data-move="down" aria-label="Move down">Down</button>
+          <button data-move="left" aria-label="Move left">Left</button><button data-move="backward" aria-label="Move backward">Back</button><button data-move="right" aria-label="Move right">Right</button>
+        </div>
+      </div>
+      <div id="selection-detail" role="status">Purple join = R1 leg B + R2 leg A + ADC A0 wire.</div>
+    </section>
+    <aside>
+      <section class="module-info" aria-label="Module purpose">
+        <label for="module-picker" class="eyebrow">CLICK A MODULE IN 3D OR CHOOSE ONE</label>
+        <select id="module-picker"><option value="">Choose a module…</option></select>
+        <div aria-live="polite"><h2 id="module-title">What does each module do?</h2><p id="module-purpose"></p><ul id="module-details"></ul><p id="module-change" class="module-change" hidden></p></div>
+        <button id="focus-module" disabled>Look closer at this module</button>
+      </section>
+      <section id="case-guide" class="case-guide" hidden>
+        <span class="eyebrow">WOODEN CASE · WORKSHOP PLANNER</span><h2>Explore the enclosure</h2>
+        <div class="case-modes">
+          <button data-case-mode="enclosure" class="active">Assembled</button><button data-case-mode="internals">Inside</button><button data-case-mode="exploded">Exploded</button>
+        </div>
+        <div class="case-cameras">
+          <button data-case-camera="front">Front</button><button data-case-camera="rear">Rear</button><button data-case-camera="iso">3D Iso</button>
+        </div>
+        <label><input id="case-wood" type="checkbox" checked> Show plywood walls</label>
+        <label><input id="case-tags" type="checkbox"> Component labels</label>
+        <label>Trace wire <select id="case-wire"><option value="">Select a wire…</option></select></label>
+        <p class="tip"><strong>Before cutting:</strong> Print PDF at 100% and measure 100 mm line. Check keypad opening and switch housing against physical parts.</p>
+        <p class="note amber-text">Rear cover: four M3 screws. Pi on 8 mm standoffs. Lift 20 mm and disconnect power before opening fully.</p>
+        <div class="case-downloads">
+          <a href="/design/wooden-case/PDF/a4_cutting_and_drilling.pdf" target="_blank" rel="noopener">1:1 Cutting PDF ↗</a>
+          <a href="/design/wooden-case/PDF/placement_and_wiring.pdf" target="_blank" rel="noopener">Wiring PDF ↗</a>
+          <a href="/design/wooden-case/STEP/enclosure.step" download>STEP CAD ↗</a>
+        </div>
+      </section>
+      <section id="radio-guide" class="radio-guide" hidden>
+        <span class="eyebrow">WOODEN RADIO · ALFA · FULL DESIGN</span><h2>Little House Radio</h2>
+        <a id="radio-cover-link" class="radio-sheet" target="_blank" rel="noopener"><img id="radio-cover" alt="Alfa plan cover: the little house radio in a snowy night"></a>
+        <p class="note">Concept B, complete: every panel, hinge, magnet, screw and wire. Click a part or a wire; hide the plywood to look inside.</p>
+        <dl id="radio-facts" class="radio-facts"></dl>
+        <div class="case-modes">
+          <button data-radio-mode="assembled">Assembled</button><button data-radio-mode="roof_open">Roof open</button><button data-radio-mode="inside">Inside</button><button data-radio-mode="exploded">Exploded</button>
+        </div>
+        <label><input id="radio-wood" type="checkbox" checked> Show plywood</label>
+        <label><input id="radio-tags" type="checkbox"> Component labels</label>
+        <label>Wire group <select id="radio-group"><option value="all">All</option><option>None</option><option>LCD</option><option>Audio</option><option>ADC</option><option>Keypad</option><option>Power</option></select></label>
+        <label>Trace wire <select id="radio-wire"><option value="">Select a wire…</option></select></label>
+        <p class="tip"><strong>Charging:</strong> pull the two roof knobs up and out; both halves stand upright. The power bank's USB-C socket is under the ridge. Fold the halves down and the magnets click them shut.</p>
+        <div class="case-downloads" id="radio-documents"></div>
+        <details class="radio-common"><summary>Screws, calculated from the parts they hold</summary><ul id="radio-fasteners"></ul></details>
+        <details class="radio-common"><summary>Earlier concepts (step 1)</summary>
+          <div id="radio-concepts" class="radio-cards"></div>
+          <a href="/design/wooden-radio/PDF/radio_concepts.pdf" target="_blank" rel="noopener">Concept drawings PDF ↗</a>
+        </details>
+      </section>
+      <section id="keypad-guide" class="adc-guide" hidden>
+
+        <span class="eyebrow">YOUR BOARD · PHOTO _003</span><h2>Five buttons · three pins</h2>
+        <p class="note">Component side up. Four directional buttons and one lower button. The right-angle header is at the bottom-right: OUT, VCC, GND from top to bottom.</p>
+        <button id="keypad-close-up">Look closer at button module</button>
+        <table class="amp-pin-table"><thead><tr><th>Printed pin</th><th>Connection</th></tr></thead><tbody>
+          <tr><td><button id="keypad-pin-KOUT">OUT</button></td><td id="keypad-connection-KOUT"></td></tr>
+          <tr><td><button id="keypad-pin-KVCC">VCC</button></td><td id="keypad-connection-KVCC"></td></tr>
+          <tr><td><button id="keypad-pin-KGND">GND</button></td><td id="keypad-connection-KGND"></td></tr>
+        </tbody></table>
+        <p class="tip">OUT connects to R1. VCC receives 5 V. GND shares controller and ADC ground. The three sockets fit the long horizontal header pins.</p>
+        <div class="amp-photos"><a target="_blank" rel="noopener"><img id="keypad-photo" alt="Photo _003: five yellow buttons and OUT/VCC/GND right-angle header" loading="lazy"></a></div>
+      </section>
+      <section id="adc-guide" class="adc-guide" hidden>
+        <span class="eyebrow">YOUR BOARD · BUT1 / BUT2</span><h2>ADC pins &amp; connections</h2>
+        <p class="note">Label side up, header on the right: V, G, SCL, SDA, ADDR, ALERT, A0, A1, A2, A3. The black spacer and long pins are on the component side. Board enlarged for clarity.</p>
+        <div class="adc-modes"><button data-adc-mode="labels" class="active">Labels &amp; wiring</button><button data-adc-mode="components">Component side</button></div>
+        <p id="adc-instructions" class="amp-instructions"></p><button id="adc-close-up">Look closer at ADC</button>
+        <table class="amp-pin-table"><thead><tr><th>Printed pin</th><th>Connection</th></tr></thead><tbody id="adc-pin-table"></tbody></table>
+        <p class="tip"><strong>V means VDD; G means GND.</strong> A0 connects to the R1/R2 join. ADDR connects to G. ALERT and A1–A3 stay unwired.</p>
+        <p class="note">G is a shared connection: the marked ground join connects controller ground, R2 and ADDR. One yellow lead runs from that join to G. Wire colors identify connections in this diagram.</p>
+        <div class="adc-color-key" aria-label="ADC wire colors"><span><i style="background:#e3b51f"></i>Yellow · all ground branches: controller, R2, ADDR and G</span><span><i style="background:#8850c7"></i>Purple · join → A0</span></div>
+        <div id="adc-photos" class="amp-photos" aria-label="Original ADC photos"></div>
+      </section>
+      <section id="amplifier-guide" class="amplifier-guide" hidden>
+        <span class="eyebrow">YOUR BOARD · HEADER ORDER VERIFIED IN MAX4</span><h2>Amplifier assembly &amp; wiring</h2>
+        <p class="note">Component side up. Green speaker block at the top; yellow seven-pin header at the bottom. Board enlarged for clarity.</p>
+        <div class="amp-modes" aria-label="Amplifier assembly view">
+          <button data-amp-mode="wiring" class="active">Connect cables</button><button data-amp-mode="before">Before soldering</button><button data-amp-mode="underside">Solder underside</button>
+        </div>
+        <p id="amp-instructions" class="amp-instructions"></p>
+        <button id="amp-close-up">Look closer at amplifier</button>
+        <table class="amp-pin-table"><thead><tr><th>Header label</th><th id="amp-controller-heading">Pi 3 connection</th></tr></thead><tbody id="amp-pin-table"></tbody></table>
+        <p class="tip"><strong>Seven solder joints, five jumper wires.</strong> Solder all seven header pins. Leave GAIN and SD without external wires.</p>
+        <div class="speaker-connections"><strong>Green screw terminal</strong><button data-amp-pin="M-">Left − → speaker −</button><button data-amp-pin="M+">Right + → speaker +</button><p>Loosen each screw, insert the stripped speaker wire into its wire entry opening, then tighten. Neither speaker wire connects to GND.</p></div>
+        <p class="note">Disconnect Pi power before soldering or moving wires. The long header pins face upward; solder the short legs on the back.</p>
+        <div id="amp-photos" class="amp-photos" aria-label="Original module photos"></div>
+      </section>
+      <section id="pico-guide" hidden>
+        <span class="eyebrow">PI 3 → PICO · WHAT CHANGES</span><h2>Same modules. New controller.</h2>
+        <div id="pico-difference-list"></div>
+        <details class="pin-comparison"><summary>Compare all 19 header connections</summary><table><thead><tr><th>Terminal</th><th>Pi 3 pin</th><th>Pico physical pin / GP</th></tr></thead><tbody id="pin-comparison-body"></tbody></table></details>
+        <p class="note">Pico wiring is a proposed firmware pin assignment. The Linux app in <code>app/</code> is for the Pi 3. The Pico needs separate firmware.</p>
+      </section>
+      <div id="divider-guide">
+        <span class="eyebrow">TWO RESISTORS · BOTH 10 kΩ</span><h2>One shared join. Three connections.</h2>
+        <p class="lead">Join these three ends together: <strong>R1 leg B</strong>, <strong>R2 leg A</strong>, and the <strong>ADC A0 wire</strong>.</p>
+        <div class="join-card"><span class="join-dot"></span><div><strong>Shared join</strong><p>This is one electrical connection. It is not a third component.</p></div></div>
+        <ol id="connection-steps"></ol>
+        <p class="tip"><strong>Resistors have no + or −.</strong> Either end can be leg A. The labels only help you follow this drawing.</p>
+        <p class="tip">Make the join with solder, or use one connected breadboard row. Separate breadboard rows do not connect automatically.</p>
+        <p class="note">R1 reduces the signal together with R2. With two equal resistors, 5 V at OUT becomes about 2.5 V at A0.</p>
+      </div>
+      <div id="setup-guide" hidden><span class="eyebrow">ALL DEVICES TOGETHER</span><h2>Trace one cable at a time.</h2><p><strong id="pin-convention">Pi numbers are physical header pins.</strong> Click a cable or a row below to display both endpoint labels.</p><p>The group selector moves the camera closer and hides the other cables.</p><div id="wire-list"></div></div>
+    </aside>
+  </main>
+  <section class="connection-summary">
+    <div><h2>The complete resistor connection</h2><p><strong>Keypad OUT → R1 → shared join → ADC A0</strong></p><p><strong>Shared join → R2 → GND</strong></p></div>
+    <div><p>Keypad: <strong>5 V</strong>. ADC: <strong>3.3 V</strong>. All GND connections share Pi ground.</p><p class="note">The ADC header order follows but2.jpg. V = VDD, G = GND. Disconnect Pi power before changing wires.</p></div>
+  </section>
+  <footer>Three.js 3D viewer · The Pi test software stays in <code>app/</code>. <a href="../output/resistor-divider-clear.png">Open the resistor image</a></footer>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body></html>

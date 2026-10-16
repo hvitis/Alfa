@@ -1,0 +1,77 @@
+{
+  "units": "mm",
+  "revision": "concepts-1",
+  "plywood": 6,
+  "dowel_diameter": 22,
+  "plywood_density_g_cm3": 0.68,
+  "dowel_density_g_cm3": 0.72,
+  "electronics_mass_g": 325,
+  "a4_part_limit": [200, 287],
+  "handle_rules": {"min_finger_gap": 34, "min_grip_length": 85, "min_bar_height": 20},
+  "concepts": [
+    {
+      "id": "lunchbox",
+      "letter": "A",
+      "name": "Lunchbox Radio",
+      "tagline": "A classic little tabletop radio with a round wooden carry bar between two rounded ears.",
+      "story": "Reads instantly as 'the radio'. A big sunflower grille with warm felt behind it, the screen and the five buttons side by side.",
+      "handle": "22 mm beech dowel between rounded side ears. 188 mm grip, 35 mm finger space above the lid. Glued, then pinned by one screw through each ear.",
+      "pros": [
+        "Simplest build: four rectangles, two ears with one curve each, one dowel",
+        "Long grip fits a child's two hands or an adult's whole hand",
+        "Low, steady box; the screen sits at a comfortable height"
+      ],
+      "cons": [
+        "Most ordinary look of the three",
+        "Needs a 22 mm Forstner or spade bit for the dowel holes"
+      ],
+      "accent": "#c8553d"
+    },
+    {
+      "id": "house",
+      "letter": "B",
+      "name": "Little House Radio",
+      "tagline": "A storybook house: the screen is a window, the buttons are the front door, the speaker sings from the round attic window.",
+      "story": "Invites stories and play. Natural birch walls with a painted roof, a rounded chimney that is also the carry handle.",
+      "handle": "22 mm dowel running front to back through two rounded chimney tabs. 88 mm grip, 37 mm finger space above the ridge.",
+      "pros": [
+        "Most character and play value",
+        "Straight cuts everywhere except the two rounded chimney tabs",
+        "Smallest footprint on a shelf (150 x 100 mm)"
+      ],
+      "cons": [
+        "Tallest (278 mm) on the narrowest base: tips over more easily if pushed",
+        "Roof needs a lapped ridge, glue cleats and bevelled wall tops",
+        "Opening the back also means unscrewing the dowel end"
+      ],
+      "accent": "#4f7cac"
+    },
+    {
+      "id": "cloud",
+      "letter": "C",
+      "name": "Cloud Caddy",
+      "tagline": "A low, wide radio with a soft cloud-shaped handle on top and a sunny speaker grille.",
+      "story": "Calm and sleepy: a cloud to hold and a sun that sings. The battery lies flat on the floor, so it sits very low.",
+      "handle": "Cloud fin of three glued 6 mm layers (18 mm thick) with a 100 x 34 mm hand hole, screwed from inside through the lid.",
+      "pros": [
+        "Lowest centre of gravity: hardest to tip over",
+        "Carries level: the handle is right above the middle",
+        "No bar ends sticking out; one rounded hand hole, nothing to pinch"
+      ],
+      "cons": [
+        "Three identical curvy layers: most parts (9) and the most coping-saw work",
+        "Hand-hole edges need careful rounding on all three layers",
+        "Widest footprint (200 x 90 mm)"
+      ],
+      "accent": "#f2c14e"
+    }
+  ],
+  "common": [
+    "6 mm birch plywood; every flat part fits on one A4 sheet, so each prints as one 1:1 template.",
+    "Hand tools only: saw with mitre box, coping or fret saw, drill with 3, 3.5, 4, 5, 16 and 22 mm bits (C: a 34 mm Forstner bit or hole saw), sandpaper, clamps, wood glue.",
+    "Glued butt joints, no routing. The back is removable with four M3 screws into glued corner blocks, so a tool is needed to reach the battery.",
+    "Same electronics as the wooden case: Pi 3 on the back on 8 mm standoffs, 2-inch LCD, five-button board, 40 mm speaker, MAX98357A, ADS, divider, Baseus 5000 mAh, inline USB switch.",
+    "Child safety: round every edge (R3 or more), use a toy-safe water-based finish, glue the keycaps onto their stems, keep grille holes 5 mm or smaller with felt behind, keep handle openings 34 mm or more so fingers cannot jam.",
+    "Charging works as in the wooden case: open the back and unplug the output lead. A panel-mount USB-C socket is an option for the full design."
+  ]
+}

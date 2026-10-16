@@ -1,0 +1,11 @@
+# Local build logs and scratch renders.
+/tmp/
+__pycache__/
+
+# Generated CAD, facts, reports, drawings and images; rebuild with build_concepts.py.
+/STEP/
+/GLB/
+/PDF/
+/previews/
+/facts/
+/verification.json

@@ -1,0 +1,25 @@
+{
+  "status": "Existing artwork retained unchanged; brand-specific generation instructions removed.",
+  "atlases": {
+    "listening": "assets/animations/listening-atlas.png",
+    "speaking": "assets/animations/speaking-atlas.png"
+  },
+  "layout": {
+    "grid": [
+      2,
+      2
+    ],
+    "frameSize": [
+      240,
+      320
+    ],
+    "fps": 5
+  },
+  "references": [
+    "assets/animations/references/listening-base-pose.png",
+    "assets/animations/references/listening-original.png",
+    "assets/animations/references/speaking-smile.jpg",
+    "assets/animations/references/speaking-talking.jpg"
+  ],
+  "notice": "See THIRD_PARTY_NOTICES.md for retained media status."
+}

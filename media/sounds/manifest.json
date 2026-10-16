@@ -1,0 +1,12 @@
+{
+  "signature": "daa5ebac954166d2dae95e9219f53bb5fc96034ee854a8b94b2566e2048e86d3",
+  "items": [
+    {
+      "source": "SPEAKER_01_0014.wav",
+      "file": "000-SPEAKER_01_0014.wav",
+      "seconds": 5.0,
+      "rate": 48000,
+      "channels": 2
+    }
+  ]
+}

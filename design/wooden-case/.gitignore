@@ -1,0 +1,22 @@
+# Local build caches and intermediate files.
+/.cad-cache/
+/tmp/
+/viewer-dist/
+__pycache__/
+
+# Generated CAD, drawings, images and standalone viewer.
+/STEP/
+/GLB/
+/DXF/
+/PDF/
+/SVG/
+/previews/
+/viewer.html
+
+# Generated manifests, reports and machine-specific viewer links.
+/cut-list.json
+/routing.json
+/wiring.csv
+/verification.json
+/viewer-verification.json
+/cad-viewer-links.md

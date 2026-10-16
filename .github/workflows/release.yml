@@ -1,0 +1,126 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Existing SemVer tag on main, for example v1.0.0'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag_name || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: ${{ inputs.tag_name || github.ref_name }}
+
+jobs:
+  verify-tag:
+    name: Verify SemVer tag and main ancestry
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      commit: ${{ steps.gate.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag_name) || github.ref }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Reject wrong tags and commits outside main
+        id: gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor HEAD refs/remotes/origin/main
+          python3 scripts/verify_release_ref.py "$RELEASE_TAG"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build and validate distribution
+    needs: verify-tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.verify-tag.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements*.txt
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install -r requirements-dev.txt
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Build complete software kit
+        run: make build PYTHON=python
+      - name: Independently validate deliverables
+        run: python -c "from scripts.package import validate_release_kit; validate_release_kit('output')"
+      - name: Generate release notes from reports
+        run: python scripts/generate_release_notes.py "$RELEASE_TAG" > output/release-notes.md
+      - name: Retain diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-failure-reports
+          path: output/reports/
+          if-no-files-found: ignore
+      - name: Upload exact release deliverables
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-deliverables
+          if-no-files-found: error
+          path: |
+            output/Alfa-Build-Kit.zip
+            output/SHA256SUMS
+            output/release-notes.md
+            output/reports/build-manifest.json
+            output/reports/validation.json
+            output/reports/hardware.csv
+
+  publish:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-deliverables
+          path: release-assets
+      - name: Verify transferred archive
+        working-directory: release-assets
+        run: sha256sum --check SHA256SUMS
+      - name: Publish validated assets
+        working-directory: release-assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ASSETS=(Alfa-Build-Kit.zip SHA256SUMS reports/build-manifest.json reports/validation.json reports/hardware.csv)
+          if gh release view "$RELEASE_TAG" > /dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${ASSETS[@]}" --clobber
+            gh release edit "$RELEASE_TAG" --notes-file release-notes.md
+          else
+            gh release create "$RELEASE_TAG" "${ASSETS[@]}" --verify-tag --title "Alfa $RELEASE_TAG" --notes-file release-notes.md
+          fi

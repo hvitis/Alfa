@@ -1,0 +1,6 @@
+-r requirements.txt
+gpiozero>=2.0.1.post3,<3
+smbus2>=0.6.1,<1
+spidev>=3.8,<4
+# lgpio comes from Raspberry Pi OS: apt install python3-lgpio.
+# Create the virtual environment with --system-site-packages.

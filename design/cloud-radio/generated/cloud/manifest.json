@@ -1,0 +1,1134 @@
+{
+  "revision": "prototype-6",
+  "outer_mm": [
+    214.97,
+    190.0,
+    86
+  ],
+  "core_mm": [
+    210,
+    190,
+    86
+  ],
+  "side_relief": {
+    "protrusion": 2.5,
+    "anchor": 0.6,
+    "rows": [
+      26,
+      51,
+      77,
+      103,
+      123
+    ],
+    "front_depths": [
+      14,
+      27
+    ],
+    "rear_depths": [
+      60,
+      73
+    ],
+    "radius": 14,
+    "protected_from_y": 140,
+    "style": "Additive rounded cumulus caps; closed core and handle unchanged"
+  },
+  "keypad_bridge": {
+    "single_button_zone": 16,
+    "clear_gap": 9,
+    "width": 4,
+    "source": "User measurement from isolated-button short PCB edge; remaining button centres and cap diameters provisional",
+    "root_radius": 8
+  },
+  "allowance_mm": 5,
+  "material": "PETG",
+  "components": [
+    {
+      "id": "battery",
+      "title": "Baseus 5000 mAh",
+      "size": [
+        106,
+        69,
+        14
+      ],
+      "origin": [
+        -53,
+        10,
+        63
+      ],
+      "uncertain": false,
+      "source": "User-confirmed 69 x 106 x 14 bank, rotated horizontally; USB-C centred on right 69 x 14 end face",
+      "color": "#d9e4e5",
+      "rotation_deg": 90
+    },
+    {
+      "id": "pi",
+      "title": "Raspberry Pi 3 B",
+      "size": [
+        85,
+        56,
+        1.6
+      ],
+      "origin": [
+        -42.5,
+        84,
+        75
+      ],
+      "uncertain": false,
+      "source": "https://datasheets.raspberrypi.com/rpi3/raspberry-pi-3-b-mechanical-drawing.pdf",
+      "color": "#287557"
+    },
+    {
+      "id": "lcd",
+      "title": "Waveshare 2-inch LCD",
+      "size": [
+        35,
+        58,
+        10
+      ],
+      "origin": [
+        39,
+        51,
+        6
+      ],
+      "uncertain": false,
+      "source": "https://files.waveshare.com/upload/6/6d/2inch_LCD_Module_2D_Drawing.pdf",
+      "color": "#275579"
+    },
+    {
+      "id": "keypad",
+      "title": "Five-button AD-Key \u00b7 provisional",
+      "size": [
+        30,
+        68,
+        8
+      ],
+      "origin": [
+        -77,
+        45,
+        6
+      ],
+      "uncertain": true,
+      "source": "https://sklep.msalamon.pl/produkt/modul-ad-key-klawiatura-5-przyciskow/",
+      "note": "Supplier says 68 x 26 with inconsistent 61 x 26 hole pitch; reserve 68 x 30 plus allowance. User hole offset 4.5 diagonally. Button positions/height are illustrative. User-confirmed isolated-button zone 16 mm from short PCB edge, then 9 mm clear gap. A 4 mm face bridge leaves 2.5 mm on each side.",
+      "color": "#303a42",
+      "rotation_deg": 90
+    },
+    {
+      "id": "speaker",
+      "title": "40 mm speaker \u00b7 provisional",
+      "size": [
+        40,
+        40,
+        20
+      ],
+      "origin": [
+        -38,
+        98,
+        5.5
+      ],
+      "uncertain": true,
+      "source": "Recorded envelope; user-confirmed corner-hole diagonal offset 4.5 mm",
+      "color": "#39414a"
+    },
+    {
+      "id": "amp",
+      "title": "MAX98357A \u00b7 provisional",
+      "size": [
+        20,
+        19,
+        12
+      ],
+      "origin": [
+        -12,
+        70,
+        8
+      ],
+      "uncertain": true,
+      "source": "https://www.gotronik.pl/modul-wzmacniacza-audio-i2s-3w-klasa-d-dacmax98357-p-13866.html",
+      "note": "Supplier approx. 19 x 19; reserve max of earlier 20 x 15 and supplier outline. Populated height estimated.",
+      "color": "#77529a"
+    },
+    {
+      "id": "adc",
+      "title": "ADS1115/ADS1015 \u00b7 provisional",
+      "size": [
+        9,
+        29,
+        12
+      ],
+      "origin": [
+        -4,
+        34,
+        8
+      ],
+      "uncertain": true,
+      "source": "Recorded provisional envelope; exact module manufacturer unidentified",
+      "color": "#77529a"
+    },
+    {
+      "id": "divider",
+      "title": "10 k\u03a9 divider perfboard",
+      "size": [
+        16,
+        20,
+        8
+      ],
+      "origin": [
+        -14,
+        8,
+        8
+      ],
+      "uncertain": true,
+      "source": "New perfboard design target",
+      "color": "#b78b56"
+    },
+    {
+      "id": "switch",
+      "title": "QUARKZMAN switch \u00b7 provisional",
+      "size": [
+        18,
+        40,
+        12
+      ],
+      "origin": [
+        54,
+        95,
+        65
+      ],
+      "uncertain": true,
+      "source": "QUARKZMAN B0H1JMNHQT; manufacturer housing drawing unavailable",
+      "color": "#343f47",
+      "rotation_deg": 0
+    }
+  ],
+  "keepouts": [
+    {
+      "id": "pi_ports",
+      "title": "Pi connectors",
+      "origin": [
+        -42.5,
+        82,
+        59
+      ],
+      "size": [
+        87,
+        60,
+        16
+      ],
+      "uncertain": false,
+      "parent": "pi"
+    },
+    {
+      "id": "gpio",
+      "title": "Connected GPIO sockets \u00b7 provisional",
+      "origin": [
+        -35.5,
+        134,
+        51
+      ],
+      "size": [
+        53,
+        8,
+        24
+      ],
+      "uncertain": true,
+      "parent": "pi",
+      "fixed_back_z": 75
+    },
+    {
+      "id": "pi_power",
+      "title": "Angled micro-USB plug \u00b7 provisional",
+      "origin": [
+        -49,
+        85,
+        61
+      ],
+      "size": [
+        20,
+        12,
+        10
+      ],
+      "uncertain": true,
+      "parent": "pi"
+    },
+    {
+      "id": "bank_plug",
+      "title": "Battery USB-C plug \u00b7 provisional",
+      "origin": [
+        53,
+        38.5,
+        66.75
+      ],
+      "size": [
+        22,
+        12,
+        6.5
+      ],
+      "uncertain": true,
+      "parent": "battery"
+    },
+    {
+      "id": "usb_join",
+      "title": "Connected USB-C coupling \u00b7 provisional",
+      "origin": [
+        -6,
+        61,
+        42
+      ],
+      "size": [
+        16,
+        30,
+        12
+      ],
+      "uncertain": true,
+      "parent": "switch"
+    },
+    {
+      "id": "lcd_cable",
+      "title": "LCD connector \u00b7 provisional",
+      "origin": [
+        42,
+        52,
+        16
+      ],
+      "size": [
+        25,
+        10,
+        12
+      ],
+      "uncertain": true,
+      "parent": "lcd"
+    }
+  ],
+  "handle": {
+    "center": [
+      0,
+      159
+    ],
+    "opening": [
+      64,
+      22
+    ],
+    "wall": 3,
+    "note": "Raised 20 mm grip centred on the shell joint, with full-width closed rounded shoulders and smooth roots. Physical hand fit remains to be checked.",
+    "grip_depth": 20,
+    "shoulder": {
+      "height": 152,
+      "front_radius": 8,
+      "root_radius": 10,
+      "crown_radius": 10
+    }
+  },
+  "fasteners": {
+    "enclosure": "3 x M3 x 55 pan head + 3 DIN 934 M3 nuts",
+    "battery_door": "1 x M3 x 12 pan head + 1 DIN 934 M3 nut",
+    "lcd": "4 x M2.5 x 6 thread-forming screws; verify actual PCB holes",
+    "pi": "4 x M2.5 x 6 thread-forming screws",
+    "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README"
+  },
+  "checks_count": 205,
+  "passed": true,
+  "files": [
+    "front.stl",
+    "rear.stl",
+    "battery_door.stl",
+    "cloud-radio.step",
+    "cloud-radio.zip"
+  ],
+  "print_parts": [
+    "front",
+    "rear",
+    "battery_door"
+  ],
+  "frame_features": [
+    {
+      "id": "F-N01",
+      "title": "Snap hook",
+      "part": "front",
+      "origin": [
+        -60.0,
+        1.0,
+        28.0
+      ],
+      "size": [
+        10.0,
+        3.8,
+        21.0
+      ]
+    },
+    {
+      "id": "F-N02",
+      "title": "Snap hook",
+      "part": "front",
+      "origin": [
+        50.0,
+        1.0,
+        28.0
+      ],
+      "size": [
+        10.0,
+        3.8,
+        21.0
+      ]
+    },
+    {
+      "id": "F-N03",
+      "title": "Snap hook",
+      "part": "front",
+      "origin": [
+        100.2,
+        80.0,
+        28.0
+      ],
+      "size": [
+        3.8,
+        10.0,
+        21.0
+      ]
+    },
+    {
+      "id": "F-N04",
+      "title": "Snap hook",
+      "part": "front",
+      "origin": [
+        -104.0,
+        80.0,
+        28.0
+      ],
+      "size": [
+        3.8,
+        10.0,
+        21.0
+      ]
+    },
+    {
+      "id": "F-L01",
+      "title": "LCD mounting post",
+      "part": "front",
+      "origin": [
+        39.1,
+        51.1,
+        3.0
+      ],
+      "size": [
+        4.8,
+        4.8,
+        3.0
+      ]
+    },
+    {
+      "id": "F-L02",
+      "title": "LCD mounting post",
+      "part": "front",
+      "origin": [
+        39.1,
+        104.1,
+        3.0
+      ],
+      "size": [
+        4.8,
+        4.8,
+        3.0
+      ]
+    },
+    {
+      "id": "F-L03",
+      "title": "LCD mounting post",
+      "part": "front",
+      "origin": [
+        69.1,
+        51.1,
+        3.0
+      ],
+      "size": [
+        4.8,
+        4.8,
+        3.0
+      ]
+    },
+    {
+      "id": "F-L04",
+      "title": "LCD mounting post",
+      "part": "front",
+      "origin": [
+        69.1,
+        104.1,
+        3.0
+      ],
+      "size": [
+        4.8,
+        4.8,
+        3.0
+      ]
+    },
+    {
+      "id": "F-K05",
+      "title": "Rounded keypad bridge \u00b7 4 mm / R8",
+      "part": "front",
+      "origin": [
+        -76.0,
+        55.5,
+        0.0
+      ],
+      "size": [
+        28.0,
+        20.0,
+        3.0
+      ]
+    },
+    {
+      "id": "F-K01",
+      "title": "Keypad mounting slot",
+      "part": "front",
+      "origin": [
+        -79.318,
+        44.182,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        3.0
+      ]
+    },
+    {
+      "id": "F-K02",
+      "title": "Keypad mounting slot",
+      "part": "front",
+      "origin": [
+        -79.318,
+        105.818,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        3.0
+      ]
+    },
+    {
+      "id": "F-K03",
+      "title": "Keypad mounting slot",
+      "part": "front",
+      "origin": [
+        -55.682,
+        44.182,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        3.0
+      ]
+    },
+    {
+      "id": "F-K04",
+      "title": "Keypad mounting slot",
+      "part": "front",
+      "origin": [
+        -55.682,
+        105.818,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        3.0
+      ]
+    },
+    {
+      "id": "F-SP01",
+      "title": "Speaker mounting slot",
+      "part": "front",
+      "origin": [
+        -40.318,
+        97.182,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        2.5
+      ]
+    },
+    {
+      "id": "F-SP02",
+      "title": "Speaker mounting slot",
+      "part": "front",
+      "origin": [
+        -40.318,
+        130.818,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        2.5
+      ]
+    },
+    {
+      "id": "F-SP03",
+      "title": "Speaker mounting slot",
+      "part": "front",
+      "origin": [
+        -6.682,
+        97.182,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        2.5
+      ]
+    },
+    {
+      "id": "F-SP04",
+      "title": "Speaker mounting slot",
+      "part": "front",
+      "origin": [
+        -6.682,
+        130.818,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        2.5
+      ]
+    },
+    {
+      "id": "F-AMP01",
+      "title": "MAX98357A \u00b7 provisional support slot",
+      "part": "front",
+      "origin": [
+        -7.5,
+        62.0,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-AMP02",
+      "title": "MAX98357A \u00b7 provisional support slot",
+      "part": "front",
+      "origin": [
+        -7.5,
+        89.0,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-ADC01",
+      "title": "ADS1115/ADS1015 \u00b7 provisional support slot",
+      "part": "front",
+      "origin": [
+        -5.0,
+        26.0,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-ADC02",
+      "title": "ADS1115/ADS1015 \u00b7 provisional support slot",
+      "part": "front",
+      "origin": [
+        -5.0,
+        63.0,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-DIVIDER01",
+      "title": "10 k\u03a9 divider perfboard support slot",
+      "part": "front",
+      "origin": [
+        -11.5,
+        0.0,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-DIVIDER02",
+      "title": "10 k\u03a9 divider perfboard support slot",
+      "part": "front",
+      "origin": [
+        -11.5,
+        28.0,
+        3.0
+      ],
+      "size": [
+        11.0,
+        8.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-B01",
+      "title": "Battery lower edge support",
+      "part": "front",
+      "origin": [
+        -61.5,
+        3.0,
+        3.0
+      ],
+      "size": [
+        8.0,
+        6.5,
+        57.5
+      ]
+    },
+    {
+      "id": "R-B03",
+      "title": "Battery wall shelf and strap slot",
+      "part": "rear",
+      "origin": [
+        -105.0,
+        77.5,
+        57.5
+      ],
+      "size": [
+        51.5,
+        8.0,
+        3.0
+      ]
+    },
+    {
+      "id": "F-BF11",
+      "title": "Battery lower retaining fence",
+      "part": "front",
+      "origin": [
+        -59.5,
+        3.5,
+        60.5
+      ],
+      "size": [
+        4.0,
+        4.0,
+        19.0
+      ]
+    },
+    {
+      "id": "R-BF12",
+      "title": "Battery upper retaining fence",
+      "part": "rear",
+      "origin": [
+        -59.5,
+        79.5,
+        60.5
+      ],
+      "size": [
+        4.0,
+        4.0,
+        19.0
+      ]
+    },
+    {
+      "id": "F-B02",
+      "title": "Battery lower edge support",
+      "part": "front",
+      "origin": [
+        53.5,
+        3.0,
+        3.0
+      ],
+      "size": [
+        8.0,
+        6.5,
+        57.5
+      ]
+    },
+    {
+      "id": "R-B04",
+      "title": "Battery wall shelf and strap slot",
+      "part": "rear",
+      "origin": [
+        53.5,
+        77.5,
+        57.5
+      ],
+      "size": [
+        51.5,
+        8.0,
+        3.0
+      ]
+    },
+    {
+      "id": "F-BF21",
+      "title": "Battery lower retaining fence",
+      "part": "front",
+      "origin": [
+        55.5,
+        3.5,
+        60.5
+      ],
+      "size": [
+        4.0,
+        4.0,
+        19.0
+      ]
+    },
+    {
+      "id": "R-BF22",
+      "title": "Battery upper retaining fence",
+      "part": "rear",
+      "origin": [
+        55.5,
+        79.5,
+        60.5
+      ],
+      "size": [
+        4.0,
+        4.0,
+        19.0
+      ]
+    },
+    {
+      "id": "R-P01",
+      "title": "Raspberry Pi mounting post",
+      "part": "rear",
+      "origin": [
+        -41.7,
+        84.8,
+        76.6
+      ],
+      "size": [
+        5.4,
+        5.4,
+        6.4
+      ]
+    },
+    {
+      "id": "R-P02",
+      "title": "Raspberry Pi mounting post",
+      "part": "rear",
+      "origin": [
+        -41.7,
+        133.8,
+        76.6
+      ],
+      "size": [
+        5.4,
+        5.4,
+        6.4
+      ]
+    },
+    {
+      "id": "R-P03",
+      "title": "Raspberry Pi mounting post",
+      "part": "rear",
+      "origin": [
+        16.3,
+        84.8,
+        76.6
+      ],
+      "size": [
+        5.4,
+        5.4,
+        6.4
+      ]
+    },
+    {
+      "id": "R-P04",
+      "title": "Raspberry Pi mounting post",
+      "part": "rear",
+      "origin": [
+        16.3,
+        133.8,
+        76.6
+      ],
+      "size": [
+        5.4,
+        5.4,
+        6.4
+      ]
+    },
+    {
+      "id": "R-SW01",
+      "title": "Switch retaining slot",
+      "part": "rear",
+      "origin": [
+        45.0,
+        96.0,
+        77.0
+      ],
+      "size": [
+        6.0,
+        8.0,
+        6.0
+      ]
+    },
+    {
+      "id": "R-SW02",
+      "title": "Switch retaining slot",
+      "part": "rear",
+      "origin": [
+        45.0,
+        126.0,
+        77.0
+      ],
+      "size": [
+        6.0,
+        8.0,
+        6.0
+      ]
+    },
+    {
+      "id": "R-SW03",
+      "title": "Switch retaining slot",
+      "part": "rear",
+      "origin": [
+        75.0,
+        117.0,
+        77.0
+      ],
+      "size": [
+        6.0,
+        8.0,
+        6.0
+      ]
+    },
+    {
+      "id": "F-S01",
+      "title": "Perimeter case screw post",
+      "part": "front",
+      "origin": [
+        -100.2,
+        19.8,
+        3.0
+      ],
+      "size": [
+        10.4,
+        10.4,
+        40.0
+      ]
+    },
+    {
+      "id": "R-S01",
+      "title": "Perimeter case screw receiver",
+      "part": "rear",
+      "origin": [
+        -100.2,
+        19.8,
+        43.3
+      ],
+      "size": [
+        10.4,
+        10.4,
+        39.7
+      ]
+    },
+    {
+      "id": "F-S02",
+      "title": "Perimeter case screw post",
+      "part": "front",
+      "origin": [
+        -79.2,
+        133.8,
+        3.0
+      ],
+      "size": [
+        10.4,
+        10.4,
+        40.0
+      ]
+    },
+    {
+      "id": "R-S02",
+      "title": "Perimeter case screw receiver",
+      "part": "rear",
+      "origin": [
+        -79.2,
+        133.8,
+        43.3
+      ],
+      "size": [
+        10.4,
+        10.4,
+        39.7
+      ]
+    },
+    {
+      "id": "F-S03",
+      "title": "Perimeter case screw post",
+      "part": "front",
+      "origin": [
+        90.8,
+        99.8,
+        3.0
+      ],
+      "size": [
+        10.4,
+        10.4,
+        40.0
+      ]
+    },
+    {
+      "id": "R-S03",
+      "title": "Perimeter case screw receiver",
+      "part": "rear",
+      "origin": [
+        90.8,
+        99.8,
+        43.3
+      ],
+      "size": [
+        10.4,
+        10.4,
+        39.7
+      ]
+    },
+    {
+      "id": "B-T01",
+      "title": "Battery door retaining tab",
+      "part": "battery_door",
+      "origin": [
+        -47.0,
+        2.0,
+        81.2
+      ],
+      "size": [
+        10.0,
+        5.0,
+        1.8
+      ]
+    },
+    {
+      "id": "B-T02",
+      "title": "Battery door retaining tab",
+      "part": "battery_door",
+      "origin": [
+        27.0,
+        2.0,
+        81.2
+      ],
+      "size": [
+        10.0,
+        5.0,
+        1.8
+      ]
+    },
+    {
+      "id": "R-D01",
+      "title": "Battery door screw receiver",
+      "part": "rear",
+      "origin": [
+        70.8,
+        73.8,
+        73.0
+      ],
+      "size": [
+        10.4,
+        10.4,
+        10.0
+      ]
+    },
+    {
+      "id": "F-H01",
+      "title": "Rounded front handle and shoulder",
+      "part": "front",
+      "origin": [
+        -67.1538,
+        152.0,
+        23.15
+      ],
+      "size": [
+        137.0041,
+        37.9989,
+        19.85
+      ]
+    },
+    {
+      "id": "R-H01",
+      "title": "Rounded rear handle and shoulder",
+      "part": "rear",
+      "origin": [
+        -67.1538,
+        152.0,
+        43.3
+      ],
+      "size": [
+        137.0041,
+        37.9989,
+        19.85
+      ]
+    },
+    {
+      "id": "F-C01",
+      "title": "Rounded cumulus side relief",
+      "part": "front",
+      "origin": [
+        -107.4866,
+        17.5813,
+        5.7084
+      ],
+      "size": [
+        214.9697,
+        113.5222,
+        29.5831
+      ]
+    },
+    {
+      "id": "R-C01",
+      "title": "Rounded cumulus side relief",
+      "part": "rear",
+      "origin": [
+        -107.4866,
+        17.5813,
+        52.0
+      ],
+      "size": [
+        214.9697,
+        113.5222,
+        29.0
+      ]
+    }
+  ],
+  "frame_parts": [
+    {
+      "id": "F-00",
+      "name": "front",
+      "title": "Front shell"
+    },
+    {
+      "id": "R-00",
+      "name": "rear",
+      "title": "Rear shell"
+    },
+    {
+      "id": "B-00",
+      "name": "battery_door",
+      "title": "Battery door"
+    }
+  ],
+  "limits": [
+    "Not FEA. PETG print strength and fatigue require physical testing.",
+    "Unknown component/connector dimensions remain provisional; 5 mm is a fit allowance, not guaranteed accuracy.",
+    "Display active-area placement and button centres require physical fit confirmation.",
+    "PCB mounting holes on unbranded modules are not manufacturer-verified. Use adjustable slots and insulating ties.",
+    "Harness centre lines are illustrative; actual cable lengths, bend radii, thermal behaviour and drop retention require bench tests."
+  ]
+}

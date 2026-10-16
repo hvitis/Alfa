@@ -1,0 +1,1159 @@
+{
+  "revision": "prototype-6",
+  "checks": [
+    {
+      "check": "front: valid connected solid",
+      "pass": true,
+      "detail": {
+        "solids": 1,
+        "volume_mm3": 211136.27
+      }
+    },
+    {
+      "check": "front: retains full lower frame",
+      "pass": true,
+      "detail": [
+        214.97,
+        189.999,
+        79.5
+      ]
+    },
+    {
+      "check": "front: fits configured print field",
+      "pass": true,
+      "detail": [
+        214.97,
+        189.999,
+        79.5
+      ]
+    },
+    {
+      "check": "rear: valid connected solid",
+      "pass": true,
+      "detail": {
+        "solids": 1,
+        "volume_mm3": 172943.71
+      }
+    },
+    {
+      "check": "rear: retains full lower frame",
+      "pass": true,
+      "detail": [
+        214.97,
+        189.999,
+        42.7
+      ]
+    },
+    {
+      "check": "rear: fits configured print field",
+      "pass": true,
+      "detail": [
+        214.97,
+        189.999,
+        42.7
+      ]
+    },
+    {
+      "check": "battery_door: valid connected solid",
+      "pass": true,
+      "detail": {
+        "solids": 1,
+        "volume_mm3": 33925.23
+      }
+    },
+    {
+      "check": "battery_door: fits configured print field",
+      "pass": true,
+      "detail": [
+        147.0,
+        83.0,
+        4.8
+      ]
+    },
+    {
+      "check": "Assembled shells: front / rear do not interfere",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Assembled shells: front / battery_door do not interfere",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Assembled shells: rear / battery_door do not interfere",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: battery / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: battery / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: battery / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: pi / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: pi / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: pi / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: lcd / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: lcd / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: lcd / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: keypad / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: keypad / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: keypad / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: speaker / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: speaker / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: speaker / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: amp / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: amp / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: amp / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: adc / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: adc / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: adc / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: divider / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: divider / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: divider / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: switch / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: switch / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: switch / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded envelope inside shell: battery",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: pi",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: lcd",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: keypad",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: speaker",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: amp",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: adc",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: divider",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: switch",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: pi_ports",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: gpio",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: pi_power",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: bank_plug",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: usb_join",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: lcd_cable",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded clearance: battery / pi",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / lcd",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / keypad",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / speaker",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / adc",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / divider",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / lcd",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / keypad",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / speaker",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / adc",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / divider",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / keypad",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / speaker",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / adc",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / divider",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / speaker",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / adc",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / divider",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: keypad / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / adc",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / divider",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / adc",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / divider",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: adc / divider",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: adc / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: adc / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: adc / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: adc / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: adc / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: adc / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: adc / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: divider / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: divider / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: divider / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: divider / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: divider / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: divider / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: divider / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: pi_ports / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: pi_ports / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: pi_ports / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: gpio / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: gpio / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: gpio / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: pi_power / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: pi_power / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: pi_power / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: bank_plug / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: bank_plug / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: bank_plug / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: usb_join / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: usb_join / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: usb_join / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: lcd_cable / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: lcd_cable / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: lcd_cable / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Battery removal +5 mm swept clearance: front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Battery removal +5 mm swept clearance: rear",
+      "pass": true,
+      "detail": 0.0025
+    },
+    {
+      "check": "Snap elastic-strain screening <= 2%",
+      "pass": true,
+      "detail": {
+        "estimated_strain": 0.00694,
+        "assumed_limit": 0.02
+      }
+    },
+    {
+      "check": "Four enclosure screw axes",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Front layout: LCD left and keypad right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Integrated handle through-opening: front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Integrated handle through-opening: rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Integrated handle through-opening: battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Handle opening at least 64 x 22 mm",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Horizontal battery door remains below handle",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Grip depth <= 20 mm",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "No raised side tip: front left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "No raised side tip: front right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "No raised side tip: rear left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "No raised side tip: rear right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Handle centred on shell joint",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Equal handle depth in both shells",
+      "pass": true,
+      "detail": {
+        "front_mm": 9.85,
+        "rear_mm": 9.85,
+        "seam_mm": 0.3
+      }
+    },
+    {
+      "check": "Front and rear grip volumes within 0.1%",
+      "pass": true,
+      "detail": {
+        "front_mm3": 9814.714,
+        "rear_mm3": 9814.708,
+        "relative_error": 5e-07
+      }
+    },
+    {
+      "check": "Case screw 1 beside perimeter wall",
+      "pass": true,
+      "detail": 6.907
+    },
+    {
+      "check": "Case screw 2 beside perimeter wall",
+      "pass": true,
+      "detail": 5.813
+    },
+    {
+      "check": "Case screw 3 beside perimeter wall",
+      "pass": true,
+      "detail": 7.084
+    },
+    {
+      "check": "Keypad bridge fills the measured gap across both long sides",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad bridge leaves 2.5 mm each side",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Rounded bridge root adds cover material",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Rounded bridge root adds cover material",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Rounded bridge root adds cover material",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Rounded bridge root adds cover material",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad bridge and roots clear nearest cap plus 2.5 mm",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad nominal cap clears front face",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad bridge and roots clear nearest cap plus 2.5 mm",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Keypad nominal cap clears front face",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Frame feature IDs unique",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "front: saved STL manifold and outward winding",
+      "pass": true,
+      "detail": {
+        "triangles": 45378,
+        "watertight": true,
+        "consistent_winding": true,
+        "volume_mm3": 207970.31,
+        "removed_degenerate_triangles": 2
+      }
+    },
+    {
+      "check": "rear: saved STL manifold and outward winding",
+      "pass": true,
+      "detail": {
+        "triangles": 38044,
+        "watertight": true,
+        "consistent_winding": true,
+        "volume_mm3": 169508.5,
+        "removed_degenerate_triangles": 0
+      }
+    },
+    {
+      "check": "battery_door: saved STL manifold and outward winding",
+      "pass": true,
+      "detail": {
+        "triangles": 1310,
+        "watertight": true,
+        "consistent_winding": true,
+        "volume_mm3": 33924.91,
+        "removed_degenerate_triangles": 0
+      }
+    },
+    {
+      "check": "snap-coupon-0.2: saved STL manifold and outward winding",
+      "pass": true,
+      "detail": {
+        "triangles": 76,
+        "watertight": true,
+        "consistent_winding": true,
+        "volume_mm3": 1984.48,
+        "removed_degenerate_triangles": 0
+      }
+    },
+    {
+      "check": "snap-coupon-0.3: saved STL manifold and outward winding",
+      "pass": true,
+      "detail": {
+        "triangles": 76,
+        "watertight": true,
+        "consistent_winding": true,
+        "volume_mm3": 1990.36,
+        "removed_degenerate_triangles": 0
+      }
+    },
+    {
+      "check": "snap-coupon-0.4: saved STL manifold and outward winding",
+      "pass": true,
+      "detail": {
+        "triangles": 76,
+        "watertight": true,
+        "consistent_winding": true,
+        "volume_mm3": 1996.0,
+        "removed_degenerate_triangles": 0
+      }
+    }
+  ],
+  "passed": true,
+  "limitations": [
+    "Not FEA. PETG print strength and fatigue require physical testing.",
+    "Unknown component/connector dimensions remain provisional; 5 mm is a fit allowance, not guaranteed accuracy.",
+    "Display active-area placement and button centres require physical fit confirmation.",
+    "PCB mounting holes on unbranded modules are not manufacturer-verified. Use adjustable slots and insulating ties.",
+    "Harness centre lines are illustrative; actual cable lengths, bend radii, thermal behaviour and drop retention require bench tests."
+  ],
+  "meshes": {
+    "front": {
+      "triangles": 45378,
+      "watertight": true,
+      "consistent_winding": true,
+      "volume_mm3": 207970.31,
+      "removed_degenerate_triangles": 2
+    },
+    "rear": {
+      "triangles": 38044,
+      "watertight": true,
+      "consistent_winding": true,
+      "volume_mm3": 169508.5,
+      "removed_degenerate_triangles": 0
+    },
+    "battery_door": {
+      "triangles": 1310,
+      "watertight": true,
+      "consistent_winding": true,
+      "volume_mm3": 33924.91,
+      "removed_degenerate_triangles": 0
+    },
+    "snap-coupon-0.2": {
+      "triangles": 76,
+      "watertight": true,
+      "consistent_winding": true,
+      "volume_mm3": 1984.48,
+      "removed_degenerate_triangles": 0
+    },
+    "snap-coupon-0.3": {
+      "triangles": 76,
+      "watertight": true,
+      "consistent_winding": true,
+      "volume_mm3": 1990.36,
+      "removed_degenerate_triangles": 0
+    },
+    "snap-coupon-0.4": {
+      "triangles": 76,
+      "watertight": true,
+      "consistent_winding": true,
+      "volume_mm3": 1996.0,
+      "removed_degenerate_triangles": 0
+    }
+  },
+  "checks_count": 205
+}

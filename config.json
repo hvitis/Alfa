@@ -1,0 +1,59 @@
+{
+  "display": {
+    "dc_pin": 25,
+    "reset_pin": 27,
+    "backlight_pin": 24,
+    "spi_bus": 0,
+    "spi_device": 0,
+    "spi_hz": 10000000,
+    "rotation": 0,
+    "bgr": false,
+    "invert": true
+  },
+  "adc": {
+    "model": "ads1115",
+    "bus": 1,
+    "address": "0x48",
+    "debounce_ms": 30
+  },
+  "images": {
+    "input": "imgs",
+    "prepared": "media/images",
+    "fit": "contain",
+    "background": "#ffffff"
+  },
+  "animations": {
+    "enabled": false,
+    "prepared": "media/animations",
+    "fps": 5,
+    "cycles": 2
+  },
+  "letter_drawing": {
+    "enabled": false,
+    "data": "assets/letter-drawing/letters.json",
+    "fps": 20,
+    "draw_seconds": 5,
+    "stroke_pause": 0.22,
+    "intro_seconds": 0.5,
+    "hold_seconds": 0.7,
+    "celebration_seconds": 1.8
+  },
+  "audio": {
+    "input": "sounds",
+    "prepared": "media/sounds",
+    "device": "auto",
+    "shutdown_pin": 23,
+    "volume": 0.2,
+    "max_volume": 0.5,
+    "clip_seconds": 5.0
+  },
+  "lesson": {
+    "letters": "all",
+    "invite_seconds": 20,
+    "sleep_seconds": 300
+  },
+  "controls": {
+    "exit_hold_seconds": 10,
+    "press_guard_ms": 400
+  }
+}

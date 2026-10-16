@@ -1,0 +1,16 @@
+{
+  "images": {
+    "input": "assets/alphabet",
+    "prepared": "media/alphabet",
+    "fit": "contain",
+    "background": "#fffdf5"
+  },
+  "animations": {
+    "enabled": false,
+    "fps": 4,
+    "cycles": 2
+  },
+  "letter_drawing": {
+    "enabled": true
+  }
+}
