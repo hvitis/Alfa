@@ -16,12 +16,10 @@ Print the cloud in your favorite colors, fit the electronics, and make it your o
 
 ## A little look around
 
-| Make a cloud | Peek inside |
-| --- | --- |
-| ![Pastel blue cloud radio with its integrated handle, LCD and five buttons](docs/images/cloud-assembled.png) | ![Exploded CAD assembly showing the two shells, electronics and battery door](docs/images/cloud-exploded.png) |
-| [Choose colors and download the print files](https://hvitis.github.io/Alfa/#3dprint) | [Assembly, dimensions and physical checks](design/cloud-radio/README.md) |
-
-![Three printed parts: two cloud shells and a battery door](docs/images/cloud-assembly.png)
+| Rendered hardware connections | Inside look through back case | Roentgen look through all elements |
+| --- | --- | --- |
+| ![Rendered 3D hardware connections between controller, display, buttons, audio amplifier, and power](docs/images/hardware-connections.png) | ![Inside look through the back case showing internal placement and wiring](docs/images/inside-back-case.png) | ![Translucent roentgen view through all elements of the cloud radio](docs/images/roentgen-look.png) |
+| [Interactive wiring atlas](https://hvitis.github.io/Alfa/#hardware) | [Plywood case internals](design/wooden-case/README.md) | [Cloud assembly & 3D print](design/cloud-radio/README.md) |
 
 **Explore the build atlas:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Plywood](https://hvitis.github.io/Alfa/#plywood) · [Hardware](https://hvitis.github.io/Alfa/#hardware) · [Software](https://hvitis.github.io/Alfa/#software)
 

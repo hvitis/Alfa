@@ -16,12 +16,10 @@ Wydrukuj obudowę w swoich kolorach, zamontuj elektronikę i stwórz własne rad
 
 ## Zajrzyj do środka
 
-| Stwórz chmurkę | Poznaj budowę |
-| --- | --- |
-| ![Pastelowa niebieska obudowa z uchwytem, ekranem i pięcioma przyciskami](docs/images/cloud-assembled.png) | ![Model CAD z rozsuniętymi połówkami obudowy, elektroniką i klapką baterii](docs/images/cloud-exploded.png) |
-| [Wybierz kolory i pobierz pliki do druku](https://hvitis.github.io/Alfa/#3dprint) | [Montaż, wymiary i próby fizyczne](design/cloud-radio/README.md) |
-
-![Trzy drukowane części: dwie połówki chmurki i klapka baterii](docs/images/cloud-assembly.png)
+| Połączenia układu | Wnętrze obudowy od tyłu | Widok rentgenowski elementów |
+| --- | --- | --- |
+| ![Trójwymiarowy model połączeń kontrolera, ekranu, przycisków, wzmacniacza i zasilania](docs/images/hardware-connections.png) | ![Widok wnętrza obudowy od tyłu z rozmieszczeniem modułów i przewodów](docs/images/inside-back-case.png) | ![Prześwietlenie rentgenowskie wszystkich wewnętrznych elementów i obudowy chmurki](docs/images/roentgen-look.png) |
+| [Interaktywny schemat połączeń](https://hvitis.github.io/Alfa/#hardware) | [Wnętrze i montaż obudowy](design/wooden-case/README.md) | [Pliki do druku chmurki](design/cloud-radio/README.md) |
 
 **Odkryj warsztat:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Sklejka](https://hvitis.github.io/Alfa/#plywood) · [Elektronika](https://hvitis.github.io/Alfa/#hardware) · [Oprogramowanie](https://hvitis.github.io/Alfa/#software)
 
