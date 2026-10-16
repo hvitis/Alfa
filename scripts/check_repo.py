@@ -25,8 +25,8 @@ def check_repo():
     data = metadata()  # Includes runtime config and letter-path validation.
     if len(data["alphabet"]) != 32 or len(set(data["alphabet"])) != 32:
         raise ValueError("The Polish alphabet must contain 32 unique letters.")
-    english = ROOT / "README.md"
-    polish = ROOT / "README.pl.md"
+    english = ROOT / "README.en.md"
+    polish = ROOT / "README.md"
     if specification_block(english) != specification_block(polish):
         raise ValueError("README specification tables differ.")
     for path, other in ((english, polish), (polish, english)):

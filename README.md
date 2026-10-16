@@ -1,39 +1,39 @@
-**English** · [Polski](README.pl.md)
+[English](README.en.md) · **Polski**
 
 # α Alfa
 
-![Alfa: an offline Raspberry Pi player and Polish alphabet companion](docs/images/readme-banner.png)
+![Alfa: odtwarzacz Raspberry Pi i nauka polskiego alfabetu bez sieci](docs/images/readme-banner.png)
 
 [![CI](https://github.com/hvitis/Alfa/actions/workflows/ci.yml/badge.svg)](https://github.com/hvitis/Alfa/actions/workflows/ci.yml)
-[![Code license: MIT](https://img.shields.io/badge/code-MIT-green)](LICENSE)
+[![Licencja kodu: MIT](https://img.shields.io/badge/code-MIT-green)](LICENSE)
 
-**Little radio. Big imagination.**
+**Małe radio. Wielka wyobraźnia.**
 
-A pastel cloud, five yellow buttons, and 32 Polish letters to explore. Alfa plays music and letter lessons offline on a Raspberry Pi.
-Print the cloud in your favorite colors, fit the electronics, and make it your own.
+Pastelowa chmurka, pięć żółtych przycisków i 32 polskie litery do odkrycia. Alfa odtwarza muzykę i lekcje liter bez sieci.
+Wydrukuj obudowę w swoich kolorach, zamontuj elektronikę i stwórz własne radio.
 
-[Live showcase](https://hvitis.github.io/Alfa/) · [Latest build kit](https://github.com/hvitis/Alfa/releases/latest) · [Hardware guide](docs/hardware-guide.md) · [Documentation](docs/README.md)
+[Prezentacja w przeglądarce](https://hvitis.github.io/Alfa/) · [Najnowszy pakiet](https://github.com/hvitis/Alfa/releases/latest) · [Instrukcja sprzętu](docs/hardware-guide.md) · [Dokumentacja](docs/README.md)
 
-## A little look around
+## Zajrzyj do środka
 
-| Rendered hardware connections | Inside look through back case | Roentgen look through all elements |
+| Połączenia układu | Wnętrze obudowy od tyłu | Widok rentgenowski elementów |
 | --- | --- | --- |
-| ![Rendered 3D hardware connections between controller, display, buttons, audio amplifier, and power](docs/images/hardware-connections.png) | ![Inside look through the back case showing internal placement and wiring](docs/images/inside-back-case.png) | ![Translucent roentgen view through all elements of the cloud radio](docs/images/roentgen-look.png) |
-| [Interactive wiring atlas](https://hvitis.github.io/Alfa/#hardware) | [Plywood case internals](design/wooden-case/README.md) | [Cloud assembly & 3D print](design/cloud-radio/README.md) |
+| ![Trójwymiarowy model połączeń kontrolera, ekranu, przycisków, wzmacniacza i zasilania](docs/images/hardware-connections.png) | ![Widok wnętrza obudowy od tyłu z rozmieszczeniem modułów i przewodów](docs/images/inside-back-case.png) | ![Prześwietlenie rentgenowskie wszystkich wewnętrznych elementów i obudowy chmurki](docs/images/roentgen-look.png) |
+| [Interaktywny schemat połączeń](https://hvitis.github.io/Alfa/#hardware) | [Wnętrze i montaż obudowy](design/wooden-case/README.md) | [Pliki do druku chmurki](design/cloud-radio/README.md) |
 
-**Explore the build atlas:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Plywood](https://hvitis.github.io/Alfa/#plywood) · [Hardware](https://hvitis.github.io/Alfa/#hardware) · [Software](https://hvitis.github.io/Alfa/#software)
+**Odkryj warsztat:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Sklejka](https://hvitis.github.io/Alfa/#plywood) · [Elektronika](https://hvitis.github.io/Alfa/#hardware) · [Oprogramowanie](https://hvitis.github.io/Alfa/#software)
 
-<details>
-<summary>See the interactive workshop and software map</summary>
+<details open>
+<summary>Zobacz warsztat i schemat oprogramowania</summary>
 
-![The Alfa workshop in the pastel website style](docs/images/showcase.png)
-![The software architecture in the pastel website style](docs/images/software-architecture.png)
+![Warsztat Alfa w pastelowym stylu strony](docs/images/showcase.png)
+![Architektura oprogramowania w pastelowym stylu strony](docs/images/software-architecture.png)
 
 </details>
 
-The [CAD folders](design/) contain the enclosure sources. The website includes the illustrated ADR PDF under **Software → Design**.
+Folder [CAD](design/) zawiera źródła obudów. Ilustrowany PDF dokumentu ADR jest w zakładce **Software → Design**.
 
-## Specifications
+## Specyfikacja
 
 <!-- specifications:start -->
 | Specification | Value |
@@ -52,18 +52,20 @@ The [CAD folders](design/) contain the enclosure sources. The website includes t
 | Static showcase | HTML, CSS, JavaScript; no backend |
 <!-- specifications:end -->
 
-## Features
+Tabela używa tych samych nazw co wersja angielska, aby automatycznie wykrywać różnice między dokumentami.
 
-- <!-- feature:offline-player --> **Offline player:** Navigate images, play recordings, and adjust volume with five physical buttons.
-- <!-- feature:letter-lessons --> **Letter lessons:** Draw 32 Polish letters stroke by stroke. The existing character assets have separate rights notes.
-- <!-- feature:hardware-simulation --> **Hardware simulation:** Save display previews on your computer without GPIO, SPI, or I²C devices.
-- <!-- feature:static-showcase --> **Static showcase:** Explore Plywood, 3DPrint, Hardware, and Software tabs, with 3D models, controller wiring, an ADR, and rendered Mermaid.
-- <!-- feature:verified-distribution --> **Verified distribution:** Build a runtime kit with a neutral demo card, checksums, validation reports, and an electronics BOM.
-- <!-- feature:enclosure-research --> **Enclosure research:** Inspect the printable cloud and both plywood projects. Cloud downloads include STL, STEP, snap coupons, and the assembly guide.
+## Funkcje
 
-## Quick start
+- <!-- feature:offline-player --> **Odtwarzacz bez sieci:** Pięć przycisków służy do zmiany obrazów, odtwarzania nagrań i regulacji głośności.
+- <!-- feature:letter-lessons --> **Nauka liter:** Animacja rysuje 32 polskie litery, kreska po kresce. Istniejące grafiki postaci mają osobne informacje o prawach.
+- <!-- feature:hardware-simulation --> **Symulacja sprzętu:** Komputer zapisuje podgląd ekranu bez urządzeń GPIO, SPI i I²C.
+- <!-- feature:static-showcase --> **Prezentacja statyczna:** Zakładki Plywood, 3DPrint, Hardware i Software zawierają modele 3D, połączenia kontrolerów, ilustrowany PDF ADR i diagram Mermaid.
+- <!-- feature:verified-distribution --> **Sprawdzany pakiet:** Pakiet zawiera neutralny obraz demonstracyjny, sumy kontrolne, raporty walidacji i zestawienie elektroniki.
+- <!-- feature:enclosure-research --> **Projekty obudów:** Prezentacja obejmuje drukowaną chmurkę i oba projekty ze sklejki. Pliki chmurki zawierają STL, STEP, próbki zatrzasków i instrukcję montażu.
 
-Use Python 3.11 or newer. Install FFmpeg for audio conversion.
+## Szybki start
+
+Użyj Pythona 3.11 lub nowszego. Zainstaluj FFmpeg do konwersji dźwięku.
 
 ```bash
 python3 -m venv .venv
@@ -72,11 +74,11 @@ python -m pip install -r requirements.txt
 python -m app --simulate player --once --no-audio
 ```
 
-The simulator saves `.state/preview/current.png`. The checkout uses existing prepared media.
-The release kit supplies a neutral demo image instead.
-For wiring, button calibration, speaker checks, and service installation, read the [hardware guide](docs/hardware-guide.md).
+Symulator zapisuje `.state/preview/current.png`. Repozytorium korzysta z istniejących przygotowanych multimediów.
+Pakiet wydania zawiera neutralny obraz demonstracyjny.
+Połączenia, kalibrację przycisków, sprawdzanie głośnika i instalację usługi opisuje [instrukcja sprzętu](docs/hardware-guide.md).
 
-For the development tools and local showcase:
+Zainstaluj narzędzia programistyczne i uruchom lokalną prezentację:
 
 ```bash
 make install
@@ -84,43 +86,44 @@ make check
 make serve
 ```
 
-Open `http://127.0.0.1:8000`. Use Node.js 22 for the browser checks.
-Read [build-guide.md](docs/build-guide.md) for Linux prerequisites and environment details.
+Otwórz `http://127.0.0.1:8000`. Testy przeglądarki wymagają Node.js 22.
+Plik [build-guide.md](docs/build-guide.md) opisuje wymagania Linuksa i środowisko.
 
-## Automated validation
+## Automatyczna walidacja
 
-`make check` runs configuration checks, Python tests, JavaScript syntax checks, viewer data tests, and bilingual documentation checks.
-CI exports the static showcase and runs Chromium checks at the domain root and a repository subpath, on desktop and mobile.
-Browser checks cover both plywood models, the printable cloud, both wiring atlases, the illustrated ADR PDF, rendered Mermaid, social images, and local assets.
-`make build` also runs the packaged simulator and verifies archive contents and SHA-256 checksums.
+`make check` sprawdza konfigurację, testy Pythona, składnię JavaScript, dane przeglądarki 3D i zgodność dokumentacji dwujęzycznej.
+CI eksportuje prezentację i sprawdza ją w Chromium, w katalogu głównym oraz podkatalogu repozytorium, na ekranie komputera i telefonu.
+Testy obejmują oba modele ze sklejki, drukowaną obudowę chmurki, połączenia obu kontrolerów, ADR, diagram Mermaid i lokalne zasoby.
+`make build` uruchamia również symulator z pakietu i sprawdza zawartość archiwum oraz sumy SHA-256.
 
-The cloud is a fit prototype. Its digital geometry checks do not replace physical print, grip, snap, drop, and temperature tests.
-Physical wiring, acoustic volume, enclosure fit, and media redistribution rights require separate review.
-The software pipeline does not certify those properties.
+Połączenia fizyczne, głośność akustyczna, dopasowanie obudowy i prawa do multimediów wymagają osobnego przeglądu.
+Automatyzacja oprogramowania nie potwierdza tych właściwości.
 
-## Build and publish
+## Budowanie i publikacja
 
 ```bash
 make smoke
 make build
 ```
 
-The kit is `output/Alfa-Build-Kit.zip`. Reports are in `output/reports/`.
-The kit includes the Python runtime, wiring guide, neutral demo image, and static atlas with its viewer meshes.
-It excludes character media, recordings, and the legacy viewer. The static site includes the cloud print downloads. Website sources and generation live in [web/](web/README.md).
-Read [release contents](docs/release-contents.md), [pipeline details](docs/pipeline.md), and [publication steps](docs/publishing.md).
+Pakiet powstaje jako `output/Alfa-Build-Kit.zip`. Raporty trafiają do `output/reports/`.
+Pakiet zawiera aplikację Python, instrukcję połączeń, neutralny obraz i prezentację statyczną z siatkami modeli 3D.
+Nie zawiera grafik postaci, nagrań ani starszej przeglądarki. Strona zawiera pliki chmurki do druku. Źródła strony i generator są w [web/](web/README.md).
+Przeczytaj [zawartość wydania](docs/release-contents.md), [opis automatyzacji](docs/pipeline.md) i [kroki publikacji](docs/publishing.md).
 
-CI validates pull requests. GitHub Pages deploys after successful checks on `main`.
-Releases require a SemVer tag whose actual commit is on `main`.
+CI sprawdza pull requesty. GitHub Pages wdraża stronę po poprawnych testach na `main`.
+Wydanie wymaga tagu SemVer wskazującego rzeczywisty commit z gałęzi `main`.
 
-## Contributing and licenses
+## Współpraca i licencje
 
-Read [CONTRIBUTING.md](docs/contributing.md) for the development workflow.
-Use [SECURITY.md](SECURITY.md) for security reports.
-The [MIT license](LICENSE) covers original code and technical documentation.
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) records asset exclusions and dependency notices.
-Existing character artwork and recordings require a separate rights review before public visibility.
-Read the [publication checklist](docs/publishing.md). The README and social cards use original CAD renders.
+Plik [contributing.md](docs/contributing.md) opisuje pracę nad kodem.
+Problemy bezpieczeństwa zgłaszaj zgodnie z [SECURITY.md](SECURITY.md).
+[Licencja MIT](LICENSE) obejmuje oryginalny kod i dokumentację techniczną.
+Plik [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) opisuje wyłączenia dotyczące zasobów i informacje o zależnościach.
 
-To recreate these images, run `make serve`, then `npm run render:assets`. Run `make site` to export the illustrated ADR PDF.
-The GitHub social card is [.github/social-preview.png](.github/social-preview.png).
+Obudowa jest prototypem do sprawdzenia dopasowania. Próby fizyczne uchwytu, zatrzasków, upadków i temperatury są nadal wymagane.
+Grafiki postaci i nagrania wymagają osobnego przeglądu praw przed publikacją. Zobacz [listę czynności przed publikacją](docs/publishing.md).
+Obrazy w README i karty społecznościowe są oryginalnymi renderami CAD.
+
+Aby odtworzyć obrazy, uruchom `make serve`, a potem `npm run render:assets`. Polecenie `make site` eksportuje ilustrowany PDF ADR.
+Karta GitHub: [.github/social-preview.png](.github/social-preview.png).
