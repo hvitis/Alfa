@@ -3,6 +3,7 @@ import adrPl from './.generated/adr.pl.html?raw';
 import teachingEn from './.generated/teaching-adr.html?raw';
 import teachingPl from './.generated/teaching-adr.pl.html?raw';
 import './cloud/style.css';
+import './pcb/style.css';
 import {createCloudColorControls} from './cloud/colors.js';
 import {createStlViewer} from './cloud/stl-viewer.js';
 import {initPricing} from './cloud/pricing.js';
@@ -12,6 +13,12 @@ import houseData from './hardware-visualisation/src/data/radio-house.json' with 
 import caseData from './hardware-visualisation/src/data/case-routing.json' with { type: 'json' };
 import { createPicoData } from './hardware-visualisation/src/data/picoSetup.js';
 import { getLocale, t, tr } from './i18n.js';
+import {readRoute,writeRoute,routeFields} from './routes.js';
+import pcbSpecification from '../design/pi3-shield/generated/design.json' with {type: 'json'};
+import pcbArchive from '../design/pi3-shield/generated/alfa-pi3-shield-prototype.zip?url';
+import pcbSchematic from '../design/pi3-shield/generated/schematic.pdf?url';
+import pcbStep from '../design/pi3-shield/generated/shield.step?url';
+import pcbGerbers from '../design/pi3-shield/generated/fabrication-draft.zip?url';
 
 const $ = selector => document.querySelector(selector);
 const tabs = [...document.querySelectorAll('[data-tab]')];
@@ -27,6 +34,35 @@ function plywoodModels() {
 const picoData = createPicoData();
 let cloudColorControls, stlViewer;
 let activeTab = '3dprint', viewerPromise, viewer, diagramPromise, teachingPromise, devicePromise, transition = 0, selectedWire = '', repository;
+
+function languageLinks() {
+  for(const link of document.querySelectorAll('a[hreflang][lang]')) {
+    const url=new URL(link.getAttribute('href'),document.baseURI);
+    url.search=location.search;url.hash=location.hash;link.href=url.href;
+    if(/(?:^|\/)pcb\//.test(location.pathname)) {
+      url.searchParams.set('controller',$('#hardware-controller').value);
+      url.hash=location.hash||'hardware';link.href=url.href;
+    }
+  }
+}
+function syncRoute() {
+  const values=Object.fromEntries(routeFields.map(([,id])=>[id,document.getElementById(id).value]));
+  history.replaceState(null,'',writeRoute(new URL(location.href),activeTab,values));
+  languageLinks();
+}
+function restoreRoute() {
+  const route=readRoute(new URL(location.href));
+  for(const [,id] of routeFields) {
+    if(id==='assembly-mode')continue;
+    const select=document.getElementById(id);
+    if([...select.options].some(option=>option.value===route.values[id]))select.value=route.values[id];
+  }
+  fillPlywood();
+  const assembly=$('#assembly-mode');
+  if([...assembly.options].some(option=>option.value===route.values['assembly-mode']))assembly.value=route.values['assembly-mode'];
+  renderWires();selectedWire='';languageLinks();
+  return route;
+}
 
 function fail(error) {
   status.textContent = t('error.view', { message: error.message });
@@ -97,13 +133,16 @@ async function showScene() {
     const mode = $('#assembly-mode').value;
     if (model.getMode() !== mode) await world.setMode(mode);
     world.setWood($('#show-wood').checked); world.setLabels($('#show-labels').checked);
+  } else if ($('#hardware-controller').value === 'pcb') {
+    await world.setMode($('#pcb-mode').value);
+    world.setLabels($('#pcb-labels').checked);
   } else {
     world.filter($('#circuit-filter').value);
     if (selectedWire) world.selectWire(selectedWire);
   }
   if (token === transition) {
     $('#assembly-mode').disabled = false;
-    viewerStatus.textContent = hardware ? t('viewer.readyHardware') : cloud ? t('viewer.readyCloud') : t('viewer.readyPlywood');
+    viewerStatus.textContent = hardware && $('#hardware-controller').value==='pcb' ? t('pcb.ready') : hardware ? t('viewer.readyHardware') : cloud ? t('viewer.readyCloud') : t('viewer.readyPlywood');
     status.textContent = t('status.ready');
     document.documentElement.dataset.ready = 'true';
   }
@@ -152,6 +191,22 @@ function selectWire(id) {
 }
 
 function renderWires() {
+  const pcb = $('#hardware-controller').value === 'pcb';
+  $('#pcb-controls').hidden = !pcb; $('#pcb-details').hidden = !pcb;
+  for (const element of document.querySelectorAll('#panel-hardware .wiring-heading, #wiring-table, #panel-hardware .selected-wire, #panel-hardware label[for="circuit-filter"], #circuit-filter, #hardware-wiring-note')) element.hidden = pcb;
+  if (pcb) {
+    $('#controller-title').textContent=t('pcb.title'); $('#controller-description').textContent=t('pcb.description');
+    $('#pico-notice').hidden=true;
+    $('#pcb-parts').replaceChildren(...pcbSpecification.components.filter(c=>!c.ref.startsWith('TP')).map(c=>{
+      const row=document.createElement('tr');
+      for(const value of [c.ref,c.value,c.ref==='J1'?t('pcb.bottom'):c.ref.startsWith('J')?t('pcb.tht'):t('pcb.smt')]) {
+        const cell=document.createElement('td');cell.textContent=value;row.append(cell);
+      }
+      return row;
+    }));
+    for(const [id,url] of [['pcb-archive',pcbArchive],['pcb-schematic',pcbSchematic],['pcb-step',pcbStep],['pcb-gerbers',pcbGerbers]]) $(id.startsWith('#')?id:`#${id}`).href=url;
+    return;
+  }
   const data = hardwareData(), pico = $('#hardware-controller').value === 'pico', group = $('#circuit-filter').value;
   const wires = data.wires.filter(wire => group === 'all' || wire.group === group);
   $('#controller-title').textContent = pico ? t('controller.pico.title') : t('controller.pi.title');
@@ -209,6 +264,7 @@ async function activate(name, updateHash = true) {
     $(`#${tab.getAttribute('aria-controls')}`).hidden = !selected;
   }
   if (updateHash) history.replaceState(null, '', `#${name}`);
+  if (updateHash) syncRoute();
   stlViewer?.setActive(name === '3dprint');
   if (['plywood', 'hardware', '3dprint'].includes(name)) {
     const device = await devicePromise;
@@ -231,7 +287,7 @@ async function start() {
   $('#adr-content').innerHTML = adrHTML(); // Build-time Markdown rendering, with raw HTML disabled.
   $('#teaching-adr-content').innerHTML = teachingHTML();
   $('#mermaid-source').textContent = architecture;
-  fillPlywood(); renderWires();
+  const initialRoute=restoreRoute();
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => handle(activate(tab.dataset.tab)));
     tab.addEventListener('keydown', event => {
@@ -254,11 +310,16 @@ async function start() {
   $('#cloud-labels').addEventListener('change', () => viewer?.setLabels($('#cloud-labels').checked));
   $('#cloud-clearances').addEventListener('change', () => viewer?.setClearances($('#cloud-clearances').checked));
   $('#hardware-controller').addEventListener('change', () => { selectedWire = ''; $('#circuit-filter').value = 'all'; renderWires(); $('#wire-detail').textContent = t('hw.choose'); handle(showScene()); });
+  $('#pcb-mode').addEventListener('change',()=>handle(viewer?.setMode($('#pcb-mode').value)));
+  $('#pcb-labels').addEventListener('change',()=>viewer?.setLabels($('#pcb-labels').checked));
   $('#circuit-filter').addEventListener('change', () => { selectedWire = ''; viewer?.filter($('#circuit-filter').value); renderWires(); selectWire(''); });
   $('#clear-wire').addEventListener('click', () => { $('#circuit-filter').value = 'all'; viewer?.filter('all'); selectedWire = ''; renderWires(); selectWire(''); });
   $('#reset-camera').addEventListener('click', () => viewer?.reset());
   $('#software-view').addEventListener('change', () => handle(showSoftware()));
-  window.addEventListener('hashchange', () => handle(activate(location.hash.slice(1), false)));
+  for(const [,id] of routeFields)document.getElementById(id).addEventListener('change',syncRoute);
+  function navigate(){const route=restoreRoute();handle(activate(route.tab,false));}
+  window.addEventListener('hashchange',navigate);
+  window.addEventListener('popstate',navigate);
   window.addEventListener('pagehide', () => { viewer?.dispose(); stlViewer?.dispose(); devicePromise?.then(device => device.setActive(false)); }, { once: true });
   cloudColorControls = createCloudColorControls($('#cloud-colors'), colors => {
     viewer?.setPartColors(colors);
@@ -269,7 +330,7 @@ async function start() {
     stlViewer = createStlViewer(stlContainer, { initialColors: cloudColorControls.getColors() });
   }
   initPricing($('#cloud-pricing'));
-  await activate(location.hash.slice(1) || '3dprint', false);
+  await activate(initialRoute.tab, false);
   document.documentElement.dataset.ready = 'true';
 }
 start().catch(fail);

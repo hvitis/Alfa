@@ -1,0 +1,5 @@
+.pcb-downloads { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.5rem 0; }
+.pcb-downloads a { text-decoration: none; }
+.pcb-details > p { max-width: 80ch; }
+.pcb-annotation { background: #fffdf4; color: #273a41; border: 1px solid #b9c9c8; font-size: 11px; padding: 3px 7px; }
+#pcb-controls[hidden], #pcb-details[hidden], #wiring-table[hidden] { display: none; }

@@ -55,6 +55,14 @@ The verified CAD assets are generated with `make cloud` and committed under `des
 Download ZIP files are not committed. `make site` creates the cloud ZIP in `_site/cloud/` from the verified assets.
 CI uses this same static build, without CAD software. The development server creates the archive on demand.
 Run `make dev` for the website at port 8000 with automatic cloud CAD rebuilds and browser refresh.
+The third Hardware controller option, **Raspi 3 PCB**, shows the integrated shield exported from KiCad.
+Run `make prepare-commit` before staging to refresh the PCB downloads and rebuild the website.
+This command does not stage, commit, or stash files.
+`make pcb` regenerates the PCB files with the pinned KiCad Docker image.
+The generated directory is ignored by Git. The editable KiCad sources and required package models stay in Git.
+Both `make site` and `make dev` reject stale exports and regenerate them when necessary.
+GitHub Actions generates the PCB exports before the website and release builds, then transfers them as a workflow artifact.
+The website therefore uses exports from the same commit as its source code.
 Run `make stress` after `make site` for 100 cloud view, tab, and viewport cycles.
 Use `CLOUD_BASE_URL=http://127.0.0.1:8000/ make stress` to check the live server and GPU resource counts.
 After rebuilding geometry, use the design projects' sync scripts to update the meshes in `hardware-visualisation/src/data/`.

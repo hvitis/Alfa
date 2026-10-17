@@ -66,7 +66,7 @@ def check_repo():
             ast.parse(path.read_text(encoding="utf-8"), filename=name)
         if path.suffix == ".json":
             json.loads(path.read_text(encoding="utf-8"))
-    for name in ("ci.yml", "release.yml"):
+    for name in ("ci.yml", "release.yml", "pcb.yml"):
         workflow = yaml.safe_load((ROOT / ".github/workflows" / name).read_text())
         if not isinstance(workflow.get("jobs"), dict):
             raise ValueError(f"Invalid workflow: {name}")

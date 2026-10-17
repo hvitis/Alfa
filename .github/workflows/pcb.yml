@@ -1,0 +1,40 @@
+name: Generate PCB exports
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit to export; empty uses the caller's checkout ref
+        type: string
+        default: ''
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit or branch to export
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    name: Check PCB and export manufacturing files and 3D assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+      - name: Generate with the pinned KiCad container
+        run: make pcb PYTHON=python3
+      - name: Verify the source and export checksums
+        run: make pcb-check PYTHON=python3
+      - name: Upload exports for the website and manufacturer
+        uses: actions/upload-artifact@v7
+        with:
+          name: pi3-shield-exports
+          path: design/pi3-shield/generated/
+          if-no-files-found: error
+          retention-days: 30

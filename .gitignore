@@ -29,6 +29,7 @@ build/
 FreeCAD-squashfs/
 test-results/
 playwright-report/
+logs/
 photos/
 imgs/
 

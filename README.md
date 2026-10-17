@@ -23,6 +23,11 @@ Wydrukuj obudowę w swoich kolorach, zamontuj elektronikę i stwórz własne rad
 
 **Odkryj warsztat:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Sklejka](https://hvitis.github.io/Alfa/#plywood) · [Elektronika](https://hvitis.github.io/Alfa/#hardware) · [Oprogramowanie](https://hvitis.github.io/Alfa/#software)
 
+[![Shield Alfa do Raspberry Pi 3: zintegrowany ADC, wzmacniacz i złącza](docs/images/pi3-shield.png)](https://hvitis.github.io/Alfa/pcb/)
+
+**[Raspi 3 PCB — otwórz interaktywny model shielda](https://hvitis.github.io/Alfa/pcb/)** · [Projekt i instrukcja wykonania](design/pi3-shield/README.md).
+Prototyp 65 × 56 mm mieści ADC, wzmacniacz i dzielnik bez osobnych modułów. Próby na sprzęcie pozostają do wykonania.
+
 <details open>
 <summary>Zobacz warsztat i schemat oprogramowania</summary>
 

@@ -1,0 +1,12 @@
+*.kicad_prl
+*.kicad_pcb.lck
+*.kicad_sch.lck
+*-backups/
+routing-input.kicad_pro
+before-routing.rpt
+schematic.net
+freerouting.json
+generated/
+*.dsn
+*.ses
+routing-input.kicad_pcb

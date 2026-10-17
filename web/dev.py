@@ -8,6 +8,9 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from web.project import metadata
+from web.pcb.assets import ensure_pcb_assets
+
+ensure_pcb_assets()
 
 generated = ROOT / "web/.generated"
 generated.mkdir(parents=True, exist_ok=True)

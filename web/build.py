@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from web.project import metadata
 from web.archives import create_cloud_archive
+from web.pcb.assets import ensure_pcb_assets
 
 
 def export_site(destination=ROOT / "_site"):
@@ -18,6 +19,7 @@ def export_site(destination=ROOT / "_site"):
     if destination == ROOT or destination in ROOT.parents or any(destination == p or destination in p.parents or p in destination.parents for p in protected):
         raise ValueError("The website output must be a separate generated directory, such as _site/.")
     generated = ROOT / "web/.generated"
+    ensure_pcb_assets()
     cloud_manifest = ROOT / "design/cloud-radio/generated/cloud/manifest.json"
     if not cloud_manifest.exists():
         raise FileNotFoundError("Cloud CAD assets are missing. Run: bash design/cloud-radio/run-cad.sh")

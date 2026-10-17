@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { messages } from './i18n.js';
+import {pcbPage} from './pcb/page.mjs';
 
 const indexPath = fileURLToPath(new URL('./index.html', import.meta.url));
 
@@ -93,6 +94,17 @@ export function bilingualDevPlugin() {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = new URL(req.url ?? '/', 'http://localhost');
+        if(url.pathname==='/pcb') {
+          res.statusCode=302;res.setHeader('Location',`/pcb/${url.search}`);res.end();return;
+        }
+        if(url.pathname==='/pcb/'||url.pathname==='/pcb/index.html') {
+          try {
+            const source=await readFile(indexPath,'utf8');
+            const transformed=await server.transformIndexHtml('/index.html',source);
+            res.statusCode=200;res.setHeader('Content-Type','text/html; charset=utf-8');res.end(pcbPage(transformed));
+          } catch(error){next(error)}
+          return;
+        }
         if (url.pathname === '/en') {
           res.statusCode = 302;
           res.setHeader('Location', `/en/${url.search}`);

@@ -46,32 +46,51 @@ Those originals were removed after conversion. The prepared copies remain in `me
 The voice model card lists the source dataset as CC0:
 [Polish Gosia model card](https://huggingface.co/rhasspy/piper-voices/blob/main/pl/pl_PL/gosia/medium/MODEL_CARD).
 
-Install Piper in a separate laptop environment:
+### 1. One-time environment & model setup
+
+Install `ffmpeg` if not already installed (e.g. `brew install ffmpeg`). Then install Piper in a dedicated virtual environment (Python 3.11 or 3.12 recommended; `.venv-piper/` is gitignored):
 
 ```bash
-python3 -m venv .venv-piper
-.venv-piper/bin/python -m pip install piper-tts
+uv venv .venv-piper --python python3.12
+uv pip install piper-tts --python .venv-piper
 ```
+*(or via standard venv: `python3 -m venv .venv-piper && .venv-piper/bin/pip install piper-tts`)*
 
-Download the `.onnx` model and its matching `.onnx.json` from
-[the voice repository](https://huggingface.co/rhasspy/piper-voices/tree/main/pl/pl_PL/gosia/medium).
-Then run the offline generator:
+Download the `.onnx` model and its `.onnx.json` config directly into `.venv-piper/`:
 
 ```bash
-.venv-piper/bin/python scripts/prepare-letter-audio.py --model /path/to/pl_PL-gosia-medium.onnx
+curl -L -o .venv-piper/pl_PL-gosia-medium.onnx https://huggingface.co/rhasspy/piper-voices/resolve/main/pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx
+curl -L -o .venv-piper/pl_PL-gosia-medium.onnx.json https://huggingface.co/rhasspy/piper-voices/resolve/main/pl/pl_PL/gosia/medium/pl_PL-gosia-medium.onnx.json
 ```
 
-Edit the `text` fields in `manifest.json`, then run the generator.
-The generator synthesizes changed Piper text and preserves personal recordings.
-The first run adds text hashes to older Piper entries and regenerates those clips.
-Later runs skip unchanged clips. A manually replaced WAV also stays unchanged.
-`--replace` regenerates every slot, including personal replacements, and still uses the manifest text.
-It trims silence, normalizes loudness to -23 LUFS, and adds short fades.
-It converts all output to the required PCM format. The Pi needs neither Piper nor the model.
-The `manifest.json` file records each source and SHA-256 hash.
-The script's `WORDS` table supplies phrases only for new slots.
-The `text_sha256` field records the phrase used for the latest synthesis.
-Synthesis approximates letter sounds and needs an adult listening review.
+### 2. Edit phrases in manifest.json
+
+Edit the `"text"` field for any letter or prompt in [`manifest.json`](manifest.json) (for example, `"text": "p, jak Paszczak"`). Do not worry about modifying the hashes manually—the script handles them.
+
+### 3. Run the generator
+
+Run the offline preparation script:
+
+```bash
+.venv-piper/bin/python scripts/prepare-letter-audio.py --model .venv-piper/pl_PL-gosia-medium.onnx
+```
+
+Or using the Makefile target:
+
+```bash
+make letter-audio
+```
+
+### How regeneration works
+
+- **Selective synthesis:** The script computes SHA-256 of the new text and compares it to `text_sha256` in `manifest.json`. Only clips with modified text are synthesized; unchanged clips and personal voice recordings are skipped.
+- **Normalization:** Each generated clip is trimmed of silence, normalized to -23 LUFS loudness, shaped with soft edge fades, and saved as 48 kHz 16-bit stereo PCM WAV (`pcm_s16le`).
+- **Manifest tracking:** After synthesis, the script updates both `sha256` (audio checksum) and `text_sha256` in `manifest.json`.
+- **Full regeneration (`--replace`):** To force re-synthesizing all slots from manifest text regardless of cached hashes:
+  ```bash
+  .venv-piper/bin/python scripts/prepare-letter-audio.py --model .venv-piper/pl_PL-gosia-medium.onnx --replace
+  ```
+  *(or `make letter-audio AUDIO_ARGS=--replace`)*
 
 ## Replace one clip with your voice
 

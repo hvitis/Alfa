@@ -23,6 +23,11 @@ Print the cloud in your favorite colors, fit the electronics, and make it your o
 
 **Explore the build atlas:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Plywood](https://hvitis.github.io/Alfa/#plywood) · [Hardware](https://hvitis.github.io/Alfa/#hardware) · [Software](https://hvitis.github.io/Alfa/#software)
 
+[![Alfa Raspberry Pi 3 shield: integrated ADC, amplifier and connectors](docs/images/pi3-shield.png)](https://hvitis.github.io/Alfa/pcb/)
+
+**[Raspi 3 PCB — open the interactive shield model](https://hvitis.github.io/Alfa/pcb/)** · [Design and assembly guide](design/pi3-shield/README.md).
+The 65 × 56 mm prototype fits the ADC, amplifier and divider directly on one board. Hardware tests remain pending.
+
 <details open>
 <summary>See the interactive workshop and software map</summary>
 

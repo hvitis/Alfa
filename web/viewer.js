@@ -6,6 +6,7 @@ import { createRadioScene } from './hardware-visualisation/src/scene/radioScene.
 import { createSetupScene } from './hardware-visualisation/src/scene/setupScene.js';
 import { isVisible } from './hardware-visualisation/src/scene/modules.js';
 import { createCloudScene } from './cloud/scene.js';
+import { createPcbScene } from './pcb/scene.js';
 import { t } from './i18n.js';
 
 export function createViewer(container, onSelect) {
@@ -75,7 +76,7 @@ export function createViewer(container, onSelect) {
     hideHover();
     const token = ++request;
     if (!scenes.has(id)) {
-      const model = id === 'cloud' ? createCloudScene() : id === 'house' ? createRadioScene() : id === 'case' ? createCaseScene('enclosure') : createSetupScene(id === 'pico' ? 'pico' : 'pi3');
+      const model = id === 'pcb' ? createPcbScene() : id === 'cloud' ? createCloudScene() : id === 'house' ? createRadioScene() : id === 'case' ? createCaseScene('enclosure') : createSetupScene(id === 'pico' ? 'pico' : 'pi3');
       model.root.visible = false;
       scenes.set(id, model);
       world.add(model.root);

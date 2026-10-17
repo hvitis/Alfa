@@ -14,6 +14,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  pcb-exports:
+    name: Generate PCB exports
+    uses: ./.github/workflows/pcb.yml
+
   secrets:
     name: Scan source and Git history for secrets
     runs-on: ubuntu-latest
@@ -35,12 +39,18 @@ jobs:
 
   validate-and-export:
     name: Validate app and static showcase
+    needs: pcb-exports
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+      - name: Use PCB exports from this commit
+        uses: actions/download-artifact@v4
+        with:
+          name: pi3-shield-exports
+          path: design/pi3-shield/generated/
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

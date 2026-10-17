@@ -70,6 +70,7 @@ export function cloudDevelopment(root) {
         const url=request.url?.split('?')[0];
         const files={
           '/og-cloud.png':['web/assets/og-cloud.png','image/png'],
+          '/og-pcb.png':['web/assets/og-pcb.png','image/png'],
           '/docs/adr.pdf':['web/.generated/adr.pdf','application/pdf'],
         };
         if(!files[url])return next();

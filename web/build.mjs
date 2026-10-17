@@ -2,6 +2,8 @@ import { build } from 'vite';
 import { exportAdr } from './export-pdf.mjs';
 import { exportTeachingAdr, renderTeaching, teachingMarkdown, TEACHING_FILE } from './export-teaching.mjs';
 import { writeEnglishPage } from './i18n-html.mjs';
+import {pcbPage} from './pcb/page.mjs';
+import {renderPcbImages} from './pcb/render.mjs';
 import MarkdownIt from 'markdown-it';
 import { readFile, writeFile, mkdir, copyFile, readdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -17,8 +19,12 @@ await writeFile(resolve(web, '.generated/adr.pl.html'), markdown.render(await re
 // teachingMarkdown() stops the build if the fictional example loses any part of its disclaimer.
 await writeFile(resolve(web, '.generated/teaching-adr.html'), renderTeaching(await teachingMarkdown()));
 await writeFile(resolve(web, '.generated/teaching-adr.pl.html'), renderTeaching(await readFile(resolve(web, 'content/teaching-adr.pl.md'), 'utf8')));
+await renderPcbImages();
 await build({ configFile: resolve(web, 'vite.config.js'), logLevel: 'warn', build: { outDir: destination } });
 await writeEnglishPage(destination);
+await mkdir(resolve(destination,'pcb'),{recursive:true});
+await writeFile(resolve(destination,'pcb/index.html'),pcbPage(await readFile(resolve(destination,'index.html'),'utf8')));
+await copyFile(resolve(web,'assets/og-pcb.png'),resolve(destination,'og-pcb.png'));
 await mkdir(resolve(destination, 'data'), { recursive: true });
 await mkdir(resolve(destination, 'docs'), { recursive: true });
 await copyFile(resolve(web, '.generated/manifest.json'), resolve(destination, 'data/manifest.json'));
