@@ -13,22 +13,15 @@ class Settings:
 
     @classmethod
     def load(cls, path=None, root=ROOT):
-        data = json.loads((root / "config.json").read_text())
-        if path and Path(path).resolve() != (root / "config.json").resolve():
-            custom = json.loads(Path(path).read_text())
-            for section, values in custom.items():
-                # Old Pi overrides can retain this removed feature's section.
-                if section == "power":
-                    continue
-                if section not in data or not isinstance(values, dict):
-                    raise ValueError(f"Unknown configuration section: {section}")
-                data[section].update(values)
-        selection = root / "settings.json"
-        if selection.exists():
-            custom = json.loads(selection.read_text(encoding="utf-8"))
-            if not isinstance(custom, dict) or set(custom) != {"letters"}:
-                raise ValueError("settings.json must contain only a letters list or letters: all.")
-            data.setdefault("lesson", {})["letters"] = custom["letters"]
+        root = Path(root)
+        # Load exactly one complete file. No presets, overrides, or hidden selection file.
+        data = json.loads((Path(path) if path else root / "config.json").read_text(encoding="utf-8"))
+        sections = {"display", "adc", "images", "animations", "letter_drawing", "audio", "lesson", "controls"}
+        if not isinstance(data, dict):
+            raise ValueError("Configuration must be a JSON object.")
+        data.pop("power", None)  # Ignore the retired shutdown feature in older complete files.
+        if set(data) != sections or any(not isinstance(data[key], dict) for key in sections):
+            raise ValueError("Configuration must contain all sections: " + ", ".join(sorted(sections)))
         settings = cls(root, data)
         settings.validate()
         return settings
@@ -108,6 +101,17 @@ class Settings:
                 raise ValueError("Full-screen animation FPS must be between 4 and 6.")
             if type(cycles) is not int or not 1 <= cycles <= 4:
                 raise ValueError("Animation cycles must be an integer between 1 and 4.")
+            clips = animations.get("clips", {})
+            if not isinstance(clips, dict):
+                raise ValueError("Animation clips must be an object of timing options.")
+            for name, options in clips.items():
+                if not isinstance(options, dict) or set(options) - {"fps", "cycles"}:
+                    raise ValueError(f"Invalid animation timing options for {name}.")
+                clip_fps, clip_cycles = options.get("fps", fps), options.get("cycles", cycles)
+                if type(clip_fps) not in (int, float) or not math.isfinite(clip_fps) or not 4 <= clip_fps <= 6:
+                    raise ValueError(f"Animation {name} FPS must be between 4 and 6.")
+                if type(clip_cycles) is not int or not 1 <= clip_cycles <= 4:
+                    raise ValueError(f"Animation {name} cycles must be between 1 and 4.")
 
     @property
     def exit_hold(self):

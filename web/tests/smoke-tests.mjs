@@ -125,6 +125,13 @@ try {
       await page.getByRole('button', { name: 'Zresetuj kamerę' }).click();
       await noOverflow();
       await page.getByRole('tab', { name: 'Program' }).click();
+      await page.waitForSelector('#device-screen[data-ready="true"]');
+      assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'A');
+      await page.locator('[data-button="right"]').click();
+      assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'D');
+      await page.waitForTimeout(450);
+      await page.locator('[data-button="left"]').click();
+      assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'A');
       assert.equal(await page.locator('#software-view').inputValue(), 'design');
       assert((await page.locator('#adr-content h1').textContent()).includes('ADR 0001'));
       assert((await page.locator('#adr-content').textContent()).includes('PlayerSession'));

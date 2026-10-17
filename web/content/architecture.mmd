@@ -1,5 +1,5 @@
 flowchart TB
-  CLI["python -m app"] --> Config["Settings.load · config + local overrides"]
+  CLI["python -m app"] --> Config["Settings.load · one config.json"]
   Config --> Startup["Startup · prepared media + resource acquisition"]
   Splash["Optional boot splash · Unix socket handoff"] --> Startup
   Startup --> Loop["Control loop · app/app.py"]

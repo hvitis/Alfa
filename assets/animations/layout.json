@@ -1,6 +1,34 @@
 {
   "listening": {
     "anchor": "Left toe x=84 and sole baseline y=266 on the native 240x320 canvas",
-    "frame_offsets": [[0, 0], [0, 0], [-2, 3], [-1, 3]]
+    "frame_offsets": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        -2,
+        3
+      ],
+      [
+        -1,
+        3
+      ]
+    ]
+  },
+  "hemulen": {
+    "base": "hemulen-base.png",
+    "heads": "hemulen-heads.png",
+    "head_height": 100,
+    "head_anchor": [
+      128,
+      145
+    ],
+    "frames": 24,
+    "preview_fps": 6
   }
 }

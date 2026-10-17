@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Laptop-only: convert personal recordings and fill missing slots with offline Piper."""
+"""Laptop-only: prepare recordings and synthesize edited manifest text with offline Piper."""
 import argparse
 import hashlib
 import json
@@ -40,15 +40,37 @@ def prepare(root, model, replace=False):
     manifest_path = folder / "manifest.json"
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {"version": 1, "recordings": {}}
     items = [(letter, root / item["audio"], WORDS[letter]) for letter, item in catalog.items()]
-    shared = {"prompt": "Powiesz ze mną?", "praise_1": "Brawo! Pięknie!", "praise_2": "Świetnie! Dobra robota!"}
+    shared = {"prompt": "Powiedz jaka to literka.", "praise_1": "Brawo! Pięknie!", "praise_2": "Świetnie! Dobra robota!"}
     items += [(name, folder / f"{name}.wav", text) for name, text in shared.items()]
     for letter, target, text in items:
-        # Never overwrite a later personal replacement during ordinary regeneration.
-        if target.exists() and not replace:
-            continue
+        entry = manifest["recordings"].get(letter, {})
+        # The manifest is the editable source of truth. WORDS only fills new slots.
+        synthesized = entry.get("text") is not None
+        if synthesized:
+            text = entry["text"]
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError(f"Empty speech text for {letter}")
+        text_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
         personal = next((p for suffix in (".wav", ".mp3") if (p := root / "sounds" / f"literka_{letter}{suffix}").is_file()), None)
-        if letter in shared and (root / f"{letter}.wav").is_file():
-            personal = root / f"{letter}.wav"
+        if letter in shared:
+            sources = ([root / f"brawo_{letter[-1]}.wav"] if letter.startswith("praise_") else [])
+            sources.append(root / f"{letter}.wav")
+            personal = next((p for p in sources if p.is_file()), None)
+        if synthesized:
+            personal = None
+        source_hash = hashlib.sha256(personal.read_bytes()).hexdigest() if personal else None
+        if target.exists() and not replace:
+            audio_hash = hashlib.sha256(target.read_bytes()).hexdigest()
+            if audio_hash != entry.get("sha256"):
+                continue  # A person replaced this WAV after its last preparation.
+            if not synthesized:
+                if personal is None:
+                    continue
+                if (entry.get("source") == str(personal.relative_to(root))
+                        and entry.get("source_sha256", source_hash) == source_hash):
+                    continue
+            elif entry.get("text_sha256") == text_hash:
+                continue
         with tempfile.TemporaryDirectory() as directory:
             raw = Path(directory) / "voice.wav"
             if personal:
@@ -62,9 +84,21 @@ def prepare(root, model, replace=False):
                     voice.synthesize_wav(text, output)
                 source = raw
                 provenance = "Piper pl_PL-gosia-medium (offline)"
-            convert(source, target)
+            normalized = Path(directory) / "normalized.wav"
+            convert(source, normalized)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            # Write beside the destination so replacement stays atomic across filesystems.
+            staged = target.with_suffix(".wav.tmp")
+            staged.write_bytes(normalized.read_bytes())
+            staged.replace(target)
         manifest["recordings"][letter] = {"file": str(target.relative_to(root)), "source": provenance,
             "text": text if not personal else None, "sha256": hashlib.sha256(target.read_bytes()).hexdigest()}
+        if not personal:
+            manifest["recordings"][letter]["text_sha256"] = text_hash
+        else:
+            manifest["recordings"][letter]["source_sha256"] = source_hash
+        # Save each completed clip so an interrupted run can resume.
+        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
         print(f"{letter}: {provenance}", flush=True)
     manifest["recordings"].pop("praise", None)
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")

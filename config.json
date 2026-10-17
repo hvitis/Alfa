@@ -17,19 +17,25 @@
     "debounce_ms": 30
   },
   "images": {
-    "input": "imgs",
-    "prepared": "media/images",
+    "input": "assets/alphabet",
+    "prepared": "media/alphabet",
     "fit": "contain",
-    "background": "#ffffff"
+    "background": "#fffdf5"
   },
   "animations": {
-    "enabled": false,
+    "enabled": true,
     "prepared": "media/animations",
-    "fps": 5,
-    "cycles": 2
+    "fps": 4,
+    "cycles": 2,
+    "clips": {
+      "hemulen": {
+        "fps": 6,
+        "cycles": 2
+      }
+    }
   },
   "letter_drawing": {
-    "enabled": false,
+    "enabled": true,
     "data": "assets/letter-drawing/letters.json",
     "fps": 20,
     "draw_seconds": 5,
@@ -48,7 +54,15 @@
     "clip_seconds": 5.0
   },
   "lesson": {
-    "letters": "all",
+    "letters": [
+      "A",
+      "D",
+      "G",
+      "M",
+      "P",
+      "T",
+      "W"
+    ],
     "invite_seconds": 20,
     "sleep_seconds": 300
   },

@@ -303,5 +303,5 @@
   "sources": [
     "https://software.sil.org/andika/"
   ],
-  "notice": "Eight cards regenerated with character swaps: Ć ↔ D, Ą ↔ A, Ż ↔ G, E ↔ Ę. Asset labels identify illustrations, not character names. See THIRD_PARTY_NOTICES.md."
+  "notice": "Eight cards regenerated with character swaps: Ć ↔ D, Ą ↔ A, Ż ↔ G, E ↔ Ę. Asset labels identify illustrations, not character names. See docs/third-party-notices.md."
 }

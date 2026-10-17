@@ -125,6 +125,40 @@
       <div class="table-wrap"><table id="wiring-table"><caption id="wiring-caption" data-i18n="wiring.caption.pi">Okablowanie Raspberry Pi 3 · numery sterownika to fizyczne piny złącza.</caption><thead><tr><th scope="col" data-i18n="hw.th.wire">Przewód</th><th scope="col" data-i18n="hw.th.signal">Obwód / sygnał</th><th scope="col" data-i18n="hw.th.from">Od</th><th scope="col" data-i18n="hw.th.to">Do</th></tr></thead><tbody id="wiring-body"></tbody></table></div>
     </section>
     <section id="panel-software" role="tabpanel" aria-labelledby="tab-software" hidden>
+      <article class="device-tile" id="device-demo" tabindex="0" aria-labelledby="device-title">
+        <div class="device-copy">
+          <p class="eyebrow" data-i18n="play.eyebrow">APLIKACJA Z RASPBERRY PI</p>
+          <p class="device-badge" data-i18n="play.badge">PRZYTRZYMAJ, ABY RYSOWAĆ</p>
+          <p class="device-title" id="device-title" data-i18n="play.title">Ekran po lewej. Przyciski po prawej.</p>
+          <p data-i18n="play.lead">Lekcja alfabetu z Raspberry Pi. Ołówek idzie tymi samymi kreskami. Przytrzymaj dolny przycisk, a rysuje. Puść, a czeka.</p>
+          <p class="device-note" data-i18n="play.recordings">Nagrania głosu zostają na Pi. Tutaj te same przyciski prowadzą tę samą lekcję.</p>
+          <ul class="device-legend">
+            <li data-i18n="play.legend.letters">Lewo i prawo zmieniają literę.</li>
+            <li data-i18n="play.legend.listen">Górny odtwarza słuchanie i wsuwa kartę z góry.</li>
+            <li data-i18n="play.legend.say">Przycisk pod nimi mówi „powiedz ze mną”, czeka, a potem chwali.</li>
+            <li data-i18n="play.legend.draw">Dolny rysuje literę, dopóki go trzymasz.</li>
+          </ul>
+          <p class="device-keys" id="device-keys" data-i18n="play.keys">Strzałki i spacja działają tak samo.</p>
+        </div>
+        <div class="device-stage">
+          <p id="device-status" class="device-status" role="status" data-i18n="play.loading">Wczytywanie alfabetu…</p>
+          <div class="device-face">
+            <div class="lcd"><canvas id="device-screen" width="480" height="640" role="img" aria-label="Ekran Raspberry Pi" data-i18n-aria-label="play.screen" data-ready="false" data-phase="card" data-held="false"></canvas></div>
+            <div class="keypad-board" role="group" aria-label="Pięć przycisków analogowych" data-i18n-aria-label="play.group" aria-describedby="device-keys">
+              <span class="keypad-hole hole-tl" aria-hidden="true"></span>
+              <span class="keypad-hole hole-tr" aria-hidden="true"></span>
+              <span class="keypad-hole hole-bl" aria-hidden="true"></span>
+              <span class="keypad-hole hole-br" aria-hidden="true"></span>
+              <button type="button" class="pad" data-button="up" aria-pressed="false" aria-label="Posłuchaj litery" data-i18n-aria-label="play.up"></button>
+              <button type="button" class="pad" data-button="left" aria-pressed="false" aria-label="Poprzednia litera" data-i18n-aria-label="play.left"></button>
+              <button type="button" class="pad" data-button="right" aria-pressed="false" aria-label="Następna litera" data-i18n-aria-label="play.right"></button>
+              <button type="button" class="pad" data-button="down" aria-pressed="false" aria-label="Powiedz ze mną" data-i18n-aria-label="play.down"></button>
+              <button type="button" class="pad" data-button="center" aria-pressed="false" aria-label="Przytrzymaj, aby narysować literę" data-i18n-aria-label="play.center"></button>
+              <span class="keypad-pins" aria-hidden="true">OUT · VCC · GND</span>
+            </div>
+          </div>
+        </div>
+      </article>
       <div class="section-bar"><div><p class="eyebrow" data-i18n="sw.eyebrow">OPROGRAMOWANIE</p><h2 data-i18n="sw.h2">Od naciśnięcia przycisku do odpowiedzi.</h2></div><label class="select-field" for="software-view"><span data-i18n="sw.docLabel">Dokument</span><select id="software-view"><option value="design" data-i18n="sw.opt.design">Projekt</option><option value="implementation" data-i18n="sw.opt.implementation">Implementacja</option><option value="teaching" data-i18n="sw.opt.teaching">Przykład szkoleniowy (MDR)</option></select></label></div>
       <div id="software-design" class="document-layout"><aside class="document-meta"><span class="section-number" data-i18n="sw.designKicker">04 / PROJEKT</span><h3 data-i18n="sw.designH3">Decyzje stojące za kodem.</h3><p data-i18n="sw.designLead">Rejestr decyzji architektonicznej dla istniejącej aplikacji Pythona działającej offline.</p><div class="document-tag">ADR 0001 <span data-i18n="sw.designTag">ZAPISANE</span></div><a href="./docs/adr.pdf" download class="text-link" data-i18n="sw.adrPdf">Ilustrowany ADR <small>PDF, EN ↙</small></a><br><a href="./docs/adr.pl.md" data-i18n-href="sw.adrHref" download class="text-link" data-i18n="sw.adrMd">Pobierz źródło ADR</a></aside><article id="adr-content" class="prose" aria-label="Rejestr decyzji architektonicznej"></article></div>
       <div id="software-implementation" hidden><div class="diagram-heading"><div><span class="section-number" data-i18n="sw.implKicker">04 / IMPLEMENTACJA</span><h3 data-i18n="sw.implH3">Jedna pętla. Jawne granice sprzętu.</h3><p data-i18n="sw.implLead">Obecna aplikacja na Raspberry Pi: od startu i przygotowania mediów po wejście, wyświetlacz, dźwięk i sprzątanie.</p></div><a href="./docs/architecture.mmd" download class="text-link"><span data-i18n="sw.mermaidLink">Źródło Mermaid</span> ↙</a></div><div class="diagram-scroll" tabindex="0" role="region" aria-label="Diagram architektury oprogramowania" data-i18n-aria-label="sw.diagram"><div id="architecture-diagram" aria-busy="true"></div></div><div class="diagram-legend"><span><i class="swatch runtime"></i> <span data-i18n="sw.legend.flow">Przepływ sterowania</span></span><span><i class="swatch physical"></i> <span data-i18n="sw.legend.physical">Sprzęt fizyczny</span></span><span><i class="swatch simulation"></i> <span data-i18n="sw.legend.sim">Symulacja</span></span></div><details class="diagram-source"><summary data-i18n="sw.mermaidSummary">Przeczytaj definicję Mermaid</summary><pre><code id="mermaid-source"></code></pre></details></div>

@@ -10,8 +10,9 @@
     "Ą": {
       "file": "media/letter-sounds/01-Ą.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "ą, jak w słowie wąż",
-      "sha256": "e4cecd0b591567d7f95c1804c68a1eaba8960e7bddd01e3cb94ff38d45cb7bfc"
+      "text": "ą, gąska",
+      "sha256": "e62d0092954f050b6b9dd8c16ddce7463b942d46948f58796e7d4a2cdf9e2a81",
+      "text_sha256": "30ddd88b4d658317537583af51f6f30788e81deb84781fb1d1bc9b2d9c9fc89b"
     },
     "B": {
       "file": "media/letter-sounds/02-B.wav",
@@ -29,7 +30,8 @@
       "file": "media/letter-sounds/04-Ć.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "ć, jak ćma",
-      "sha256": "95285447244080d451ef7c731e824193a8744cca3cfe39d36d6497e973059e23"
+      "sha256": "316257cf9592871b085655803ddfccf7fa0f0939ad91dd38cf51e9a7aa645b2f",
+      "text_sha256": "d257da064d238e966e12fd2f5b585bace7a5a46704d3e39f145ea31ecdc1e77b"
     },
     "D": {
       "file": "media/letter-sounds/05-D.wav",
@@ -46,8 +48,9 @@
     "Ę": {
       "file": "media/letter-sounds/07-Ę.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "ę, jak w słowie gęś",
-      "sha256": "628cfc8729b18ff894f33aee9919dc41e40a929dc5f7cb13a4265d364f90a4f6"
+      "text": "ę, jak gęś",
+      "sha256": "a314b106edd2d0c2a321731b9ba8e9cb48326ee0df3d3bd5bda4ace2f01f96ec",
+      "text_sha256": "e9f24c103169dfd013a9f8959c490945b6be1c0cdaa43ab6ede76f7ea3ea3c2e"
     },
     "F": {
       "file": "media/letter-sounds/08-F.wav",
@@ -88,128 +91,149 @@
     "L": {
       "file": "media/letter-sounds/14-L.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "lll, jak lalka",
-      "sha256": "e0f9369d01f65cac9b9fe8b9fe2cc5fdb47d6d6f9aee8aaf2fb0f3f9e6a43df6"
+      "text": "l, jak lala",
+      "sha256": "ff0857e0cf0d499b59b3b2b45ad4298d86703d5d394c27874cc19e2b882f43bd",
+      "text_sha256": "25ab2f349b11e391688c03b7f00aa6baa1506fd710f9f2cad185dbe99dbaf4fa"
     },
     "Ł": {
       "file": "media/letter-sounds/15-Ł.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "ł, jak łódka",
-      "sha256": "158256c7d797dfee0fface9d1e3523573d3399b4bad1fb6eb5dd1f6a40361471"
+      "sha256": "0984b438a7cbc9cf7800933a6b50de3b4b56b7badd186a365fef11b74db9ac77",
+      "text_sha256": "643e3cb10adb5a261afdf46ccb7c1b5e08623344de395bb965d3422f3c9a9105"
     },
     "M": {
       "file": "media/letter-sounds/16-M.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "mmm, jak mama",
-      "sha256": "01c9e5d342448db5dd2a0218c714553101e0d8e04fb3a859c37e64d9837cb438"
+      "text": "m, jak mama",
+      "sha256": "f84d87890e8145d757764cf0195f75ec73339cbd107f966e34d7c791ad00e507",
+      "text_sha256": "81c95c468c9a365acf795fdf50ada7e323ba228f36f5d9a39e6be88404b587ac"
     },
     "N": {
       "file": "media/letter-sounds/17-N.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "nnn, jak nos",
-      "sha256": "753959b6b7d6c50c6426d44f3505c12915cd7268611a657682a2aa9ecbf72e59"
+      "text": "n, jak nos",
+      "sha256": "5cb280c70e6516caa109e0462f50060886f91a6877ffbbf041dd1a1a9283bdf1",
+      "text_sha256": "4f951fb263108680f69d72fdb68c1c16974d76c6efd23d0566a94002bf4a1263"
     },
     "Ń": {
       "file": "media/letter-sounds/18-Ń.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "ń, jak w słowie koń",
-      "sha256": "f1e382358bc074137c8c2a34ddb57ac604ac57a0361f58bc11cf8e9285215691"
+      "text": "ń, jak koń",
+      "sha256": "92a42b9e35d4ce5413a91b511d9a10be4b2987b9f2e8dc8829ffffd91e8efa26",
+      "text_sha256": "c55dde421fa0a29cf19aaf2a73374ee6bc6caaf4ad85d0da177f699f4ace9a62"
     },
     "O": {
       "file": "media/letter-sounds/19-O.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "o, jak oko",
-      "sha256": "c1d6b08b1f46ffbf1542327127fa12d97bf6afae8bf8682f5d2291eb9bfa2b19"
+      "sha256": "4932d279ab5fb2a64f9741151469e64d4320b5a0c8e502180301e47d12891d3e",
+      "text_sha256": "89ca45439736abb7f87e86920ec01f65e802fb171c02391f8355dca2e12001a2"
     },
     "Ó": {
       "file": "media/letter-sounds/20-Ó.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "u, ó kreskowane, jak ołówek",
-      "sha256": "9f612ad91ea727b7f36bac7dbc41037b52bd1728390047fa3139c5b70bbf1d9e"
+      "text": "ó, jak ósmy",
+      "sha256": "a2f40c5eff5dd48cecd54cc3edcc2b42f00d1d7b7d1f261bbbeea84e313ab917",
+      "text_sha256": "4e30e0259a4b81afb737de751ba0f717a03a481340e0404ff5008844bc4b0a64"
     },
     "P": {
       "file": "media/letter-sounds/21-P.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "p, jak pies",
-      "sha256": "aec146671026778ebecdf7fa8a8783218a1a07bf4d1b14a181231c498c5b6676"
+      "sha256": "c0184d398cfc7124cc4af693a279dc920c43a122515397a705bab3140e3e30b2",
+      "text_sha256": "8dafd25ae7507933d736f500491519edde08923bd1a6c1a6b0fed06f51dc00df"
     },
     "R": {
       "file": "media/letter-sounds/22-R.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "rrr, jak ryba",
-      "sha256": "1b3de05f8ec11af8131964793069531e6bcdc0bb44ee364bce46a24dd02f423b"
+      "text": "r, jak ryba",
+      "sha256": "549ed1ab337afabd41b2aed8ab02c42e5cdcd8319f62fe1f81f1bb1a9f3818a2",
+      "text_sha256": "b1e7bd5fe91c552d38cf513aec69061c4ff3cb2fb64da488d35d0be12501f83c"
     },
     "S": {
       "file": "media/letter-sounds/23-S.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "sss, jak słońce",
-      "sha256": "7949bf61ce8f2141e2b09ab1b8b704f4233e88b8ee513025a431ced465dace2f"
+      "text": "s, jak słońce",
+      "sha256": "2a621b23043f4273dbb568a14bff5332f957813fa610c88e4f856b877a3b1bc6",
+      "text_sha256": "47f0802a80f3774ff8b674bc57f8b26b857082d869a0a3e87969f32e949f7433"
     },
     "Ś": {
       "file": "media/letter-sounds/24-Ś.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "ś, jak ślimak",
-      "sha256": "78ef5dade60128c197dc0687eb4d815f4498489019933a699d59d911677e589f"
+      "sha256": "906fccc5f95818c0eb1b29be833c483290900c963e9656297251f452b04e0919",
+      "text_sha256": "4148674045a22cf9544697602d422ec83868292ecdef197ffb74d39f28281d17"
     },
     "T": {
       "file": "media/letter-sounds/25-T.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "t, jak tata",
-      "sha256": "5f6fbf541aee1f04e5814723d39b0f2cfc425bde374713afab3a64a89aaadd39"
+      "sha256": "3c2ed92d6b66fe985cd29d98d048325d3b6dfebdd33afef3068310acdab02253",
+      "text_sha256": "6d34c055041409284094071b6920613f1e2e876d82a0e5ac9c3ee7be105c9b26"
     },
     "U": {
       "file": "media/letter-sounds/26-U.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "u, jak ucho",
-      "sha256": "9313b7268077d35f26f86d76ac8f0a01b83a4bfafa5b6ee2843e8d5029a78ca9"
+      "sha256": "30d48a17ae6d99c5399023cc73f4384bbc8565c3ff9f627d635703e7624f60f8",
+      "text_sha256": "ebe862d951445b4ebfa9781051395cd0a58c538a38810f6651ca6370525dfc79"
     },
     "W": {
       "file": "media/letter-sounds/27-W.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "www, jak woda",
-      "sha256": "19da8c56bfde85e0116e23cd0fa178e33889191d9dcfbf95a5563eec2dc55f61"
+      "text": "w, jak woda",
+      "sha256": "f65d947289163e3ef18f778ed7f4a6f3a39c6e8748acd21a727975459fd7acdc",
+      "text_sha256": "486426ec0b0454f48677e57ca368b7e6f96e22a59839aed42c8743673f41e85a"
     },
     "Y": {
       "file": "media/letter-sounds/28-Y.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "y, jak w słowie buty",
-      "sha256": "238d4c500859ea1342e1713d13b6e5fe3f01b45ed43ba72fd0a6b596a5cc7b4b"
+      "sha256": "5259ca1b1923be0f3e6cb7ca67dad638f769215219190f17ea5304bffa64dca6",
+      "text_sha256": "1ee2b38eb70a990ac2649625efcdfca9132d0c1c572e35e4feec76555a3d578b"
     },
     "Z": {
       "file": "media/letter-sounds/29-Z.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "zzz, jak zebra",
-      "sha256": "dec6b6fdf29acc2f8e4335f1eaac75bb17b96e0f4403bd8198427f532d1b7945"
+      "text": "z, jak zebra",
+      "sha256": "2f812177a3ff8fe5d574c5e990371c262ae06158d8531feffb6fdd551fc5b832",
+      "text_sha256": "e40e03946a799e63798e164bd5d275c0e1ab5afdba6189f02c886b6d4383e07f"
     },
     "Ź": {
       "file": "media/letter-sounds/30-Ź.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "ź, jak źrebak",
-      "sha256": "af24e5a2ceec70f2f017ca64611f0f8ad441262960f7b5edbb14b2d6568d5dc0"
+      "sha256": "87d3a127f845a960df039b1a1a75caf374858c537d52d381f3204206c9205de7",
+      "text_sha256": "3d30cf806a36655fbf648cd0a0bda7cb6d3c63399054776d3e5a0bc7b1bd5ae7"
     },
     "Ż": {
       "file": "media/letter-sounds/31-Ż.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
       "text": "ż, jak żaba",
-      "sha256": "a83ba4a4d557af716f1d5adaf5e127c7cc51f139032c10118748037207443bc9"
+      "sha256": "f519b9129f9624feccf338f7b9675fc6a558536f8242c40839f77fb98b9cfd42",
+      "text_sha256": "e710121b8f2a8140d5fbf48488bb5d09b147d2260ee234e40f6e2524125e379a"
     },
     "prompt": {
       "file": "media/letter-sounds/prompt.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "Powiesz ze mną?",
-      "sha256": "bab43350ad9ecb07c05bd221eea166b4c101b450524b20766d23f092d939e376"
+      "text": "Powiedz jaka to literka.",
+      "sha256": "40d8ddf3ce740fe1bc9de677fa57bcf6452fd622c77cf4c1e4c61bec29730d8e",
+      "text_sha256": "744456137de204441752e209a149ea36940288e8f640b9737e56d6fa90fdf476"
     },
     "praise_1": {
       "file": "media/letter-sounds/praise_1.wav",
-      "source": "praise_1.wav",
+      "source": "brawo_1.wav",
       "text": null,
-      "sha256": "502b97e43bc4311875fe653a80eb14ef218d80e0359ba58971488a156e57592a"
+      "sha256": "af5f8311fd7a16346d672daaf9c84f417acfa4c4317dc1f062b56e2ef4f0364c",
+      "source_sha256": "789d16d4a20b3b8c8cb26ff98e25c43d79e42b81010a1923da51eadf0a12e178"
     },
     "praise_2": {
       "file": "media/letter-sounds/praise_2.wav",
-      "source": "praise_2.wav",
+      "source": "brawo_2.wav",
       "text": null,
-      "sha256": "a0fd65ee2375f489bdd045cfad5fccd0c367a6f6c8a35db6cdf824bd10c3832b"
+      "sha256": "f6b22ee51c5f7d676f03f887c4115cab0fb21d6dc7e1ee6f496f32abb4fd5fd8",
+      "source_sha256": "4fde5c8fc8be7c21ab934a48431b509db9fad1632e1a27b4249f54c2fa7a0dfd"
     }
   }
 }

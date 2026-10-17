@@ -61,7 +61,7 @@ flowchart LR
         A1["UP: Sound + Exemplar ('mmm, jak mama')"]
         A2["Missing Period 2 (Receptive Choice)"]
         A3["CENTER: Hold-to-Draw Vector Pencil"]
-        A4["settings.json: Curated Starter Sets"]
+        A4["config.json · lesson.letters: Curated Starter Sets"]
         A5["Offline Cloud Console & 5 Chunky Buttons"]
         A6["DOWN: 2.0s Pause Before Praise"]
     end
@@ -80,7 +80,7 @@ flowchart LR
 |---|---|---|---|
 | **Sound vs. Name** | Teach pure phoneme first (*"mmm"*), not letter name (*"em"*). | UP plays pure phonetic sound + word (*"mmm, jak mama"*). | **Full Alignment.** Prevents decoding interference in Polish. |
 | **Vocal Recall & Latency** | Children need 1.5–2.5s to plan and articulate speech. | DOWN plays *"Powiesz ze mną?"*, pauses for 2.0s, then praises. | **Full Alignment.** Respects toddler articulatory latency without rushing. |
-| **Pacing & Scaffolding** | Start with small, high-salience sets (own name, family). | `settings.json` supports custom starter lists (e.g. `["M", "A", "J", "A"]`). | **Full Alignment.** Avoids the A–Z cognitive overload trap. |
+| **Pacing & Scaffolding** | Start with small, high-salience sets (own name, family). | `lesson.letters` in `config.json` supports unique starter letters (e.g. `["M", "A", "J"]`). | **Full Alignment.** Avoids the A–Z cognitive overload trap. |
 | **Form Factor & Focus** | Physical manipulatives prevent dopamine-driven hyper-tapping. | Physical cloud enclosure, 5 chunky debounced buttons, no touch screen. | **Full Alignment.** Encourages intentional, calm exploration. |
 | **Stroke Dynamics** | Dynamic stroke direction (*ductus*) trains orientation and prevents reversals. | CENTER drives a yellow pencil along mathematical Bézier strokes; accents drawn last. | **Full Alignment.** Teaches correct top-to-bottom ductus. |
 | **Lesson Sequence** | Montessori 3-Period: 1. Naming $\to$ 2. Recognition $\to$ 3. Production. | Has Period 1 (UP) and Period 3 (DOWN), but lacks Period 2 (Receptive choice). | **Identified Gap.** Direct jump to vocal production can cause hesitation. |

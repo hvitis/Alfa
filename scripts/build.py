@@ -26,8 +26,17 @@ def stage_runtime(staging):
             destination = runtime / source.relative_to(ROOT)
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, destination)
-    for name in ("config.json", "requirements.txt", "requirements-pi.txt"):
-        shutil.copy2(ROOT / name, runtime / name)
+    # The demo kit uses its own single config and excludes character media.
+    import json
+    config = json.loads((ROOT / "config.json").read_text())
+    config["images"].update(input="imgs", prepared="media/images", background="#ffffff")
+    config["animations"]["enabled"] = False
+    config["letter_drawing"]["enabled"] = False
+    config["lesson"]["letters"] = "all"
+    write_json(runtime / "config.json", config)
+    (runtime / "requirements").mkdir()
+    for name in ("base.txt", "pi.txt"):
+        shutil.copy2(ROOT / "requirements" / name, runtime / "requirements" / name)
     (runtime / "scripts").mkdir()
     for name in ("setup-pi.sh",):
         shutil.copy2(ROOT / "scripts" / name, runtime / "scripts" / name)
@@ -83,8 +92,9 @@ def build():
         staging = Path(temp)
         stage_runtime(staging)
         shutil.copytree(ROOT / "_site", staging / "site")
-        for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
-            shutil.copy2(ROOT / name, staging / name)
+        shutil.copy2(ROOT / "LICENSE", staging / "LICENSE")
+        (staging / "docs").mkdir()
+        shutil.copy2(ROOT / "docs/third-party-notices.md", staging / "docs/third-party-notices.md")
         shutil.copy2(ROOT / "docs/release-contents.md", staging / "START-HERE.md")
         run("packaged-runtime", [sys.executable, "-m", "app", "--simulate", "player", "--once", "--no-audio"], cwd=staging / "runtime")
         shutil.rmtree(staging / "runtime/.state")

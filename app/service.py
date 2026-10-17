@@ -61,7 +61,7 @@ Type=notify
 NotifyAccess=main
 User={user}
 WorkingDirectory={working_directory}
-ExecStart={quote(python)} -u -m app.splash --config config.standalone.json
+ExecStart={quote(python)} -u -m app.splash
 RuntimeDirectory=alfa-splash
 RuntimeDirectoryMode=0750
 Environment=PYTHONDONTWRITEBYTECODE=1
@@ -76,7 +76,7 @@ StandardError=journal
 [Install]
 WantedBy=sysinit.target
 """
-    command = f"{quote(python)} -u -m app --config config.standalone.json player --fullscreen --standalone --prepared-only --autoplay"
+    command = f"{quote(python)} -u -m app player --fullscreen --standalone --prepared-only --autoplay"
     if no_audio:
         command += " --no-audio"
     return f"""[Unit]

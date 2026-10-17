@@ -7,16 +7,15 @@ from PIL import Image
 
 
 class CharacterAnimation:
-    def __init__(self, directory, fps=5, cycles=2, rotation=0, clock=time.monotonic):
+    def __init__(self, directory, fps=5, cycles=2, rotation=0, clock=time.monotonic, clip_options=None):
         self.directory = Path(directory)
         manifest = json.loads((self.directory / "manifest.json").read_text())
         if manifest.get("size") != [240, 320] or manifest.get("wire_format") != "RGB565-BE":
             raise ValueError("Animation manifest must specify 240x320 RGB565-BE wire frames.")
         self.clips = manifest["clips"]
-        for name in ("listening", "speaking"):
-            frames = self.clips[name]
-            if not 2 <= len(frames) <= 4:
-                raise ValueError("Character animations need 2 to 4 frames.")
+        for frames in self.clips.values():
+            if not 2 <= len(frames) <= 32:
+                raise ValueError("Character animations need 2 to 32 frames.")
             for frame in frames:
                 for key in ("png", "bin"):
                     path = Path(frame[key])
@@ -25,19 +24,34 @@ class CharacterAnimation:
                     if not (self.directory / path).is_file():
                         raise ValueError(f"Missing animation frame: {path}")
         self.fps, self.cycles, self.rotation, self.clock = fps, cycles, rotation, clock
+        self.default_fps, self.default_cycles = fps, cycles
+        self.clip_options = clip_options or {}
         self.active = None
         self.started = 0
         self.serial = 0
         self.payloads = []
         self.payload_index = None
 
-    def start(self, name):
+    def start(self, name, minimum_seconds=0):
         if name not in self.clips:
             raise ValueError(f"Unknown animation: {name}")
         # One native frame (153600 bytes), loaded only when it reaches the screen.
         self.payloads, self.payload_index = [], None
         self.active, self.started = name, self.clock()
+        options = self.clip_options.get(name, {})
+        self.fps = options.get("fps", self.default_fps)
+        self.cycles = options.get("cycles", self.default_cycles)
+        self.duration = max(len(self.clips[name]) * self.cycles / self.fps, minimum_seconds)
         self.serial += 1
+
+    def first_frame(self, name):
+        return self.load_frame(name, 0)
+
+    def load_frame(self, name, index):
+        with Image.open(self.directory / self.clips[name][index]["png"]) as source:
+            if source.size != (240, 320):
+                raise ValueError("Animation PNG must be 240x320.")
+            return source.convert("RGB")
 
     def stop(self):
         self.active = None
@@ -49,7 +63,7 @@ class CharacterAnimation:
             return None
         tick = int(max(0, self.clock() - self.started) * self.fps)
         count = len(self.clips[self.active])
-        if tick >= count * self.cycles:
+        if self.clock() - self.started >= self.duration:
             self.stop()
             return None
         return tick % count
@@ -62,10 +76,7 @@ class CharacterAnimation:
         index = self.index()
         if index is None:
             return None
-        with Image.open(self.directory / self.clips[self.active][index]["png"]) as source:
-            if source.size != (240, 320):
-                raise ValueError("Animation PNG must be 240x320.")
-            return source.convert("RGB")
+        return self.load_frame(self.active, index)
 
     def wire_frame(self):
         index = self.index()

@@ -25,9 +25,9 @@ Keep the specification blocks identical. Keep the feature markers in the same or
 Retain commands and configuration keys exactly in translations.
 The complete hardware instructions are in [hardware-guide.md](hardware-guide.md).
 
-For new media, record the owner, source, license, and redistribution evidence in [the asset notices](../THIRD_PARTY_NOTICES.md).
+For new media, record the owner, source, license, and redistribution evidence in [the asset notices](third-party-notices.md).
 Do not put calibration, credentials, personal recordings, or local device addresses in commits.
-Use `config.local.json` for local configuration.
+Edit the single `config.json` for device settings. Keep personal hardware changes out of unrelated commits.
 
 ## Pull requests
 

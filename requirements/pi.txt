@@ -1,4 +1,4 @@
--r requirements.txt
+-r base.txt
 gpiozero>=2.0.1.post3,<3
 smbus2>=0.6.1,<1
 spidev>=3.8,<4

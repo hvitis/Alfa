@@ -21,5 +21,7 @@ restore_service() {
     exit "$result"
 }
 trap restore_service EXIT
-sudo systemctl stop alfa.service
-"$python_bin" -m app --config config.alphabet.json gallery --fullscreen
+if "$was_running"; then
+    sudo systemctl stop alfa.service
+fi
+"$python_bin" -m app gallery --fullscreen

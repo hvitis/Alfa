@@ -68,13 +68,21 @@ Use Python 3.11 or newer. Install FFmpeg for audio conversion.
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements/base.txt
 python -m app --simulate player --once --no-audio
 ```
 
 The simulator saves `.state/preview/current.png`. The checkout uses existing prepared media.
+The app, Pi service, splash, and browser preview use one [config.json](config.json), including the selected letters in `lesson.letters`.
+Read [installation.md](docs/installation.md) for local and Pi setup, and [configuration.md](docs/configuration.md) for settings.
 The release kit supplies a neutral demo image instead.
 For wiring, button calibration, speaker checks, and service installation, read the [hardware guide](docs/hardware-guide.md).
+
+On the Pi, run `make mapping` after fitting or rotating the buttons in the case.
+Follow the prompts for LEFT, RIGHT, TOP, BOTTOM, and CENTER. The command restores a previously running service.
+
+For a loading image before Linux starts on Pi 3, follow the [firmware splash guide](docs/early-boot-splash.md).
+It covers compatible firmware, `make firmware-splash-install`, backups, and removal.
 
 For the development tools and local showcase:
 
@@ -115,10 +123,10 @@ Releases require a SemVer tag whose actual commit is on `main`.
 
 ## Contributing and licenses
 
-Read [CONTRIBUTING.md](docs/contributing.md) for the development workflow.
+Read [the contribution guide](docs/contributing.md) for the development workflow.
 Use [SECURITY.md](SECURITY.md) for security reports.
 The [MIT license](LICENSE) covers original code and technical documentation.
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) records asset exclusions and dependency notices.
+[Asset and dependency notices](docs/third-party-notices.md) records asset exclusions and dependency notices.
 Existing character artwork and recordings require a separate rights review before public visibility.
 Read the [publication checklist](docs/publishing.md). The README and social cards use original CAD renders.
 

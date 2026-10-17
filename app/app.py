@@ -179,17 +179,18 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         stack.callback(audio.close)
         session = PlayerSession(images, sounds, audio, fullscreen)
         animation_cfg = settings.data.get("animations", {})
-        if animation_cfg.get("enabled") and not drawing_cfg.get("enabled"):
+        if animation_cfg.get("enabled"):
             session.fullscreen = True
             session.animation = CharacterAnimation(
                 settings.path("animations", "prepared"), animation_cfg["fps"],
-                animation_cfg["cycles"], settings.data["display"]["rotation"])
+                animation_cfg["cycles"], settings.data["display"]["rotation"],
+                clip_options=animation_cfg.get("clips", {}))
         if drawing_cfg.get("enabled"):
             session.fullscreen = True
             session.hold_clock = HoldClock(clock=lambda: time.monotonic())
             session.card_motion = CardMotion(clock=lambda: time.monotonic())
             session.drawing = LetterLesson(catalog, size=settings.size,
-                clock=session.hold_clock,
+                clock=session.hold_clock, celebration_clock=lambda: time.monotonic(),
                 **{key: drawing_cfg[key] for key in ("fps", "draw_seconds", "stroke_pause",
                    "intro_seconds", "hold_seconds", "celebration_seconds")})
             session.letter_recordings = LetterRecordings(catalog, settings.root, audio, enabled=not no_audio)
@@ -254,11 +255,11 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
             next_frame_at = 0
             if button == "center":
                 print(f"CENTER: {session.last_action}; card={session.gallery.paths[session.gallery.index].name}", flush=True)
-        if session.animation:
-            print("Alphabet: LEFT/RIGHT (A/D) = letter; TOP (W/UP) = listening; BOTTOM (S/DOWN) = repeating; CENTER (Space) = draw letter.")
-        elif session.drawing:
-            print("Alphabet: LEFT/RIGHT = letter; UP = sound and word; DOWN = repeat; hold CENTER = draw.")
+        if session.drawing:
+            print("Alphabet: LEFT/RIGHT = letter; TOP = Little My asks; BOTTOM = clapping and praise; hold CENTER = draw.")
             print("SSH: Space holds the pencil for 0.2 seconds; repeat Space to keep drawing.")
+        elif session.animation:
+            print("Alphabet: LEFT/RIGHT (A/D) = letter; TOP (W/UP) = listening; BOTTOM (S/DOWN) = speaking.")
         else:
             print("Player: LEFT/RIGHT (A/D) = photos; UP/DOWN (W/S) = volume; CENTER (Space) = play/stop.")
         if standalone or not exit_hold:
@@ -343,7 +344,7 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
 
 def parser():
     result = argparse.ArgumentParser(description="Test the Waveshare LCD, MAX98357A speaker and analog buttons over SSH.")
-    result.add_argument("--config", help="JSON overrides; relative media paths still use this project directory.")
+    result.add_argument("--config", help="Complete configuration file (default: config.json); media paths use the project directory.")
     result.add_argument("--simulate", action="store_true", help="Save PNG previews and skip Pi hardware and audio output.")
     result.add_argument("--debug", action="store_true", help="Show a traceback on errors.")
     commands = result.add_subparsers(dest="command", required=True)

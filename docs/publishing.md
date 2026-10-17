@@ -5,7 +5,7 @@ It does not change repository visibility, push commits, create tags, or publish 
 
 ## Before making the repository public
 
-1. Review [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).
+1. Review [THIRD_PARTY_NOTICES.md](third-party-notices.md).
 2. Record permission for retained character artwork, recordings, photos, composite previews, and generated documents.
 3. Remove or replace assets whose distribution rights remain unresolved.
 4. Review the complete Git history for secrets and restricted assets.

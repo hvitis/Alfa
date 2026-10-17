@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from PIL import Image
+from PIL import Image, ImageChops
 
 from app.animation import CharacterAnimation
 from app.app import run_gallery
@@ -84,7 +84,7 @@ class AnimationTests(unittest.TestCase):
 
     def test_bundled_png_raw_and_wire_frames_match_exactly(self):
         for name, frames in self.animation.clips.items():
-            self.assertEqual(len(frames), 4)
+            self.assertEqual(len(frames), 24 if name == "hemulen" else 4)
             self.animation.start(name)
             self.assertEqual(self.animation.wire_frame(),
                              (self.animation.directory / frames[0]["bin"]).read_bytes())
@@ -109,6 +109,33 @@ class AnimationTests(unittest.TestCase):
                 anchors.append((min(x for x, y in points if x < 120),
                                 max(y for x, y in points)))
         self.assertEqual(anchors, [(84, 266)] * 4)
+
+    def test_hemulen_has_a_smooth_eight_second_loop_over_a_stationary_scene(self):
+        settings = Settings.load()
+        animation = CharacterAnimation(ROOT / 'media/animations', clock=lambda: self.now,
+                                       clip_options=settings.data['animations']['clips'])
+        animation.start('hemulen')
+        self.assertEqual(animation.fps, 6)
+        self.assertEqual(animation.duration, 8)
+        self.assertEqual(len(animation.clips['hemulen']), 24)
+        first = animation.frame()
+        poses = []
+        for index in range(24):
+            self.now = 100 + index / 6 + .001
+            frame = animation.frame()
+            self.assertEqual(frame.crop((0, 163, 240, 320)).tobytes(),
+                             first.crop((0, 163, 240, 320)).tobytes(), 'Body, hands, feet, and flower must stay fixed')
+            self.assertEqual(frame.crop((193, 140, 220, 190)).tobytes(),
+                             first.crop((193, 140, 220, 190)).tobytes(), 'The glass stays in its original position')
+            poses.append(frame.crop((100, 40, 193, 162)).tobytes())
+        self.assertEqual(len(set(poses)), 24, 'Every exported head pose must be different')
+        self.assertIsNotNone(ImageChops.difference(first, animation.frame()).getbbox())
+        self.now = 107.99
+        self.assertIsNotNone(animation.frame())
+        self.now = 108
+        self.assertIsNone(animation.frame())
+        animation.start('speaking')
+        self.assertEqual(animation.fps, 5, 'Other clips retain their original configured timing')
 
     def test_rotated_wire_payload_preserves_pixel_words(self):
         animation = CharacterAnimation(ROOT / "media/animations", rotation=180)
@@ -161,9 +188,8 @@ class AnimationTests(unittest.TestCase):
         self.assertEqual((destination / "speaking/frame-00.bin").read_bytes(), bytes.fromhex("f800") * (240 * 320))
 
     def test_alphabet_configuration_requires_portrait_and_hardware_fps(self):
-        settings = Settings.load(ROOT / "config.alphabet.json")
-        self.assertFalse(settings.data["animations"]["enabled"])
-        settings.data["animations"]["enabled"] = True
+        settings = Settings.load(ROOT / "config.json")
+        self.assertTrue(settings.data["animations"]["enabled"])
         for rotation in (90, 270):
             settings.data["display"]["rotation"] = rotation
             with self.assertRaisesRegex(ValueError, "portrait"):
@@ -174,7 +200,7 @@ class AnimationTests(unittest.TestCase):
             settings.validate()
 
     def test_keyboard_loop_uses_raw_frames_and_limits_transfers_with_spi_time(self):
-        settings = Settings.load(ROOT / "config.alphabet.json")
+        settings = Settings.load(ROOT / "config.json")
         settings.data["letter_drawing"]["enabled"] = False
         settings.data["animations"]["enabled"] = True
         sent, pngs = [], []
@@ -194,8 +220,8 @@ class AnimationTests(unittest.TestCase):
             def read(self):
                 self.calls += 1
                 return "w" if self.calls == 1 else "q" if elapsed[0] > 106 else ""
-        def make_animation(*args):
-            return CharacterAnimation(*args, clock=lambda: elapsed[0])
+        def make_animation(*args, **kwargs):
+            return CharacterAnimation(*args, clock=lambda: elapsed[0], **kwargs)
         def sleep(seconds): elapsed[0] += seconds
         with patch("app.app.prepare_images", return_value=self.photos), patch("app.app.display_resource", side_effect=lambda stack, *args: (stack.callback(display.close), display)[1]), patch("app.app.CharacterAnimation", side_effect=make_animation), patch("app.app.Keyboard", Keyboard), patch("app.app.time.monotonic", side_effect=lambda: elapsed[0]), patch("app.app.time.sleep", side_effect=sleep):
             run_gallery(settings, simulate=True, no_audio=True)

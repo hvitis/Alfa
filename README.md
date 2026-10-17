@@ -70,13 +70,21 @@ Użyj Pythona 3.11 lub nowszego. Zainstaluj FFmpeg do konwersji dźwięku.
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements/base.txt
 python -m app --simulate player --once --no-audio
 ```
 
 Symulator zapisuje `.state/preview/current.png`. Repozytorium korzysta z istniejących przygotowanych multimediów.
+Aplikacja, usługa Pi, ekran startowy i podgląd w przeglądarce używają jednego [config.json](config.json), z wyborem liter w `lesson.letters`.
+Plik [installation.md](docs/installation.md) opisuje instalację lokalną i na Pi, a [configuration.md](docs/configuration.md) opisuje ustawienia.
 Pakiet wydania zawiera neutralny obraz demonstracyjny.
 Połączenia, kalibrację przycisków, sprawdzanie głośnika i instalację usługi opisuje [instrukcja sprzętu](docs/hardware-guide.md).
+
+Po zamontowaniu lub obróceniu przycisków w obudowie uruchom na Pi `make mapping`.
+Przypisz kolejno LEWO, PRAWO, GÓRĘ, DÓŁ i ŚRODEK zgodnie z instrukcjami. Polecenie przywraca wcześniej uruchomioną usługę.
+
+Aby wyświetlić obraz na Pi 3 przed uruchomieniem Linuksa, użyj [instrukcji ekranu startowego firmware](docs/early-boot-splash.md).
+Opisuje zgodny firmware, `make firmware-splash-install`, kopie zapasowe i usuwanie zmian.
 
 Zainstaluj narzędzia programistyczne i uruchom lokalną prezentację:
 
@@ -119,7 +127,7 @@ Wydanie wymaga tagu SemVer wskazującego rzeczywisty commit z gałęzi `main`.
 Plik [contributing.md](docs/contributing.md) opisuje pracę nad kodem.
 Problemy bezpieczeństwa zgłaszaj zgodnie z [SECURITY.md](SECURITY.md).
 [Licencja MIT](LICENSE) obejmuje oryginalny kod i dokumentację techniczną.
-Plik [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) opisuje wyłączenia dotyczące zasobów i informacje o zależnościach.
+Plik [Informacje o zasobach i zależnościach](docs/third-party-notices.md) opisuje wyłączenia dotyczące zasobów i informacje o zależnościach.
 
 Obudowa jest prototypem do sprawdzenia dopasowania. Próby fizyczne uchwytu, zatrzasków, upadków i temperatury są nadal wymagane.
 Grafiki postaci i nagrania wymagają osobnego przeglądu praw przed publikacją. Zobacz [listę czynności przed publikacją](docs/publishing.md).

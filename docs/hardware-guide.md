@@ -23,10 +23,10 @@ This Python app tests the hardware in your photos over SSH. It runs without a gr
 
 - The screen test displays colors, a border, and orientation labels.
 - The speaker test plays a short clip from `sounds` through the MAX98357A amplifier.
-- The on-screen player displays photos and plays the complete recording with button volume control.
+- The default on-screen player runs alphabet lessons, character animations, and speech.
 - The button tools display the ADC voltage and save calibration for each button.
 
-The six supplied photos are prepared in `media/images` as **240 × 320 RGB PNGs**.
+The optional photo player uses six supplied photos prepared in `media/images` as **240 × 320 RGB PNGs**.
 The speaker test uses a **5-second, 48 kHz, stereo, 16-bit WAV** in `media/sounds`.
 The player prepares the complete recording separately in `media/sounds/full`.
 The original files stay in `imgs` and `sounds`.
@@ -39,20 +39,23 @@ The source PNGs are in `assets/alphabet`, and the 240 × 320 LCD PNGs are in `me
 To display the complete cards on the Pi, run:
 
 ```bash
-python3 -m app --config config.alphabet.json gallery --fullscreen --no-audio
+python3 -m app gallery --fullscreen --no-audio
 ```
 
 Use LEFT and RIGHT to change the card.
-Press TOP (UP) for the listening animation.
-Press BOTTOM (DOWN) for the speaking animation.
-Each animation uses four frames at 5 FPS and returns to the selected card after two cycles (1.6 seconds).
+Press TOP (UP) for the speaking animation and “Powiedz jaka to literka.”
+Press BOTTOM (DOWN) for a random praise pair: the clapping character with `brawo_2`, or Hemulen with `brawo_1`.
+Each action slides a still first frame in from above or below before starting animation and speech.
+The original animations use four frames. Hemulen uses 24 poses at 6 FPS for eight seconds, with a stationary body.
+Each animation returns to the selected card after its cycles and speech finish.
 LEFT and RIGHT stop the animation and change the letter.
-Press CENTER (the fifth button) to draw the selected letter, stroke by stroke, with a moving pencil.
+Hold CENTER (the fifth button) to draw the selected letter, stroke by stroke, with a moving pencil.
+Release CENTER to pause the pencil. After the final stroke, fireworks run without a held button.
 The thicker strokes use the navy color sampled from the selected letter card.
 The completed letter stays visible during success fireworks, then the original card returns.
-Each of the 32 letters has an optional recording slot. Missing recordings act as silent placeholders.
+Each of the 32 letters has a prepared recording. Missing selected recordings produce a startup error.
 LEFT, RIGHT, UP, and DOWN interrupt the drawing lesson and stop its recording.
-Pressing CENTER again while the letter is still being drawn does nothing; once it finishes, CENTER draws it again.
+Pressing CENTER again resumes a paused trace. After the fireworks finish, CENTER starts a new trace.
 Pressing TOP or BOTTOM again during its own animation lets it finish instead of restarting it.
 Add `--keyboard` for SSH keyboard control (A/D for letters, W/S for character animations, Space for drawing).
 For a preview without hardware, add `--simulate` before `gallery` and `--once` after it.
@@ -187,7 +190,8 @@ The photographed ADC board says `ADS1115/ADS1015`.
 The app supports both chips.
 The default is `ads1115`, with I²C address `0x48` and input `A0`.
 
-If your chip is an ADS1015, create `config.local.json` with:
+If your chip is an ADS1015, edit `adc.model` in `config.json`.
+The following fragment shows the existing section to change:
 
 ```json
 {
@@ -197,14 +201,13 @@ If your chip is an ADS1015, create `config.local.json` with:
 }
 ```
 
-Use `--config config.local.json` **before** the command name for all subsequent commands:
+All commands read the same `config.json`:
 
 ```bash
-python -m app --config config.local.json doctor
+python -m app doctor
 ```
 
-The commands below use the default configuration.
-Add the configuration argument if you created a local configuration.
+The snippets show individual settings. Keep all other sections in `config.json`.
 
 Run the setup check.
 
@@ -251,13 +254,13 @@ For a slower test, run:
 python -m app screen-test --seconds 4
 ```
 
-Display your photos with keyboard controls before calibrating the buttons:
+Display the alphabet with keyboard controls before mapping the buttons:
 
 ```bash
 python -m app gallery --keyboard --no-audio
 ```
 
-Press `A` or `D` to change the photo.
+Press `A` or `D` to change the letter.
 Press `Q` to stop.
 
 ## 6. Test the speaker with your sound
@@ -310,7 +313,7 @@ For example, if the identifier is `sndrpimax98357a`, run:
 python -m app speaker-test --device 'plughw:CARD=sndrpimax98357a,DEV=0' --volume 0.1
 ```
 
-You can save that device in `config.local.json`:
+Save that device in the existing `audio` section of `config.json`:
 
 ```json
 {
@@ -321,7 +324,7 @@ You can save that device in `config.local.json`:
 }
 ```
 
-If a local configuration already exists, add the `audio` section to it.
+Keep the other audio settings in that section.
 Use the actual card identifier from your Pi.
 
 **CAUTION:** Connect the speaker only to amplifier OUT+ and OUT−.
@@ -343,10 +346,10 @@ The voltage must change between the idle state and each button.
 The expected divider output is approximately 0–2.5 V.
 Before calibration, the displayed button state is `unknown`.
 
-Run calibration in an interactive SSH terminal.
+Run the mapping command in an interactive SSH terminal after fitting or rotating the buttons in the case.
 
 ```bash
-python -m app calibrate-buttons
+make mapping
 ```
 
 For each prompt:
@@ -357,6 +360,8 @@ For each prompt:
 4. Release the button before the next prompt.
 
 You choose which physical button performs LEFT, RIGHT, UP, DOWN, and CENTER.
+Face the front of the assembled case. The board can be horizontal, vertical, or reversed.
+The command stops a running service before calibration and restores it afterward, including after an interrupted calibration.
 The tool saves six measured states in `.state/buttons.json`.
 It rejects overlapping or unstable readings.
 
@@ -433,7 +438,10 @@ Simulation uses the recording duration and displays progress. It produces no sou
 
 ## Add photos or sounds
 
-Put new photos in `imgs`.
+For the optional photo player, edit the existing `config.json` first.
+Set `images.input` to `imgs`, `images.prepared` to `media/images`, and `lesson.letters` to `all`.
+Set `animations.enabled` and `letter_drawing.enabled` to `false`.
+Then put new photos in `imgs`.
 Put new sound files in `sounds`.
 Then run:
 
@@ -455,7 +463,7 @@ A content hash prevents repeated conversions when the source files and configura
 The manifest selects current files, so older generated files do not appear in the gallery.
 Use `python -m app prepare --full-audio` to prepare complete recordings before the player starts.
 
-To change rotation, fit, or clip length, create a local configuration.
+To change rotation, fit, or clip length, edit the existing sections in `config.json`.
 For example:
 
 ```json
@@ -466,7 +474,7 @@ For example:
 }
 ```
 
-Rotation accepts `0`, `90`, `180`, or `270`.
+Alphabet mode accepts rotation `0` or `180`. The optional photo player also accepts `90` or `270`.
 At `90` or `270`, prepared images use a 320 × 240 logical canvas.
 The display driver rotates that canvas into the native 240 × 320 panel.
 The `cover` fit fills the canvas and crops the image edges.
@@ -474,8 +482,8 @@ The `cover` fit fills the canvas and crops the image edges.
 Use the same configuration for preparation and playback.
 
 ```bash
-python -m app --config config.local.json prepare
-python -m app --config config.local.json gallery
+python -m app prepare
+python -m app gallery
 ```
 
 ## Preview and test on your computer
@@ -487,7 +495,7 @@ On macOS, the FFmpeg command is `brew install ffmpeg`.
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements/base.txt
 python -m app prepare
 python -m app --simulate doctor
 python -m app --simulate screen-test --seconds 0
@@ -548,8 +556,7 @@ Audio logs are saved in `.state/audio-*.log`.
 |---|---|
 | `app/` | Python app and hardware drivers |
 | `app/player.py` | Button actions and on-screen player state |
-| `config.json` | Default wiring and media configuration |
-| `config.local.json` | Optional local overrides; ignored by Git |
+| `config.json` | Single configuration for hardware, media, animations, audio, and selected letters |
 | `imgs/` / `sounds/` | Original media |
 | `media/images/` / `media/sounds/` | Prepared PNGs and WAVs |
 | `.state/` | Button calibration, previews, and audio logs; ignored by Git |

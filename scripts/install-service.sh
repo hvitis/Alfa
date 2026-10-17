@@ -33,10 +33,10 @@ if [[ "$service_user" == root ]] || ! id "$service_user" >/dev/null 2>&1; then
     exit 1
 fi
 "$python_bin" -c 'import PIL, gpiozero, lgpio, spidev, smbus2'
-"$python_bin" -c 'from app.config import Settings; from app.buttons import load_calibration; load_calibration(Settings.load("config.standalone.json"))'
-"$python_bin" -m app --config config.standalone.json prepare --wire-only
-"$python_bin" -m app.splash --config config.standalone.json --prepare
-"$python_bin" -m app --config config.standalone.json --simulate player --fullscreen --prepared-only --once ${audio_args[@]+"${audio_args[@]}"}
+"$python_bin" -c 'from app.config import Settings; from app.buttons import load_calibration; load_calibration(Settings.load())'
+"$python_bin" -m app prepare --wire-only
+"$python_bin" -m app.splash --prepare
+"$python_bin" -m app --simulate player --fullscreen --prepared-only --once ${audio_args[@]+"${audio_args[@]}"}
 
 unit_dir="$(mktemp -d)"
 unit_path="$unit_dir/alfa.service"

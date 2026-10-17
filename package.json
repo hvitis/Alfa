@@ -6,7 +6,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "test:syntax": "node web/tests/check-syntax.mjs",
+    "test:syntax": "node web/tests/check-syntax.mjs && node --test web/tests/device-sim.test.js",
     "test:smoke": "node web/tests/smoke-tests.mjs",
     "test:viewer": "node --test web/hardware-visualisation/tests/*.test.js",
     "build:site": "python3 web/build.py _site",

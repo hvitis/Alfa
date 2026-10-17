@@ -33,7 +33,7 @@ For interaction specifications, see [alphabet-plan.md](alphabet-plan.md). For lo
   - Implemented in [`app/player.py`](../app/player.py).
 
 - [x] **Dynamic Letter Selection Profile**
-  - Loads letter subset from [`settings.json`](../settings.json) on startup (e.g. child's name or active focus letters).
+  - Loads letter subset from `lesson.letters` in [`config.json`](../config.json) on startup (e.g. child's name or active focus letters).
   - Supports `"all"` for full 32-letter navigation.
   - Implemented in [`app/config.py`](../app/config.py) and [`app/player.py`](../app/player.py).
 

@@ -7,13 +7,14 @@ There are no LISTEN/SAY rows or hidden activity modes.
 | --- | --- | --- |
 | LEFT | Select the previous letter | A whoosh and a card that enters from the left |
 | RIGHT | Select the next letter | A whoosh and a card that enters from the right |
-| UP (ear) | Play the current letter recording, including its sound and word | A tick and a card that enters from the top |
-| DOWN (mouth) | Play “Powiesz ze mną?”, wait two seconds, then play praise | A tick and a card that enters from the bottom |
+| UP | Show the speaking character and ask “Powiedz jaka to literka.” | Slide the first frame in from above, then start animation and speech |
+| DOWN | Randomly choose the clapping character or Hemulen with its paired praise | Slide the first frame in from below, then start animation and speech |
 | CENTER | Start or resume tracing while held | A pop, the letter guide, and a moving pencil |
 
 Release CENTER to pause the pencil. Another CENTER press resumes the same trace.
 LEFT, RIGHT, UP, and DOWN cancel the trace. These buttons also cancel its recording.
 A completed trace shows fireworks, then restores the card.
+The fireworks run without a held button after the final stroke.
 CENTER never exits the alphabet. Q or Ctrl+C exits a manual run. The service ignores Q.
 
 Every debounced press produces feedback, including a press rejected by the 400 ms guard.
@@ -26,28 +27,30 @@ The default debounce is 30 ms. ALSA uses a 20 ms buffer and a bounded Linux pipe
 A display worker sends the newest frame, so SPI transfers cannot block button input.
 The response target is approximately 100 ms from a stable physical press. Measure this latency on the Pi.
 
-The generic girl animations remain available to older configurations. The alphabet presets use card movement instead.
+The single `config.json` enables both tracing and character animations.
+Run `make mapping` after fitting or rotating the buttons in the case.
+Assign each action by pressing its chosen button. Measured voltages support horizontal, vertical, and reversed boards.
 
 ## Letter selection
 
-Edit [settings.json](../settings.json) before restarting the Pi or service.
-The default starter set is A, L, F, M, O, S. This set is an example, not a known child's name.
+Edit `lesson.letters` in [config.json](../config.json) before restarting the Pi or service.
+The current starter set is A, D, G, M, P, T, W.
 Replace it with five or six letters from the child's name and favorite characters.
 The list order controls navigation. Duplicate, lowercase, unknown, and empty selections produce a startup error.
 
 ```json
-{"letters": ["M", "A", "J", "S", "O", "T"]}
+{"lesson": {"letters": ["M", "A", "J", "S", "O", "T"]}}
 ```
 
 To enable all 32 letters, use:
 
 ```json
-{"letters": "all"}
+{"lesson": {"letters": "all"}}
 ```
 
 The app retains all cards and recordings. A selection only changes the available navigation choices.
 The app reads the selection once at startup. Changes take effect after `make restart` or a Pi restart.
-Without `settings.json`, the `lesson.letters` value in the main configuration applies.
+Edit the existing `lesson` section and retain its idle timers. No separate selection file is loaded.
 
 ## Invitation and sleep
 
@@ -67,8 +70,11 @@ Read [the wiring instructions](wiring.md#amplifier-sleep-control) before connect
 
 All 32 letter slots contain prepared recordings. Existing `literka_A` through `literka_K` files supply 11 slots.
 Piper generated the other 21 clips locally with its Polish `pl_PL-gosia-medium` voice.
-Piper also generated the prompt. The praise clips use `praise_1.wav` and `praise_2.wav` from the repository root.
-DOWN inserts a two-second silence after the prompt and alternates between the two praise clips.
+Piper also generated the prompt. The prepared praise clips were imported from the original `brawo_1.wav` and `brawo_2.wav` recordings.
+The root originals were removed after conversion. Playback uses the prepared copies.
+UP plays the question after its slide. DOWN randomly selects one fixed character and sound pair after each completed action.
+Hemulen uses `praise_1.wav`. The clapping character uses `praise_2.wav`.
+Edited manifest text controls Piper regeneration. Unchanged clips and personal replacements stay unchanged during an ordinary run.
 
 [The recording guide](../media/letter-sounds/README.md) explains generation and individual voice replacements.
 [The drawing guide](../assets/letter-drawing/README.md) explains the stroke data and rendering components.

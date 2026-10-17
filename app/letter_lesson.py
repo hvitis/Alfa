@@ -140,8 +140,10 @@ class LetterRenderer:
 class LetterLesson:
     def __init__(self, catalog, size=(240, 320), fps=20, draw_seconds=5,
                  stroke_pause=.22, intro_seconds=.5, hold_seconds=.7,
-                 celebration_seconds=1.8, clock=time.monotonic):
+                 celebration_seconds=1.8, clock=time.monotonic, celebration_clock=None):
         self.catalog, self.clock, self.fps = catalog, clock, fps
+        self.celebration_clock = celebration_clock or clock
+        self.finished_at = None
         self.draw_seconds, self.stroke_pause = draw_seconds, stroke_pause
         self.intro_seconds, self.hold_seconds = intro_seconds, hold_seconds
         self.celebration_seconds = celebration_seconds
@@ -168,10 +170,12 @@ class LetterLesson:
         self.celebration_start = max(self.draw_end + self.hold_seconds, audio_seconds)
         self.duration = self.celebration_start + self.celebration_seconds
         self.active, self.started = letter, self.clock()
+        self.finished_at = None
         self.serial += 1
 
     def stop(self):
         self.active = None
+        self.finished_at = None
         self.renderer.guide = None
         self.renderer.strokes = ()
         self.timeline = ()
@@ -179,11 +183,10 @@ class LetterLesson:
     def state(self):
         if self.active is None:
             return None
-        now = self.clock()
-        if now >= self.started + self.duration:
+        elapsed = self.elapsed()
+        if elapsed >= self.duration:
             self.stop()
             return None
-        elapsed = max(0, now - self.started)
         count = len(self.timeline)
         if elapsed >= self.celebration_start:
             return ("celebrate", count, None, 1,
@@ -200,13 +203,22 @@ class LetterLesson:
             if elapsed < end:
                 return ("draw", index, index, (elapsed - start) / (end - start), 0)
 
+    def elapsed(self):
+        elapsed = max(0, self.clock() - self.started)
+        if self.finished_at is None and elapsed >= self.draw_end:
+            # Only the pencil needs a held button. Completion runs on real time.
+            self.finished_at = self.celebration_clock() - (elapsed - self.draw_end)
+        if self.finished_at is not None:
+            return self.draw_end + max(0, self.celebration_clock() - self.finished_at)
+        return elapsed
+
     def render_key(self):
         state = self.state()
         if state is None:
             return (None, self.serial)
         phase, count, current, _, _ = state
         # The pencil moves between strokes as well as while drawing.
-        tick = int((self.clock() - self.started) * self.fps) if phase in ("draw", "pause", "celebrate") else None
+        tick = int(self.elapsed() * self.fps) if phase in ("draw", "pause", "celebrate") else None
         return (self.active, self.serial, phase, count, current, tick)
 
     def frame(self):

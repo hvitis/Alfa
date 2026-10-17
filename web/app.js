@@ -26,7 +26,7 @@ function plywoodModels() {
 }
 const picoData = createPicoData();
 let cloudColorControls, stlViewer;
-let activeTab = '3dprint', viewerPromise, viewer, diagramPromise, teachingPromise, transition = 0, selectedWire = '', repository;
+let activeTab = '3dprint', viewerPromise, viewer, diagramPromise, teachingPromise, devicePromise, transition = 0, selectedWire = '', repository;
 
 function fail(error) {
   status.textContent = t('error.view', { message: error.message });
@@ -195,6 +195,8 @@ async function showSoftware() {
     teachingPromise ??= renderTeachingDiagram();
     await teachingPromise;
   }
+  devicePromise ??= import('./device-app.js').then(({ mountDevice }) => mountDevice($('#device-demo')));
+  (await devicePromise).setActive(true);
 }
 
 async function activate(name, updateHash = true) {
@@ -208,10 +210,17 @@ async function activate(name, updateHash = true) {
   }
   if (updateHash) history.replaceState(null, '', `#${name}`);
   stlViewer?.setActive(name === '3dprint');
-  if (['plywood', 'hardware', '3dprint'].includes(name)) await showScene();
-  else {
+  if (['plywood', 'hardware', '3dprint'].includes(name)) {
+    const device = await devicePromise;
+    device?.setActive(false);
+    await showScene();
+  } else {
     transition++; viewer?.setActive(false); status.textContent = '';
     if (name === 'software') await showSoftware();
+    else {
+      const device = await devicePromise;
+      device?.setActive(false);
+    }
   }
 }
 
@@ -250,7 +259,7 @@ async function start() {
   $('#reset-camera').addEventListener('click', () => viewer?.reset());
   $('#software-view').addEventListener('change', () => handle(showSoftware()));
   window.addEventListener('hashchange', () => handle(activate(location.hash.slice(1), false)));
-  window.addEventListener('pagehide', () => { viewer?.dispose(); stlViewer?.dispose(); }, { once: true });
+  window.addEventListener('pagehide', () => { viewer?.dispose(); stlViewer?.dispose(); devicePromise?.then(device => device.setActive(false)); }, { once: true });
   cloudColorControls = createCloudColorControls($('#cloud-colors'), colors => {
     viewer?.setPartColors(colors);
     stlViewer?.setPartColors(colors);

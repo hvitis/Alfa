@@ -80,9 +80,14 @@ def adc_identity(settings):
 
 def calibrate(adc, settings):
     samples = {}
-    actions = {"idle": "release all buttons", "left": "hold LEFT (previous photo)", "right": "hold RIGHT (next photo)",
-               "up": "hold UP (volume up)", "down": "hold DOWN (volume down)", "center": "hold CENTER (play / stop recording)"}
-    print("Choose the physical button for each action. Hold one button until the reading is complete.")
+    actions = {"idle": "release all buttons", "left": "hold the button for LEFT (previous letter)",
+               "right": "hold the button for RIGHT (next letter)",
+               "up": "hold the button for TOP (Little My asks)",
+               "down": "hold the button for BOTTOM (clapping and praise)",
+               "center": "hold the button for CENTER (draw the letter)"}
+    print("Face the front of the assembled case. The board can be horizontal, vertical, or reversed.")
+    print("Assign buttons by their position or intended action in the case, not by the board labels.")
+    print("Hold each requested button until the reading is complete. Release it before the next step.")
     for state in STATES:
         input(f"Please {actions[state]}, then press Enter here: ")
         time.sleep(0.2)
@@ -96,7 +101,7 @@ def calibrate(adc, settings):
     states = calibration_from_samples(samples)
     path = settings.state / "buttons.json"
     atomic_json(path, {"version": 1, "adc": adc_identity(settings), "states": states})
-    print(f"Calibration saved: {path}")
+    print(f"Button mapping saved: {path}. Repeat make mapping after moving the controls in the case.")
     return states
 
 

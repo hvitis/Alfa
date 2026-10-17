@@ -46,7 +46,7 @@ After this update, reinstall the service to replace its old shutdown hook.
 If the buttons need calibration, run:
 
 ```bash
-.venv/bin/python -m app --config config.standalone.json calibrate-buttons
+.venv/bin/python -m app calibrate-buttons
 ```
 
 For display-only operation without the amplifier, run the installer with `--no-audio`.
@@ -78,6 +78,10 @@ A splash failure does not prevent the main app from starting.
 The firmware and kernel still run before the splash can appear.
 The first image time requires a cold-boot measurement on the Pi.
 The splash log records when the image becomes visible, in seconds since kernel startup.
+
+For an image before Linux starts, follow [the firmware splash installation](early-boot-splash.md).
+It explains firmware prerequisites, `make firmware-splash-install`, backup, and removal on Pi 3.
+The 3–4 second target still requires a cold-boot measurement on the assembled Pi.
 
 After copying the updated files to the Pi, install both services:
 
@@ -120,8 +124,12 @@ These behaviors use [systemd service supervision](https://github.com/systemd/sys
 In standalone mode, holding CENTER and pressing Q do not exit the app.
 Hold CENTER to draw the selected letter and start its recording. Release CENTER to pause the pencil.
 The finished letter stays visible during fireworks, then the original card returns.
-LEFT/RIGHT change the letter. UP plays its sound and word. DOWN plays a prompt, a pause, and praise.
+Fireworks run automatically after the last stroke, even after CENTER is released.
+LEFT/RIGHT change the letter. UP shows the speaking character and asks “Powiedz jaka to literka.”
+DOWN randomly selects the clapping character with `brawo_2`, or Hemulen inspecting a flower with `brawo_1`.
+UP/DOWN first slides the character's still frame in from above or below, then starts animation and speech.
 These four controls also interrupt the drawing lesson and stop its recording.
+Run `make mapping` after fitting or rotating the controls in the case. It restores a previously running service.
 The [drawing lesson guide](../assets/letter-drawing/README.md) lists all 32 recording slots and explains the component architecture.
 Alphabet mode waits for button input at startup, including when the service supplies `--autoplay`.
 
@@ -145,7 +153,7 @@ ADC conversion and display transfer time also contribute to the loop duration.
 The program skips late animation frames instead of creating a growing queue.
 The LCD retains static cards without continuous refresh. A character peeks in after 20 seconds idle.
 After five minutes, the backlight and amplifier sleep. Any button wakes them without rebooting.
-Edit `settings.json` to select the letters shown after startup.
+Edit `lesson.letters` in `config.json` to select the letters shown after startup.
 See [the alphabet interaction guide](alphabet-plan.md) and [amplifier sleep wiring](wiring.md#amplifier-sleep-control).
 The complete app's CPU use, RAM use, and startup time still need measurement on the Pi.
 
@@ -211,9 +219,9 @@ The manual test uses both physical buttons and keyboard input.
 Press Q or Ctrl+C to finish the test.
 If the service was running, the script starts it again after the test, including after a test failure.
 
-For configuration changes, edit `config.standalone.json` and run `make restart`.
-That file overrides `config.json`. The service does not also read `config.local.json`.
-Add an `audio` section there if the amplifier needs an explicit ALSA device or a different volume.
+For configuration changes, edit `config.json` and run `make restart`.
+The service, splash, mapping tool, and manual player all read that single file.
+Edit its existing `audio` section if the amplifier needs an explicit ALSA device or a different volume.
 
 ## Idle operation
 

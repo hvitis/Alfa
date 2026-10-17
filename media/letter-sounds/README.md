@@ -3,10 +3,17 @@
 Every filename below now contains a recording.
 The app loads selected clips at startup and reports missing or invalid files.
 Use stereo, 48 kHz, 16-bit PCM WAV recordings.
-UP plays the letter recording. CENTER starts it when a new trace begins.
+CENTER starts the letter recording when a new trace begins.
 Release CENTER to pause the pencil. Speech continues independently.
-DOWN plays `prompt.wav`, two seconds of silence, then one praise clip.
-Successive presses alternate between `praise_1.wav` and `praise_2.wav`.
+After the last stroke, fireworks continue without a held button.
+UP slides the existing speaking character in from above, then plays `prompt.wav` with the animation.
+The question is “Powiedz jaka to literka.”
+DOWN randomly selects a paired animation and recording, then slides its first frame in from below.
+Animation and speech start after the slide finishes.
+The clapping character always uses `praise_2.wav`, imported from `brawo_2.wav`.
+Hemulen inspecting a flower always uses `praise_1.wav`, imported from `brawo_1.wav`.
+Both pairs have an equal chance. A new action can select the same pair again.
+LEFT, RIGHT, or CENTER cancels a pending animation and its speech.
 
 | Letter | Filename | Letter | Filename |
 |---|---|---|---|
@@ -33,8 +40,9 @@ Successive presses alternate between `praise_1.wav` and `praise_2.wav`.
 
 The existing A–K recordings fill 11 slots, including the MP3 source for H.
 The remaining 21 clips use the Polish Piper voice `pl_PL-gosia-medium`.
-The shared prompt contains “Powiesz ze mną?”.
-The praise clips use the `praise_1.wav` and `praise_2.wav` recordings from the repository root.
+The shared prompt contains “Powiedz jaka to literka.”
+The praise clips were converted from the original root recordings `brawo_1.wav` and `brawo_2.wav`.
+Those originals were removed after conversion. The prepared copies remain in `media/letter-sounds/`.
 The voice model card lists the source dataset as CC0:
 [Polish Gosia model card](https://huggingface.co/rhasspy/piper-voices/blob/main/pl/pl_PL/gosia/medium/MODEL_CARD).
 
@@ -53,11 +61,17 @@ Then run the offline generator:
 .venv-piper/bin/python scripts/prepare-letter-audio.py --model /path/to/pl_PL-gosia-medium.onnx
 ```
 
-The generator preserves existing slots. `--replace` regenerates every slot, including personal replacements.
+Edit the `text` fields in `manifest.json`, then run the generator.
+The generator synthesizes changed Piper text and preserves personal recordings.
+The first run adds text hashes to older Piper entries and regenerates those clips.
+Later runs skip unchanged clips. A manually replaced WAV also stays unchanged.
+`--replace` regenerates every slot, including personal replacements, and still uses the manifest text.
 It trims silence, normalizes loudness to -23 LUFS, and adds short fades.
 It converts all output to the required PCM format. The Pi needs neither Piper nor the model.
 The `manifest.json` file records each source and SHA-256 hash.
-The script's `WORDS` table contains the fallback phrases. Synthesis approximates letter sounds and needs an adult listening review.
+The script's `WORDS` table supplies phrases only for new slots.
+The `text_sha256` field records the phrase used for the latest synthesis.
+Synthesis approximates letter sounds and needs an adult listening review.
 
 ## Replace one clip with your voice
 
@@ -76,4 +90,6 @@ make restart
 ```
 
 The same replacement process applies to `prompt.wav`, `praise_1.wav`, and `praise_2.wav`.
-The generator uses root recordings for shared clips when those files exist, including with `--replace`.
+The generator can import new root recordings named `brawo_1.wav` and `brawo_2.wav` into the existing praise slots.
+These filenames take priority over root files named `praise_1.wav` and `praise_2.wav`.
+The `source_sha256` field records each imported source. An ordinary run preserves prepared copies after the sources are removed.

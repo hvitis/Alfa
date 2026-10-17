@@ -26,7 +26,7 @@ class UpdateAppTests(unittest.TestCase):
         (self.root / ".state").mkdir()
         (self.root / ".state/buttons.json").write_text("keep calibration")
         (self.root / "local-notes.txt").write_text("keep local edits")
-        for source in ("Makefile", "scripts/update-app.sh", "scripts/run-app.sh"):
+        for source in ("Makefile", "scripts/update-app.sh", "scripts/run-app.sh", "scripts/map-buttons.sh"):
             shutil.copyfile(ROOT / source, self.root / source)
         self.executable(self.bin / "uname", '#!/bin/sh\nprintf "Linux\\n"\n')
         self.executable(self.bin / "sudo", '#!/bin/sh\nexec "$@"\n')
@@ -80,7 +80,7 @@ sudo systemctl --no-pager status alfa.service
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(events, ["systemctl is-active --quiet alfa.service",
             "systemctl stop alfa.service", "git pull --ff-only",
-            "python -m pip install -r requirements-pi.txt",
+            "python -m pip install -r requirements/pi.txt",
             "systemctl reset-failed alfa.service", "install --no-audio",
             "systemctl daemon-reload", "systemctl enable alfa.service",
             "systemctl restart alfa.service", "systemctl --no-pager status alfa.service",
@@ -128,7 +128,7 @@ sudo systemctl --no-pager status alfa.service
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(events, ["systemctl is-active --quiet alfa.service",
             "systemctl stop alfa.service",
-            "python -m app --config config.alphabet.json gallery --fullscreen",
+            "python -m app gallery --fullscreen",
             "systemctl reset-failed alfa.service", "systemctl start alfa.service"])
         self.assertEqual(self.state.read_text(), "active")
 
@@ -138,6 +138,25 @@ sudo systemctl --no-pager status alfa.service
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertNotIn("systemctl start alfa.service", events)
         self.assertEqual(self.state.read_text(), "inactive")
+
+    def test_mapping_releases_gpio_and_restores_the_running_service_even_after_failure(self):
+        for failure in ('0', '7'):
+            if self.calls.exists():
+                self.calls.unlink()
+            result, events = self.run_make('mapping', STUB_FAIL_RUN=failure)
+            self.assertEqual(result.returncode == 0, failure == '0', result.stderr)
+            self.assertEqual(events, ['systemctl is-active --quiet alfa.service',
+                'systemctl stop alfa.service',
+                'python -m app calibrate-buttons',
+                'systemctl reset-failed alfa.service', 'systemctl start alfa.service'])
+            self.assertEqual(self.state.read_text(), 'active')
+
+    def test_mapping_keeps_a_stopped_service_stopped(self):
+        self.state.write_text('inactive')
+        result, events = self.run_make('mapping')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(events, ['systemctl is-active --quiet alfa.service',
+            'python -m app calibrate-buttons'])
 
 
 if __name__ == "__main__":

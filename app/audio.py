@@ -13,6 +13,8 @@ class LetterRecordings:
     def __init__(self, catalog, root, player, enabled=True):
         self.catalog, self.root, self.player, self.enabled = catalog, root, player, enabled
         self._repeats = ()
+        self._question = b""
+        self._praises = ()
         self._next_repeat = 0
 
     def preload(self, letters):
@@ -20,10 +22,24 @@ class LetterRecordings:
             return
         for letter in letters:
             self.player.preload(self.catalog.audio_path(self.root, letter))
-        prefix = self.player.preload(self.root / "media/letter-sounds/prompt.wav") + bytes(2 * 192000)
-        self._repeats = tuple(prefix + self.player.preload(self.root / f"media/letter-sounds/praise_{index}.wav")
-                              for index in (1, 2))
+        self._question = self.player.preload(self.root / "media/letter-sounds/prompt.wav")
+        self._praises = tuple(self.player.preload(self.root / f"media/letter-sounds/praise_{index}.wav")
+                             for index in (1, 2))
+        prefix = self._question + bytes(2 * 192000)
+        self._repeats = tuple(prefix + praise for praise in self._praises)
         self._next_repeat = 0
+
+    def ask(self):
+        if self.enabled and self._question:
+            self.player.play_pcm(self._question)
+            return self.player.duration
+        return 0
+
+    def praise(self, number):
+        if self.enabled and self._praises:
+            self.player.play_pcm(self._praises[number - 1])
+            return self.player.duration
+        return 0
 
     def repeat(self):
         if self.enabled and self._repeats:
@@ -57,7 +73,7 @@ def audio_device(configured="auto", listing=None):
         if match and "max98357" in line.lower():
             matches.append(f"plughw:CARD={match[1]},DEV={match[2]}")
     if len(matches) != 1:
-        raise ValueError("Cannot identify one MAX98357A sound card. Run aplay -l and set audio.device in config.local.json.")
+        raise ValueError("Cannot identify one MAX98357A sound card. Run aplay -l and set audio.device in config.json.")
     return matches[0]
 
 

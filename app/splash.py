@@ -87,7 +87,7 @@ def serve_splash(settings, socket_path=SPLASH_SOCKET):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", default="config.standalone.json")
+    parser.add_argument("--config", default=None)
     parser.add_argument("--prepare", action="store_true", help="Prepare the splash and PNG preview without hardware.")
     args = parser.parse_args()
     settings = Settings.load(args.config)

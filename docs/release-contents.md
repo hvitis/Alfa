@@ -12,7 +12,7 @@ From the extracted kit, run:
 cd runtime
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements/base.txt
 python -m app --simulate player --once --no-audio
 ```
 
@@ -42,12 +42,13 @@ The showcase uses only local runtime assets. Repository links require internet a
 | Path | Contents |
 | --- | --- |
 | `runtime/app/` | Python app and drivers. |
-| `runtime/config.json` | Default wiring and volume configuration. |
+| `runtime/config.json` | The kit's single configuration for wiring, volume, and its neutral demo. |
+| `runtime/requirements/` | Base and Raspberry Pi dependency files. |
 | `runtime/media/images/` | One original geometric demo card and its manifest. |
 | `runtime/scripts/` | Pi dependency installation script. |
 | `runtime/docs/wiring.md` | Wiring reference. |
 | `site/` | Four-tab static atlas, bundled libraries, CAD viewer meshes, cloud print downloads, illustrated ADR PDF, Mermaid source, and specifications. |
-| `LICENSE`, `THIRD_PARTY_NOTICES.md` | Code license and asset exclusions. |
+| `LICENSE`, `docs/third-party-notices.md` | Code license and asset exclusions. |
 | `checksums.json` | SHA-256 of every other ZIP entry. |
 
 The site includes `THIRD-PARTY-LICENSES.txt` for its bundled libraries.

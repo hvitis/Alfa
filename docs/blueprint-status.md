@@ -1,6 +1,6 @@
 # Blueprint implementation
 
-The implementation adapts [PROJECT-BLUEPRINT.md](../PROJECT-BLUEPRINT.md) to the Python radio application.
+The implementation adapts [project-blueprint.md](project-blueprint.md) to the Python radio application.
 CAD projects retain their own toolchains. The software release does not claim to validate fabrication geometry.
 
 | Phase | Implementation |

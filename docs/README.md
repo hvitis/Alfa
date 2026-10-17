@@ -4,6 +4,10 @@ Welcome to the technical documentation for **Alfa**, an offline Raspberry Pi aud
 
 This directory contains the engineering specifications, wiring schematics, deployment guides, interaction plans, and architectural research supporting the physical device and open-source project.
 
+Start with [installation.md](installation.md) for local and Pi setup, then [configuration.md](configuration.md) for the single application configuration.
+Read [early-boot-splash.md](early-boot-splash.md) to install the firmware LCD splash and measure its power-on timing.
+The [project blueprint](project-blueprint.md), [contribution guide](contributing.md), and [asset notices](third-party-notices.md) also live here.
+
 ---
 
 ## Documentation Map

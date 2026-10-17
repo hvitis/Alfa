@@ -41,13 +41,15 @@ restore_on_failure() {
 }
 trap restore_on_failure EXIT
 
-sudo systemctl stop alfa.service
+if "$was_running"; then
+    sudo systemctl stop alfa.service
+fi
 if "$pull_changes"; then
     # Never discard local calibration, configuration, recordings, or code edits.
     git pull --ff-only
-    "$python_bin" -m pip install -r requirements-pi.txt
+    "$python_bin" -m pip install -r requirements/pi.txt
 fi
-sudo systemctl reset-failed alfa.service
+sudo systemctl reset-failed alfa.service 2>/dev/null || true
 bash scripts/install-service.sh ${installer_args[@]+"${installer_args[@]}"}
 systemctl is-active --quiet alfa.service
 if revision="$(git rev-parse --short HEAD 2>/dev/null)"; then

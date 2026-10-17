@@ -28,7 +28,7 @@ It includes current versions of tracked files and non-ignored new files, and exc
 All 108 repository images present at the start of this audit retain their original SHA-256 checksums.
 Ten image files have neutral filenames. The public copy preserves the same bytes.
 Existing image pixels, embedded lettering, character depictions, and media rights remain unchanged.
-[THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) describes the retained media.
+[THIRD_PARTY_NOTICES.md](third-party-notices.md) describes the retained media.
 
 The public copy has one new initial commit on `main`.
 It contains no inherited branches, tags, commits, remotes, or reflogs from the original checkout.

@@ -8,7 +8,17 @@ export default defineConfig({
   base: './',
   publicDir: fileURLToPath(new URL('../design/cloud-radio/generated/', import.meta.url)),
   plugins: [bilingualDevPlugin(), cloudDevelopment(fileURLToPath(new URL('../', import.meta.url)))],
-  server: { host: '127.0.0.1', port: 8000, strictPort: true },
+  server: {
+    host: '127.0.0.1',
+    port: 8000,
+    strictPort: true,
+    fs: {
+      allow: [
+        fileURLToPath(new URL('./', import.meta.url)),
+        fileURLToPath(new URL('../', import.meta.url)),
+      ],
+    },
+  },
   assetsInclude: ['**/*.glb'],
   build: {
     outDir: '../_site',

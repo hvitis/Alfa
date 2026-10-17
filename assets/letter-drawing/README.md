@@ -3,7 +3,7 @@
 Hold CENTER (the fifth button) to draw the selected letter in alphabet mode.
 Release CENTER to pause. Press it again to resume the same trace.
 Each Space from an SSH keyboard supplies a 0.2-second hold pulse.
-The alphabet and standalone presets enable this feature.
+The single `config.json` enables this feature for manual and service use.
 
 The lesson shows a pale guide and a tilted yellow pencil with a graphite tip and pink eraser.
 The pencil follows the stroke endpoint and moves smoothly between strokes without adding connecting lines.
@@ -23,16 +23,17 @@ The original character card returns when the fireworks finish.
 | Button | Action |
 |---|---|
 | LEFT / RIGHT | Interrupt the lesson and select the previous or next letter |
-| UP | Cancel the lesson and play the letter sound and word |
-| DOWN | Cancel the lesson and play a prompt, a pause, and praise |
+| UP | Slide the speaking character in from above, then animate and ask “Powiedz jaka to literka.” |
+| DOWN | Randomly choose the clapping character or Hemulen, slide in from below, then play its paired praise |
 | Hold CENTER | Start or resume the selected letter lesson |
 
 CENTER never exits the alphabet. Press Q or Ctrl+C to exit a manual run.
 The standalone service ignores Q.
 
-The default lesson needs about 8–9 seconds of total hold time.
+The default lesson needs about 6 seconds of total hold time, depending on its stroke count.
 It has a 0.5-second introduction, 5 seconds of tracing, and 0.22-second pauses between strokes.
 The completed letter stays visible for 0.7 seconds before the 1.8-second fireworks animation.
+After the last stroke, these timers run independently of CENTER. Releasing the button cannot pause the fireworks.
 If the recording lasts longer, the completed letter stays visible until that recording ends.
 After 20 seconds idle, a character peeks in. After five minutes, the backlight and amplifier sleep.
 Any button wakes the device without rebooting.
@@ -49,7 +50,7 @@ The actual frame rate depends on the Pi and the display connection.
 | [LetterCatalog and Stroke](../../app/letter_paths.py) | Resolve a card filename, expand shared geometry, and measure stroke paths |
 | [LetterLesson](../../app/letter_lesson.py) | Control introduction, tracing, pen lifts, the completed letter, and fireworks |
 | `LetterRenderer` and `Pencil` in that module | Draw the guide, completed strokes, pencil, and fireworks |
-| [LetterRecordings](../../app/audio.py) | Play prepared letter recordings and the prompt/pause/praise sequence |
+| [LetterRecordings](../../app/audio.py) | Play prepared letter recordings, the question, and the chosen character's praise clip |
 | [PlayerSession](../../app/player.py) | Connect button actions to lessons, audio, navigation, and card movement |
 | [AnimationPresenter](../../app/frames.py) | Retain one frame and transfer only changed pixels |
 | [ST7789.show_region](../../app/hardware.py) | Send a rectangle through SPI with the configured display rotation |
@@ -92,7 +93,8 @@ python3 scripts/preview-letter-drawing.py --letter Ż --destination output/lette
 Each letter has its own recording path in `letters.json`.
 All 32 recording slots now contain audio. Missing selected recordings produce a startup error.
 The app starts the recording when the drawing lesson starts.
-Navigation or UP/DOWN stops the lesson. UP/DOWN immediately plays its own recording.
+Navigation or UP/DOWN stops the lesson.
+UP/DOWN first slides a still animation frame onto the screen. Animation and speech start after the slide finishes.
 `--no-audio` also keeps all drawing lessons silent.
 
 Read [the recording guide](../../media/letter-sounds/README.md) for offline Piper generation and individual replacements.
@@ -119,10 +121,20 @@ make update
 For a manual hardware test, use `make run`.
 This command stops the service to release its GPIO pins, then restores the service after the test ends.
 
+After fitting or rotating the controls in the case, run:
+
+```bash
+make mapping
+```
+
+Face the front of the case. Hold the button for each requested action, then press Enter in the terminal.
+The mapping supports horizontal, vertical, and reversed boards because it uses measured voltages for the chosen actions.
+The command saves `.state/buttons.json` and restores a previously running service.
+
 For a silent preview without hardware, run:
 
 ```bash
-python3 -m app --config config.alphabet.json --simulate gallery --fullscreen --keyboard --no-audio
+python3 -m app --simulate gallery --fullscreen --keyboard --no-audio
 ```
 
 Simulation updates `.state/preview/current.png` as the lesson plays.
@@ -142,7 +154,7 @@ journalctl -u alfa.service -n 30 --no-pager
 
 The startup log reports `Letter drawing enabled` and the stroke catalog path.
 If drawing is disabled, the log reports the configuration setting to enable.
-The service must use `config.standalone.json` from the updated project folder.
+The service and manual commands use `config.json` from the updated project folder.
 
 After a CENTER action, the log reports the action and selected card filename.
 For example, `CENTER: Drawing A; card=000-00-A.png` confirms that the app started the lesson.
@@ -152,7 +164,7 @@ If there is no CENTER log, stop the service and inspect physical button events:
 
 ```bash
 sudo systemctl stop alfa.service
-.venv/bin/python -m app --config config.standalone.json buttons
+.venv/bin/python -m app buttons
 ```
 
 Press and release the fifth button. Its press event must identify `center`.

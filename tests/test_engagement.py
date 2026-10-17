@@ -14,6 +14,7 @@ from unittest.mock import Mock, patch
 from PIL import Image, ImageChops
 
 from app.app import run_gallery
+from app.animation import CharacterAnimation
 from app.audio import LetterRecordings, StreamingAudioPlayer, read_pcm
 from app.config import ROOT, Settings
 from app.engagement import CardMotion, HoldClock, IdlePlay
@@ -27,7 +28,7 @@ class EngagementTests(unittest.TestCase):
     def setUp(self):
         self.now = 0.0
         self.clock = lambda: self.now
-        self.settings = Settings.load(ROOT / 'config.alphabet.json')
+        self.settings = Settings.load(ROOT / 'config.json')
         self.catalog = LetterCatalog(ROOT / 'assets/letter-drawing/letters.json')
         self.audio = StreamingAudioPlayer(self.settings, simulate=True)
         self.addCleanup(self.audio.close)
@@ -36,8 +37,9 @@ class EngagementTests(unittest.TestCase):
     def session(self):
         session = PlayerSession(self.paths, [], self.audio, fullscreen=True)
         session.hold_clock = HoldClock(self.clock)
-        session.drawing = LetterLesson(self.catalog, clock=session.hold_clock)
+        session.drawing = LetterLesson(self.catalog, clock=session.hold_clock, celebration_clock=self.clock)
         session.card_motion = CardMotion(self.clock)
+        session.animation = CharacterAnimation(ROOT / 'media/animations', clock=self.clock)
         session.letter_recordings = LetterRecordings(self.catalog, ROOT, self.audio)
         session.letter_recordings.preload(['A', 'B'])
         return session
@@ -61,34 +63,120 @@ class EngagementTests(unittest.TestCase):
         self.assertEqual(session.drawing.active, 'B')
         self.assertEqual(session.drawing.serial, 2)
 
-    def test_up_and_down_always_play_their_own_audio_and_do_not_change_volume(self):
+    def test_characters_slide_in_as_still_frames_then_start_their_own_voice_and_animation(self):
         session = self.session()
-        for prior in ('center', 'up', 'down', 'right'):
-            session.action(prior)
-            session.action('up')
-            letter = self.catalog.letter_for_image(session.gallery.paths[session.gallery.index])
-            self.assertEqual(self.audio._speech, read_pcm(self.catalog.audio_path(ROOT, letter)))
+        for button, clip, speech in [('up', 'speaking', 'prompt'), ('down', 'clapping', 'praise_2')]:
+            card = session.card()
+            with patch('app.player.random.choice', return_value='clapping'):
+                session.action(button)
+            self.assertFalse(self.audio.playing, 'Voice must wait until the slide finishes')
+            self.assertIsNone(session.animation.active)
             self.assertIsNone(session.drawing.active)
-            self.assertEqual(session.card_motion.direction, 'up')
-            session.action('down')
-            prompt = read_pcm(ROOT / 'media/letter-sounds/prompt.wav')
-            praises = [read_pcm(ROOT / f'media/letter-sounds/praise_{index}.wav') for index in (1, 2)]
-            self.assertIn(self.audio._speech, [prompt + bytes(384000) + praise for praise in praises])
-            self.assertEqual(session.card_motion.direction, 'down')
+            self.assertEqual(session.card_motion.direction, button)
+            self.assertEqual(session.frame().tobytes(), card.tobytes())
+            self.now += .14
+            first = session.animation.first_frame(clip)
+            expected = Image.new('RGB', card.size, '#fffdf5')
+            offset = -160 if button == 'up' else 160
+            expected.paste(card, (0, -offset))
+            expected.paste(first, (0, offset))
+            self.assertEqual(session.frame().tobytes(), expected.tobytes())
+            self.assertFalse(self.audio.playing)
+            self.assertIsNone(session.animation.active)
+            self.now += .15
+            session.render_key()
+            self.assertEqual(session.animation.active, clip)
+            self.assertEqual(session.animation.index(), 0)
+            self.assertEqual(self.audio._speech, read_pcm(ROOT / f'media/letter-sounds/{speech}.wav'))
+            self.assertEqual(session.frame().tobytes(), first.tobytes())
+            self.assertGreaterEqual(session.animation.duration, self.audio.duration)
             self.assertEqual(self.audio.volume, .2)
+            self.now += session.animation.duration + .01
+            self.assertEqual(session.frame().tobytes(), card.tobytes())
+            self.assertEqual(session.gallery.index, 0)
+            session.action('right')
+            self.now += .3
+            session.frame()
+            session.action('left')
+            self.now += .3
+            session.frame()
         session.action('right')
         self.assertFalse(self.audio.playing, 'Changing letters cancels queued praise')
 
-    def test_repeat_alternates_preloaded_praises_with_the_full_response_pause(self):
+    def test_down_randomly_selects_a_fixed_character_voice_pair_once_per_completed_action(self):
         session = self.session()
-        prefix = read_pcm(ROOT / 'media/letter-sounds/prompt.wav') + bytes(384000)
-        praises = [read_pcm(ROOT / f'media/letter-sounds/praise_{index}.wav') for index in (1, 2)]
-        self.assertNotEqual(praises[0], praises[1])
-        with patch('app.audio.read_pcm', side_effect=AssertionError('Playback must use preloaded audio')):
-            for index in (0, 1, 0, 1):
+        praises = {name: read_pcm(ROOT / f'media/letter-sounds/praise_{index}.wav')
+                   for name, index in [('hemulen', 1), ('clapping', 2)]}
+        self.assertNotEqual(praises['hemulen'], praises['clapping'])
+        # Consecutive duplicates are valid random choices; the old sequence alternated.
+        choices = ['hemulen', 'clapping', 'clapping', 'hemulen']
+        with patch('app.audio.read_pcm', side_effect=AssertionError('Playback must use preloaded audio')), \
+             patch('app.player.random.choice', side_effect=choices) as choose:
+            for count, name in enumerate(choices, 1):
                 session.action('down')
-                self.assertEqual(self.audio._speech, prefix + praises[index])
+                self.assertEqual(choose.call_count, count)
+                self.assertEqual(set(choose.call_args.args[0]), {'hemulen', 'clapping'})
+                self.assertEqual(session.pending_character, (name, 'down'))
+                session.action('down')
+                self.assertEqual(choose.call_count, count, 'A pending slide must not reroll')
+                self.now += .3
+                session.render_key()
+                self.assertEqual(session.animation.active, name)
+                self.assertEqual(self.audio._speech, praises[name])
                 self.assertAlmostEqual(self.audio.duration, len(self.audio._speech) / 192000)
+                serial = session.animation.serial
+                session.action('down')
+                self.assertEqual(choose.call_count, count, 'An active animation must not reroll')
+                self.assertEqual(session.animation.serial, serial)
+                self.assertEqual(self.audio._speech, praises[name])
+                self.now += session.animation.duration + .01
+                session.render_key()
+
+    def test_muted_down_still_randomly_selects_both_animations_and_restores_the_card(self):
+        session = self.session()
+        session.letter_recordings.enabled = False
+        with patch('app.player.random.choice', side_effect=['hemulen', 'clapping']):
+            for name in ('hemulen', 'clapping'):
+                session.action('down')
+                self.now += .3
+                session.render_key()
+                self.assertEqual(session.animation.active, name)
+                self.assertFalse(self.audio.playing)
+                self.now += session.animation.duration + .01
+                self.assertEqual(session.frame().tobytes(), session.card().tobytes())
+
+    def test_navigation_and_center_cancel_pending_character_and_its_delayed_voice(self):
+        session = self.session()
+        for button in ('left', 'right', 'center'):
+            session.action('up')
+            self.assertIsNotNone(session.pending_character)
+            session.action(button)
+            self.now += .4
+            session.render_key()
+            self.assertIsNone(session.pending_character)
+            self.assertIsNone(session.animation.active)
+            if button != 'center':
+                self.assertFalse(self.audio.playing)
+            else:
+                letter = session.drawing.active
+                self.assertEqual(self.audio._speech, read_pcm(self.catalog.audio_path(ROOT, letter)))
+
+    def test_fireworks_finish_after_center_is_released_at_the_final_stroke(self):
+        session = self.session()
+        session.action('center')
+        self.now = session.drawing.draw_end + .001
+        session.release('center')
+        held_time = session.hold_clock()
+        self.assertEqual(session.drawing.state()[0], 'hold')
+        self.now += session.drawing.hold_seconds + .1
+        self.assertEqual(session.drawing.state()[0], 'celebrate')
+        first = session.drawing.render_key()
+        self.now += .1
+        self.assertNotEqual(session.drawing.render_key(), first)
+        self.assertEqual(session.hold_clock(), held_time)
+        self.now += session.drawing.celebration_seconds
+        self.assertEqual(session.frame().tobytes(), session.card().tobytes())
+        self.assertIsNone(session.drawing.active)
 
     def test_card_enters_from_the_button_direction_and_returns_to_the_exact_card(self):
         old = Image.new('RGB', (100, 100), 'red')
@@ -197,13 +285,15 @@ class EngagementTests(unittest.TestCase):
     def test_settings_selection_is_validated_and_reloaded_on_restart(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            (root / 'config.json').write_text((ROOT / 'config.json').read_text())
-            path = root / 'settings.json'
+            data = json.loads((ROOT / 'config.json').read_text())
+            path = root / 'config.json'
             for letters in (['Ż', 'A'], 'all', ['M']):
-                path.write_text(json.dumps({'letters': letters}))
+                data['lesson']['letters'] = letters
+                path.write_text(json.dumps(data))
                 self.assertEqual(Settings.load(root=root).data['lesson']['letters'], letters)
             for letters in ([], ['A', 'A'], ['a'], ['Q'], None, [True], 'ABC'):
-                path.write_text(json.dumps({'letters': letters}))
+                data['lesson']['letters'] = letters
+                path.write_text(json.dumps(data))
                 with self.assertRaises(ValueError):
                     Settings.load(root=root)
             for key, value in [('shutdown_pin', 24), ('shutdown_pin', True), ('shutdown_pin', 18)]:
@@ -328,7 +418,7 @@ class EngagementTests(unittest.TestCase):
         self.assertAlmostEqual(snapshots[5][1], .15)
         self.assertIn((20.4, .15, False, True), [(t, round(c, 2), s, p) for t, c, s, p in snapshots])
         self.assertTrue(any(sleeping for _, _, sleeping, _ in snapshots))
-        self.assertEqual(sessions[0].last_action, 'Listen')
+        self.assertEqual(sessions[0].last_action, 'Which letter?')
         self.assertEqual(sessions[0].drawing.serial, 1)
         self.assertEqual([call.args[0] for call in effect.call_args_list], ['pop', 'tick', 'tick'])
         display.set_awake.assert_any_call(False)

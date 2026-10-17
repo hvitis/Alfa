@@ -11,7 +11,7 @@ sudo apt-get update
 sudo apt-get install -y python3-venv python3-pip python3-dev python3-lgpio build-essential libjpeg-dev libwebp-dev zlib1g-dev ffmpeg alsa-utils i2c-tools fonts-dejavu-core
 cd -- "$project_dir"
 python3 -m venv --system-site-packages .venv
-.venv/bin/python -m pip install -r requirements-pi.txt
+.venv/bin/python -m pip install -r requirements/pi.txt
 sudo usermod -aG gpio,i2c,spi,audio "$(id -un)"
 
 cat <<'MESSAGE'

@@ -8,11 +8,11 @@ from pathlib import Path
 
 KIT_NAME = "Alfa-Build-Kit.zip"
 REQUIRED = {
-    "runtime/app/__main__.py", "runtime/config.json", "runtime/requirements.txt",
+    "runtime/app/__main__.py", "runtime/config.json", "runtime/requirements/base.txt",
     "runtime/media/images/000-demo.png", "runtime/media/images/manifest.json",
     "site/index.html", "site/data/manifest.json", "site/docs/adr.md",
     "site/docs/architecture.mmd", "site/THIRD-PARTY-LICENSES.txt",
-    "LICENSE", "THIRD_PARTY_NOTICES.md", "START-HERE.md", "checksums.json",
+    "LICENSE", "docs/third-party-notices.md", "START-HERE.md", "checksums.json",
 }
 
 

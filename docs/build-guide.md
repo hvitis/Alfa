@@ -24,6 +24,8 @@ make smoke
 ```
 
 `make install` creates `.venv`, installs Python dependencies, runs `npm ci`, and installs Chromium.
+Python dependencies come from `requirements/dev.txt`, which includes `requirements/base.txt`.
+The Pi installer uses `requirements/pi.txt`. Read [installation.md](installation.md) for both installation procedures.
 On Linux, install browser OS dependencies with `npx playwright install --with-deps chromium`.
 On Windows, use WSL2 for Make and the shell scripts.
 

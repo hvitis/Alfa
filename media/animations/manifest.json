@@ -9,6 +9,150 @@
   "wire_format": "RGB565-BE",
   "fps": 5,
   "clips": {
+    "clapping": [
+      {
+        "png": "clapping/frame-00.png",
+        "raw": "clapping/frame-00.raw",
+        "bin": "clapping/frame-00.bin"
+      },
+      {
+        "png": "clapping/frame-01.png",
+        "raw": "clapping/frame-01.raw",
+        "bin": "clapping/frame-01.bin"
+      },
+      {
+        "png": "clapping/frame-02.png",
+        "raw": "clapping/frame-02.raw",
+        "bin": "clapping/frame-02.bin"
+      },
+      {
+        "png": "clapping/frame-03.png",
+        "raw": "clapping/frame-03.raw",
+        "bin": "clapping/frame-03.bin"
+      }
+    ],
+    "hemulen": [
+      {
+        "png": "hemulen/frame-00.png",
+        "raw": "hemulen/frame-00.raw",
+        "bin": "hemulen/frame-00.bin"
+      },
+      {
+        "png": "hemulen/frame-01.png",
+        "raw": "hemulen/frame-01.raw",
+        "bin": "hemulen/frame-01.bin"
+      },
+      {
+        "png": "hemulen/frame-02.png",
+        "raw": "hemulen/frame-02.raw",
+        "bin": "hemulen/frame-02.bin"
+      },
+      {
+        "png": "hemulen/frame-03.png",
+        "raw": "hemulen/frame-03.raw",
+        "bin": "hemulen/frame-03.bin"
+      },
+      {
+        "png": "hemulen/frame-04.png",
+        "raw": "hemulen/frame-04.raw",
+        "bin": "hemulen/frame-04.bin"
+      },
+      {
+        "png": "hemulen/frame-05.png",
+        "raw": "hemulen/frame-05.raw",
+        "bin": "hemulen/frame-05.bin"
+      },
+      {
+        "png": "hemulen/frame-06.png",
+        "raw": "hemulen/frame-06.raw",
+        "bin": "hemulen/frame-06.bin"
+      },
+      {
+        "png": "hemulen/frame-07.png",
+        "raw": "hemulen/frame-07.raw",
+        "bin": "hemulen/frame-07.bin"
+      },
+      {
+        "png": "hemulen/frame-08.png",
+        "raw": "hemulen/frame-08.raw",
+        "bin": "hemulen/frame-08.bin"
+      },
+      {
+        "png": "hemulen/frame-09.png",
+        "raw": "hemulen/frame-09.raw",
+        "bin": "hemulen/frame-09.bin"
+      },
+      {
+        "png": "hemulen/frame-10.png",
+        "raw": "hemulen/frame-10.raw",
+        "bin": "hemulen/frame-10.bin"
+      },
+      {
+        "png": "hemulen/frame-11.png",
+        "raw": "hemulen/frame-11.raw",
+        "bin": "hemulen/frame-11.bin"
+      },
+      {
+        "png": "hemulen/frame-12.png",
+        "raw": "hemulen/frame-12.raw",
+        "bin": "hemulen/frame-12.bin"
+      },
+      {
+        "png": "hemulen/frame-13.png",
+        "raw": "hemulen/frame-13.raw",
+        "bin": "hemulen/frame-13.bin"
+      },
+      {
+        "png": "hemulen/frame-14.png",
+        "raw": "hemulen/frame-14.raw",
+        "bin": "hemulen/frame-14.bin"
+      },
+      {
+        "png": "hemulen/frame-15.png",
+        "raw": "hemulen/frame-15.raw",
+        "bin": "hemulen/frame-15.bin"
+      },
+      {
+        "png": "hemulen/frame-16.png",
+        "raw": "hemulen/frame-16.raw",
+        "bin": "hemulen/frame-16.bin"
+      },
+      {
+        "png": "hemulen/frame-17.png",
+        "raw": "hemulen/frame-17.raw",
+        "bin": "hemulen/frame-17.bin"
+      },
+      {
+        "png": "hemulen/frame-18.png",
+        "raw": "hemulen/frame-18.raw",
+        "bin": "hemulen/frame-18.bin"
+      },
+      {
+        "png": "hemulen/frame-19.png",
+        "raw": "hemulen/frame-19.raw",
+        "bin": "hemulen/frame-19.bin"
+      },
+      {
+        "png": "hemulen/frame-20.png",
+        "raw": "hemulen/frame-20.raw",
+        "bin": "hemulen/frame-20.bin"
+      },
+      {
+        "png": "hemulen/frame-21.png",
+        "raw": "hemulen/frame-21.raw",
+        "bin": "hemulen/frame-21.bin"
+      },
+      {
+        "png": "hemulen/frame-22.png",
+        "raw": "hemulen/frame-22.raw",
+        "bin": "hemulen/frame-22.bin"
+      },
+      {
+        "png": "hemulen/frame-23.png",
+        "raw": "hemulen/frame-23.raw",
+        "bin": "hemulen/frame-23.bin"
+      }
+    ],
     "listening": [
       {
         "png": "listening/frame-00.png",

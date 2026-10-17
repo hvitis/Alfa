@@ -5,6 +5,8 @@ from array import array
 
 from PIL import Image
 
+from .display_init import st7789_commands
+
 
 def rgb565(image):
     pixels = iter(image.convert("RGB").tobytes())
@@ -59,25 +61,10 @@ class ST7789:
             time.sleep(0.02)
             self.reset.on()
             time.sleep(0.12)
-            self.command(0x01)  # Software reset.
-            time.sleep(0.15)
-            self.command(0x11)  # Exit sleep.
-            time.sleep(0.12)
-            self.command(0x36, [0x08 if self.cfg["bgr"] else 0x00])
-            self.command(0x3A, [0x55])  # RGB565, 16 bits per pixel.
-            for command, data in (
-                (0xB2, [0x0C, 0x0C, 0x00, 0x33, 0x33]),
-                (0xB7, [0x35]), (0xBB, [0x1F]), (0xC0, [0x2C]),
-                (0xC2, [0x01]), (0xC3, [0x12]), (0xC4, [0x20]),
-                (0xC6, [0x0F]), (0xD0, [0xA4, 0xA1]),
-                (0xE0, [0xD0, 0x08, 0x11, 0x08, 0x0C, 0x15, 0x39, 0x33, 0x50, 0x36, 0x13, 0x14, 0x29, 0x2D]),
-                (0xE1, [0xD0, 0x08, 0x10, 0x08, 0x06, 0x06, 0x39, 0x44, 0x51, 0x0B, 0x16, 0x14, 0x2F, 0x31]),
-            ):
+            for command, data, delay_us in st7789_commands(self.cfg):
                 self.command(command, data)
-            self.command(0x21 if self.cfg["invert"] else 0x20)
-            self.command(0x13)  # Normal display mode.
-            self.command(0x29)  # Display on.
-            time.sleep(0.02)
+                if delay_us:
+                    time.sleep(delay_us / 1_000_000)
             if initial_payload is None:
                 self.show(Image.new("RGB", self.size, "black"))
             else:

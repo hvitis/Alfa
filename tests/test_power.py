@@ -1,3 +1,4 @@
+from tests.support import photo_settings
 """Regression checks: idle time must never stop the player or power off the Pi."""
 import copy
 from contextlib import redirect_stdout
@@ -21,7 +22,7 @@ class PowerTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.settings = Settings(self.root, copy.deepcopy(Settings.load().data))
+        self.settings = photo_settings(self.root)
         self.photos = [self.root / f"{index}.png" for index in range(2)]
         for photo in self.photos:
             Image.new("RGB", (240, 320), "white").save(photo)
@@ -110,7 +111,9 @@ class PowerTests(unittest.TestCase):
 
     def test_old_power_override_does_not_reenable_shutdown_or_prevent_startup(self):
         custom = self.root / "old-config.json"
-        custom.write_text(json.dumps({"power": {"idle_shutdown_seconds": 300}}))
+        data = self.settings.data.copy()
+        data["power"] = {"idle_shutdown_seconds": 300}
+        custom.write_text(json.dumps(data))
         settings = Settings.load(custom)
         self.assertNotIn("power", settings.data)
 

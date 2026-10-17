@@ -1,5 +1,8 @@
+from tests.support import photo_settings
 import copy
 import json
+import itertools
+import io
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,7 +11,7 @@ from unittest.mock import patch
 from PIL import Image
 
 from app.audio import audio_device
-from app.buttons import Debouncer, calibration_from_samples, classify, load_calibration
+from app.buttons import Debouncer, calibrate, calibration_from_samples, classify, load_calibration
 from app.config import ROOT, Settings
 from app.hardware import ADS1x15, ST7789, adc_voltage, rgb565
 from app.media import atomic_json, fit_image, prepare_images
@@ -37,7 +40,7 @@ class MediaTests(unittest.TestCase):
             root = Path(directory)
             (root / "imgs").mkdir()
             Image.new("RGB", (20, 20), "red").save(root / "imgs/photo.png")
-            settings = Settings(root, copy.deepcopy(Settings.load().data))
+            settings = photo_settings(root)
             paths = prepare_images(settings)
             self.assertEqual(len(paths), 1)
             modified = paths[0].stat().st_mtime_ns
@@ -61,6 +64,24 @@ class MediaTests(unittest.TestCase):
 
 
 class ButtonTests(unittest.TestCase):
+    def test_mapping_uses_chosen_case_actions_for_horizontal_vertical_and_reversed_boards(self):
+        for voltages in ((2.5, 0, .3, .6, 1, 1.6), (2.5, .6, 1, .3, 0, 1.6),
+                         (2.5, .3, 0, 1, .6, 1.6)):
+            with tempfile.TemporaryDirectory() as directory:
+                settings = Settings(Path(directory), copy.deepcopy(Settings.load().data))
+                samples = iter(voltages)
+                adc = type('ADC', (), {'read_voltage': lambda self: self.voltage})()
+                def choose_button(_):
+                    adc.voltage = next(samples)
+                ticks = itertools.count(step=.01)
+                with patch('builtins.input', side_effect=choose_button), \
+                     patch('app.buttons.time.monotonic', side_effect=lambda: next(ticks)), \
+                     patch('app.buttons.time.sleep'), patch('sys.stdout', new_callable=io.StringIO):
+                    calibrate(adc, settings)
+                states = load_calibration(settings)
+                for name, voltage in zip(('idle', 'left', 'right', 'up', 'down', 'center'), voltages):
+                    self.assertEqual(classify(voltage, states), name)
+
     def samples(self):
         return {name: [value + 0.001 * (i % 3) for i in range(15)] for name, value in
                 zip(("idle", "left", "right", "up", "down", "center"), (2.5, 0.0, 0.3, 0.6, 1.0, 1.6))}

@@ -46,8 +46,8 @@ When this document is provided as a prompt or repository guideline:
 ├── README.pl.md (or localized)          # Synchronized secondary language documentation
 ├── Makefile                             # Unified task runner (make check, make site, make build)
 ├── package.json                         # Dev dependencies for browser checks (e.g., Playwright)
-├── requirements.txt / pyproject.toml    # Core runtime dependencies
-├── requirements-dev.txt                 # Development / testing dependencies
+├── requirements/base.txt / pyproject.toml    # Core runtime dependencies
+├── requirements/dev.txt                 # Development / testing dependencies
 └── .gitignore                           # Strict ignore rules for virtual environments & build artifacts
 ```
 
@@ -93,7 +93,7 @@ help:
 	@echo "  make clean    - Remove build artifacts and temporary files"
 
 install:
-	python3 -m pip install -r requirements-dev.txt
+	python3 -m pip install -r requirements/dev.txt
 	npm install
 
 check:
@@ -266,19 +266,19 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
-          cache-dependency-path: requirements*.txt
+          cache-dependency-path: requirements/*.txt
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+          if [ -f requirements/base.txt ]; then python -m pip install -r requirements/base.txt; fi
 
       - name: Cache generated data
         id: site-cache
         uses: actions/cache@v4
         with:
           path: _site/data
-          key: site-data-v1-${{ runner.os }}-py312-${{ hashFiles('scripts/**', 'source/**', 'requirements.txt') }}
+          key: site-data-v1-${{ runner.os }}-py312-${{ hashFiles('scripts/**', 'source/**', 'requirements/base.txt') }}
 
       - name: Export static site
         env:
@@ -379,12 +379,12 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
-          cache-dependency-path: requirements*.txt
+          cache-dependency-path: requirements/*.txt
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then python -m pip install -r requirements.txt; fi
+          if [ -f requirements/base.txt ]; then python -m pip install -r requirements/base.txt; fi
 
       - name: Execute full reproducible build
         run: python scripts/build.py --production
@@ -474,7 +474,7 @@ When tasked with generating a repository according to this blueprint, the AI ass
 ## Example Prompt to Give AI in a New Repository
 
 ```text
-Please read `PROJECT-BLUEPRINT.md` and scaffold this repository accordingly.
+Please read `docs/project-blueprint.md` and scaffold this repository accordingly.
 1. Create the project structure with directories for docs, static site (_site), tests, and CI/CD.
 2. Implement dual-language README.md (English) and README.pl.md (Polish) with specifications table and language switcher.
 3. Set up the GitHub Actions CI workflow (caching, site export, GitHub Pages deployment from main).

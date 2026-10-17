@@ -1,4 +1,10 @@
+import random
+
 from .ui import Gallery, player_frame
+
+
+# Select the character once, then use its matching prepared recording after the slide.
+PRAISE_CLIPS = {"clapping": 2, "hemulen": 1}
 
 
 class PlayerSession:
@@ -15,6 +21,7 @@ class PlayerSession:
         self.hold_clock = None
         self.card_motion = None
         self.idle = None
+        self.pending_character = None
 
     def card(self):
         from PIL import Image
@@ -23,7 +30,41 @@ class PlayerSession:
 
     def release(self, button):
         if button == "center" and self.hold_clock:
+            if self.drawing:
+                self.drawing.state()
             self.hold_clock.hold(False)
+
+    def start_character(self, button):
+        choices = ("speaking",) if button == "up" else tuple(PRAISE_CLIPS)
+        if self.pending_character and self.pending_character[1] == button:
+            return
+        if self.animation.index() is not None and self.animation.active in choices:
+            return
+        name = choices[0] if button == "up" else random.choice(choices)
+        old = self.frame()
+        self.stop_drawing()
+        self.animation.stop()
+        self.audio.stop()
+        self.pending_character = (name, button)
+        first = self.animation.first_frame(name)
+        if self.card_motion:
+            self.card_motion.start(old, first, button)
+        else:
+            self.update_character()
+
+    def update_character(self):
+        if self.pending_character is None:
+            return
+        if self.card_motion and self.card_motion.render_key() is not None:
+            return
+        name, button = self.pending_character
+        self.pending_character = None
+        duration = 0
+        if self.letter_recordings:
+            duration = (self.letter_recordings.ask() if button == "up"
+                        else self.letter_recordings.praise(PRAISE_CLIPS[name]))
+        # Animation and speech both begin after the first frame finishes sliding in.
+        self.animation.start(name, minimum_seconds=duration)
 
     def feedback(self, button, accepted=True):
         name = "tick" if not accepted else "whoosh" if button in ("left", "right") else "pop" if button == "center" else "tick"
@@ -48,6 +89,10 @@ class PlayerSession:
 
     def action(self, button):
         if self.drawing and button in ("up", "down"):
+            if self.animation:
+                self.start_character(button)
+                self.last_action = "Which letter?" if button == "up" else "Bravo!"
+                return
             self.stop_drawing()
             if self.animation:
                 self.animation.stop()
@@ -64,7 +109,8 @@ class PlayerSession:
             self.last_action = "Listen" if button == "up" else "Say it with me"
             return
         if button in ("left", "right"):
-            old = self.card() if self.card_motion else None
+            old = self.frame() if self.card_motion else None
+            self.pending_character = None
             self.stop_drawing()
             if self.drawing:
                 self.audio.stop()
@@ -88,6 +134,7 @@ class PlayerSession:
             self.last_action = f"Volume {self.audio.volume:.0%}"
         elif button == "center":
             if self.drawing:
+                self.pending_character = None
                 if self.card_motion:
                     self.card_motion.stop()
                 if self.hold_clock:
@@ -117,6 +164,7 @@ class PlayerSession:
                 self.last_action = "Playing"
 
     def frame(self):
+        self.update_character()
         if self.idle and self.idle.peeking:
             return self.idle.frame(self.card())
         if self.card_motion:
@@ -137,6 +185,7 @@ class PlayerSession:
                             self.sounds[0].name if self.sounds else "Audio disabled", self.last_action)
 
     def render_key(self):
+        self.update_character()
         if self.idle and (self.idle.peeking or self.idle.sleeping):
             return (self.gallery.index, "idle", self.idle.render_key())
         if self.card_motion:

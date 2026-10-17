@@ -1,3 +1,4 @@
+from tests.support import photo_settings
 import copy
 import io
 import struct
@@ -22,7 +23,7 @@ class PlayerTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.settings = Settings(self.root, copy.deepcopy(Settings.load().data))
+        self.settings = photo_settings(self.root)
 
     def recording(self, frames=960, name="recording.wav"):
         path = self.root / name

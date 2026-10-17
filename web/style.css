@@ -71,7 +71,7 @@ p { color: var(--muted); line-height: 1.75; }
 .tabs button:nth-child(2) { --tab-bg: var(--pink); }
 .tabs button:nth-child(3) { --tab-bg: var(--mint); }
 .tabs button:nth-child(4) { --tab-bg: var(--lavender); }
-.tabs button span { display: grid; place-items: center; width: 26px; height: 26px; border: 1.5px solid currentColor; border-radius: 50%; background: #fff9; font: 800 10px "Trebuchet MS", sans-serif; flex-shrink: 0; }
+.tabs button span:first-child { display: grid; place-items: center; width: 26px; height: 26px; border: 1.5px solid currentColor; border-radius: 50%; background: #fff9; font: 800 10px "Trebuchet MS", sans-serif; flex-shrink: 0; }
 .tabs button:hover { transform: translateY(-2px); }
 .tabs button[aria-selected=true] { transform: translateY(-3px); box-shadow: 4px 6px 0 var(--ink); }
 .section-bar { display: flex; justify-content: space-between; align-items: center; gap: 25px; margin: 28px 0 22px; }
@@ -194,7 +194,7 @@ footer div { display: flex; gap: 22px; }
   .intro .eyebrow { font-size: 9px; padding: 5px 10px; }
   .tabs { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 13px; margin-bottom: 28px; }
   .tabs button { min-height: 50px; padding: 10px; font-size: 14px; border-radius: 13px; }
-  .tabs button span { width: 23px; height: 23px; font-size: 9px; }
+  .tabs button span:first-child { width: 23px; height: 23px; font-size: 9px; }
   .section-bar { align-items: flex-start; gap: 17px; flex-direction: column; margin: 23px 0 18px; }
   h2 { font-size: 27px; }h3 { font-size: 24px; }
   .select-field { min-width: 0; width: 100%; }
@@ -232,3 +232,65 @@ footer div { display: flex; gap: 22px; }
 .teaching-notice { padding: 11px 12px; border: 1.5px solid #b42318; border-radius: 12px; background: #fdecea; color: #7a1f16 !important; font-size: 11px !important; }
 .footer-notice { margin: 0; font-weight: 700; color: #b42318; }
 @media (max-width:760px) { .teaching-document table { display: block; overflow-x: auto; } }
+
+/* The software tile plays the same alphabet lesson as the Raspberry Pi. */
+.device-tile {
+  display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 28px; align-items: center;
+  margin: 6px 0 8px; padding: 26px; border: 2px solid var(--ink); border-radius: 26px;
+  background: var(--paper); box-shadow: 5px 6px 0 #c7badc;
+}
+.device-tile:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+.device-copy, .device-stage { min-width: 0; }
+.device-copy .eyebrow { display: inline-flex; margin-bottom: 12px; color: var(--ink); background: var(--mint); border: 1.5px solid var(--ink); border-radius: 22px; padding: 6px 12px; }
+.device-badge {
+  display: inline-block; margin: 0 0 8px 10px; padding: 8px 12px; border: 2px solid var(--ink); border-radius: 8px;
+  background: var(--pink); color: var(--ink); box-shadow: 3px 3px 0 var(--ink); transform: rotate(3deg);
+  font-size: 10px; font-weight: 800; letter-spacing: .08em;
+}
+.device-title { margin: 8px 0 10px; color: var(--ink); font: 800 clamp(24px, 3vw, 32px)/1.15 var(--display); letter-spacing: -.03em; }
+.device-copy p { margin: 0 0 10px; }
+.device-note { padding: 10px 12px; border: 1.5px dashed var(--ink); border-radius: 14px; background: var(--yellow); color: var(--ink) !important; font-size: 13px; }
+.device-legend { margin: 4px 0 12px; padding: 0; list-style: none; display: grid; gap: 6px; }
+.device-legend li { position: relative; padding-left: 18px; color: var(--ink); font-size: 14px; line-height: 1.45; }
+.device-legend li::before { content: ""; position: absolute; left: 0; top: 0.45em; width: 9px; height: 9px; border: 1.5px solid var(--ink); border-radius: 50%; background: var(--accent); }
+.device-keys { margin: 0 !important; font-size: 13px; }
+.device-stage { padding: 16px; border: 2px solid var(--ink); border-radius: 22px; background: var(--lavender); box-shadow: 4px 5px 0 #e1d3a2; }
+.device-status { margin: 0 0 12px; min-height: 1.4em; color: var(--ink); font: 800 14px/1.4 var(--display); letter-spacing: -.02em; }
+.device-face { display: flex; gap: 14px; align-items: flex-start; width: min(100%, 560px); margin-inline: auto; }
+.lcd, .keypad-board { box-sizing: border-box; border: 3px solid var(--ink); box-shadow: 4px 5px 0 var(--ink); }
+.lcd {
+  width: calc((100% - 14px) * 0.75 / 1.19); aspect-ratio: 240 / 320; padding: 8px;
+  border-radius: 18px; background: #243044;
+}
+.lcd canvas { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 4px; background: #fffdf5; }
+.keypad-board {
+  position: relative; width: calc((100% - 14px) * 0.44 / 1.19); aspect-ratio: 110 / 250;
+  border-radius: 16px; background: #1a1a1a;
+}
+.keypad-hole { position: absolute; width: 8%; aspect-ratio: 1; border-radius: 50%; background: #0e0e0e; box-shadow: inset 0 0 0 1.5px #3d3d3d; transform: translate(-50%, -50%); }
+.hole-tl { left: 9.09%; top: 4%; } .hole-tr { left: 90.91%; top: 4%; }
+.hole-bl { left: 9.09%; top: 96%; } .hole-br { left: 90.91%; top: 96%; }
+.pad {
+  position: absolute; width: 41.8%; aspect-ratio: 1; padding: 0; border: 2px solid #2a2418; border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #fff7cc, #ffe68c 46%, #e6b83a); color: #5c4310;
+  box-shadow: 0 4px 0 #a8842a, inset 0 -3px 0 #f3d36a; transform: translate(-50%, -50%);
+  touch-action: none; user-select: none; font: 800 13px/1 var(--display);
+}
+.pad::after { content: ""; }
+.pad:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.pad[data-button="up"] { left: 50%; top: 14.8%; } .pad[data-button="up"]::after { content: "▲"; }
+.pad[data-button="left"] { left: 23.636%; top: 38.4%; } .pad[data-button="left"]::after { content: "◀"; }
+.pad[data-button="right"] { left: 76.364%; top: 38.4%; } .pad[data-button="right"]::after { content: "▶"; }
+.pad[data-button="down"] { left: 50%; top: 61.6%; } .pad[data-button="down"]::after { content: "▼"; }
+.pad[data-button="center"] { left: 50%; top: 87.6%; } .pad[data-button="center"]::after { content: "●"; font-size: 10px; }
+.pad[aria-pressed="true"] { transform: translate(-50%, -50%) translateY(3px); box-shadow: 0 1px 0 #a8842a, inset 0 -1px 0 #f3d36a; }
+.keypad-pins { position: absolute; left: 0; right: 0; bottom: 3px; color: #8d846c; font-size: 6px; letter-spacing: .12em; text-align: center; pointer-events: none; }
+@media (max-width: 860px) {
+  .device-tile { grid-template-columns: 1fr; gap: 18px; padding: 18px; }
+  .device-badge { margin-left: 0; }
+}
+@media (max-width: 760px) {
+  .device-tile { padding: 14px; border-radius: 22px; }
+  .device-stage { padding: 10px; }
+  .device-legend li, .device-copy p { font-size: 13px; }
+}

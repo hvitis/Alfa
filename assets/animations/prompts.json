@@ -1,8 +1,10 @@
 {
-  "status": "Existing artwork retained unchanged; brand-specific generation instructions removed.",
+  "status": "Existing listening and speaking artwork retained unchanged; clapping and Hemulen atlases added with the built-in image generation tool.",
   "atlases": {
     "listening": "assets/animations/listening-atlas.png",
-    "speaking": "assets/animations/speaking-atlas.png"
+    "speaking": "assets/animations/speaking-atlas.png",
+    "clapping": "assets/animations/clapping-atlas.png",
+    "hemulen": "assets/animations/hemulen-atlas.png"
   },
   "layout": {
     "grid": [
@@ -21,5 +23,29 @@
     "assets/animations/references/speaking-smile.jpg",
     "assets/animations/references/speaking-talking.jpg"
   ],
-  "notice": "See THIRD_PARTY_NOTICES.md for retained media status."
+  "notice": "See docs/third-party-notices.md for retained media status.",
+  "clapping": {
+    "reference": "assets/animations/listening-atlas.png",
+    "method": "built-in image_gen.imagegen",
+    "description": "Four equal cells in reading order: hands apart, hands clapping, hands apart, hands clapping with a delighted closed-eye smile. Fixed camera, full body, matching watercolor style and pale cream background."
+  },
+  "hemulen": {
+    "reference": "assets/animations/clapping-atlas.png",
+    "method": "built-in image_gen.imagegen",
+    "description": "Stationary scene with head-only motion: look toward the flower, tilt toward the viewer, then return. Four transparent head poses become 24 eased intermediate frames around a fixed neck pivot.",
+    "layers": {
+      "base": "assets/animations/hemulen-base.png",
+      "heads": "assets/animations/hemulen-heads.png"
+    },
+    "playback": {
+      "frames": 24,
+      "fps": 6,
+      "cycles": 2,
+      "seconds": 8
+    }
+  },
+  "praise_pairs": {
+    "clapping": "media/letter-sounds/praise_2.wav",
+    "hemulen": "media/letter-sounds/praise_1.wav"
+  }
 }

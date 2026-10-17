@@ -23,20 +23,21 @@ The character illustrations use soft ink contours, pastel colors, and a faint mi
 From the project directory, run:
 
 ```bash
-python3 -m app --config config.alphabet.json gallery --fullscreen --no-audio
+python3 -m app gallery --fullscreen --no-audio
 ```
 
 Use LEFT and RIGHT to change the card.
-Press TOP (UP) for the listening animation.
-Press BOTTOM (DOWN) for the speaking animation.
-Each animation plays two four-frame cycles at 5 FPS, then restores the selected card.
+Press TOP (UP) for the speaking animation and “Powiedz jaka to literka.”
+Press BOTTOM (DOWN) for a random praise pair: the clapping character with `brawo_2`, or Hemulen with `brawo_1`.
+The first frame slides in from above or below before animation and speech start.
+Each animation plays at least two four-frame cycles, then restores the card when its speech ends.
 LEFT and RIGHT stop the animation and change the letter.
-Tap CENTER to draw the selected letter with a moving pencil tip.
+Hold CENTER to draw the selected letter with a moving pencil tip. Release it to pause the trace.
 The finished letter stays visible during fireworks, then the selected card returns.
 LEFT, RIGHT, UP, and DOWN interrupt the drawing lesson and stop its recording.
 The [drawing lesson guide](../letter-drawing/README.md) includes all 32 stroke definitions and recording slots.
-Hold CENTER for two seconds to exit the current gallery viewer.
-The physical buttons require the existing button calibration.
+CENTER never exits the alphabet. Use Q or Ctrl+C to exit a manual run.
+Run `make mapping` after fitting or rotating the physical buttons in the case.
 For SSH keyboard control, add `--keyboard` and use A/D for letters, W/S for character animations, or Space for drawing.
 
 ## Preview without hardware
@@ -44,7 +45,7 @@ For SSH keyboard control, add `--keyboard` and use A/D for letters, W/S for char
 Run:
 
 ```bash
-python3 -m app --config config.alphabet.json --simulate gallery --fullscreen --no-audio --once
+python3 -m app --simulate gallery --fullscreen --no-audio --once
 ```
 
 The preview appears in `.state/preview/current.png`.
@@ -62,7 +63,7 @@ Use a separate prepared folder in a landscape configuration to retain both expor
 Run preparation with the selected configuration:
 
 ```bash
-python3 -m app --config config.alphabet.json prepare --images-only
+python3 -m app prepare --images-only
 ```
 
 The gallery also prepares images automatically before display.
@@ -74,12 +75,12 @@ A checkout can use the bundled prepared cards when this source folder is absent.
 Illustration numbers identify retained assets. They do not teach a letter through a character name.
 [prompts.json](prompts.json) records the card dimensions, paths, and prompts for the eight edited cards.
 The built-in image generator edited these eight cards using the original cards as references.
-See [the media notice](../../THIRD_PARTY_NOTICES.md) for their distribution status.
+See [the media notice](../../docs/third-party-notices.md) for their distribution status.
 
 ## Layout scope
 
 These cards use the complete screen in the current gallery viewer.
-The TOP/BOTTOM character animations work in the gallery with `config.alphabet.json`.
+The TOP/BOTTOM character animations work in the gallery with the default `config.json`.
 The [animation documentation](../animations/README.md) describes playback and file formats.
 The CENTER drawing lesson uses lightweight stroke data and optional recordings for each letter.
 Activity indicators and a letter dial remain planned.

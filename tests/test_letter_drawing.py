@@ -184,11 +184,13 @@ class LetterDrawingTests(unittest.TestCase):
             self.session.gallery.index = 0
             self.session.action("center")
             self.assertTrue(self.audio.playing)
-            self.session.action(button)
+            with patch('app.player.random.choice', return_value='clapping'):
+                self.session.action(button)
             self.assertIsNone(self.lesson.active)
-            self.assertEqual(self.audio.playing, button == "up")
+            self.assertFalse(self.audio.playing)
             self.assertEqual(self.audio.volume, .2)
-            self.assertIsNone(self.session.animation.active)
+            self.assertEqual(self.session.animation.active,
+                             {"up": "speaking", "down": "clapping"}.get(button))
 
     def test_recording_for_current_letter_plays_in_full_before_fireworks_and_mute_still_draws(self):
         self.recording("Ż", seconds=12)
@@ -250,7 +252,7 @@ class LetterDrawingTests(unittest.TestCase):
             with self.assertRaises(ValueError): display.show_region(crop, (20, 40, 71, 80))
 
     def test_real_gallery_loop_draws_with_compiled_cards_and_restores_after_success(self):
-        settings = Settings.load(ROOT / "config.alphabet.json")
+        settings = Settings.load(ROOT / "config.json")
         settings.data["lesson"]["letters"] = "all"
         elapsed = [100.0]
         events, frames, sessions = [], [], []
@@ -284,7 +286,7 @@ class LetterDrawingTests(unittest.TestCase):
         self.assertIsNone(sessions[0].drawing.active)
 
     def test_configuration_rejects_invalid_timing_and_landscape(self):
-        settings = Settings.load(ROOT / "config.alphabet.json")
+        settings = Settings.load(ROOT / "config.json")
         settings.data["lesson"]["letters"] = "all"
         for key in ("fps", "draw_seconds", "stroke_pause", "intro_seconds", "hold_seconds", "celebration_seconds"):
             for bad in (float("nan"), -1, True):
@@ -296,7 +298,7 @@ class LetterDrawingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "portrait"): settings.validate()
 
     def test_physical_center_starts_on_press_and_pauses_across_releases(self):
-        settings = Settings.load(ROOT / "config.alphabet.json")
+        settings = Settings.load(ROOT / "config.json")
         settings.data["lesson"]["letters"] = "all"
         elapsed, level, sessions, snapshots = [0.0], ["idle"], [], []
         # The real debouncer receives idle, a >2s hold, release, a tap mid-lesson, then a tap after it.
