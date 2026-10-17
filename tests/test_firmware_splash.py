@@ -1,5 +1,7 @@
 """Decode firmware output and exercise boot edits without accessing a real SD card."""
 import copy
+from contextlib import redirect_stdout
+import io
 import json
 import os
 from pathlib import Path
@@ -8,7 +10,7 @@ import struct
 import subprocess
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from PIL import Image
 
@@ -30,11 +32,14 @@ def decode(binary):
             offset += 5
         else:
             assert opcode == 0x10
-            assert binary[offset + 1:offset + 3] == b"\0\0"
+            assert binary[offset + 1] == 0
+            flags = binary[offset + 2]
+            assert flags in (0, 1)
             length = struct.unpack_from("<H", binary, offset + 3)[0]
             packet = binary[offset + 5:offset + 5 + length]
-            assert 0 < length <= 65535 and len(packet) == length
-            commands.append((packet[0], packet[1:]))
+            # The field is 16 bits, but the upstream parser buffer is only 1024.
+            assert 0 < length <= 1024 and len(packet) == length
+            commands.append((None, packet) if flags else (packet[0], packet[1:]))
             offset += 5 + length
     assert offset == len(binary)
     return params, commands, delays
@@ -46,9 +51,9 @@ class FirmwareSplashTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
         self.settings = Settings(self.root, copy.deepcopy(Settings.load().data))
-        images = self.root / "media/images"
+        images = self.root / "assets/splash"
         images.mkdir(parents=True)
-        shutil.copyfile(ROOT / "media/images/000-illustration_0.png", images / "000-illustration_0.png")
+        shutil.copyfile(ROOT / "assets/splash/waving.png", images / "waving.png")
         self.bundle = splash.prepare(self.settings)
         self.boot = self.root / "boot"
         self.boot.mkdir()
@@ -58,6 +63,9 @@ class FirmwareSplashTests(unittest.TestCase):
         self.host = patch.object(splash, "check_host")
         self.host.start()
         self.addCleanup(self.host.stop)
+        self.services = patch.object(splash, "check_services")
+        self.services.start()
+        self.addCleanup(self.services.stop)
         self.sync = patch.object(splash.os, "sync")
         self.sync.start()
         self.addCleanup(self.sync.stop)
@@ -71,15 +79,16 @@ class FirmwareSplashTests(unittest.TestCase):
         self.assertEqual(delays, [20000, 150000, 120000, 20000])
         self.assertEqual(commands[:4], [(1, b""), (0x11, b""), (0x36, b"\0"), (0x3A, b"\x55")])
         self.assertIn((0x21, b""), commands)
-        self.assertEqual(commands[-13], (0x29, b""))
-        strips = []
-        for index, row in enumerate(range(0, 320, 80)):
-            column, window, data = commands[-12 + index * 3:][:3]
-            self.assertEqual(column, (0x2A, b"\0\0\0\xef"))
-            self.assertEqual(window, (0x2B, struct.pack(">HH", row, row + 79)))
-            self.assertEqual(data[0], 0x2C)
-            self.assertEqual(len(data[1]), 38400)
-            strips.append(data[1])
+        self.assertEqual(commands[-1], (0x29, b""))
+        self.assertEqual(sum(number == 0x29 for number, _ in commands), 1)
+        start = commands.index((0x2A, b"\0\0\0\xef"))
+        self.assertEqual(commands[start + 1], (0x2B, b"\0\0\x01\x3f"))
+        image_transfers = commands[start + 2:-1]
+        self.assertEqual(len(image_transfers), 320)
+        self.assertEqual(image_transfers[0][0], 0x2C)
+        self.assertTrue(all(number is None for number, _ in image_transfers[1:]))
+        strips = [data for _, data in image_transfers]
+        self.assertTrue(all(len(data) == 480 for data in strips))
         self.assertEqual(b"".join(strips), pixels)
 
     def test_rotations_and_color_settings_match_linux_payload(self):
@@ -205,6 +214,21 @@ class FirmwareSplashTests(unittest.TestCase):
         self.assertEqual(list(self.boot.iterdir()), [self.config])
         self.assertEqual(self.config.read_bytes(), self.original)
 
+    def test_stale_service_rejection_leaves_boot_untouched(self):
+        with patch.object(splash, "check_services", side_effect=ValueError("Run make restart")):
+            with self.assertRaisesRegex(ValueError, "make restart"):
+                splash.install(self.settings, self.bundle, self.boot)
+        self.assertEqual(list(self.boot.iterdir()), [self.config])
+        self.assertEqual(self.config.read_bytes(), self.original)
+
+    def test_local_status_identifies_host_without_claiming_to_inspect_the_pi(self):
+        output = io.StringIO()
+        with patch.object(splash.Settings, "load", return_value=self.settings), \
+                patch.object(splash.sys, "platform", "darwin"), redirect_stdout(output):
+            self.assertEqual(splash.main(["status", "--boot-dir", str(self.boot)]), 0)
+        self.assertIn("Host:", output.getvalue())
+        self.assertIn("Boot files on the Raspberry Pi are not inspected", output.getvalue())
+
     def test_boot_symlink_is_rejected(self):
         actual = self.root / "actual-config.txt"
         self.config.rename(actual)
@@ -240,6 +264,21 @@ class FirmwareWrapperTests(unittest.TestCase):
                 self.assertEqual(calls[0], "PYTHON -m app.firmware_splash prepare")
                 self.assertEqual("SUDO" in calls, not dry_run)
                 self.assertTrue(calls[-1].startswith("PYTHON -m app.firmware_splash install --boot-dir /boot/firmware"))
+
+
+class InstalledServiceTests(unittest.TestCase):
+    def test_retired_or_missing_units_require_service_reinstallation(self):
+        for command in ("", "python -m app --config config.standalone.json player",
+                        "python -m app.splash --config config.alphabet.json"):
+            with self.subTest(command=command), patch.object(splash.subprocess, "run", return_value=Mock(stdout=command)):
+                with self.assertRaisesRegex(ValueError, "make restart"):
+                    splash.check_services()
+
+    def test_both_current_services_are_checked(self):
+        with patch.object(splash.subprocess, "run", side_effect=[Mock(stdout="python -m app player"),
+                                                               Mock(stdout="python -m app.splash")]) as run:
+            splash.check_services()
+        self.assertEqual([call.args[0][2] for call in run.call_args_list], ["alfa.service", "alfa-splash.service"])
 
 
 if __name__ == "__main__":

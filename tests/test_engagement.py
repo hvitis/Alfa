@@ -46,22 +46,52 @@ class EngagementTests(unittest.TestCase):
 
     def test_trace_pauses_and_resumes_without_restarting_and_other_actions_cancel(self):
         session = self.session()
-        session.action('center')
+        session.action('draw')
         self.now = 1.2
         state = session.drawing.state()
         session.release('center')
         self.now = 50
         self.assertEqual(session.drawing.state(), state)
-        session.action('center')
+        session.action('draw')
         self.now = 51
         self.assertNotEqual(session.drawing.state(), state)
         self.assertEqual(session.drawing.serial, 1)
         session.action('right')
         self.assertIsNone(session.drawing.active)
         self.assertIsNone(session.hold_clock.since)
-        session.action('center')
+        session.action('draw')
         self.assertEqual(session.drawing.active, 'B')
         self.assertEqual(session.drawing.serial, 2)
+
+    def test_navigation_and_taps_play_the_selected_recording_from_the_start(self):
+        session = self.session()
+        with patch('app.audio.read_pcm', side_effect=AssertionError('Use preloaded letter audio')):
+            for button, letter in [('right', 'B'), ('right', 'A'), ('left', 'B'), ('left', 'A')]:
+                session.action(button)
+                self.assertEqual(self.audio._speech, self.audio.preload(self.catalog.audio_path(ROOT, letter)))
+                self.audio._mix_block()
+                self.assertGreater(self.audio._cursor, 0)
+                session.action('center')
+                self.assertEqual(self.audio._cursor, 0)
+                self.assertTrue(self.audio.playing)
+                self.assertIsNone(session.drawing.active)
+                self.assertEqual(session.last_action, 'Listen')
+                self.assertEqual(self.audio.volume, .2)
+
+    def test_tap_cancels_paused_drawing_and_muted_navigation_stays_silent(self):
+        session = self.session()
+        session.action('draw')
+        self.now = 1
+        session.release('center')
+        session.action('center')
+        self.assertIsNone(session.drawing.active)
+        self.assertIsNone(session.hold_clock.since)
+        self.assertEqual(session.frame().tobytes(), session.card().tobytes())
+        session.letter_recordings.enabled = False
+        session.action('right')
+        self.assertFalse(self.audio.playing)
+        session.action('center')
+        self.assertFalse(self.audio.playing)
 
     def test_characters_slide_in_as_still_frames_then_start_their_own_voice_and_animation(self):
         session = self.session()
@@ -101,7 +131,7 @@ class EngagementTests(unittest.TestCase):
             self.now += .3
             session.frame()
         session.action('right')
-        self.assertFalse(self.audio.playing, 'Changing letters cancels queued praise')
+        self.assertEqual(self.audio._speech, read_pcm(self.catalog.audio_path(ROOT, 'B')))
 
     def test_down_randomly_selects_a_fixed_character_voice_pair_once_per_completed_action(self):
         session = self.session()
@@ -155,15 +185,13 @@ class EngagementTests(unittest.TestCase):
             session.render_key()
             self.assertIsNone(session.pending_character)
             self.assertIsNone(session.animation.active)
-            if button != 'center':
-                self.assertFalse(self.audio.playing)
-            else:
-                letter = session.drawing.active
-                self.assertEqual(self.audio._speech, read_pcm(self.catalog.audio_path(ROOT, letter)))
+            letter = session.drawing.catalog.letter_for_image(session.gallery.paths[session.gallery.index])
+            self.assertEqual(self.audio._speech, read_pcm(self.catalog.audio_path(ROOT, letter)))
+            self.assertIsNone(session.drawing.active)
 
     def test_fireworks_finish_after_center_is_released_at_the_final_stroke(self):
         session = self.session()
-        session.action('center')
+        session.action('draw')
         self.now = session.drawing.draw_end + .001
         session.release('center')
         held_time = session.hold_clock()
@@ -380,7 +408,7 @@ class EngagementTests(unittest.TestCase):
         with self.assertRaisesRegex(OSError, 'SPI disconnected'):
             output.close()
 
-    def test_real_loop_resumes_guarded_hold_and_wakes_with_the_requested_action(self):
+    def test_real_loop_ignores_guarded_tap_and_wakes_with_the_requested_action(self):
         self.settings.data['lesson']['letters'] = ['A', 'B']
         script = iter([(0, None), (.1, ('press', 'center')), (.2, ('release', 'center')),
                        (.25, ('press', 'center')), (.3, ('release', 'center')),
@@ -415,11 +443,11 @@ class EngagementTests(unittest.TestCase):
              patch('app.app.time.sleep'), patch.object(self.audio, 'effect', wraps=self.audio.effect) as effect:
             with self.assertRaises(KeyboardInterrupt):
                 run_gallery(self.settings, standalone=True)
-        self.assertAlmostEqual(snapshots[5][1], .15)
-        self.assertIn((20.4, .15, False, True), [(t, round(c, 2), s, p) for t, c, s, p in snapshots])
+        self.assertAlmostEqual(snapshots[5][1], 0)
+        self.assertIn((20.4, 0, False, True), [(t, round(c, 2), s, p) for t, c, s, p in snapshots])
         self.assertTrue(any(sleeping for _, _, sleeping, _ in snapshots))
         self.assertEqual(sessions[0].last_action, 'Which letter?')
-        self.assertEqual(sessions[0].drawing.serial, 1)
+        self.assertEqual(sessions[0].drawing.serial, 0)
         self.assertEqual([call.args[0] for call in effect.call_args_list], ['pop', 'tick', 'tick'])
         display.set_awake.assert_any_call(False)
         display.set_awake.assert_any_call(True)

@@ -12,7 +12,7 @@ from contextlib import ExitStack
 from pathlib import Path
 
 from .audio import LetterRecordings, StreamingAudioPlayer, audio_device
-from .buttons import Debouncer, PressGuard, calibrate, classify, load_calibration
+from .buttons import CenterPress, Debouncer, PressGuard, calibrate, classify, load_calibration
 from .config import Settings
 from .hardware import ADS1x15, Amplifier, LatestDisplay, PreviewDisplay, ST7789
 from .engagement import CardMotion, HoldClock, IdlePlay
@@ -242,6 +242,7 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         debounce = Debouncer(settings.data["adc"]["debounce_ms"] / 1000)
         # Physical buttons only: the SSH keyboard belongs to a grown-up.
         guard = PressGuard(settings.press_guard)
+        center_press = CenterPress()
         exit_hold = 0 if session.drawing else settings.exit_hold
         keyboard = stack.enter_context(Keyboard())
         center_since = None
@@ -253,11 +254,11 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
             nonlocal next_frame_at
             session.action(button)
             next_frame_at = 0
-            if button == "center":
+            if button in ("center", "draw"):
                 print(f"CENTER: {session.last_action}; card={session.gallery.paths[session.gallery.index].name}", flush=True)
         if session.drawing:
-            print("Alphabet: LEFT/RIGHT = letter; TOP = Little My asks; BOTTOM = clapping and praise; hold CENTER = draw.")
-            print("SSH: Space holds the pencil for 0.2 seconds; repeat Space to keep drawing.")
+            print("Alphabet: LEFT/RIGHT = letter and sound; TOP = Little My asks; BOTTOM = clapping and praise; tap CENTER = replay; hold CENTER for 0.6 seconds = draw.")
+            print("SSH: Space/Enter = replay; F holds the pencil for 0.2 seconds; repeat F to keep drawing.")
         elif session.animation:
             print("Alphabet: LEFT/RIGHT (A/D) = letter; TOP (W/UP) = listening; BOTTOM (S/DOWN) = speaking.")
         else:
@@ -280,13 +281,14 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                 if key in ("q", "\x03"):
                     if not standalone:
                         return
-                if key in {"a", "d", "w", "s", " "}:
-                    button = {"a": "left", "d": "right", "w": "up", "s": "down", " ": "center"}[key]
+                if key in {"a", "d", "w", "s", " ", "\r", "\n"} or (key == "f" and session.drawing):
+                    button = {"a": "left", "d": "right", "w": "up", "s": "down",
+                              " ": "center", "\r": "center", "\n": "center", "f": "draw"}[key]
                     if session.idle:
                         session.idle.touch()
-                    session.feedback(button)
+                    session.feedback("center" if button == "draw" else button)
                     perform_action(button)
-                    if button == "center" and session.drawing:
+                    if button == "draw" and session.drawing:
                         keyboard_center_until = time.monotonic() + .2
             if adc:
                 name = classify(adc.read_voltage(), states)
@@ -299,27 +301,30 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                     if kind == "press":
                         accepted = guard.accept(now)
                         session.feedback(button, accepted)
-                        # Resume an existing trace even if this new press is guarded.
                         if button == "center" and session.drawing:
                             physical_center = True
-                            if session.drawing.active:
-                                session.hold_clock.hold(True)
                         if not accepted:
                             continue
                         if button == "center":
                             center_since = now
-                            # Begin a letter lesson on press, including a held button.
                             if session.drawing:
-                                perform_action("center")
+                                center_press.press(now)
                         else:
                             perform_action(button)
                     elif button == "center":
                         physical_center = False
+                        action = center_press.release(now) if session.drawing else None
+                        if action:
+                            perform_action(action)
                         session.release(button)
                         if center_since is not None:
                             if not session.drawing and now - center_since < 2:
                                 perform_action("center")
                             center_since = None
+                if session.drawing and name == "center":
+                    action = center_press.update(now)
+                    if action:
+                        perform_action(action)
                 if (not standalone and exit_hold and center_since is not None and name == "center"
                         and now - center_since >= exit_hold):
                     print(f"CENTER held for {exit_hold:g} seconds: stopping the player.")

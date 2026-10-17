@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import catalog from '../../assets/letter-drawing/letters.json' with { type: 'json' };
 import config from '../../config.json' with { type: 'json' };
 import {
-  LetterLesson, createSession, handlePress, handleRelease, frameOf,
+  LetterLesson, createSession, handleHeld, handlePress, handleRelease, frameOf,
   letterStrokes, selectedLetters, effectFor, effectSamples, CardMotion, IdlePlay,
 } from '../device-sim.js';
 
@@ -84,44 +84,68 @@ test('Ą keeps the A strokes and the ogonek', () => {
   assert.equal(catalog.letters['Ą'].ink, '#01275e');
 });
 
-test('the pencil pauses on release and resumes without a new trace', () => {
+test('a short center press replays on release without entering drawing mode', () => {
+  const clock = clockAt(0);
+  const session = createSession({ letters: settings.letters, catalog, clock });
+  const press = handlePress(session, 'center');
+  assert.equal(press.cue, null);
+  clock.advance(0.599);
+  assert.equal(handleHeld(session), null);
+  const release = handleRelease(session, 'center');
+  assert.equal(release.cue.letter, session.current());
+  assert.equal(release.cue.kind, 'listen');
+  assert.equal(session.lesson.active, null);
+  assert.equal(session.lesson.serial, 0);
+  assert.equal(session.hold.isDown(), false);
+});
+
+test('a long center press draws once, pauses on release, and resumes after another hold', () => {
   const clock = clockAt(0);
   const session = createSession({ letters: settings.letters, catalog, clock });
   handlePress(session, 'center');
+  clock.advance(0.6);
+  assert.equal(handleHeld(session).cue.letter, session.current());
   assert.equal(session.lastAction, `Drawing ${settings.letters[0]}`);
   assert.equal(session.lesson.serial, 1);
   clock.advance(1);
+  assert.equal(handleHeld(session), null);
   const moving = session.lesson.state();
   assert.equal(moving[0], 'draw');
-  handleRelease(session, 'center');
+  assert.equal(handleRelease(session, 'center'), null, 'A long release must not replay audio');
   clock.advance(5);
   const paused = session.lesson.state();
   assert.equal(paused[0], moving[0]);
   near(paused[3], moving[3], 'frozen fraction');
-  clock.advance(0.5);
   handlePress(session, 'center');
+  assert.equal(session.hold.isDown(), false);
+  clock.advance(0.61);
+  handleHeld(session);
   assert.equal(session.lesson.serial, 1);
   assert.equal(session.lastAction, `Still drawing ${settings.letters[0]}`);
   assert.equal(session.hold.isDown(), true);
 });
 
-test('right cancels a trace and wraps the letter list', () => {
+test('navigation cancels drawing, wraps, and plays the selected letter', () => {
   const clock = clockAt(0);
   const session = createSession({ letters: settings.letters, catalog, clock });
   handlePress(session, 'center');
-  clock.advance(0.5);
+  clock.advance(0.61);
+  handleHeld(session);
   handleRelease(session, 'center');
-  handlePress(session, 'right');
+  const right = handlePress(session, 'right');
   assert.equal(session.current(), settings.letters[1]);
+  assert.equal(right.cue.letter, session.current());
+  assert.equal(right.audioStop, true);
   assert.equal(session.lesson.active, null);
   assert.equal(session.lastAction, 'Next photo');
   const fresh = createSession({ letters: settings.letters, catalog, clock: clockAt(0) });
-  handlePress(fresh, 'left');
+  const left = handlePress(fresh, 'left');
   assert.equal(fresh.current(), settings.letters.at(-1));
+  assert.equal(left.cue.letter, fresh.current());
   assert.equal(fresh.lastAction, 'Previous photo');
 });
 
-test('a guarded center press resumes the pencil and does not start another trace', () => {
+test('a guarded center press cannot replay or start drawing', () => {
   const clock = clockAt(0);
   const session = createSession({ letters: settings.letters, catalog, clock });
   handlePress(session, 'center');
@@ -130,15 +154,29 @@ test('a guarded center press resumes the pencil and does not start another trace
   const rejected = handlePress(session, 'center');
   assert.equal(rejected.accepted, false);
   assert.equal(rejected.effect, 'tick');
+  clock.advance(1);
+  assert.equal(handleHeld(session), null);
+  assert.equal(handleRelease(session, 'center'), null);
+  assert.equal(session.lesson.serial, 0);
+});
+
+test('a delayed long release draws once and a cancelled press has no action', () => {
+  const clock = clockAt(0);
+  const session = createSession({ letters: settings.letters, catalog, clock });
+  handlePress(session, 'center');
+  clock.advance(0.61);
+  assert.equal(handleRelease(session, 'center').cue.kind, 'listen');
   assert.equal(session.lesson.serial, 1);
-  assert.equal(session.lastAction, `Drawing ${settings.letters[0]}`);
-  assert.equal(session.hold.isDown(), true);
-  handleRelease(session, 'center');
-  clock.set(0.4);
-  const accepted = handlePress(session, 'center');
-  assert.equal(accepted.accepted, true);
+  assert.equal(session.hold.isDown(), false);
+  clock.advance(1);
+  handlePress(session, 'center');
+  assert.equal(handleRelease(session, 'center', true), null);
   assert.equal(session.lesson.serial, 1);
-  assert.equal(session.lastAction, `Still drawing ${settings.letters[0]}`);
+  clock.advance(1);
+  handlePress(session, 'center');
+  clock.advance(0.1);
+  assert.equal(handleRelease(session, 'center').cue.letter, session.current());
+  assert.equal(session.lesson.active, null, 'A tap cancels the paused drawing');
 });
 
 test('up and down play cues without changing the letter or volume', () => {
@@ -203,6 +241,8 @@ test('the screen peeks after 20 seconds and sleeps after 300', () => {
 
   const session = createSession({ letters: settings.letters, catalog, clock: clockAt(0) });
   handlePress(session, 'center');
+  session.clock.advance(0.61);
+  handleHeld(session);
   session.clock.advance(1);
   handleRelease(session, 'center');
   session.clock.advance(20);

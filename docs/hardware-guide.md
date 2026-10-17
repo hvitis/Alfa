@@ -42,22 +42,25 @@ To display the complete cards on the Pi, run:
 python3 -m app gallery --fullscreen --no-audio
 ```
 
-Use LEFT and RIGHT to change the card.
+Use LEFT and RIGHT to change the card and play its letter recording.
 Press TOP (UP) for the speaking animation and “Powiedz jaka to literka.”
 Press BOTTOM (DOWN) for a random praise pair: the clapping character with `brawo_2`, or Hemulen with `brawo_1`.
 Each action slides a still first frame in from above or below before starting animation and speech.
 The original animations use four frames. Hemulen uses 24 poses at 6 FPS for eight seconds, with a stationary body.
 Each animation returns to the selected card after its cycles and speech finish.
 LEFT and RIGHT stop the animation and change the letter.
-Hold CENTER (the fifth button) to draw the selected letter, stroke by stroke, with a moving pencil.
+Tap CENTER (the fifth button) to replay the selected letter recording.
+Hold CENTER for 0.6 seconds to start or resume drawing with a moving pencil.
 Release CENTER to pause the pencil. After the final stroke, fireworks run without a held button.
 The thicker strokes use the navy color sampled from the selected letter card.
 The completed letter stays visible during success fireworks, then the original card returns.
 Each of the 32 letters has a prepared recording. Missing selected recordings produce a startup error.
 LEFT, RIGHT, UP, and DOWN interrupt the drawing lesson and stop its recording.
-Pressing CENTER again resumes a paused trace. After the fireworks finish, CENTER starts a new trace.
+A long CENTER press resumes a paused trace. A short press cancels it and replays the letter.
+After the fireworks finish, a long CENTER press starts a new trace.
 Pressing TOP or BOTTOM again during its own animation lets it finish instead of restarting it.
-Add `--keyboard` for SSH keyboard control (A/D for letters, W/S for character animations, Space for drawing).
+Add `--keyboard` for SSH keyboard control. A/D changes letters, W/S shows character animations, and Space/Enter replays the letter.
+Repeated F presses advance the drawing.
 For a preview without hardware, add `--simulate` before `gallery` and `--once` after it.
 The [animation assets and previews](../assets/animations/README.md) include PNG frames, RGB565 files, and GIF previews.
 The [drawing lesson guide](../assets/letter-drawing/README.md) includes a GIF preview, all letter paths, component details, and recording instructions.

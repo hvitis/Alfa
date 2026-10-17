@@ -12,7 +12,7 @@ from PIL import Image
 
 from app.app import run_gallery
 from app.audio import StreamingAudioPlayer
-from app.buttons import Debouncer, PressGuard
+from app.buttons import CenterPress, Debouncer, PressGuard
 from app.config import Settings
 from app.player import PlayerSession
 
@@ -64,6 +64,20 @@ class ToddlerControlTests(unittest.TestCase):
                   [(0, "idle"), (10, "idle")] + [(t, "right") for t in range(20, 520, 5)] + [(530, "idle"), (540, "idle")]]
         presses = [e for e in events if e and e[0] == "press"]
         self.assertEqual(presses, [("press", "right")])
+
+    def test_center_short_release_replays_and_hold_draws_once(self):
+        button = CenterPress()
+        self.assertIsNone(button.release(0))
+        button.press(0)
+        self.assertIsNone(button.update(.599))
+        self.assertEqual(button.release(.599), "center")
+        button.press(1)
+        self.assertEqual(button.update(1.6), "draw")
+        self.assertIsNone(button.update(3))
+        self.assertIsNone(button.release(4), "Long release must not replay the letter")
+        button.press(5)
+        self.assertEqual(button.release(5.61), "draw", "Release detects a hold even if polling was delayed")
+        self.assertIsNone(button.release(6))
 
     def run_physical(self, batches, standalone=False):
         """Drive run_gallery with scripted (time, button) readings through the real debouncer."""

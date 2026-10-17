@@ -1,7 +1,9 @@
 # Firmware LCD splash on Raspberry Pi 3
 
 Alfa can prepare a splash program that Raspberry Pi firmware runs before Linux starts.
-It uses the existing loading illustration and the display settings from [`config.json`](../config.json).
+It shows a waving white character on pale pastel blue, using the display settings from [`config.json`](../config.json).
+The source artwork is [`assets/splash/waving.png`](../assets/splash/waving.png).
+The firmware splash and Linux splash use the same artwork and loading label.
 The target is a complete image within 3–4 seconds of applying power.
 That time still needs measurement on the assembled Pi.
 
@@ -72,7 +74,10 @@ splash_screen=alfa-splash.bin
 ```
 
 These pins come from the current configuration. GPIO 27 releases reset; GPIO 24 enables the backlight.
-The program uses software reset, the shared ST7789 initialization sequence, and four 80-row pixel transfers.
+The program uses software reset, the shared ST7789 initialization sequence, and 320 short row transfers.
+The first row includes RAMWR. Later rows use the firmware's DATA_ONLY flag, as in the upstream ST7789 example.
+Each image transfer contains at most 481 bytes, below the upstream parser's 1,024-byte buffer limit.
+The panel stays off until its image is complete.
 It preserves rotation, color order, inversion, and SPI speed.
 With the current 10 MHz setting, pixel transfer alone needs about 0.123 seconds.
 The program also includes 0.31 seconds of explicit panel delays.
@@ -86,6 +91,8 @@ Before each change, the installer saves the current configuration and any previo
 
 It validates bundle checksums and the current configuration before writing boot files.
 It rejects competing `splash_screen` settings, including settings in included files.
+It also rejects missing service commands and service commands that reference the retired JSON configuration files.
+Run `make restart` to update those service commands before enabling the firmware splash.
 It uses atomic file replacement and restores previous contents if an installation operation fails.
 Existing boot settings remain in place.
 
@@ -118,6 +125,21 @@ If only the later Linux splash appears, check firmware support first, then the c
 
 ## Remove or recover
 
+If the Pi boots but the app does not start, first inspect its service logs:
+
+```bash
+systemctl --no-pager --full status alfa.service alfa-splash.service
+journalctl -b -u alfa.service -u alfa-splash.service -n 50 --no-pager
+```
+
+An error for `config.standalone.json` or `config.alphabet.json` means the installed services need an update.
+Run `make restart` from the Pi checkout. Both units then use `config.json`.
+The first firmware program used oversized image transfers that exceed the published parser's buffer.
+Update the checkout and run `make firmware-splash-install` to replace that program with the short-transfer version.
+The corrected program still needs visual validation on the panel.
+
+Run status commands on the Pi. A status command on the Mac only inspects that Mac's local files.
+
 To return to the Linux splash:
 
 ```bash
@@ -142,6 +164,9 @@ The binary was checked byte for byte against Raspberry Pi's official assembler a
 [`b57c48e97f7f43d95d86334798650cfda1ebc8a1`](https://github.com/raspberrypi/utils/tree/b57c48e97f7f43d95d86334798650cfda1ebc8a1/splashasm).
 The upstream assembler requires Python 3.12; Alfa's generator uses the existing app environment.
 The source leaves SPI polarity parameters at their defaults to preserve format version 1.
+The corrected binary was also read with the upstream C parser.
+All 320 rows and the final display-on command were recovered, with the exact source RGB565 pixel bytes.
+The original oversized-transfer binary stopped in that parser before its image data.
 
 Tests decode the program independently, reconstruct the frame, and check rotations and color settings.
 They also exercise boot edits, repeat installation, backup, removal, conflict detection, checksums, and failure recovery.

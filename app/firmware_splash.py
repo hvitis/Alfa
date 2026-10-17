@@ -7,7 +7,9 @@ import os
 from pathlib import Path
 import re
 import shutil
+import socket
 import struct
+import subprocess
 import sys
 import tempfile
 
@@ -20,6 +22,7 @@ BEGIN = "# BEGIN ALFA FIRMWARE SPLASH"
 END = "# END ALFA FIRMWARE SPLASH"
 FILES = (BOOT_IMAGE, "alfa-splash.splash", "pixels.bin", "preview.png", "config.txt.fragment")
 UPSTREAM = "https://github.com/raspberrypi/utils/tree/b57c48e97f7f43d95d86334798650cfda1ebc8a1/splashasm"
+MAX_COMMAND_BYTES = 1024  # Upstream parser limit, narrower than the 16-bit size field.
 
 
 def digest(content):
@@ -65,23 +68,30 @@ def program(display, pixels):
         binary.extend(b"\x00" + struct.pack("<I", microseconds))
         source.append(f"delay [US] {microseconds}")
 
+    def transfer(packet, data_only=False):
+        if not 0 < len(packet) <= MAX_COMMAND_BYTES:
+            raise ValueError("Firmware SPI command exceeds the upstream 1024-byte parser limit.")
+        binary.extend(bytes([0x10, 0, int(data_only)]) + struct.pack("<H", len(packet)) + packet)
+        source.append("lcd " + ("[DATA_ONLY] " if data_only else "") + packet.hex(" "))
+
     def command(number, data=b""):
-        packet = bytes([number]) + data
-        if len(packet) > 65535:
-            raise ValueError("Firmware SPI command exceeds its 16-bit length field.")
-        binary.extend(b"\x10\x00\x00" + struct.pack("<H", len(packet)) + packet)
-        source.append("lcd " + packet.hex(" "))
+        transfer(bytes([number]) + data)
 
     delay(20000)  # Reset is held HIGH by the firmware GPIO configuration.
     for number, data, wait in st7789_commands(display):
+        if number == 0x29:
+            continue  # Keep the panel off until its entire RAM contains our image.
         command(number, data)
         if wait:
             delay(wait)
-    # A complete frame cannot fit into one firmware command. Use four address windows.
-    for row in range(0, 320, 80):
-        command(0x2A, struct.pack(">HH", 0, 239))
-        command(0x2B, struct.pack(">HH", row, row + 79))
-        command(0x2C, pixels[row * 480:(row + 80) * 480])
+    # Follow the upstream ST7789 example: RAMWR then small DATA_ONLY row transfers.
+    command(0x2A, struct.pack(">HH", 0, 239))
+    command(0x2B, struct.pack(">HH", 0, 319))
+    command(0x2C, pixels[:480])
+    for offset in range(480, len(pixels), 480):
+        transfer(pixels[offset:offset + 480], data_only=True)
+    command(0x29)
+    delay(20000)
     return bytes(binary), "\n".join(source) + "\n"
 
 
@@ -105,9 +115,10 @@ def prepare(settings):
                 "preview.png": preview.read_bytes(), "config.txt.fragment": snippet(settings.data["display"]).encode()}
     for name, content in contents.items():
         atomic_write(bundle / name, content)
-    manifest = {"version": 1, "format": "SPLASH ASM v1", "upstream": UPSTREAM,
+    manifest = {"version": 2, "format": "SPLASH ASM v1", "upstream": UPSTREAM,
                 "settings_sha256": settings_digest(settings), "display": settings.data["display"],
-                "size": [240, 320], "windows": 4, "delay_us": 310000,
+                "size": [240, 320], "windows": 1, "image_transfers": 320,
+                "max_command_bytes": MAX_COMMAND_BYTES, "delay_us": 310000,
                 "files": {name: digest(content) for name, content in contents.items()}}
     # Commit the inventory last. An interrupted preparation cannot pass installation checks.
     atomic_write(bundle / "manifest.json", (json.dumps(manifest, indent=2) + "\n").encode())
@@ -117,7 +128,7 @@ def prepare(settings):
 def load_bundle(settings, bundle):
     bundle = Path(bundle)
     manifest = json.loads((bundle / "manifest.json").read_text())
-    if manifest.get("version") != 1 or manifest.get("settings_sha256") != settings_digest(settings):
+    if manifest.get("version") != 2 or manifest.get("settings_sha256") != settings_digest(settings):
         raise ValueError("Firmware splash configuration changed. Run make firmware-splash again.")
     if set(manifest.get("files", {})) != set(FILES):
         raise ValueError("Firmware splash inventory is incomplete.")
@@ -193,6 +204,19 @@ def backup(boot, config):
     return folder
 
 
+def check_services():
+    """Do not enable a firmware image while stale service units cannot load the app."""
+    for unit in ("alfa.service", "alfa-splash.service"):
+        try:
+            result = subprocess.run(["systemctl", "show", unit, "--property=ExecStart", "--value"],
+                                    capture_output=True, text=True, timeout=5, check=True)
+        except (OSError, subprocess.SubprocessError) as error:
+            raise ValueError(f"Cannot inspect {unit}. Run make restart on the Pi before firmware installation.") from error
+        if not result.stdout.strip() or re.search(r"config\.(?:standalone|alphabet)\.json", result.stdout):
+            raise ValueError(f"{unit} is missing or references a retired configuration. "
+                             "Run make restart on the Pi, then retry firmware installation.")
+
+
 def install(settings, bundle, boot, dry_run=False):
     contents = load_bundle(settings, bundle)
     boot = Path(boot).resolve()
@@ -210,6 +234,7 @@ def install(settings, bundle, boot, dry_run=False):
     if dry_run:
         return {"dry_run": True, "config": updated.decode(), "bytes": len(contents[BOOT_IMAGE])}
     check_host(boot)
+    check_services()
     previous_image = image.read_bytes() if image.exists() else None
     saved = backup(boot, original)
     try:
@@ -278,6 +303,9 @@ def main(argv=None):
         elif args.command == "remove":
             print(json.dumps(remove(args.boot_dir, args.dry_run), indent=2))
         else:
+            print(f"Host: {socket.gethostname()} ({sys.platform})")
+            if sys.platform != "linux":
+                print("This is a local inspection. Boot files on the Raspberry Pi are not inspected.")
             print(f"Boot partition: {args.boot_dir}")
             path = args.boot_dir / "config.txt"
             active = False
@@ -286,8 +314,11 @@ def main(argv=None):
             print(f"Alfa firmware splash configured: {active}")
             print(f"Installed program present: {(args.boot_dir / BOOT_IMAGE).is_file()}")
             if bundle.exists():
-                load_bundle(settings, bundle)
+                contents = load_bundle(settings, bundle)
                 print("Prepared bundle checksums and configuration: OK")
+                image = args.boot_dir / BOOT_IMAGE
+                if image.is_file():
+                    print(f"Installed program matches prepared bundle: {image.read_bytes() == contents[BOOT_IMAGE]}")
             print("For installed firmware identity, run: vcgencmd version")
             print("The splash_screen feature must be supported by that firmware build.")
         return 0

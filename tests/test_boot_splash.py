@@ -29,9 +29,9 @@ class BootSplashTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.settings = photo_settings(self.root)
-        (self.root / "media/images").mkdir(parents=True)
-        shutil.copyfile(ROOT / "media/images/000-illustration_0.png",
-                        self.root / "media/images/000-illustration_0.png")
+        (self.root / "assets/splash").mkdir(parents=True)
+        shutil.copyfile(ROOT / "assets/splash/waving.png",
+                        self.root / "assets/splash/waving.png")
 
     def test_installed_payload_matches_preview_in_all_rotations(self):
         for rotation in (0, 90, 180, 270):
@@ -40,8 +40,13 @@ class BootSplashTests(unittest.TestCase):
                 preview = prepare_splash(self.settings)
                 with Image.open(preview) as image:
                     self.assertEqual(image.size, self.settings.size)
-                    # The supplied Alfa artwork and navy text both reach the preview.
-                    self.assertTrue(any(r > 200 and g < 180 and b > 100 for r, g, b in image.getdata()))
+                    # Pale blue reaches all four edges; the white character remains visible.
+                    for corner in ((0, 0), (image.width - 1, 0), (0, image.height - 1),
+                                   (image.width - 1, image.height - 1)):
+                        r, g, b = image.getpixel(corner)
+                        self.assertGreater(b, r + 15)
+                        self.assertGreater(g, r)
+                    self.assertTrue(any(min(pixel) > 245 for pixel in image.getdata()))
                     self.assertTrue(any(b > r + 30 for r, g, b in image.crop((0, image.height - 55, image.width, image.height)).getdata()))
                     self.assertEqual((self.settings.state / "boot-splash.bin").read_bytes(),
                                      rgb565(image.rotate(rotation, expand=True)))

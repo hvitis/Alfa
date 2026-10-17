@@ -5,20 +5,22 @@ There are no LISTEN/SAY rows or hidden activity modes.
 
 | Button | Action | Feedback |
 | --- | --- | --- |
-| LEFT | Select the previous letter | A whoosh and a card that enters from the left |
-| RIGHT | Select the next letter | A whoosh and a card that enters from the right |
+| LEFT | Select and hear the previous letter | A whoosh, the letter recording, and a card that enters from the left |
+| RIGHT | Select and hear the next letter | A whoosh, the letter recording, and a card that enters from the right |
 | UP | Show the speaking character and ask “Powiedz jaka to literka.” | Slide the first frame in from above, then start animation and speech |
 | DOWN | Randomly choose the clapping character or Hemulen with its paired praise | Slide the first frame in from below, then start animation and speech |
-| CENTER | Start or resume tracing while held | A pop, the letter guide, and a moving pencil |
+| Tap CENTER | Replay the selected letter | A pop and the letter recording from the start |
+| Hold CENTER for 0.6 seconds | Start or resume tracing while held | A pop, the letter guide, and a moving pencil |
 
-Release CENTER to pause the pencil. Another CENTER press resumes the same trace.
-LEFT, RIGHT, UP, and DOWN cancel the trace. These buttons also cancel its recording.
+Release CENTER to pause the pencil. Another long press resumes the same trace.
+A short press cancels the trace and replays the letter. A long press does not replay on release.
+LEFT, RIGHT, UP, and DOWN cancel the trace and its recording. LEFT and RIGHT then play the new letter recording.
 A completed trace shows fireworks, then restores the card.
 The fireworks run without a held button after the final stroke.
 CENTER never exits the alphabet. Q or Ctrl+C exits a manual run. The service ignores Q.
 
 Every debounced press produces feedback, including a press rejected by the 400 ms guard.
-A guarded CENTER press can resume an existing trace. It cannot start a new one.
+A guarded CENTER press cannot replay audio or start or resume a trace.
 The guard limits actions and never suppresses a release.
 
 The player keeps one ALSA stream open and mixes effects with speech in 10 ms blocks.

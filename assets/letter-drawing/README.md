@@ -1,8 +1,9 @@
 # Letter drawing lessons
 
-Hold CENTER (the fifth button) to draw the selected letter in alphabet mode.
-Release CENTER to pause. Press it again to resume the same trace.
-Each Space from an SSH keyboard supplies a 0.2-second hold pulse.
+Tap CENTER (the fifth button) to replay the selected letter recording.
+Hold CENTER for 0.6 seconds to start or resume drawing. Release CENTER to pause.
+A short press cancels a paused trace and replays the letter.
+On an SSH keyboard, Space or Enter replays the recording. Each F supplies a 0.2-second hold pulse for drawing.
 The single `config.json` enables this feature for manual and service use.
 
 The lesson shows a pale guide and a tilted yellow pencil with a graphite tip and pink eraser.
@@ -22,10 +23,11 @@ The original character card returns when the fireworks finish.
 
 | Button | Action |
 |---|---|
-| LEFT / RIGHT | Interrupt the lesson and select the previous or next letter |
+| LEFT / RIGHT | Interrupt the lesson, select the previous or next letter, and play its recording |
 | UP | Slide the speaking character in from above, then animate and ask “Powiedz jaka to literka.” |
 | DOWN | Randomly choose the clapping character or Hemulen, slide in from below, then play its paired praise |
-| Hold CENTER | Start or resume the selected letter lesson |
+| Tap CENTER | Replay the selected letter recording |
+| Hold CENTER for 0.6 seconds | Start or resume the selected letter lesson |
 
 CENTER never exits the alphabet. Press Q or Ctrl+C to exit a manual run.
 The standalone service ignores Q.
@@ -92,7 +94,7 @@ python3 scripts/preview-letter-drawing.py --letter Ż --destination output/lette
 
 Each letter has its own recording path in `letters.json`.
 All 32 recording slots now contain audio. Missing selected recordings produce a startup error.
-The app starts the recording when the drawing lesson starts.
+The app plays the selected recording on navigation, a short CENTER press, or the start of a new drawing lesson.
 Navigation or UP/DOWN stops the lesson.
 UP/DOWN first slides a still animation frame onto the screen. Animation and speech start after the slide finishes.
 `--no-audio` also keeps all drawing lessons silent.

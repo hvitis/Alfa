@@ -74,6 +74,29 @@ class PressGuard:
         return True
 
 
+class CenterPress:
+    """Emit one drawing action on hold, or one replay action on short release."""
+    def __init__(self, seconds=0.6):
+        self.seconds = seconds
+        self.since = None
+        self.drawn = False
+
+    def press(self, now):
+        self.since, self.drawn = now, False
+
+    def update(self, now):
+        if self.since is not None and not self.drawn and now - self.since >= self.seconds:
+            self.drawn = True
+            return "draw"
+
+    def release(self, now):
+        action = self.update(now)
+        if self.since is not None and not self.drawn:
+            action = "center"
+        self.since = None
+        return action
+
+
 def adc_identity(settings):
     return {"model": settings.data["adc"]["model"], "bus": settings.data["adc"]["bus"], "address": settings.address}
 
@@ -84,7 +107,7 @@ def calibrate(adc, settings):
                "right": "hold the button for RIGHT (next letter)",
                "up": "hold the button for TOP (Little My asks)",
                "down": "hold the button for BOTTOM (clapping and praise)",
-               "center": "hold the button for CENTER (draw the letter)"}
+               "center": "hold the button for CENTER (tap to hear; hold to draw)"}
     print("Face the front of the assembled case. The board can be horizontal, vertical, or reversed.")
     print("Assign buttons by their position or intended action in the case, not by the board labels.")
     print("Hold each requested button until the reading is complete. Release it before the next step.")

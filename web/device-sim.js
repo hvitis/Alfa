@@ -5,6 +5,7 @@
 
 export const SCREEN = Object.freeze({ width: 240, height: 320 });
 export const CUES = Object.freeze({ listen: 0.45, prompt: 0.4, silence: 2, praise: Object.freeze([0.5, 0.7]) });
+export const CENTER_HOLD_SECONDS = 0.6;
 
 const DRAW = Object.freeze({
   fps: 20,
@@ -448,6 +449,8 @@ export function createSession({ letters, catalog, clock, pressGuard = 0.4, volum
     volume,
     lastAction: 'Ready',
     held: false,
+    centerSince: null,
+    centerDrawn: false,
     pendingCue: null,
     audioStop: false,
     clock: time,
@@ -487,10 +490,19 @@ export function createSession({ letters, catalog, clock, pressGuard = 0.4, volum
         const step = button === 'left' ? -1 : 1;
         this.index = (this.index + step + this.letters.length) % this.letters.length;
         this.motion.start(old, this.current(), button);
+        this.pendingCue = { ...this.cues.listen(), letter: this.current() };
         this.lastAction = button === 'left' ? 'Previous photo' : 'Next photo';
         return;
       }
-      if (button !== 'center') return;
+      if (button === 'center') {
+        this.stopDrawing();
+        this.motion.stop();
+        this.audioStop = true;
+        this.pendingCue = { ...this.cues.listen(), letter: this.current() };
+        this.lastAction = 'Listen';
+        return;
+      }
+      if (button !== 'draw') return;
       this.motion.stop();
       this.hold.hold(true);
       const letter = this.current();
@@ -500,7 +512,7 @@ export function createSession({ letters, catalog, clock, pressGuard = 0.4, volum
         return;
       }
       this.audioStop = true;
-      const cue = this.cues.listen();
+      const cue = { ...this.cues.listen(), letter };
       this.pendingCue = cue;
       this.lesson.start(letter, cue.seconds);
       this.lastAction = `Drawing ${letter}`;
@@ -517,19 +529,37 @@ export function handlePress(session, button) {
   const effect = effectFor(button, accepted);
   if (button === 'center') {
     session.held = true;
-    if (session.lesson.active) session.hold.hold(true);
+    session.centerSince = accepted ? session.clock() : null;
+    session.centerDrawn = false;
+    return { accepted, effect, cue: null, audioStop: false };
   }
   if (!accepted) return { accepted: false, effect, cue: null, audioStop: false };
   session.act(button);
   return { accepted: true, effect, cue: session.pendingCue, audioStop: session.audioStop };
 }
 
-export function handleRelease(session, button) {
+export function handleHeld(session) {
+  if (session.centerSince == null || session.centerDrawn
+      || session.clock() - session.centerSince < CENTER_HOLD_SECONDS) return null;
+  session.centerDrawn = true;
+  session.act('draw');
+  return { cue: session.pendingCue, audioStop: session.audioStop };
+}
+
+export function handleRelease(session, button, cancelled = false) {
   session.idle.touch();
   if (button === 'center') {
+    let result = cancelled ? null : handleHeld(session);
+    if (!cancelled && session.centerSince != null && !session.centerDrawn) {
+      session.act('center');
+      result = { cue: session.pendingCue, audioStop: session.audioStop };
+    }
+    session.centerSince = null;
     session.held = false;
     session.hold.hold(false);
+    return result;
   }
+  return null;
 }
 
 /** What the screen shows. Sleep, peek, and a slide skip the lesson clock, matching PlayerSession.frame. */

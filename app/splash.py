@@ -18,10 +18,8 @@ def prepare_splash(settings):
     from .ui import font
 
     width, height = settings.size
-    frame = Image.new("RGB", settings.size, "white")
-    with Image.open(settings.root / "media/images/000-illustration_0.png") as source:
-        picture = ImageOps.contain(source.convert("RGB"), (width - 24, height - 64), Image.Resampling.LANCZOS)
-    frame.paste(picture, ((width - picture.width) // 2, (height - 64 - picture.height) // 2))
+    with Image.open(settings.root / "assets/splash/waving.png") as source:
+        frame = ImageOps.fit(source.convert("RGB"), settings.size, Image.Resampling.LANCZOS)
     draw = ImageDraw.Draw(frame)
     draw.text((width // 2, height - 35), "Starting…", font=font(23), fill="#002d60", anchor="mm")
     settings.state.mkdir(parents=True, exist_ok=True)

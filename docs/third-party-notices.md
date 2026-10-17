@@ -8,7 +8,7 @@ The project name does not imply endorsement by any character owner or hardware m
 
 | Paths | Status |
 | --- | --- |
-| `assets/alphabet/*.png`, `assets/animations/` | Character artwork and references. AI generation does not establish permission to distribute character depictions. |
+| `assets/alphabet/*.png`, `assets/animations/`, `assets/splash/` | Character artwork and references. AI generation does not establish permission to distribute character depictions. |
 | `media/alphabet/`, `media/animations/`, `media/images/` | Prepared versions of artwork or photographs. The same source rights apply. |
 | `sounds/`, `media/sounds/`, optional `media/letter-sounds/*.wav` | Recording ownership and redistribution permission need confirmation. |
 | `docs/*contact-sheet.png`, `docs/alphabet-revisions.png`, `assets/letter-drawing/preview.gif` | Composite previews can contain character artwork. |

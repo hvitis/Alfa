@@ -122,10 +122,11 @@ Explicit `systemctl stop` stops the service for maintenance.
 These behaviors use [systemd service supervision](https://github.com/systemd/systemd/blob/main/man/systemd.service.xml).
 
 In standalone mode, holding CENTER and pressing Q do not exit the app.
-Hold CENTER to draw the selected letter and start its recording. Release CENTER to pause the pencil.
+Tap CENTER to replay the selected letter recording. Hold CENTER for 0.6 seconds to start or resume drawing.
+Release CENTER to pause the pencil. A short press cancels the trace and replays the letter.
 The finished letter stays visible during fireworks, then the original card returns.
 Fireworks run automatically after the last stroke, even after CENTER is released.
-LEFT/RIGHT change the letter. UP shows the speaking character and asks “Powiedz jaka to literka.”
+LEFT/RIGHT change the letter and play its recording. UP shows the speaking character and asks “Powiedz jaka to literka.”
 DOWN randomly selects the clapping character with `brawo_2`, or Hemulen inspecting a flower with `brawo_1`.
 UP/DOWN first slides the character's still frame in from above or below, then starts animation and speech.
 These four controls also interrupt the drawing lesson and stop its recording.

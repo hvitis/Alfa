@@ -2,7 +2,7 @@ import config from '../config.json' with { type: 'json' };
 import letterData from '../assets/letter-drawing/letters.json' with { type: 'json' };
 import { t } from './i18n.js';
 import {
-  SCREEN, createSession, effectSamples, frameOf, handlePress, handleRelease, selectedLetters,
+  SCREEN, createSession, effectSamples, frameOf, handleHeld, handlePress, handleRelease, selectedLetters,
 } from './device-sim.js';
 
 const settings = config.lesson;
@@ -12,7 +12,7 @@ const STROKE = Math.max(6, Math.round(SCALE * 6.4));
 const KEYS = {
   ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down',
   a: 'left', A: 'left', d: 'right', D: 'right', w: 'up', W: 'up', s: 'down', S: 'down',
-  ' ': 'center',
+  ' ': 'center', Enter: 'center',
 };
 const PHASE_KEY = {
   card: 'play.phase.card',
@@ -384,9 +384,10 @@ export function mountDevice(root) {
   }
 
   function gesture(result) {
+    if (!result) return;
     if (result.audioStop && !result.cue) stopSpeech();
     if (result.cue) playCue(result.cue);
-    playEffect(result.effect);
+    if (result.effect) playEffect(result.effect);
     paint();
   }
 
@@ -395,12 +396,12 @@ export function mountDevice(root) {
     gesture(handlePress(session, name));
   }
 
-  function release(name) {
-    handleRelease(session, name);
+  function release(name, cancelled) {
+    gesture(handleRelease(session, name, cancelled));
     paint();
   }
 
-  function clearHold() {
+  function clearHold(cancelled = false) {
     if (!source) return;
     const name = downName;
     source = null;
@@ -408,7 +409,7 @@ export function mountDevice(root) {
     downEl?.setAttribute('aria-pressed', 'false');
     downEl = null;
     downName = null;
-    if (name) release(name);
+    if (name) release(name, cancelled);
   }
 
   for (const button of root.querySelectorAll('[data-button]')) {
@@ -424,7 +425,7 @@ export function mountDevice(root) {
     const finish = event => {
       if (source !== 'pointer' || downEl !== button) return;
       if (event.type === 'pointerup' && event.button !== 0) return;
-      clearHold();
+      clearHold(event.type === 'pointercancel');
     };
     button.addEventListener('pointerup', finish);
     button.addEventListener('pointercancel', finish);
@@ -448,11 +449,12 @@ export function mountDevice(root) {
     clearHold();
   });
   window.addEventListener('blur', () => {
-    clearHold();
+    clearHold(true);
   });
 
   function loop() {
     if (!running) return;
+    gesture(handleHeld(session));
     paint();
     frameHandle = requestAnimationFrame(loop);
   }
@@ -462,7 +464,7 @@ export function mountDevice(root) {
     running = on;
     if (!on) {
       cancelAnimationFrame(frameHandle);
-      clearHold();
+      clearHold(true);
       stopSpeech();
       return;
     }

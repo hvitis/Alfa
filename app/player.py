@@ -119,6 +119,10 @@ class PlayerSession:
             self.gallery.navigate(button)
             if self.card_motion:
                 self.card_motion.start(old, self.card(), button)
+            if self.drawing and self.letter_recordings:
+                letter = self.drawing.catalog.letter_for_image(self.gallery.paths[self.gallery.index])
+                if letter:
+                    self.letter_recordings.play(letter)
             self.last_action = "Previous photo" if button == "left" else "Next photo"
         elif button in ("up", "down"):
             self.stop_drawing()
@@ -132,7 +136,19 @@ class PlayerSession:
             delta = .05 if button == "up" else -.05
             self.audio.set_volume(round(max(0, min(1, self.audio.volume + delta)), 2))
             self.last_action = f"Volume {self.audio.volume:.0%}"
-        elif button == "center":
+        elif button == "center" and self.drawing:
+            self.pending_character = None
+            self.stop_drawing()
+            if self.card_motion:
+                self.card_motion.stop()
+            if self.animation:
+                self.animation.stop()
+            self.audio.stop()
+            letter = self.drawing.catalog.letter_for_image(self.gallery.paths[self.gallery.index])
+            if letter and self.letter_recordings:
+                self.letter_recordings.play(letter)
+            self.last_action = "Listen"
+        elif button == "center" or (button == "draw" and self.drawing):
             if self.drawing:
                 self.pending_character = None
                 if self.card_motion:
