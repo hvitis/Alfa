@@ -43,7 +43,22 @@ try {
       async function noOverflow() { assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Page overflows at mobile width'); }
       await page.goto(`${origin}${prefix}`, { waitUntil: 'networkidle' });
       await page.waitForSelector('html[data-ready="true"]');
-      assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['3DPrint', 'Plywood', 'Hardware', 'Software']);
+      if (viewport.width === 1440) {
+        await page.getByRole('link', { name: 'EN', exact: true }).click();
+        await page.waitForURL(url => url.pathname.endsWith('/en/'));
+        await page.waitForSelector('html[lang="en"][data-ready="true"]');
+        assert.match(await page.locator('.intro h1').innerHTML(), /Little radio/);
+        assert.equal(await page.locator('base').getAttribute('href'), '../');
+        await scene('cloud', 'assembled');
+        await page.selectOption('#pricing-case', 'plywood-house');
+        assert((await page.locator('#pricing-tbody').textContent()).includes('Birch plywood'));
+        assert((await page.locator('footer').textContent()).includes('Not a medical device. For educational purposes only.'));
+        await page.getByRole('link', { name: 'PL', exact: true }).click();
+        await page.waitForURL(url => !url.pathname.includes('/en'));
+        await page.waitForSelector('html[lang="pl"][data-ready="true"]');
+      }
+      assert.equal(await page.locator('html').getAttribute('lang'), 'pl');
+      assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['Druk 3D', 'Sklejka', 'Elektronika', 'Program']);
       assert.equal(await page.locator('meta[property="og:image"]').getAttribute('content'),'https://hvitis.github.io/Alfa/og-cloud.png');
       assert.equal(await page.locator('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
       const pdf=await page.request.get(`${origin}${prefix}docs/adr.pdf`);
@@ -69,18 +84,18 @@ try {
       assert((await page.locator('#pricing-tbody').textContent()).includes('Pico 2 WH'));
       await page.selectOption('#pricing-case', 'plywood-house');
       assert((await page.locator('.pricing-total-value').textContent()).includes('270 – 340'));
-      assert((await page.locator('#pricing-tbody').textContent()).includes('Birch plywood 6 mm sheet'));
+      assert((await page.locator('#pricing-tbody').textContent()).includes('Sklejka brzozowa 6 mm'));
       assert((await page.locator('#material-title').textContent()).includes('Little House Radio'));
       await page.locator('button[data-sort-key="name"]').click();
       const firstNameAsc = await page.locator('#pricing-tbody tr td strong').first().textContent();
-      assert.equal(firstNameAsc, 'AD-Key 5-button analog keypad');
+      assert.equal(firstNameAsc, 'AD-Key, analogowa klawiatura 5 przycisków');
       await page.locator('button[data-sort-key="price"]').click();
       const firstPriceAsc = await page.locator('#pricing-tbody tr td:nth-child(3) strong').first().textContent();
       assert.equal(firstPriceAsc, '~3 – 6 zł');
       await page.selectOption('#pricing-case', '3d-print');
       await page.selectOption('#pricing-controller', 'pi3');
       await noOverflow();
-      await page.getByRole('tab', { name: 'Plywood' }).click();
+      await page.getByRole('tab', { name: 'Sklejka' }).click();
       await scene('house', 'assembled');
       for (const mode of ['roof_open', 'inside', 'exploded', 'assembled']) {
         await page.selectOption('#assembly-mode', mode); await scene('house', mode);
@@ -91,25 +106,25 @@ try {
       await page.selectOption('#assembly-mode', 'internals'); await scene('case', 'internals');
       await page.selectOption('#assembly-mode', 'exploded'); await scene('case', 'exploded');
       await noOverflow();
-      await page.getByRole('tab', { name: 'Hardware' }).click(); await scene('raspberry');
+      await page.getByRole('tab', { name: 'Elektronika' }).click(); await scene('raspberry');
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length);
-      assert((await page.locator('#wiring-body').textContent()).includes('physical pin'));
+      assert((await page.locator('#wiring-body').textContent()).includes('Fizyczny pin'));
       const first = atlas.wires[0].id;
-      await page.getByRole('button', { name: `Trace wire ${first}`, exact: true }).click();
+      await page.getByRole('button', { name: `Śledź przewód ${first}`, exact: true }).click();
       assert.equal(await page.locator(`[data-wire="${first}"]`).getAttribute('aria-pressed'), 'true');
       assert((await page.locator('#wire-detail').textContent()).includes(first));
       await page.selectOption('#circuit-filter', 'Audio');
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.filter(wire => wire.group === 'Audio').length);
-      await page.getByRole('button', { name: 'Show all wires', exact: true }).click();
+      await page.getByRole('button', { name: 'Pokaż wszystkie przewody', exact: true }).click();
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length);
       await page.selectOption('#hardware-controller', 'pico'); await scene('pico');
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length + 2);
       assert.equal(await page.locator('#pico-notice').isVisible(), true);
       assert((await page.locator('#wiring-body').textContent()).includes('GP'));
       assert((await page.locator('#wiring-body').textContent()).includes('PWR3'));
-      await page.getByRole('button', { name: 'Reset camera' }).click();
+      await page.getByRole('button', { name: 'Zresetuj kamerę' }).click();
       await noOverflow();
-      await page.getByRole('tab', { name: 'Software' }).click();
+      await page.getByRole('tab', { name: 'Program' }).click();
       assert.equal(await page.locator('#software-view').inputValue(), 'design');
       assert((await page.locator('#adr-content h1').textContent()).includes('ADR 0001'));
       assert((await page.locator('#adr-content').textContent()).includes('PlayerSession'));
@@ -131,7 +146,7 @@ try {
       for (const phrase of ['TEACHING MATERIAL · NOT A MEDICAL DEVICE · FOR EDUCATIONAL PURPOSES ONLY', 'Read this first', 'Alfa is not a medical device', 'Alfa-L does not exist', 'Nobody signed anything']) assert(teaching.includes(phrase), phrase);
       assert((await page.locator('#teaching-adr-content').evaluate(element => getComputedStyle(element, '::after').backgroundImage)).includes('TEACHING'), 'Teaching ADR watermark');
       assert(await page.locator('#teaching-adr-content').isVisible());
-      assert((await page.locator('footer').textContent()).includes('Not a medical device. For educational purposes only.'));
+      assert((await page.locator('footer').textContent()).includes('To nie jest wyrób medyczny. Wyłącznie do celów edukacyjnych.'));
       await noOverflow();
       const teachingPdf = await page.request.get(`${origin}${prefix}docs/teaching-material-adr-example-not-a-medical-device.pdf`);
       assert((await teachingPdf.body()).subarray(0, 5).equals(Buffer.from('%PDF-')), 'Teaching ADR download must be a real PDF');
@@ -142,9 +157,9 @@ try {
       await scene('pico'); // Hash navigation retains the selected controller.
       await page.reload({ waitUntil: 'networkidle' });
       await page.waitForSelector('html[data-ready="true"]'); await scene('raspberry');
-      await page.getByRole('tab', { name: 'Hardware' }).focus();
+      await page.getByRole('tab', { name: 'Elektronika' }).focus();
       await page.keyboard.press('ArrowRight');
-      assert.equal(await page.getByRole('tab', { name: 'Software' }).getAttribute('aria-selected'), 'true');
+      assert.equal(await page.getByRole('tab', { name: 'Program' }).getAttribute('aria-selected'), 'true');
       for (const tab of ['software', '3dprint']) {
         await page.goto(`${origin}${prefix}#${tab}`, { waitUntil: 'networkidle' });
         // A hash-only navigation does not wait for lazy module imports.

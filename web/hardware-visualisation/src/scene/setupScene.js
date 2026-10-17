@@ -4,13 +4,18 @@ import { createPicoData } from '../data/picoSetup.js';
 import { board, box, cylinderBetween, sphere, terminal } from './primitives.js';
 import { makeResistor } from './resistor.js';
 import { makeCable } from './cables.js';
-import { addLabel } from './labels.js';
+import { addLabel as placeLabel } from './labels.js';
+import { tr } from '../../../i18n.js';
 import { makePi3, makePico } from './controllers.js';
 import { registerModule, highlightModule } from './modules.js';
 import { makeAmplifier } from './amplifier.js';
 import { makeAdc } from './adc.js';
 import { ADC } from '../data/adc.js';
 import { makeKeypad } from './keypad.js';
+
+function addLabel(group, text, position, className = '') {
+  return placeLabel(group, tr(text), position, className);
+}
 
 function portName(key,data) {
   if(/^P\d+$/.test(key))return data.pinNames?.[key]??'pin '+key.slice(1);

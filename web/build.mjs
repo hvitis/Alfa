@@ -1,6 +1,7 @@
 import { build } from 'vite';
 import { exportAdr } from './export-pdf.mjs';
 import { exportTeachingAdr, renderTeaching, teachingMarkdown, TEACHING_FILE } from './export-teaching.mjs';
+import { writeEnglishPage } from './i18n-html.mjs';
 import MarkdownIt from 'markdown-it';
 import { readFile, writeFile, mkdir, copyFile, readdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
@@ -12,14 +13,19 @@ const destination = resolve(process.argv[2] || resolve(root, '_site'));
 const markdown = new MarkdownIt({ html: false, linkify: false, typographer: false });
 await mkdir(resolve(web, '.generated'), { recursive: true });
 await writeFile(resolve(web, '.generated/adr.html'), markdown.render(await readFile(resolve(web, 'content/adr.md'), 'utf8')));
+await writeFile(resolve(web, '.generated/adr.pl.html'), markdown.render(await readFile(resolve(web, 'content/adr.pl.md'), 'utf8')));
 // teachingMarkdown() stops the build if the fictional example loses any part of its disclaimer.
 await writeFile(resolve(web, '.generated/teaching-adr.html'), renderTeaching(await teachingMarkdown()));
+await writeFile(resolve(web, '.generated/teaching-adr.pl.html'), renderTeaching(await readFile(resolve(web, 'content/teaching-adr.pl.md'), 'utf8')));
 await build({ configFile: resolve(web, 'vite.config.js'), logLevel: 'warn', build: { outDir: destination } });
+await writeEnglishPage(destination);
 await mkdir(resolve(destination, 'data'), { recursive: true });
 await mkdir(resolve(destination, 'docs'), { recursive: true });
 await copyFile(resolve(web, '.generated/manifest.json'), resolve(destination, 'data/manifest.json'));
 await copyFile(resolve(web, 'content/adr.md'), resolve(destination, 'docs/adr.md'));
+await copyFile(resolve(web, 'content/adr.pl.md'), resolve(destination, 'docs/adr.pl.md'));
 await copyFile(resolve(web, 'content/teaching-adr.md'), resolve(destination, `docs/${TEACHING_FILE}.md`));
+await copyFile(resolve(web, 'content/teaching-adr.pl.md'), resolve(destination, 'docs/teaching-adr.pl.md'));
 await copyFile(resolve(web, 'content/architecture.mmd'), resolve(destination, 'docs/architecture.mmd'));
 await writeFile(resolve(destination, '.nojekyll'), '');
 await copyFile(resolve(web, 'assets/og-cloud.png'), resolve(destination, 'og-cloud.png'));

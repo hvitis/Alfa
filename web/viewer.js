@@ -6,6 +6,7 @@ import { createRadioScene } from './hardware-visualisation/src/scene/radioScene.
 import { createSetupScene } from './hardware-visualisation/src/scene/setupScene.js';
 import { isVisible } from './hardware-visualisation/src/scene/modules.js';
 import { createCloudScene } from './cloud/scene.js';
+import { t } from './i18n.js';
 
 export function createViewer(container, onSelect) {
   const world = new THREE.Scene();
@@ -15,7 +16,7 @@ export function createViewer(container, onSelect) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.domElement.tabIndex = 0;
-  renderer.domElement.setAttribute('aria-label', '3D model. Drag to orbit, scroll to zoom, right-drag to pan.');
+  renderer.domElement.setAttribute('aria-label', t('viewer.canvasAria'));
   container.append(renderer.domElement);
   const labels = new CSS2DRenderer();
   Object.assign(labels.domElement.style, { position: 'absolute', inset: '0', pointerEvents: 'none' });

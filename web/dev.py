@@ -16,8 +16,11 @@ subprocess.run(["node", "--input-type=module", "-e", """
 import MarkdownIt from 'markdown-it';
 import {readFile,writeFile} from 'node:fs/promises';
 import {renderTeaching,teachingMarkdown} from './web/export-teaching.mjs';
-await writeFile('web/.generated/adr.html', new MarkdownIt({html:false}).render(await readFile('web/content/adr.md','utf8')));
+const markdown = new MarkdownIt({html:false});
+await writeFile('web/.generated/adr.html', markdown.render(await readFile('web/content/adr.md','utf8')));
+await writeFile('web/.generated/adr.pl.html', markdown.render(await readFile('web/content/adr.pl.md','utf8')));
 await writeFile('web/.generated/teaching-adr.html', renderTeaching(await teachingMarkdown()));
+await writeFile('web/.generated/teaching-adr.pl.html', renderTeaching(await readFile('web/content/teaching-adr.pl.md','utf8')));
 """], cwd=ROOT, check=True)
 if not (ROOT / "design/cloud-radio/generated/cloud/manifest.json").exists():
     subprocess.run(["bash", "design/cloud-radio/run-cad.sh"], cwd=ROOT, check=True)

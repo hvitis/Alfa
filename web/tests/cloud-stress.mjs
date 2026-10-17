@@ -42,16 +42,16 @@ try {
   const canvasBefore=await page.locator('#viewport canvas').screenshot();
   await page.locator('.palette-picker summary').click();
   assert.equal(await page.locator('.palette-options .palette-swatches i').count(),18);
-  await page.getByRole('button',{name:'Candy cloud',exact:true}).click();
+  await page.getByRole('button',{name:'Cukierkowa chmurka',exact:true}).click();
   assert.equal(await page.locator('#cloud-color-front').inputValue(),'#ffd6e6');
   const canvasAfter=await page.locator('#viewport canvas').screenshot();
   assert(!canvasBefore.equals(canvasAfter),'Palette selection must repaint the actual 3D canvas');
   await page.locator('[data-part=front] summary').click();
   assert.equal(await page.locator('[data-part=front] .filament-color').count(),16);
-  await page.getByRole('button',{name:'Front shell: Orange',exact:true}).click();
+  await page.getByRole('button',{name:'Skorupa przednia: Pomarańcz',exact:true}).click();
   assert.equal(await page.locator('#cloud-color-front').inputValue(),'#eb5403');
   assert.equal(await page.locator('#cloud-color-rear').inputValue(),'#d7c6f5');
-  for(const [part,title,color,value] of [['rear','Rear shell','Sky blue','#346ce3'],['battery_door','Battery door','Yellow','#f2b706']]) {
+  for(const [part,title,color,value] of [['rear','Skorupa tylna','Błękit nieba','#346ce3'],['battery_door','Drzwiczki baterii','Żółty','#f2b706']]) {
     await page.locator(`[data-part=${part}] summary`).click();
     assert.equal(await page.locator(`[data-part=${part}] .filament-color`).count(),16);
     await page.getByRole('button',{name:`${title}: ${color}`,exact:true}).click();
@@ -59,15 +59,15 @@ try {
     assert.equal(await page.locator('#cloud-color-front').inputValue(),'#eb5403');
   }
   await page.locator('.palette-picker summary').click();
-  await page.getByRole('button',{name:'Candy cloud',exact:true}).click();
+  await page.getByRole('button',{name:'Cukierkowa chmurka',exact:true}).click();
   await page.locator('[data-part=front] summary').click();
   await page.locator('#cloud-color-front').fill('#aabbcc');
-  assert.equal(await page.locator('.palette-name').textContent(),'Custom colors');
+  assert.equal(await page.locator('.palette-name').textContent(),'Własne kolory');
   await page.reload(); await waitCloud('assembled');
   assert.equal(await page.locator('#cloud-color-front').inputValue(),'#aabbcc');
   assert.equal(await page.locator('#cloud-color-rear').inputValue(),'#d7c6f5');
   await page.locator('.palette-picker summary').click();
-  await page.getByRole('button',{name:'Cloud blue',exact:true}).click();
+  await page.getByRole('button',{name:'Chmurowy błękit',exact:true}).click();
   assert.equal(await page.locator('#cloud-color-front').inputValue(),'#86bfea');
   const checks = await (await page.request.get(`${base}cloud/verification.json`)).json();
   assert(checks.passed); assert(checks.checks.length > 100);
@@ -75,12 +75,12 @@ try {
   assert(manifest.frame_features.length > 30);
   assert.equal(new Set(manifest.frame_features.map(item => item.id)).size, manifest.frame_features.length);
   await page.locator('#cloud-labels').check();
-  const frontLabel = page.locator('.annotation').filter({ hasText: /^F-00 · Front shell$/ });
-  const lcdLabel = page.locator('.annotation').filter({ hasText: /^Waveshare 2-inch LCD$/ });
+  const frontLabel = page.locator('.annotation').filter({ hasText: /^F-00 · Skorupa przednia$/ });
+  const lcdLabel = page.locator('.annotation').filter({ hasText: /^Wyświetlacz LCD Waveshare, 2 cale$/ });
   await frontLabel.waitFor({ state: 'visible' });
   // Raycast through the label's projected centre onto the real CAD surface.
   // A mount behind the front skin must not override the visible shell ID.
-  for (const [label,id,title] of [[frontLabel,'F-00','Front shell'],[lcdLabel,'lcd','Waveshare 2-inch LCD']]) {
+  for (const [label,id,title] of [[frontLabel,'F-00','Skorupa przednia'],[lcdLabel,'lcd','Wyświetlacz LCD Waveshare, 2 cale']]) {
     await label.scrollIntoViewIfNeeded();
     const rect = await label.boundingBox(); assert(rect);
     await page.mouse.move(rect.x+rect.width/2,rect.y+rect.height/2);
@@ -90,7 +90,7 @@ try {
     assert((await page.locator('#viewer-status').textContent()).includes(title));
   }
   await page.selectOption('#cloud-mode','battery_open'); await waitCloud('battery_open');
-  const rearLabel=page.locator('.annotation').filter({hasText:/^R-00 · Rear shell$/});
+  const rearLabel=page.locator('.annotation').filter({hasText:/^R-00 · Skorupa tylna$/});
   await rearLabel.waitFor({state:'visible'});
   await rearLabel.scrollIntoViewIfNeeded();
   const rearRect=await rearLabel.boundingBox(); assert(rearRect);
@@ -110,9 +110,9 @@ try {
     assert.equal(download.suggestedFilename(), selector);
     assert.equal(await download.failure(), null);
   }
-  await page.getByRole('tab', { name: 'Hardware' }).click();
+  await page.getByRole('tab', { name: 'Elektronika' }).click();
   await page.waitForSelector('#viewport[data-scene="raspberry"][data-loaded="true"]');
-  await page.getByRole('tab', { name: '3DPrint' }).click(); await waitCloud('assembled');
+  await page.getByRole('tab', { name: 'Druk 3D' }).click(); await waitCloud('assembled');
   // Warm all resources before measuring bounded growth.
   const before = await page.evaluate(() => window.__cloudViewerStats?.());
   const modes = ['exploded', 'inside', 'battery_open', 'assembled'];
@@ -121,8 +121,8 @@ try {
     const mode = modes[i % modes.length];
     await page.selectOption('#cloud-mode', mode); await waitCloud(mode);
     await page.setViewportSize(i % 2 ? { width: 1440, height: 1000 } : { width: 375, height: 812 });
-    await page.getByRole('tab', { name: 'Software' }).click();
-    await page.getByRole('tab', { name: '3DPrint' }).click(); await waitCloud(mode);
+    await page.getByRole('tab', { name: 'Program' }).click();
+    await page.getByRole('tab', { name: 'Druk 3D' }).click(); await waitCloud(mode);
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Overflow at cycle ${i}`);
     assert.equal(await page.locator('#viewport canvas').count(), 1);
   }

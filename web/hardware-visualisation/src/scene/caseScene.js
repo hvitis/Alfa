@@ -1,8 +1,13 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import facts from '../data/case-routing.json' with { type: 'json' };
-import { addLabel } from './labels.js';
+import { addLabel as placeLabel } from './labels.js';
+import { tr } from '../../../i18n.js';
 import { highlightModule } from './modules.js';
+
+function addLabel(group, text, position, className = '') {
+  return placeLabel(group, tr(text), position, className);
+}
 
 export function createCaseScene(initialMode = 'enclosure') {
   const root = new THREE.Group();

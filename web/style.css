@@ -43,8 +43,13 @@ button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible
 }
 .brand small { display: block; font: 700 9px/1.4 "Trebuchet MS", sans-serif; letter-spacing: .13em; margin-top: 8px; }
 .header-links { display: flex; gap: 20px; align-items: center; font-size: 12px; font-weight: 700; }
-.header-links a { padding: 12px 17px; border: 2px solid var(--ink); border-radius: 30px; background: var(--paper); text-decoration: none; box-shadow: 2px 3px 0 var(--ink); }
-.header-links a:hover { background: var(--pink); }
+.header-links > a { padding: 12px 17px; border: 2px solid var(--ink); border-radius: 30px; background: var(--paper); text-decoration: none; box-shadow: 2px 3px 0 var(--ink); }
+.header-links > a:hover { background: var(--pink); }
+.lang-switch { display: flex; gap: 2px; align-items: center; padding: 4px; border: 2px solid var(--ink); border-radius: 30px; background: var(--paper); box-shadow: 2px 3px 0 var(--ink); }
+.lang-switch a { padding: 6px 9px; border-radius: 20px; text-decoration: none; color: var(--ink); }
+.lang-switch a[aria-current="page"] { background: var(--ink); color: var(--paper); }
+.lang-switch a:hover { background: var(--pink); color: var(--ink); }
+.lang-switch a[aria-current="page"]:hover { background: var(--ink); color: var(--paper); }
 i { display: inline-block; }
 .offline-label { background: var(--mint); padding: 10px 14px; border-radius: 20px; font-size: 11px; }
 .offline-label i, .viewer-indicator i { width: 7px; height: 7px; background: #4c816a; border-radius: 50%; margin-right: 7px; }
@@ -180,7 +185,7 @@ footer div { display: flex; gap: 22px; }
   .brand { font-size: 30px; gap: 12px; }
   .brand-symbol { width: 49px; height: 49px; font-size: 37px; border-radius: 15px; }
   .brand small { font-size: 7px; letter-spacing: .08em; margin-top: 6px; }
-  .header-links { font-size: 10px; }.header-links a { padding: 10px 12px; }
+  .header-links { font-size: 10px; }.header-links > a { padding: 10px 12px; }
   .offline-label { display: none; }
   .intro { display: block; padding: 24px 0 26px; }
   .intro-art { display: none; }

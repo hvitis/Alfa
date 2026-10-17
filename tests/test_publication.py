@@ -80,7 +80,14 @@ class PackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             export_site(directory)
             files = {p.relative_to(directory).as_posix() for p in Path(directory).rglob("*") if p.is_file()}
-            self.assertTrue({"index.html", ".nojekyll", "data/manifest.json", "docs/adr.md", "docs/architecture.mmd", "THIRD-PARTY-LICENSES.txt", "docs/adr.pdf", "og-cloud.png"}.issubset(files))
+            self.assertTrue({"index.html", "en/index.html", ".nojekyll", "data/manifest.json", "docs/adr.md", "docs/adr.pl.md", "docs/teaching-adr.pl.md", "docs/architecture.mmd", "THIRD-PARTY-LICENSES.txt", "docs/adr.pdf", "og-cloud.png"}.issubset(files))
+            index = (Path(directory) / "index.html").read_text(encoding="utf-8")
+            self.assertIn('<html lang="pl"', index)
+            self.assertNotIn("<base ", index)
+            english = (Path(directory) / "en/index.html").read_text(encoding="utf-8")
+            self.assertIn('<html lang="en"', english)
+            self.assertIn('<base href="../">', english)
+            self.assertIn("Little radio.", english)
             self.assertIn("cloud/cloud-radio.zip", files)
             with zipfile.ZipFile(Path(directory)/"cloud/cloud-radio.zip") as archive:
                 self.assertEqual(set(archive.namelist()), set(MEMBERS))

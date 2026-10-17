@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { tr } from '../i18n.js';
 
 // One CAD assembly is shared by all four modes. No geometry is created when
 // changing views, so repeated tab changes keep a bounded GPU resource count.
@@ -74,7 +75,7 @@ export function createCloudScene() {
           : node.name === 'screen' ? 'lcd' : node.name.startsWith('button_') ? 'keypad' : null;
         if (id && hardware.has(id)) {
           object.userData.moduleId = hardware.get(id).parent || id;
-          object.userData.hoverInfo = { id, title: hardware.get(id).title, kind: 'Hardware' };
+          object.userData.hoverInfo = { id, title: tr(hardware.get(id).title), kind: tr('Hardware') };
           pickables.push(object); break;
         }
         node = node.parent;
@@ -87,13 +88,13 @@ export function createCloudScene() {
       label.position.copy(home); labels.add(label); labelAnchors.push({label, home, part});
     }
     for (const item of data.components) {
-      addLabel(item.title, item.origin.map((value,axis) => value + item.size[axis]/2));
+      addLabel(tr(item.title), item.origin.map((value,axis) => value + item.size[axis]/2));
     }
     for (const item of data.frame_parts || []) {
       const bounds = new THREE.Box3().setFromObject(shells[item.name]);
       const position = bounds.getCenter(new THREE.Vector3());
       position.z = item.name === 'front' ? bounds.min.z : bounds.max.z;
-      addLabel(`${item.id} · ${item.title}`, position.toArray(), item.name);
+      addLabel(`${item.id} · ${tr(item.title)}`, position.toArray(), item.name);
     }
     for (const feature of data.frame_features || []) {
       addLabel(feature.id, feature.origin.map((value,axis) => value + feature.size[axis]/2), feature.part);
@@ -133,7 +134,7 @@ export function createCloudScene() {
         feature.origin.every((value,axis) => point.getComponent(axis) >= value-.15 && point.getComponent(axis) <= value+feature.size[axis]+.15));
       candidates.sort((a,b) => a.size.reduce((v,n) => v*n,1)-b.size.reduce((v,n) => v*n,1));
       const feature = candidates[0] || data.frame_parts?.find(item => item.name === part);
-      return feature ? { id: feature.id, title: feature.title, kind: 'Frame' } : null;
+      return feature ? { id: feature.id, title: tr(feature.title), kind: tr('Frame') } : null;
     },
     setLabels(value) { showLabels = value; apply(); },
     setClearances(value) { showClearances = value; apply(); },

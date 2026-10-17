@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { t } from '../i18n.js';
 
 export const STL_PARTS = {
   front: { id: 'front', file: 'front.stl', name: 'Front shell', defaultColor: '#86bfea' },
@@ -24,7 +25,7 @@ export function createStlViewer(container, options = {}) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.domElement.tabIndex = 0;
-  renderer.domElement.setAttribute('aria-label', 'Individual 3D STL part. Drag to orbit, scroll to zoom.');
+  renderer.domElement.setAttribute('aria-label', t('stl.aria'));
   viewport.append(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -82,9 +83,10 @@ export function createStlViewer(container, options = {}) {
   function syncUI(partId) {
     const meta = STL_PARTS[partId];
     if (!meta) return;
-    if (nameEl) nameEl.textContent = meta.name;
+    const partLabel = t(`part.${partId}`);
+    if (nameEl) nameEl.textContent = partLabel;
     if (fileInfoEl) fileInfoEl.textContent = meta.file;
-    if (statusEl) statusEl.textContent = `${meta.name} loaded · Drag to orbit · Scroll to zoom`;
+    if (statusEl) statusEl.textContent = t('stl.loaded', { name: partLabel });
 
     partBtns.forEach(btn => {
       const isSelected = btn.dataset.stlSelect === partId;
@@ -103,7 +105,7 @@ export function createStlViewer(container, options = {}) {
     currentPart = partId;
     syncUI(partId);
 
-    if (statusEl) statusEl.textContent = `Loading ${STL_PARTS[partId].file}…`;
+    if (statusEl) statusEl.textContent = t('stl.loading', { file: STL_PARTS[partId].file });
 
     let geometry = geometryCache.get(partId);
     if (!geometry) {
@@ -114,7 +116,7 @@ export function createStlViewer(container, options = {}) {
         geometry.center();
         geometryCache.set(partId, geometry);
       } catch (err) {
-        if (statusEl) statusEl.textContent = `Unable to load ${STL_PARTS[partId].file}: ${err.message}`;
+        if (statusEl) statusEl.textContent = t('stl.failed', { file: STL_PARTS[partId].file, message: err.message });
         return;
       }
     }

@@ -2,7 +2,12 @@ import * as THREE from 'three';
 import { AMPLIFIER } from '../data/amplifier.js';
 import { box, cylinderBetween, material, sphere } from './primitives.js';
 import { surfaceText } from './surfaceText.js';
-import { addLabel } from './labels.js';
+import { addLabel as placeLabel } from './labels.js';
+import { tr } from '../../../i18n.js';
+
+function addLabel(group, text, position, className = '') {
+  return placeLabel(group, tr(text), position, className);
+}
 
 function ring(parent,x,y,z,outer,inner,color){
   const mesh=new THREE.Mesh(new THREE.RingGeometry(inner,outer,32),material(color,{metalness:0.75,side:THREE.DoubleSide}));

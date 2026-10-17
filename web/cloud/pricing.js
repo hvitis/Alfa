@@ -1,6 +1,7 @@
 /**
  * Interactive build cost & component estimate configuration and table sorting.
  */
+import { getLocale, messages, t } from '../i18n.js';
 
 export const PRICING_ITEMS = [
   // Controllers
@@ -281,28 +282,15 @@ export const MATERIAL_SPECS = {
   }
 };
 
+function itemField(item, field) {
+  return messages[getLocale()]?.[`item.${item.id}.${field}`] ?? item[field];
+}
+
 function getSubtext(caseVal, controllerVal, totalMin, totalMax) {
-  const isPico = controllerVal === 'pico';
-  const is3d = caseVal === '3d-print';
   const euroMin = Math.round(totalMin / 4.3);
   const euroMax = Math.round(totalMax / 4.3);
-
-  if (is3d) {
-    if (isPico) {
-      return `Budget build based on Pico 2 WH (~${euroMin}–${euroMax} €).<br><strong>Only ~125 PLN</strong> if you already have a controller and PETG filament!`;
-    }
-    return `Complete radio from scratch (~${euroMin}–${euroMax} €).<br><strong>Only ~155 PLN</strong> if you already have a Pi 3 and PETG filament!`;
-  } else if (caseVal === 'plywood-house') {
-    if (isPico) {
-      return `Little House Radio with Pico 2 WH (~${euroMin}–${euroMax} €).<br><strong>Only ~125 PLN</strong> if you already have a controller and plywood sheet!`;
-    }
-    return `Little House Radio enclosure build (~${euroMin}–${euroMax} €).<br><strong>Only ~168 PLN</strong> if you already have a Pi 3 and plywood sheet!`;
-  } else {
-    if (isPico) {
-      return `Original plywood case with Pico 2 WH (~${euroMin}–${euroMax} €).<br><strong>Only ~125 PLN</strong> if you already have a controller and plywood sheet!`;
-    }
-    return `Original plywood case enclosure build (~${euroMin}–${euroMax} €).<br><strong>Only ~168 PLN</strong> if you already have a Pi 3 and plywood sheet!`;
-  }
+  const controller = controllerVal === 'pico' ? 'pico' : 'pi3';
+  return t(`pricing.sub.${caseVal}.${controller}`, { euroMin, euroMax });
 }
 
 export function initPricing(container = document.querySelector('#cloud-pricing')) {
@@ -326,28 +314,27 @@ export function initPricing(container = document.querySelector('#cloud-pricing')
   let currentSort = { key: null, direction: 'asc' };
 
   function renderMaterialCard(caseType) {
-    const spec = MATERIAL_SPECS[caseType];
-    if (!spec || !materialCard) return;
+    if (!materialCard || !messages.en[`material.${caseType}.section`]) return;
 
-    if (materialSecNum) materialSecNum.textContent = spec.sectionNumber;
-    if (materialTitle) materialTitle.textContent = spec.title;
-    if (materialBadge) materialBadge.textContent = spec.badge;
-    if (materialDesc) materialDesc.textContent = spec.desc;
+    if (materialSecNum) materialSecNum.textContent = t(`material.${caseType}.section`);
+    if (materialTitle) materialTitle.textContent = t(`material.${caseType}.title`);
+    if (materialBadge) materialBadge.textContent = t(`material.${caseType}.badge`);
+    if (materialDesc) materialDesc.textContent = t(`material.${caseType}.desc`);
 
     if (materialStats) {
       materialStats.replaceChildren();
-      for (const stat of spec.stats) {
+      for (let index = 0; index < 5; index++) {
         const div = document.createElement('div');
-        div.className = `filament-stat${stat.isTotal ? ' total' : ''}`;
+        div.className = `filament-stat${index === 4 ? ' total' : ''}`;
 
         const dt = document.createElement('dt');
-        dt.textContent = stat.dt;
+        dt.textContent = t(`material.${caseType}.s${index}.dt`);
 
         const dd = document.createElement('dd');
-        dd.textContent = stat.dd;
+        dd.textContent = t(`material.${caseType}.s${index}.dd`);
 
         const small = document.createElement('small');
-        small.textContent = stat.small;
+        small.textContent = t(`material.${caseType}.s${index}.small`);
 
         div.append(dt, dd, small);
         materialStats.append(div);
@@ -373,11 +360,12 @@ export function initPricing(container = document.querySelector('#cloud-pricing')
     const factor = direction === 'desc' ? -1 : 1;
 
     return [...items].sort((a, b) => {
+      const locale = getLocale() === 'en' ? 'en' : 'pl';
       if (key === 'name') {
-        return factor * a.name.localeCompare(b.name, 'pl', { sensitivity: 'base' });
+        return factor * itemField(a, 'name').localeCompare(itemField(b, 'name'), locale, { sensitivity: 'base' });
       }
       if (key === 'function') {
-        return factor * a.function.localeCompare(b.function, 'pl', { sensitivity: 'base' });
+        return factor * itemField(a, 'function').localeCompare(itemField(b, 'function'), locale, { sensitivity: 'base' });
       }
       if (key === 'price') {
         const priceA = a.min;
@@ -388,7 +376,7 @@ export function initPricing(container = document.querySelector('#cloud-pricing')
       if (key === 'supplier') {
         const suppA = a.links.map(l => l.name).join(' ');
         const suppB = b.links.map(l => l.name).join(' ');
-        return factor * suppA.localeCompare(suppB, 'pl', { sensitivity: 'base' });
+        return factor * suppA.localeCompare(suppB, getLocale() === 'en' ? 'en' : 'pl', { sensitivity: 'base' });
       }
       return 0;
     });
@@ -424,11 +412,11 @@ export function initPricing(container = document.querySelector('#cloud-pricing')
 
         const nameCell = document.createElement('td');
         const strongName = document.createElement('strong');
-        strongName.textContent = item.name;
+        strongName.textContent = itemField(item, 'name');
         nameCell.append(strongName);
 
         const funcCell = document.createElement('td');
-        funcCell.textContent = item.function;
+        funcCell.textContent = itemField(item, 'function');
 
         const priceCell = document.createElement('td');
         const strongPrice = document.createElement('strong');
