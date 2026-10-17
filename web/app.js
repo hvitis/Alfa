@@ -17,7 +17,7 @@ const models = {
 };
 const picoData = createPicoData();
 let cloudColorControls;
-let activeTab = 'plywood', viewerPromise, viewer, diagramPromise, teachingPromise, transition = 0, selectedWire = '', repository;
+let activeTab = '3dprint', viewerPromise, viewer, diagramPromise, teachingPromise, transition = 0, selectedWire = '', repository;
 
 function fail(error) {
   status.textContent = `Unable to complete this view: ${error.message}`;
@@ -189,7 +189,7 @@ async function showSoftware() {
 }
 
 async function activate(name, updateHash = true) {
-  if (!tabs.some(tab => tab.dataset.tab === name)) name = 'plywood';
+  if (!tabs.some(tab => tab.dataset.tab === name)) name = '3dprint';
   activeTab = name;
   $('#viewer-card').hidden = !['plywood', 'hardware', '3dprint'].includes(name);
   for (const tab of tabs) {
@@ -242,7 +242,7 @@ async function start() {
   window.addEventListener('hashchange', () => handle(activate(location.hash.slice(1), false)));
   window.addEventListener('pagehide', () => viewer?.dispose(), { once: true });
   cloudColorControls=createCloudColorControls($('#cloud-colors'),colors=>viewer?.setPartColors(colors));
-  await activate(location.hash.slice(1) || 'plywood', false);
+  await activate(location.hash.slice(1) || '3dprint', false);
   document.documentElement.dataset.ready = 'true';
 }
 start().catch(fail);

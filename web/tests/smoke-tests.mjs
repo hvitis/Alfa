@@ -43,7 +43,7 @@ try {
       async function noOverflow() { assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Page overflows at mobile width'); }
       await page.goto(`${origin}${prefix}`, { waitUntil: 'networkidle' });
       await page.waitForSelector('html[data-ready="true"]');
-      assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['Plywood', '3DPrint', 'Hardware', 'Software']);
+      assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['3DPrint', 'Plywood', 'Hardware', 'Software']);
       assert.equal(await page.locator('meta[property="og:image"]').getAttribute('content'),'https://hvitis.github.io/Alfa/og-cloud.png');
       assert.equal(await page.locator('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
       const pdf=await page.request.get(`${origin}${prefix}docs/adr.pdf`);
@@ -51,17 +51,6 @@ try {
       const card=await page.request.get(`${origin}${prefix}og-cloud.png`);
       const png=await card.body();
       assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),630);
-      await scene('house', 'assembled');
-      await noOverflow();
-      for (const mode of ['roof_open', 'inside', 'exploded', 'assembled']) {
-        await page.selectOption('#assembly-mode', mode); await scene('house', mode);
-      }
-      await page.locator('#show-wood').uncheck(); await page.locator('#show-wood').check();
-      await page.locator('#show-labels').check(); await page.locator('#show-labels').uncheck();
-      await page.selectOption('#plywood-project', 'case'); await scene('case', 'enclosure');
-      await page.selectOption('#assembly-mode', 'internals'); await scene('case', 'internals');
-      await page.selectOption('#assembly-mode', 'exploded'); await scene('case', 'exploded');
-      await page.getByRole('tab', { name: '3DPrint' }).click();
       await scene('cloud', 'assembled');
       if (prefix === '/' && viewport.width === 1440 && process.env.SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.SMOKE_SCREENSHOT, fullPage: true });
       assert((await page.locator('#cloud-facts').textContent()).includes('PETG'));
@@ -74,6 +63,17 @@ try {
         const response = await page.request.get(`${origin}${prefix}cloud/${asset}`);
         assert(response.ok(), asset); assert((await response.body()).length > 100, asset);
       }
+      await noOverflow();
+      await page.getByRole('tab', { name: 'Plywood' }).click();
+      await scene('house', 'assembled');
+      for (const mode of ['roof_open', 'inside', 'exploded', 'assembled']) {
+        await page.selectOption('#assembly-mode', mode); await scene('house', mode);
+      }
+      await page.locator('#show-wood').uncheck(); await page.locator('#show-wood').check();
+      await page.locator('#show-labels').check(); await page.locator('#show-labels').uncheck();
+      await page.selectOption('#plywood-project', 'case'); await scene('case', 'enclosure');
+      await page.selectOption('#assembly-mode', 'internals'); await scene('case', 'internals');
+      await page.selectOption('#assembly-mode', 'exploded'); await scene('case', 'exploded');
       await noOverflow();
       await page.getByRole('tab', { name: 'Hardware' }).click(); await scene('raspberry');
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length);
