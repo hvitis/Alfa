@@ -140,9 +140,9 @@
     "P": {
       "file": "media/letter-sounds/21-P.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "p, jak pies",
-      "sha256": "c0184d398cfc7124cc4af693a279dc920c43a122515397a705bab3140e3e30b2",
-      "text_sha256": "8dafd25ae7507933d736f500491519edde08923bd1a6c1a6b0fed06f51dc00df"
+      "text": "py, jak Paszczak",
+      "sha256": "c2e733cb3a5b0aa786e7acb8c49a31620ab4831dce6edca260e6b1097bb6be31",
+      "text_sha256": "12b544157443ba3d2968c72854c0d36265feb722ae9cb4be56f03e5f6ad9d940"
     },
     "R": {
       "file": "media/letter-sounds/22-R.wav",
@@ -182,9 +182,9 @@
     "W": {
       "file": "media/letter-sounds/27-W.wav",
       "source": "Piper pl_PL-gosia-medium (offline)",
-      "text": "w, jak woda",
-      "sha256": "f65d947289163e3ef18f778ed7f4a6f3a39c6e8748acd21a727975459fd7acdc",
-      "text_sha256": "486426ec0b0454f48677e57ca368b7e6f96e22a59839aed42c8743673f41e85a"
+      "text": "w, jak Włóczykij",
+      "sha256": "eb443c1d76d64a0b45012cb129dad7116954397b21701437091c3e11a824721c",
+      "text_sha256": "28eac66098c428db6def40ae7675711c62faaf1bc21540f42d119747ec7b25ef"
     },
     "Y": {
       "file": "media/letter-sounds/28-Y.wav",
