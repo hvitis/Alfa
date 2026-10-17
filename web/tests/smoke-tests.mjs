@@ -174,8 +174,10 @@ try {
       assert((await (await page.request.get(`${origin}${prefix}docs/teaching-material-adr-example-not-a-medical-device.md`)).text()).includes('NOT A MEDICAL DEVICE'));
       for (const asset of ['docs/adr.md', 'docs/adr.pdf', 'og-cloud.png', 'docs/architecture.mmd', 'THIRD-PARTY-LICENSES.txt']) assert((await page.request.get(`${origin}${prefix}${asset}`)).ok());
       // Direct links and refreshes must work without server-side routing.
+      await page.goto(`${origin}${prefix}?controller=pico#hardware`, { waitUntil: 'networkidle' });
+      await scene('pico'); // URL parameter selects the controller.
       await page.goto(`${origin}${prefix}#hardware`, { waitUntil: 'networkidle' });
-      await scene('pico'); // Hash navigation retains the selected controller.
+      await scene('raspberry'); // Without controller parameter, default is restored.
       await page.reload({ waitUntil: 'networkidle' });
       await page.waitForSelector('html[data-ready="true"]'); await scene('raspberry');
       await page.getByRole('tab', { name: 'Elektronika' }).focus();
