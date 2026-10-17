@@ -63,6 +63,22 @@ try {
         const response = await page.request.get(`${origin}${prefix}cloud/${asset}`);
         assert(response.ok(), asset); assert((await response.body()).length > 100, asset);
       }
+      assert((await page.locator('.pricing-total-value').textContent()).includes('390 – 480'));
+      await page.selectOption('#pricing-controller', 'pico');
+      assert((await page.locator('.pricing-total-value').textContent()).includes('280 – 350'));
+      assert((await page.locator('#pricing-tbody').textContent()).includes('Pico 2 WH'));
+      await page.selectOption('#pricing-case', 'plywood-house');
+      assert((await page.locator('.pricing-total-value').textContent()).includes('270 – 340'));
+      assert((await page.locator('#pricing-tbody').textContent()).includes('Birch plywood 6 mm sheet'));
+      assert((await page.locator('#material-title').textContent()).includes('Little House Radio'));
+      await page.locator('button[data-sort-key="name"]').click();
+      const firstNameAsc = await page.locator('#pricing-tbody tr td strong').first().textContent();
+      assert.equal(firstNameAsc, 'AD-Key 5-button analog keypad');
+      await page.locator('button[data-sort-key="price"]').click();
+      const firstPriceAsc = await page.locator('#pricing-tbody tr td:nth-child(3) strong').first().textContent();
+      assert.equal(firstPriceAsc, '~3 – 6 zł');
+      await page.selectOption('#pricing-case', '3d-print');
+      await page.selectOption('#pricing-controller', 'pi3');
       await noOverflow();
       await page.getByRole('tab', { name: 'Plywood' }).click();
       await scene('house', 'assembled');

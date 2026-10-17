@@ -2,6 +2,8 @@ import adrHTML from './.generated/adr.html?raw';
 import teachingHTML from './.generated/teaching-adr.html?raw';
 import './cloud/style.css';
 import {createCloudColorControls} from './cloud/colors.js';
+import {createStlViewer} from './cloud/stl-viewer.js';
+import {initPricing} from './cloud/pricing.js';
 import architecture from './content/architecture.mmd?raw';
 import raspberryData from './hardware-visualisation/src/data/setup.json' with { type: 'json' };
 import houseData from './hardware-visualisation/src/data/radio-house.json' with { type: 'json' };
@@ -16,7 +18,7 @@ const models = {
   case: { title: 'Original plywood case', description: 'A compact 6 mm plywood enclosure with a removable rear cover and space for the Pi, screen, buttons, and power bank.', modes: [['enclosure', 'Assembled'], ['internals', 'Inside'], ['exploded', 'Exploded']], size: [caseData.parameters.case.width, caseData.parameters.case.height, caseData.parameters.case.depth], folder: 'wooden-case' },
 };
 const picoData = createPicoData();
-let cloudColorControls;
+let cloudColorControls, stlViewer;
 let activeTab = '3dprint', viewerPromise, viewer, diagramPromise, teachingPromise, transition = 0, selectedWire = '', repository;
 
 function fail(error) {
@@ -198,6 +200,7 @@ async function activate(name, updateHash = true) {
     $(`#${tab.getAttribute('aria-controls')}`).hidden = !selected;
   }
   if (updateHash) history.replaceState(null, '', `#${name}`);
+  stlViewer?.setActive(name === '3dprint');
   if (['plywood', 'hardware', '3dprint'].includes(name)) await showScene();
   else {
     transition++; viewer?.setActive(false); status.textContent = '';
@@ -240,8 +243,16 @@ async function start() {
   $('#reset-camera').addEventListener('click', () => viewer?.reset());
   $('#software-view').addEventListener('change', () => handle(showSoftware()));
   window.addEventListener('hashchange', () => handle(activate(location.hash.slice(1), false)));
-  window.addEventListener('pagehide', () => viewer?.dispose(), { once: true });
-  cloudColorControls=createCloudColorControls($('#cloud-colors'),colors=>viewer?.setPartColors(colors));
+  window.addEventListener('pagehide', () => { viewer?.dispose(); stlViewer?.dispose(); }, { once: true });
+  cloudColorControls = createCloudColorControls($('#cloud-colors'), colors => {
+    viewer?.setPartColors(colors);
+    stlViewer?.setPartColors(colors);
+  });
+  const stlContainer = $('#stl-viewer');
+  if (stlContainer) {
+    stlViewer = createStlViewer(stlContainer, { initialColors: cloudColorControls.getColors() });
+  }
+  initPricing($('#cloud-pricing'));
   await activate(location.hash.slice(1) || '3dprint', false);
   document.documentElement.dataset.ready = 'true';
 }
