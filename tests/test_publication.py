@@ -80,10 +80,13 @@ class PackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             export_site(directory)
             files = {p.relative_to(directory).as_posix() for p in Path(directory).rglob("*") if p.is_file()}
-            self.assertTrue({"index.html", "en/index.html", ".nojekyll", "data/manifest.json", "docs/adr.md", "docs/adr.pl.md", "docs/teaching-adr.pl.md", "docs/architecture.mmd", "THIRD-PARTY-LICENSES.txt", "docs/adr.pdf", "og-cloud.png"}.issubset(files))
+            self.assertTrue({"index.html", "en/index.html", ".nojekyll", "data/manifest.json", "docs/adr.md", "docs/adr.pl.md", "docs/teaching-adr.pl.md", "docs/architecture.mmd", "THIRD-PARTY-LICENSES.txt", "docs/adr.pdf", "og-cloud.png", "og-pcb.png", "pcb/index.html"}.issubset(files))
             index = (Path(directory) / "index.html").read_text(encoding="utf-8")
             self.assertIn('<html lang="pl"', index)
             self.assertNotIn("<base ", index)
+            pcb = (Path(directory) / "pcb/index.html").read_text(encoding="utf-8")
+            self.assertIn('<base href="../">', pcb)
+            self.assertIn("og-pcb.png", pcb)
             english = (Path(directory) / "en/index.html").read_text(encoding="utf-8")
             self.assertIn('<html lang="en"', english)
             self.assertIn('<base href="../">', english)
@@ -95,9 +98,9 @@ class PackageTests(unittest.TestCase):
                 self.assertTrue(json.loads(archive.read("verification.json"))["passed"])
             self.assertTrue(any(name.endswith(".glb") for name in files))
             self.assertTrue(any(name.endswith(".js") for name in files))
-            # Only the original CAD render and social card are public raster assets.
+            # Only the original CAD render and social cards are public raster assets.
             pngs={name for name in files if name.endswith(".png")}
-            self.assertEqual(pngs,{"og-cloud.png"})
+            self.assertEqual(pngs,{"og-cloud.png", "og-pcb.png"})
             self.assertFalse(any(name.endswith((".jpg", ".wav", ".gif")) for name in files))
             self.assertTrue((Path(directory)/"docs/adr.pdf").read_bytes().startswith(b"%PDF-"))
             # The fictional MDR example ships only as clearly marked teaching material.
@@ -107,6 +110,7 @@ class PackageTests(unittest.TestCase):
             for phrase in ("TEACHING MATERIAL · NOT A MEDICAL DEVICE · FOR EDUCATIONAL PURPOSES ONLY", "Alfa is not a medical device", "Nobody signed anything", "## End of teaching example"):
                 self.assertIn(phrase, notice)
             self.assertEqual((Path(directory)/"og-cloud.png").read_bytes(),(ROOT/"web/assets/og-cloud.png").read_bytes())
+            self.assertEqual((Path(directory)/"og-pcb.png").read_bytes(),(ROOT/"web/assets/og-pcb.png").read_bytes())
             data = json.loads((Path(directory) / "data/manifest.json").read_text())
             self.assertEqual(len(data["alphabet"]), 32)
             self.assertLessEqual(data["audio"]["initial_volume"], data["audio"]["max_volume"])
