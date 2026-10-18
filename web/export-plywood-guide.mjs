@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, access } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -20,6 +20,43 @@ function cleanSvg(raw) {
 }
 
 export async function exportPlywoodGuide(destination) {
+  const prebuilt = resolve(root, 'design/cloud-radio/generated/cloud/plywood-assembly-guide.pdf');
+  const requiredSources = [
+    'design/wooden-case/previews/enclosure.png',
+    'design/wooden-case/previews/internals.png',
+    'design/wooden-case/previews/exploded.png',
+    'docs/images/hardware-connections.png',
+    'design/house-radio/previews/house_iso.png',
+    'design/house-radio/previews/house_roof_open.png',
+    'design/wooden-case/SVG/a4_sheet_1.svg',
+    'design/wooden-case/SVG/a4_sheet_2.svg',
+    'design/wooden-case/SVG/a4_sheet_3.svg',
+    'design/wooden-case/SVG/a4_sheet_4.svg',
+    'design/house-radio/SVG/sheet_1.svg',
+    'design/house-radio/SVG/sheet_2.svg',
+    'design/house-radio/SVG/sheet_3.svg',
+    'design/house-radio/SVG/sheet_4.svg',
+    'web/assets/wiring-diagram.svg'
+  ];
+
+  const hasSources = (await Promise.all(requiredSources.map(async file => {
+    try { await access(resolve(root, file)); return true; } catch { return false; }
+  }))).every(Boolean);
+
+  if (!hasSources) {
+    try {
+      await access(prebuilt);
+      await mkdir(dirname(destination), { recursive: true });
+      if (resolve(destination) !== prebuilt) {
+        await copyFile(prebuilt, destination);
+      }
+      console.log(`Using prebuilt Plywood Assembly Guide PDF: ${destination}`);
+      return destination;
+    } catch {
+      // Proceed to try loading assets if prebuilt is missing as well
+    }
+  }
+
   console.log('Loading assets for Plywood Assembly Guide PDF...');
   
   // Vector wiring schematic diagram
