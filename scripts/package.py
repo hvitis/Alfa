@@ -49,8 +49,8 @@ def validate_release_kit(directory):
                 raise ValueError("Unsafe path in release kit.")
             if any(part in {".git", ".state", ".venv", "node_modules", "photos", "imgs", "animations", "alphabet"} for part in path.parts):
                 raise ValueError(f"Private or unreviewed content in release kit: {name}")
-            viewer_mesh = re.fullmatch(r"site/assets/(?:enclosure|internals|exploded|house_(?:assembled|roof_open|inside|exploded))-[A-Za-z0-9_-]+\.glb", name)
-            reviewed_pdf = name in {"site/docs/adr.pdf", "site/docs/teaching-material-adr-example-not-a-medical-device.pdf"}
+            viewer_mesh = re.fullmatch(r"site/assets/(?:enclosure|internals|exploded|house_(?:assembled|roof_open|inside|exploded)|shield)-[A-Za-z0-9_-]+\.glb", name)
+            reviewed_pdf = name in {"site/docs/adr.pdf", "site/docs/teaching-material-adr-example-not-a-medical-device.pdf", "site/docs/plywood-assembly-guide.pdf", "site/cloud/plywood-assembly-guide.pdf"} or bool(re.fullmatch(r"site/assets/schematic-[A-Za-z0-9_-]+\.pdf", name))
             cloud_mesh = name == "site/cloud/cloud-radio.glb"
             if (name.endswith((".wav", ".mp3", ".jpg", ".jpeg", ".gif")) or (name.endswith(".pdf") and not reviewed_pdf)
                     or (name.endswith(".glb") and not (viewer_mesh or cloud_mesh))):
