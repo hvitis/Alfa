@@ -71,7 +71,14 @@ class WireFrames:
         if entry is None:
             return None
         path, modified = entry
-        if modified != Path(image).stat().st_mtime_ns:
+        if not path.is_file():
+            return None
+        try:
+            image_stat = Path(image).stat()
+            if modified is not None and modified != image_stat.st_mtime_ns:
+                if image_stat.st_mtime - path.stat().st_mtime > 2.0:
+                    return None
+        except OSError:
             return None
         if path != self.current:
             self.payload = None
