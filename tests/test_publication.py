@@ -98,9 +98,10 @@ class PackageTests(unittest.TestCase):
                 self.assertTrue(json.loads(archive.read("verification.json"))["passed"])
             self.assertTrue(any(name.endswith(".glb") for name in files))
             self.assertTrue(any(name.endswith(".js") for name in files))
-            # Only the original CAD render and social cards are public raster assets.
+            # Only the original CAD render, social cards, and main showcase previews are public raster assets.
             pngs={name for name in files if name.endswith(".png")}
-            self.assertEqual(pngs,{"og-cloud.png", "og-pcb.png"})
+            allowed_stems = {"og-cloud", "og-pcb", "cloud-render", "house-preview", "pdf-preview", "software-architecture"}
+            self.assertTrue(all(any(stem in name for stem in allowed_stems) for name in pngs), f"Unexpected png in export: {pngs}")
             self.assertFalse(any(name.endswith((".jpg", ".wav", ".gif")) for name in files))
             self.assertTrue((Path(directory)/"docs/adr.pdf").read_bytes().startswith(b"%PDF-"))
             # The fictional MDR example ships only as clearly marked teaching material.

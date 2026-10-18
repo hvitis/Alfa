@@ -54,12 +54,14 @@ try {
         await page.locator('[data-for="pricing-case"] [data-value="plywood-house"]').click();
         assert((await page.locator('#pricing-tbody').textContent()).includes('Birch plywood'));
         assert((await page.locator('footer').textContent()).includes('Not a medical device. For educational purposes only.'));
+        await page.getByRole('tab', { name: 'Home' }).click();
         await page.getByRole('link', { name: 'PL', exact: true }).click();
         await page.waitForURL(url => !url.pathname.includes('/en'));
         await page.waitForSelector('html[lang="pl"][data-ready="true"]');
       }
       assert.equal(await page.locator('html').getAttribute('lang'), 'pl');
       assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['Główna', 'Obudowa', 'Elektronika', 'Oprogramowanie', 'Inne']);
+      await page.getByRole('tab', { name: 'Główna' }).click();
       assert.equal(await page.locator('meta[property="og:image"]').getAttribute('content'),'https://hvitis.github.io/Alfa/og-cloud.png');
       assert.equal(await page.locator('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
       const pdf=await page.request.get(`${origin}${prefix}docs/adr.pdf`);

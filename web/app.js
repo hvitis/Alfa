@@ -61,7 +61,9 @@ function initPillGroup(groupEl, inputEl, onChange) {
 
 function languageLinks() {
   for (const link of document.querySelectorAll('a[hreflang][lang]')) {
-    const url = new URL(link.getAttribute('href'), document.baseURI);
+    const isEn = link.getAttribute('lang') === 'en';
+    const basePath = isEn ? 'en/' : '';
+    const url = new URL(basePath, document.baseURI);
     url.search = location.search;
     url.hash = location.hash;
     link.href = url.href;
@@ -79,7 +81,7 @@ function syncRoute() {
   languageLinks();
 }
 
-function setEnclosureSubView(subview) {
+function setEnclosureSubView(subview, sync = true) {
   const input = $('#obudowa-view');
   if (input) input.value = subview;
   for (const btn of document.querySelectorAll('[data-subview]')) {
@@ -93,10 +95,10 @@ function setEnclosureSubView(subview) {
   if (sklejkaPanel) sklejkaPanel.hidden = subview !== 'sklejka';
   stlViewer?.setActive(activeTab === 'obudowa' && subview === 'filament');
   if (activeTab === 'obudowa') handle(showScene());
-  syncRoute();
+  if (sync) syncRoute();
 }
 
-function setController(controller) {
+function setController(controller, sync = true) {
   const input = $('#hardware-controller');
   if (input) input.value = controller;
   for (const btn of document.querySelectorAll('[data-controller]')) {
@@ -110,11 +112,12 @@ function setController(controller) {
   renderWires();
   $('#wire-detail').textContent = t('hw.choose');
   if (activeTab === 'elektronika') handle(showScene());
-  syncRoute();
+  if (sync) syncRoute();
 }
 
 function restoreRoute() {
   const route = readRoute(new URL(location.href));
+  activeTab = route.tab;
   for (const [,id] of routeFields) {
     if (id === 'assembly-mode') continue;
     const input = document.getElementById(id);
@@ -123,8 +126,8 @@ function restoreRoute() {
     const group = document.querySelector(`[data-for="${id}"]`);
     if (group) syncPillGroup(group, route.values[id]);
   }
-  setEnclosureSubView(route.values['obudowa-view'] || 'filament');
-  setController(route.values['hardware-controller'] || 'raspberry');
+  setEnclosureSubView(route.values['obudowa-view'] || 'filament', false);
+  setController(route.values['hardware-controller'] || 'raspberry', false);
   fillPlywood();
   const assembly = $('#assembly-mode');
   if (assembly) {
@@ -191,6 +194,7 @@ function fillPlywood() {
       btn.addEventListener('click', () => {
         $('#assembly-mode').value = value;
         syncPillGroup(group, value);
+        handle(viewer?.setMode(value));
         $('#assembly-mode').dispatchEvent(new Event('change', { bubbles: true }));
       });
       return btn;
@@ -361,7 +365,6 @@ async function activate(name, updateHash = true) {
     const panel = $(`#panel-${tab.dataset.tab}`);
     if (panel) panel.hidden = !selected;
   }
-  if (updateHash) history.replaceState(null, '', `#${name}`);
   if (updateHash) syncRoute();
   stlViewer?.setActive(name === 'obudowa' && $('#obudowa-view').value === 'filament');
   if (['obudowa', 'elektronika'].includes(name)) {
@@ -398,6 +401,7 @@ async function start() {
   initPillGroup($('[data-for="plywood-project"]'), $('#plywood-project'), () => { fillPlywood(); handle(showScene()); });
   initPillGroup($('[data-for="circuit-filter"]'), $('#circuit-filter'), val => { selectedWire = ''; viewer?.filter(val); renderWires(); selectWire(''); });
   initPillGroup($('[data-for="pcb-mode"]'), $('#pcb-mode'), val => handle(viewer?.setMode(val)));
+  $('#assembly-mode')?.addEventListener('change', () => handle(viewer?.setMode($('#assembly-mode').value)));
 
   // Subpage top navigation
   for (const btn of document.querySelectorAll('[data-subview]')) {
