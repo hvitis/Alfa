@@ -7,8 +7,8 @@ import './pcb/style.css';
 import {createCloudColorControls} from './cloud/colors.js';
 import {createStlViewer} from './cloud/stl-viewer.js';
 import {initPricing} from './cloud/pricing.js';
-import architecture from './content/architecture.mmd?raw';
-import raspberryData from './hardware-visualisation/src/data/setup.json' with { type: 'json' };
+import { createPi3ArcadeData } from './hardware-visualisation/src/data/arcadePiSetup.js';
+const raspberryData = createPi3ArcadeData();
 import houseData from './hardware-visualisation/src/data/radio-house.json' with { type: 'json' };
 import caseData from './hardware-visualisation/src/data/case-routing.json' with { type: 'json' };
 import { createPicoData } from './hardware-visualisation/src/data/picoSetup.js';
@@ -153,7 +153,12 @@ function hardwareData() { return $('#hardware-controller').value === 'pico' ? pi
 
 function endpoint(key, data) {
   if (/^P\d+$/.test(key)) return data.pinNames?.[key] ? t('endpoint.picoNamed', { name: data.pinNames[key] }) : t('endpoint.piPin', { pin: key.slice(1) });
-  const names = { GND_JOIN: 'endpoint.gndJoin', V3: 'endpoint.v3', V5: 'endpoint.v5', RIN: 'endpoint.rin', J: 'endpoint.join', RGND: 'endpoint.rgnd', POWER: 'endpoint.power', USB: 'endpoint.usb', 'M+': 'endpoint.speakerPlus', 'M-': 'endpoint.speakerMinus' };
+  const names = {
+    GND_JOIN: 'endpoint.gndJoin', V3: 'endpoint.v3', V5: 'endpoint.v5', RIN: 'endpoint.rin', J: 'endpoint.join',
+    RGND: 'endpoint.rgnd', POWER: 'endpoint.power', USB: 'endpoint.usb', 'M+': 'endpoint.speakerPlus', 'M-': 'endpoint.speakerMinus',
+    BTN_TOP: 'endpoint.btnTop', BTN_BTM: 'endpoint.btnBtm', BTN_L: 'endpoint.btnL', BTN_R: 'endpoint.btnR',
+    BTN_SL: 'endpoint.btnSL', BTN_SR: 'endpoint.btnSR', BTN_GND: 'endpoint.btnGnd'
+  };
   if (names[key]) return t(names[key]);
   const modules = { L: 'endpoint.module.L', A: 'endpoint.module.A', M: 'endpoint.module.M', K: 'endpoint.module.K', S: 'endpoint.module.S' };
   return modules[key[0]] ? `${t(modules[key[0]])} ${key.slice(1)}` : key;

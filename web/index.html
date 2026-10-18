@@ -278,7 +278,7 @@
           <a href="./v1/#pcb" class="card-nav-btn" data-i18n-href="wip.pcb.v1href"><span data-i18n="wip.btn.v1pcb">Zobacz płytkę shield z wersji v1</span> <span aria-hidden="true">→</span></a>
         </div>
       </div>
-      <div class="scene-layout"><div id="hardware-slot" class="scene-slot"></div><aside class="inspector"><span class="section-number" data-i18n="hw.kicker">03 / ELEKTRONIKA</span><h3 id="controller-title" data-i18n="controller.pi.title">Raspberry Pi 3</h3><p id="controller-description" data-i18n="controller.pi.description">Działający sterownik linuksowy. Obejrzyj każde połączenie wyświetlacza, dźwięku, przycisków, ADC i zasilania.</p><p id="pico-notice" class="notice" hidden data-i18n="hw.picoNotice">Proponowane okablowanie Pico. Aplikacja linuksowa działa na Raspberry Pi; Pico wymaga osobnego firmware i dźwięku przez PIO.</p><div id="pcb-controls" hidden><p class="notice" data-i18n="pcb.notice">Prototyp A · eksport KiCad. Montaż, temperatura i działanie na sprzęcie wymagają sprawdzenia.</p>
+      <div class="scene-layout"><div id="hardware-slot" class="scene-slot"></div><aside class="inspector"><span class="section-number" data-i18n="hw.kicker">03 / ELEKTRONIKA</span><h3 id="controller-title" data-i18n="controller.pi.title">Raspberry Pi 3</h3><p id="controller-description" data-i18n="controller.pi.description">Działający sterownik linuksowy. Obejrzyj każde połączenie wyświetlacza, dźwięku, 6 przycisków arcade i zasilania.</p><p id="pico-notice" class="notice" hidden data-i18n="hw.picoNotice">Proponowane okablowanie Pico. Aplikacja linuksowa działa na Raspberry Pi; Pico wymaga osobnego firmware i dźwięku przez PIO.</p><div id="pcb-controls" hidden><p class="notice" data-i18n="pcb.notice">Prototyp A · eksport KiCad. Montaż, temperatura i działanie na sprzęcie wymagają sprawdzenia.</p>
         <span class="field-label" data-i18n="pcb.mode">Widok płytki</span>
         <div class="pill-group" data-for="pcb-mode" role="group" aria-label="Widok płytki" data-i18n-aria-label="pcb.mode">
           <button type="button" class="pill-btn active" data-value="assembled" data-i18n="pcb.assembled">Shield na Raspberry Pi 3</button>
@@ -292,12 +292,11 @@
           <button type="button" class="pill-btn active" data-value="all" data-i18n="hw.circuit.all">Wszystkie połączenia</button>
           <button type="button" class="pill-btn" data-value="LCD" data-i18n="hw.circuit.lcd">Wyświetlacz / SPI</button>
           <button type="button" class="pill-btn" data-value="Audio" data-i18n="hw.circuit.audio">Dźwięk / I²S</button>
-          <button type="button" class="pill-btn" data-value="ADC" data-i18n="hw.circuit.adc">ADC / I²C</button>
-          <button type="button" class="pill-btn" data-value="Keypad" data-i18n="hw.circuit.keypad">Przyciski / dzielnik</button>
+          <button type="button" class="pill-btn" data-value="Buttons" data-i18n="hw.circuit.buttons">Przyciski arcade</button>
           <button type="button" class="pill-btn" data-value="Power" data-i18n="hw.circuit.power">Zasilanie</button>
         </div>
         <input type="hidden" id="circuit-filter" value="all">
-        <div class="selected-wire"><span class="eyebrow" data-i18n="hw.selected">WYBRANE POŁĄCZENIE</span><p id="wire-detail" role="status" data-i18n="hw.choose">Wybierz przewód na rysunku albo w tabeli poniżej.</p><button id="clear-wire" class="secondary" data-i18n="hw.clear">Pokaż wszystkie przewody</button></div><div id="hardware-wiring-note" class="inspector-note"><span class="note-mark">!</span><p data-i18n="hw.warning">Odłącz zasilanie przed zmianą przewodów. Dwa rezystory 10 kΩ obniżają sygnał OUT klawiatury przed ADC A0. Minusa głośnika nie łącz z GND.</p></div></aside></div>
+        <div class="selected-wire"><span class="eyebrow" data-i18n="hw.selected">WYBRANE POŁĄCZENIE</span><p id="wire-detail" role="status" data-i18n="hw.choose">Wybierz przewód na rysunku albo w tabeli poniżej.</p><button id="clear-wire" class="secondary" data-i18n="hw.clear">Pokaż wszystkie przewody</button></div><div id="hardware-wiring-note" class="inspector-note"><span class="note-mark">!</span><p data-i18n="hw.warning">Odłącz zasilanie przed zmianą przewodów. Przyciski arcade łączą piny GPIO ze wspólną masą GND z wewnętrznym podciąganiem pull-up. Minusa głośnika nie łącz z GND.</p></div></aside></div>
       <div id="hardware-diagram-card" class="hardware-diagram-card">
         <div class="diagram-header">
           <div>

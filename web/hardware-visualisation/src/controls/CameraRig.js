@@ -93,7 +93,7 @@ export class CameraRig {
     this.camera.updateMatrixWorld();this.orbit.update();
   }
   focusGroup(group){
-    const views={LCD:[[-210,470,380],[-210,30,-120]],Audio:[[210,420,370],[210,28,-95]],ADC:[[145,540,650],[145,20,135]],Keypad:[[-100,600,940],[-100,20,240]]};
+    const views={LCD:[[-210,470,380],[-210,30,-120]],Audio:[[210,420,370],[210,28,-95]],ADC:[[145,540,650],[145,20,135]],Keypad:[[-100,600,940],[-100,20,240]],Buttons:[[-240,550,650],[-240,20,190]]};
     if(!views[group]){this.focus(this.view);return;}
     const [position,target]=views[group];this.camera.position.set(...position);this.orbit.target.set(...target);
     this.camera.lookAt(this.orbit.target);this.camera.updateMatrixWorld();this.orbit.update();

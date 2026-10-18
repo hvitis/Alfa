@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import base from '../data/setup.json' with { type: 'json' };
 import { createPicoData } from '../data/picoSetup.js';
+import { createPi3ArcadeData } from '../data/arcadePiSetup.js';
 import { board, box, cylinderBetween, sphere, terminal } from './primitives.js';
 import { makeResistor } from './resistor.js';
 import { makeCable } from './cables.js';
@@ -24,7 +25,7 @@ function portName(key,data) {
   return key.slice(1);
 }
 export function createSetupScene(controller='pi3') {
-  const pico=controller==='pico',data=pico?createPicoData():base;
+  const pico=controller==='pico',data=pico?createPicoData():createPi3ArcadeData();
   const root=new THREE.Group();root.name=pico?'pico-setup':'complete-setup';const pickables=[],cables=[],modules={};let amplifier,adc,keypad;
   for(const component of data.components) {
     const model=new THREE.Group();root.add(model);model.name=component.id;
@@ -40,6 +41,28 @@ export function createSetupScene(controller='pi3') {
     }else if(component.id==='adc'){
       adc=makeAdc(model,component.position);
       addLabel(model,'ADS1115 / ADS1015 · photo-matched',[x,y+28,z-140],'title');
+    }else if(component.id==='arcade_buttons'){
+      board(model, component.position, component.size, component.color);
+      addLabel(model, '6 × Arcade Push Buttons (33 mm)', [x, y+24, z-component.size[1]/2-32], 'title');
+      const buttons = [
+        { id: 'BTN_TOP', pos: data.points.BTN_TOP, color: '#2563eb', name: 'Top · GPIO 5 (Pin 29)' },
+        { id: 'BTN_BTM', pos: data.points.BTN_BTM, color: '#dc2626', name: 'Bottom · GPIO 6 (Pin 31)' },
+        { id: 'BTN_L',   pos: data.points.BTN_L,   color: '#f8fafc', name: 'Left · GPIO 13 (Pin 33)' },
+        { id: 'BTN_R',   pos: data.points.BTN_R,   color: '#f8fafc', name: 'Right · GPIO 26 (Pin 37)' },
+        { id: 'BTN_SL',  pos: data.points.BTN_SL,  color: '#16a34a', name: 'Side L · GPIO 16 (Pin 36)' },
+        { id: 'BTN_SR',  pos: data.points.BTN_SR,  color: '#2563eb', name: 'Side R · GPIO 12 (Pin 32)' },
+      ];
+      for (const btn of buttons) {
+        const [bx, by, bz] = btn.pos;
+        cylinderBetween(model, [bx, by-10, bz], [bx, by+2, bz], 16.5, '#0f172a', { roughness: 0.4 });
+        cylinderBetween(model, [bx, by+1, bz], [bx, by+5, bz], 12.5, btn.color, { roughness: 0.35, metalness: 0.1 });
+        terminal(model, btn.pos);
+        const tag = addLabel(model, btn.name, [bx, by+14, bz], 'small');
+        tag.userData.endpoint = btn.id;
+      }
+      terminal(model, data.points.BTN_GND, '#94a3b8');
+      const gndTag = addLabel(model, 'Common GND (Pin 30)', [data.points.BTN_GND[0], data.points.BTN_GND[1]+14, data.points.BTN_GND[2]], 'small');
+      gndTag.userData.endpoint = 'BTN_GND';
     }else if(component.id==='amp'){
       amplifier=makeAmplifier(model,component.position);
       const overview=addLabel(model,'MAX98357A · photo-matched',[x,90,z-component.size[1]/2-35],'title');overview.userData.amplifierOverview=true;
@@ -66,7 +89,7 @@ export function createSetupScene(controller='pi3') {
     registerModule(modules,pickables,'supply',supply);
   }
   for(const [key,point]of Object.entries(data.points)){
-    if(['RIN','J','RGND','POWER','USB','V3','V5','GND_JOIN'].includes(key)||key.startsWith('M')||key.startsWith('A')||key.startsWith('K'))continue;
+    if(['RIN','J','RGND','POWER','USB','V3','V5','GND_JOIN'].includes(key)||key.startsWith('M')||key.startsWith('A')||key.startsWith('K')||key.startsWith('BTN'))continue;
     const id=/^P\d+$/.test(key)?'pi':key.startsWith('L')?'lcd':key.startsWith('K')?'keypad':key.startsWith('A')?'adc':key.startsWith('M')?'amp':'speaker';
     const port=new THREE.Group();root.add(port);terminal(port,point);
     const changed=pico&&data.wires.some(w=>w.changed&&(w.controllerPin===key||w.from===key));
@@ -80,10 +103,12 @@ export function createSetupScene(controller='pi3') {
   }
   sphere(root,data.points.GND_JOIN,4.5,'#cfb776',{metalness:0.8});
   const groundLabel=addLabel(root,'Ground join',[data.points.GND_JOIN[0]+18,38,data.points.GND_JOIN[2]-14],'small');groundLabel.userData.endpoint='GND_JOIN';
-  board(root,[-285,0,292],[166,146],'#e5e3d9');
-  for(const [id,start,end]of [['R1',data.points.RIN,data.points.J],['R2',data.points.J,data.points.RGND]])registerModule(modules,pickables,id,makeResistor(root,id,start,end));
-  const join=new THREE.Group();root.add(join);sphere(join,data.points.J,7.5,'#8754ce');registerModule(modules,pickables,'join',join);
-  addLabel(root,'R1 · 10 kΩ',[-310,38,222],'title');addLabel(root,'R2 · 10 kΩ',[-196,36,299],'title');addLabel(root,'Shared join → A0',[-220,46,244],'join');
+  if(data.components.some(c=>c.id==='adc')){
+    board(root,[-285,0,292],[166,146],'#e5e3d9');
+    for(const [id,start,end]of [['R1',data.points.RIN,data.points.J],['R2',data.points.J,data.points.RGND]])registerModule(modules,pickables,id,makeResistor(root,id,start,end));
+    const join=new THREE.Group();root.add(join);sphere(join,data.points.J,7.5,'#8754ce');registerModule(modules,pickables,'join',join);
+    addLabel(root,'R1 · 10 kΩ',[-310,38,222],'title');addLabel(root,'R2 · 10 kΩ',[-196,36,299],'title');addLabel(root,'Shared join → A0',[-220,46,244],'join');
+  }
   const power=new THREE.Group();root.add(power);box(power,[5,5,310],[60,14,26],'#e4ebef');box(power,[5,5,329],[16,6,10],'#b4c3cb');registerModule(modules,pickables,'power',power);
   for(const wire of data.wires){
     const mid=wire.path[Math.floor(wire.path.length/2)];
@@ -102,5 +127,5 @@ export function createSetupScene(controller='pi3') {
     for(const cable of cables)cable.group.traverse(object=>{if(object.userData.wireTag)object.visible=group!=='all'||Boolean(selectedId);});
   }
   setVisibleLabels(null,'all');
-  return {root,pickables,cables,data,modules,setVisibleLabels,selectModule,replacement,amplifier,adc,keypad};
+  return {root,pickables,cables,data,modules,setVisibleLabels,selectModule,replacement,amplifier,adc:adc||{setDetailed(){},selectPin(){}},keypad:keypad||{setDetailed(){},selectPin(){}}};
 }

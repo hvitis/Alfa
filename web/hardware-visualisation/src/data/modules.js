@@ -15,6 +15,7 @@ const modules={
   power:{title:'Power cable',purpose:'Carries 5 V from the power bank to the controller.',details:['The bank\'s USB-C output feeds the switched cable, then the controller\'s power socket.']},
   handle:{title:'Carry handle',purpose:'Sized for a small child to lift the radio; an adult hand fits too.',details:['A 22 mm dowel or an 18 mm hand-hole bar is comfortable for small hands.','Every handle opening leaves at least 34 mm of finger space, so fingers cannot jam.','The concept card names this concept\'s handle, grip length and fixings.']},
   switch:{title:'Inline USB power switch',purpose:'Side panel power switch for turning the player on and off.',details:['Mounts in the side window with an outer plywood cover and inside clamp.','Allows switching battery power to the Raspberry Pi without opening the rear cover.']},
+  arcade_buttons:{title:'Arcade Push Buttons · 6 × 33 mm',purpose:'Direct momentary push buttons with microswitches connected directly to Raspberry Pi 3 GPIOs.',details:['Four navigation buttons around the LCD: Top (Blue, GPIO 5 / Pin 29), Bottom (Red, GPIO 6 / Pin 31), Left (White, GPIO 13 / Pin 33), Right (White, GPIO 26 / Pin 37).','Two side buttons: Side Left (Green, GPIO 16 / Pin 36) and Side Right (Blue, GPIO 12 / Pin 32).','Each button uses internal pull-up resistors on the Raspberry Pi; pressing a button connects the GPIO to common Ground (Pin 30).','Completely replaces the old 5-button analog board, ADC (ADS1115), and resistor divider.']},
 };
 export function moduleInfo(id,view){
   const info=modules[id==='pi'&&view==='pico'?'pico':id];if(!info)return null;
@@ -26,5 +27,5 @@ export function moduleInfo(id,view){
   if(view==='pico'&&['lcd','adc','keypad'].includes(id))return {...info,changes:'The module stays the same. Its controller pins and supply source change; see the Pi 3 → Pico comparison.'};
   return info;
 }
-export const MODULE_IDS=['pi','lcd','keypad','adc','amp','speaker','R1','R2','join','power','battery','divider','switch','handle'];
+export const MODULE_IDS=['pi','lcd','keypad','adc','amp','speaker','R1','R2','join','power','battery','divider','switch','handle','arcade_buttons'];
 

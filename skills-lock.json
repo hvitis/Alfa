@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "3d-print-designer": {
+      "source": "wilsonwaters/3d-printing",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/3d-print-designer/SKILL.md",
+      "computedHash": "e36204e75094cfc1a34127de62ff2ad26ae6cafcbd3ea36e768ab3dba67ee9f8"
+    },
+    "embedded-iot-mentor": {
+      "source": "alirezarezvani/claude-skills",
+      "sourceType": "github",
+      "skillPath": "engineering-team/skills/embedded-iot-mentor/SKILL.md",
+      "computedHash": "7a4a7e36e15a3d8b508e3fdfe214bed9525fb264a2d793786f253f093e9e0f4f"
+    }
+  }
+}

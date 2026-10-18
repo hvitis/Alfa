@@ -301,7 +301,7 @@ function boot() {
       if(Array.isArray(state.quaternion)&&state.quaternion.length===4)world.camera.quaternion.fromArray(state.quaternion);
       if(Array.isArray(state.target)&&state.target.length===3)rig.orbit.target.fromArray(state.target);
       if(state.labels===false){document.getElementById('show-labels').checked=false;labelsVisible(false);}
-      if(['all','LCD','Audio','ADC','Keypad','Power'].includes(state.group)){group=state.group;document.getElementById('cable-group').value=group;updateCables();refreshWireList();}
+      if(['all','LCD','Audio','Buttons','ADC','Keypad','Power'].includes(state.group)){group=state.group;document.getElementById('cable-group').value=group;updateCables();refreshWireList();}
       if(state.selectedModule)selectModule(state.selectedModule);
       if(state.view!=='case'&&state.selectedCable&&activeSetup().cables.some(c=>c.id===state.selectedCable))selectCable(state.selectedCable);
       if(state.selectedAmpPin){selectedAmpPin=state.selectedAmpPin;activeSetup().amplifier.selectPin(selectedAmpPin);}
