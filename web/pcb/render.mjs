@@ -21,7 +21,9 @@ export async function renderPcbImages(baseURL) {
     await page.locator('#pcb-labels').uncheck();
     await page.waitForTimeout(350);
     const assembled=await page.locator('#viewport').screenshot();
-    await page.selectOption('#pcb-mode','board');
+    const boardBtn=page.locator('[data-for="pcb-mode"] [data-value="board"]');
+    if(await boardBtn.count()) await boardBtn.click();
+    else await page.selectOption('#pcb-mode','board');
     await page.waitForSelector('#viewport[data-mode="board"]');
     await page.waitForTimeout(200);
     const board=await page.locator('#viewport').screenshot();

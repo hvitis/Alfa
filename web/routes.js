@@ -1,11 +1,11 @@
 // Keep shareable selections in the URL. Unrecognized values use safe defaults.
 export const routeFields = [
   ['controller','hardware-controller','raspberry',['raspberry','pico','pcb']],
+  ['enclosure','obudowa-view','filament',['filament','plywood']],
   ['pcb-mode','pcb-mode','assembled',['assembled','board','exploded']],
   ['project','plywood-project','house',['house','case']],
   ['assembly','assembly-mode','assembled',['assembled','roof_open','inside','exploded','enclosure','internals']],
   ['cloud-mode','cloud-mode','assembled',['assembled','exploded','inside','battery_open']],
-  ['software','software-view','design',['design','implementation','teaching']],
   ['circuit','circuit-filter','all',['all','LCD','Audio','ADC','Keypad','Power']],
 ];
 
@@ -15,8 +15,15 @@ export function readRoute(url) {
     const requested=url.searchParams.get(key);
     return [id,allowed.includes(requested)?requested:key==='controller'&&pcbPage?'pcb':fallback];
   }));
-  const tab=url.hash.slice(1);
-  return {tab:['3dprint','plywood','hardware','software'].includes(tab)?tab:pcbPage||url.searchParams.has('controller')?'hardware':'3dprint',values};
+  let tab=url.hash.slice(1);
+  if(tab==='3dprint'){tab='obudowa';values['obudowa-view']='filament';}
+  else if(tab==='plywood'){tab='obudowa';values['obudowa-view']='plywood';}
+  else if(tab==='hardware'){tab='elektronika';}
+  else if(tab==='software'){tab='oprogramowanie';}
+  const allowedTabs=['glowna','obudowa','elektronika','oprogramowanie','inne'];
+  const hasValidController=['raspberry','pico','pcb'].includes(url.searchParams.get('controller'));
+  const defaultTab=pcbPage||hasValidController?'elektronika':'glowna';
+  return {tab:allowedTabs.includes(tab)?tab:defaultTab,values};
 }
 
 export function writeRoute(url,tab,values) {

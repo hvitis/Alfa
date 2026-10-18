@@ -35,6 +35,10 @@ await copyFile(resolve(web, 'content/teaching-adr.md'), resolve(destination, `do
 await copyFile(resolve(web, 'content/teaching-adr.pl.md'), resolve(destination, 'docs/teaching-adr.pl.md'));
 await copyFile(resolve(web, 'content/architecture.mmd'), resolve(destination, 'docs/architecture.mmd'));
 await copyFile(resolve(web, 'assets/wiring-diagram.svg'), resolve(destination, 'docs/wiring-diagram.svg'));
+await mkdir(resolve(destination, 'assets'), { recursive: true });
+for (const file of ['house-preview.png', 'pcb-render.svg', 'pdf-preview.png', 'software-architecture.png']) {
+  await copyFile(resolve(web, `assets/${file}`), resolve(destination, `assets/${file}`));
+}
 await writeFile(resolve(destination, '.nojekyll'), '');
 await copyFile(resolve(web, 'assets/og-cloud.png'), resolve(destination, 'og-cloud.png'));
 await exportAdr(resolve(destination, 'docs/adr.pdf'));

@@ -76,7 +76,7 @@ def cover():
     scenery.glow(ax, px, py, 12, z=5.5)
     view.polygon([(cx - 15.3, cy - 20.4), (cx + 15.3, cy - 20.4), (cx + 15.3, cy + 20.4), (cx - 15.3, cy + 20.4)], "#ffe7a3",
                  edge="none", z=6)
-    ax.text(px, py + .5, "M", fontsize=15, color="#d9603b", ha="center", va="center", zorder=6.2, fontproperties=scenery.title_font())
+    ax.text(px, py + .5, "A", fontsize=15, color="#d9603b", ha="center", va="center", zorder=6.2, fontproperties=scenery.title_font())
     spx, spy = view.p(*P["front"]["speaker_centre"])
     scenery.glow(ax, spx, spy, 5, color="#a9c8ff", z=5.5)
     # Snow lying on both roof slopes, the chimney tab and the knobs.

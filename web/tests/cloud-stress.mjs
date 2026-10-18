@@ -89,7 +89,7 @@ try {
     await page.mouse.click(rect.x+rect.width/2,rect.y+rect.height/2);
     assert((await page.locator('#viewer-status').textContent()).includes(title));
   }
-  await page.selectOption('#cloud-mode','battery_open'); await waitCloud('battery_open');
+  await page.locator('[data-for="cloud-mode"] [data-value="battery_open"]').click(); await waitCloud('battery_open');
   const rearLabel=page.locator('.annotation').filter({hasText:/^R-00 · Skorupa tylna$/});
   await rearLabel.waitFor({state:'visible'});
   await rearLabel.scrollIntoViewIfNeeded();
@@ -99,7 +99,7 @@ try {
   await page.locator('#cloud-labels').uncheck();
   await mkdir('test-results',{recursive:true});
   await page.locator('#viewport').screenshot({path:'test-results/cloud-rear.png'});
-  await page.selectOption('#cloud-mode','assembled'); await waitCloud('assembled');
+  await page.locator('[data-for="cloud-mode"] [data-value="assembled"]').click(); await waitCloud('assembled');
   await page.mouse.move(5,5);
   assert(await page.locator('.model-tooltip').isHidden());
   await page.locator('#cloud-labels').uncheck();
@@ -112,17 +112,17 @@ try {
   }
   await page.getByRole('tab', { name: 'Elektronika' }).click();
   await page.waitForSelector('#viewport[data-scene="raspberry"][data-loaded="true"]');
-  await page.getByRole('tab', { name: 'Druk 3D' }).click(); await waitCloud('assembled');
+  await page.getByRole('tab', { name: 'Obudowa' }).click(); await waitCloud('assembled');
   // Warm all resources before measuring bounded growth.
   const before = await page.evaluate(() => window.__cloudViewerStats?.());
   const modes = ['exploded', 'inside', 'battery_open', 'assembled'];
   const started = Date.now();
   for (let i = 0; i < 100; i++) {
     const mode = modes[i % modes.length];
-    await page.selectOption('#cloud-mode', mode); await waitCloud(mode);
+    await page.locator(`[data-for="cloud-mode"] [data-value="${mode}"]`).click(); await waitCloud(mode);
     await page.setViewportSize(i % 2 ? { width: 1440, height: 1000 } : { width: 375, height: 812 });
-    await page.getByRole('tab', { name: 'Program' }).click();
-    await page.getByRole('tab', { name: 'Druk 3D' }).click(); await waitCloud(mode);
+    await page.getByRole('tab', { name: 'Oprogramowanie' }).click();
+    await page.getByRole('tab', { name: 'Obudowa' }).click(); await waitCloud(mode);
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Overflow at cycle ${i}`);
     assert.equal(await page.locator('#viewport canvas').count(), 1);
   }
@@ -140,7 +140,7 @@ try {
     await page.locator(`[data-part=${part}] summary`).press('Escape');
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.selectOption('#cloud-mode', 'assembled'); await waitCloud('assembled');
+  await page.locator('[data-for="cloud-mode"] [data-value="assembled"]').click(); await waitCloud('assembled');
   await mkdir('test-results', { recursive: true });
   await page.screenshot({ path: 'test-results/cloud-radio.png', fullPage: true });
   // Keep a high oblique detail view so shoulder changes can be reviewed.

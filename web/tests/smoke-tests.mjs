@@ -49,8 +49,9 @@ try {
         await page.waitForSelector('html[lang="en"][data-ready="true"]');
         assert.match(await page.locator('.intro h1').innerHTML(), /Little radio/);
         assert.equal(await page.locator('base').getAttribute('href'), '../');
+        await page.getByRole('tab', { name: 'Enclosure' }).click();
         await scene('cloud', 'assembled');
-        await page.selectOption('#pricing-case', 'plywood-house');
+        await page.locator('[data-for="pricing-case"] [data-value="plywood-house"]').click();
         assert((await page.locator('#pricing-tbody').textContent()).includes('Birch plywood'));
         assert((await page.locator('footer').textContent()).includes('Not a medical device. For educational purposes only.'));
         await page.getByRole('link', { name: 'PL', exact: true }).click();
@@ -58,7 +59,7 @@ try {
         await page.waitForSelector('html[lang="pl"][data-ready="true"]');
       }
       assert.equal(await page.locator('html').getAttribute('lang'), 'pl');
-      assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['Druk 3D', 'Sklejka', 'Elektronika', 'Program']);
+      assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['Główna', 'Obudowa', 'Elektronika', 'Oprogramowanie', 'Inne']);
       assert.equal(await page.locator('meta[property="og:image"]').getAttribute('content'),'https://hvitis.github.io/Alfa/og-cloud.png');
       assert.equal(await page.locator('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
       const pdf=await page.request.get(`${origin}${prefix}docs/adr.pdf`);
@@ -66,11 +67,21 @@ try {
       const card=await page.request.get(`${origin}${prefix}og-cloud.png`);
       const png=await card.body();
       assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),630);
+
+      // Verify shade cards on the main page
+      assert.equal(await page.locator('.shade-card').count(), 4);
+      assert.equal(await page.locator('.shade-card .shade-layer.layer-primary').count(), 4);
+      assert.equal(await page.locator('.shade-card .shade-layer.layer-secondary').count(), 4);
+
+      // Navigate to Obudowa via the card button
+      await page.locator('.shade-card[data-card="obudowa"] .card-nav-btn').click();
+      assert.equal(await page.locator('#panel-obudowa').isVisible(), true);
       await scene('cloud', 'assembled');
       if (prefix === '/' && viewport.width === 1440 && process.env.SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.SMOKE_SCREENSHOT, fullPage: true });
       assert((await page.locator('#cloud-facts').textContent()).includes('PETG'));
       for (const mode of ['exploded', 'inside', 'battery_open', 'assembled']) {
-        await page.selectOption('#cloud-mode', mode); await scene('cloud', mode);
+        await page.locator(`[data-for="cloud-mode"] [data-value="${mode}"]`).click();
+        await scene('cloud', mode);
       }
       await page.locator('#cloud-labels').check(); await page.locator('#cloud-labels').uncheck();
       await page.locator('#cloud-clearances').check(); await page.locator('#cloud-clearances').uncheck();
@@ -79,10 +90,10 @@ try {
         assert(response.ok(), asset); assert((await response.body()).length > 100, asset);
       }
       assert((await page.locator('.pricing-total-value').textContent()).includes('390 – 480'));
-      await page.selectOption('#pricing-controller', 'pico');
+      await page.locator('[data-for="pricing-controller"] [data-value="pico"]').click();
       assert((await page.locator('.pricing-total-value').textContent()).includes('280 – 350'));
       assert((await page.locator('#pricing-tbody').textContent()).includes('Pico 2 WH'));
-      await page.selectOption('#pricing-case', 'plywood-house');
+      await page.locator('[data-for="pricing-case"] [data-value="plywood-house"]').click();
       assert((await page.locator('.pricing-total-value').textContent()).includes('270 – 340'));
       assert((await page.locator('#pricing-tbody').textContent()).includes('Sklejka brzozowa 6 mm'));
       assert((await page.locator('#material-title').textContent()).includes('Little House Radio'));
@@ -92,39 +103,64 @@ try {
       await page.locator('button[data-sort-key="price"]').click();
       const firstPriceAsc = await page.locator('#pricing-tbody tr td:nth-child(3) strong').first().textContent();
       assert.equal(firstPriceAsc, '~3 – 6 zł');
-      await page.selectOption('#pricing-case', '3d-print');
-      await page.selectOption('#pricing-controller', 'pi3');
+      await page.locator('[data-for="pricing-case"] [data-value="3d-print"]').click();
+      await page.locator('[data-for="pricing-controller"] [data-value="pi3"]').click();
       await noOverflow();
-      await page.getByRole('tab', { name: 'Sklejka' }).click();
+
+      // Obudowa: Switch to Sklejka via top big button
+      await page.locator('[data-subview="sklejka"]').click();
+      assert.equal(await page.locator('#subview-sklejka').isVisible(), true);
       await scene('house', 'assembled');
       for (const mode of ['roof_open', 'inside', 'exploded', 'assembled']) {
-        await page.selectOption('#assembly-mode', mode); await scene('house', mode);
+        await page.locator(`[data-for="assembly-mode"] [data-value="${mode}"]`).click();
+        await scene('house', mode);
       }
       await page.locator('#show-wood').uncheck(); await page.locator('#show-wood').check();
       await page.locator('#show-labels').check(); await page.locator('#show-labels').uncheck();
-      await page.selectOption('#plywood-project', 'case'); await scene('case', 'enclosure');
-      await page.selectOption('#assembly-mode', 'internals'); await scene('case', 'internals');
-      await page.selectOption('#assembly-mode', 'exploded'); await scene('case', 'exploded');
+      await page.locator('[data-for="plywood-project"] [data-value="case"]').click();
+      await scene('case', 'enclosure');
+      await page.locator('[data-for="assembly-mode"] [data-value="internals"]').click();
+      await scene('case', 'internals');
+      await page.locator('[data-for="assembly-mode"] [data-value="exploded"]').click();
+      await scene('case', 'exploded');
       await noOverflow();
-      await page.getByRole('tab', { name: 'Elektronika' }).click(); await scene('raspberry');
+
+      // Switch to Elektronika tab
+      await page.getByRole('tab', { name: 'Elektronika' }).click();
+      await scene('raspberry');
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length);
       assert((await page.locator('#wiring-body').textContent()).includes('Fizyczny pin'));
       const first = atlas.wires[0].id;
       await page.getByRole('button', { name: `Śledź przewód ${first}`, exact: true }).click();
       assert.equal(await page.locator(`[data-wire="${first}"]`).getAttribute('aria-pressed'), 'true');
       assert((await page.locator('#wire-detail').textContent()).includes(first));
-      await page.selectOption('#circuit-filter', 'Audio');
+      await page.locator('[data-for="circuit-filter"] [data-value="Audio"]').click();
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.filter(wire => wire.group === 'Audio').length);
       await page.getByRole('button', { name: 'Pokaż wszystkie przewody', exact: true }).click();
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length);
-      await page.selectOption('#hardware-controller', 'pico'); await scene('pico');
+
+      // Elektronika: Switch to Pico via top big button
+      await page.locator('[data-controller="pico"]').click();
+      await scene('pico');
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length + 2);
       assert.equal(await page.locator('#pico-notice').isVisible(), true);
       assert((await page.locator('#wiring-body').textContent()).includes('GP'));
       assert((await page.locator('#wiring-body').textContent()).includes('PWR3'));
+
+      // Elektronika: Switch to PCB via top big button
+      await page.locator('[data-controller="pcb"]').click();
+      await scene('pcb');
+      assert.equal(await page.locator('#pcb-details').isVisible(), true);
+      await page.locator('[data-for="pcb-mode"] [data-value="board"]').click();
+      await scene('pcb', 'board');
+      await page.locator('[data-for="pcb-mode"] [data-value="assembled"]').click();
+      await scene('pcb', 'assembled');
+      await page.locator('[data-controller="raspberry"]').click();
       await page.getByRole('button', { name: 'Zresetuj kamerę' }).click();
       await noOverflow();
-      await page.getByRole('tab', { name: 'Program' }).click();
+
+      // Switch to Oprogramowanie tab
+      await page.getByRole('tab', { name: 'Oprogramowanie' }).click();
       await page.waitForSelector('#device-screen[data-ready="true"]');
       assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'A');
       await page.locator('[data-button="right"]').click();
@@ -146,10 +182,9 @@ try {
       await page.waitForTimeout(450);
       await center.click();
       assert.equal(await page.locator('#device-screen').getAttribute('data-phase'), 'card', 'A short click cancels the paused drawing');
-      assert.equal(await page.locator('#software-view').inputValue(), 'design');
+
       assert((await page.locator('#adr-content h1').textContent()).includes('ADR 0001'));
       assert((await page.locator('#adr-content').textContent()).includes('PlayerSession'));
-      await page.selectOption('#software-view', 'implementation');
       await page.waitForSelector('#architecture-diagram[data-rendered="true"] svg');
       assert.equal(await page.locator('#architecture-diagram').getAttribute('aria-busy'), 'false');
       for (const name of ['PlayerSession', 'ST7789', 'StreamingAudioPlayer', 'Debouncer', 'PreviewDisplay', 'ServiceWatchdog']) assert((await page.locator('#architecture-diagram').textContent()).includes(name), name);
@@ -160,39 +195,41 @@ try {
         await mkdir(directory, { recursive: true });
         await page.screenshot({ path: path.join(directory, 'software-architecture.png'), fullPage: true });
       }
-      // The fictional MDR example must never ship without its notice, watermark, and disclaimer footer.
-      await page.selectOption('#software-view', 'teaching');
+
+      // Switch to Inne tab
+      await page.getByRole('tab', { name: 'Inne' }).click();
       await page.waitForSelector('#teaching-adr-content .teaching-diagram[data-rendered="true"] svg');
       const teaching = await page.locator('#teaching-adr-content').textContent();
       for (const phrase of ['TEACHING MATERIAL · NOT A MEDICAL DEVICE · FOR EDUCATIONAL PURPOSES ONLY', 'Read this first', 'Alfa is not a medical device', 'Alfa-L does not exist', 'Nobody signed anything']) assert(teaching.includes(phrase), phrase);
       assert((await page.locator('#teaching-adr-content').evaluate(element => getComputedStyle(element, '::after').backgroundImage)).includes('TEACHING'), 'Teaching ADR watermark');
       assert(await page.locator('#teaching-adr-content').isVisible());
       assert((await page.locator('footer').textContent()).includes('To nie jest wyrób medyczny. Wyłącznie do celów edukacyjnych.'));
+      assert.equal(await page.locator('.hub-download-card').count(), 3);
       await noOverflow();
+
       const teachingPdf = await page.request.get(`${origin}${prefix}docs/teaching-material-adr-example-not-a-medical-device.pdf`);
       assert((await teachingPdf.body()).subarray(0, 5).equals(Buffer.from('%PDF-')), 'Teaching ADR download must be a real PDF');
       assert((await (await page.request.get(`${origin}${prefix}docs/teaching-material-adr-example-not-a-medical-device.md`)).text()).includes('NOT A MEDICAL DEVICE'));
       for (const asset of ['docs/adr.md', 'docs/adr.pdf', 'og-cloud.png', 'docs/architecture.mmd', 'THIRD-PARTY-LICENSES.txt']) assert((await page.request.get(`${origin}${prefix}${asset}`)).ok());
+
       // Direct links and refreshes must work without server-side routing.
-      await page.goto(`${origin}${prefix}?controller=pico#hardware`, { waitUntil: 'networkidle' });
-      await scene('pico'); // URL parameter selects the controller.
-      await page.goto(`${origin}${prefix}#hardware`, { waitUntil: 'networkidle' });
-      await scene('raspberry'); // Without controller parameter, default is restored.
+      await page.goto(`${origin}${prefix}?controller=pico#elektronika`, { waitUntil: 'networkidle' });
+      await scene('pico');
+      await page.goto(`${origin}${prefix}#elektronika`, { waitUntil: 'networkidle' });
+      await scene('raspberry');
       await page.reload({ waitUntil: 'networkidle' });
       await page.waitForSelector('html[data-ready="true"]'); await scene('raspberry');
       await page.getByRole('tab', { name: 'Elektronika' }).focus();
       await page.keyboard.press('ArrowRight');
-      assert.equal(await page.getByRole('tab', { name: 'Program' }).getAttribute('aria-selected'), 'true');
-      for (const tab of ['software', '3dprint']) {
-        await page.goto(`${origin}${prefix}#${tab}`, { waitUntil: 'networkidle' });
-        // A hash-only navigation does not wait for lazy module imports.
-        // Finish the requested view before the explicit refresh check.
-        if (tab === '3dprint') await scene('cloud', 'assembled');
+      assert.equal(await page.getByRole('tab', { name: 'Oprogramowanie' }).getAttribute('aria-selected'), 'true');
+      for (const [hashTab, panelName] of [['software', 'oprogramowanie'], ['3dprint', 'obudowa'], ['elektronika', 'elektronika'], ['inne', 'inne'], ['glowna', 'glowna']]) {
+        await page.goto(`${origin}${prefix}#${hashTab}`, { waitUntil: 'networkidle' });
+        if (['3dprint', 'obudowa'].includes(hashTab)) await scene('cloud', 'assembled');
         await page.reload({ waitUntil: 'networkidle' });
         await page.waitForSelector('html[data-ready="true"]');
-        assert.equal(await page.locator('#viewer-card').isVisible(), tab === '3dprint');
-        if (tab === '3dprint') await scene('cloud', 'assembled');
-        assert.equal(await page.locator(`#panel-${tab}`).isVisible(), true);
+        assert.equal(await page.locator('#viewer-card').isVisible(), ['3dprint', 'obudowa', 'elektronika'].includes(hashTab));
+        if (['3dprint', 'obudowa'].includes(hashTab)) await scene('cloud', 'assembled');
+        assert.equal(await page.locator(`#panel-${panelName}`).isVisible(), true);
       }
       assert(meshes.length >= 7, 'All plywood model files must load');
       assert.deepEqual(errors, []);
