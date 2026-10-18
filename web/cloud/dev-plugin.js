@@ -72,6 +72,8 @@ export function cloudDevelopment(root) {
           '/og-cloud.png':['web/assets/og-cloud.png','image/png'],
           '/og-pcb.png':['web/assets/og-pcb.png','image/png'],
           '/docs/adr.pdf':['web/.generated/adr.pdf','application/pdf'],
+          '/docs/plywood-assembly-guide.pdf':['web/.generated/plywood-assembly-guide.pdf','application/pdf'],
+          '/docs/wiring-diagram.svg':['web/assets/wiring-diagram.svg','image/svg+xml'],
         };
         if(!files[url])return next();
         try{
@@ -79,6 +81,11 @@ export function cloudDevelopment(root) {
           if(url==='/docs/adr.pdf'){
             const {exportAdr}=await import('../export-pdf.mjs');
             pdfJob ||= exportAdr(resolve(root,file)).finally(()=>{pdfJob=undefined});
+            await pdfJob;
+          }
+          if(url==='/docs/plywood-assembly-guide.pdf'){
+            const {exportPlywoodGuide}=await import('../export-plywood-guide.mjs');
+            pdfJob ||= exportPlywoodGuide(resolve(root,file)).finally(()=>{pdfJob=undefined});
             await pdfJob;
           }
           response.setHeader('Content-Type',type);

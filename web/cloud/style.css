@@ -159,3 +159,84 @@
   .pricing-table-wrap th, .pricing-table-wrap td { padding: 10px 8px; }
 }
 
+.plywood-downloads { display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px; padding: 28px; margin-top: 32px; border: 2px solid var(--ink); border-radius: 24px; background: var(--yellow); box-shadow: 4px 5px 0 #d7c795; }
+.plywood-downloads h3 { margin: 0; }
+.plywood-downloads p { font-size: 12px; max-width: 380px; margin-bottom: 0; }
+.plywood-big-download { grid-column: span 2; font-size: 13px !important; font-weight: 800 !important; padding: 14px 18px !important; background: var(--ink) !important; color: #ffffff !important; box-shadow: 3px 4px 0 #5d4784 !important; letter-spacing: .02em; }
+.plywood-big-download:hover { background: #5d4784 !important; transform: translateY(-2px); box-shadow: 4px 5px 0 #39305b !important; }
+.inspector-download-button { display: block; margin-top: 14px; padding: 11px 14px; background: var(--ink); color: #ffffff; border: 1.5px solid var(--ink); border-radius: 12px; font-size: 11px; font-weight: 800; text-decoration: none; text-align: center; box-shadow: 2px 3px 0 #5d4784; transition: transform .15s, background .15s; }
+.inspector-download-button:hover { background: #5d4784; transform: translateY(-2px); }
+@media (max-width: 1050px) { .plywood-downloads { grid-template-columns: 1fr; gap: 20px; } }
+@media (max-width: 760px) { .plywood-downloads { padding: 23px 18px; } }
+
+.hardware-diagram-card {
+  margin-top: 36px;
+  padding: 28px;
+  border: 2px solid var(--ink);
+  border-radius: 24px;
+  background: var(--paper);
+  box-shadow: 4px 5px 0 #bcb1d0;
+  box-sizing: border-box;
+}
+.diagram-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.diagram-header h3 {
+  margin: 0 0 8px;
+  font: 800 24px/1.25 var(--display);
+}
+.diagram-header p {
+  margin: 0;
+  font-size: 12px;
+  max-width: 620px;
+  line-height: 1.6;
+}
+.diagram-actions {
+  flex-shrink: 0;
+}
+.diagram-actions .text-link {
+  margin-top: 0;
+  white-space: nowrap;
+}
+.hardware-diagram-viewport {
+  width: 100%;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fcfaf6;
+  box-shadow: 3px 4px 0 #d8cce3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  box-sizing: border-box;
+}
+.hardware-diagram-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+@media (max-width: 1050px) {
+  .diagram-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+}
+@media (max-width: 760px) {
+  .hardware-diagram-card {
+    padding: 20px 14px;
+    margin-top: 26px;
+  }
+  .hardware-diagram-viewport {
+    padding: 8px;
+    border-radius: 14px;
+  }
+}
+
+

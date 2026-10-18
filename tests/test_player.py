@@ -4,10 +4,11 @@ import io
 import struct
 import tempfile
 import threading
+import time
 import unittest
 import wave
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from PIL import Image
 
@@ -130,6 +131,84 @@ class PlayerTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "aplay exit 1"):
                 _ = audio.playing
         audio.close()
+
+    def test_audio_watchdog_recovers_stalled_broken_and_exited_workers(self):
+        class Pipe:
+            def __init__(self, broken=False):
+                self.broken = broken
+                self.writing, self.released = threading.Event(), threading.Event()
+                self.closed = False
+
+            def write(self, payload):
+                self.writing.set()
+                if self.broken:
+                    raise BrokenPipeError("ALSA stopped reading")
+                self.released.wait(2)
+                return len(payload)
+
+            def close(self):
+                self.closed = True
+
+        class Process:
+            def __init__(self, mode):
+                self.stdin = Pipe(broken=mode == "broken")
+                self.done = mode == "exited"
+
+            def poll(self): return 1 if self.done else None
+            def terminate(self): self.done = True; self.stdin.released.set()
+            def wait(self, **kwargs): return 1
+
+        for mode in ("stalled", "broken", "exited"):
+            with self.subTest(mode=mode):
+                audio = StreamingAudioPlayer(self.settings)
+                self.addCleanup(audio.close)
+                first, second = Process(mode), Process("healthy")
+                path = self.recording(48000)
+                with patch("app.audio.audio_device", return_value="test"), \
+                     patch("app.audio.subprocess.Popen", side_effect=[first, second]) as spawn:
+                    audio.play(path)
+                    worker = audio._thread
+                    cache = audio.preload(path)
+                    if mode == "stalled":
+                        self.assertTrue(first.stdin.writing.wait(1))
+                        self.assertFalse(audio.recover(), "A fresh worker must be left running")
+                        audio._last_write = time.monotonic() - 2
+                    else:
+                        worker.join(1)
+                        self.assertFalse(worker.is_alive())
+                    if mode == "exited":
+                        self.assertTrue(audio.playing, "Playback checks must recover failures too")
+                    else:
+                        self.assertTrue(audio.recover())
+                    self.assertEqual(spawn.call_count, 2)
+                    self.assertFalse(worker.is_alive())
+                    self.assertTrue(first.stdin.closed)
+                    self.assertTrue(second.stdin.writing.wait(1))
+                    self.assertIs(audio.preload(path), cache)
+                    self.assertIsNone(audio._error)
+                    self.assertFalse(audio.recover())
+                    audio.play(path)
+                    self.assertTrue(audio.playing)
+                    self.assertEqual(spawn.call_count, 2)
+                    audio.close()
+                    self.assertTrue(second.stdin.closed)
+
+    def test_audio_watchdog_bounds_retries_for_a_permanently_failed_device(self):
+        audio = StreamingAudioPlayer(self.settings)
+        self.addCleanup(audio.close)
+        process = Mock()
+        process.poll.return_value = 1
+        audio._process = process
+        with patch.object(audio, "_close_stream"), patch.object(audio, "start") as start, \
+             patch("app.audio.time.monotonic", return_value=100):
+            for _ in range(3):
+                self.assertTrue(audio.recover())
+            with self.assertRaisesRegex(RuntimeError, "failed repeatedly"):
+                audio.recover()
+            self.assertEqual(start.call_count, 3)
+        with patch.object(audio, "_close_stream"), patch.object(audio, "start"), \
+             patch("app.audio.time.monotonic", return_value=111):
+            self.assertTrue(audio.recover(), "Old failures must expire")
 
     def test_muted_pcm_is_zero_and_volume_rejects_invalid_values(self):
         payload = struct.pack("<hhh", -32768, 32767, 1000)

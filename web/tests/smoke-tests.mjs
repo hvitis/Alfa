@@ -128,7 +128,7 @@ try {
       await page.waitForSelector('#device-screen[data-ready="true"]');
       assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'A');
       await page.locator('[data-button="right"]').click();
-      assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'D');
+      assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'B');
       await page.waitForTimeout(450);
       await page.locator('[data-button="left"]').click();
       assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'A');

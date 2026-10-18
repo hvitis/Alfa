@@ -1,6 +1,7 @@
 import { build } from 'vite';
 import { exportAdr } from './export-pdf.mjs';
 import { exportTeachingAdr, renderTeaching, teachingMarkdown, TEACHING_FILE } from './export-teaching.mjs';
+import { exportPlywoodGuide } from './export-plywood-guide.mjs';
 import { writeEnglishPage } from './i18n-html.mjs';
 import {pcbPage} from './pcb/page.mjs';
 import {renderPcbImages} from './pcb/render.mjs';
@@ -33,11 +34,15 @@ await copyFile(resolve(web, 'content/adr.pl.md'), resolve(destination, 'docs/adr
 await copyFile(resolve(web, 'content/teaching-adr.md'), resolve(destination, `docs/${TEACHING_FILE}.md`));
 await copyFile(resolve(web, 'content/teaching-adr.pl.md'), resolve(destination, 'docs/teaching-adr.pl.md'));
 await copyFile(resolve(web, 'content/architecture.mmd'), resolve(destination, 'docs/architecture.mmd'));
+await copyFile(resolve(web, 'assets/wiring-diagram.svg'), resolve(destination, 'docs/wiring-diagram.svg'));
 await writeFile(resolve(destination, '.nojekyll'), '');
 await copyFile(resolve(web, 'assets/og-cloud.png'), resolve(destination, 'og-cloud.png'));
 await exportAdr(resolve(destination, 'docs/adr.pdf'));
 await copyFile(resolve(destination, 'docs/adr.pdf'),resolve(web,'.generated/adr.pdf'));
 await exportTeachingAdr(resolve(destination, `docs/${TEACHING_FILE}.pdf`));
+await exportPlywoodGuide(resolve(destination, 'docs/plywood-assembly-guide.pdf'));
+await copyFile(resolve(destination, 'docs/plywood-assembly-guide.pdf'), resolve(web, '.generated/plywood-assembly-guide.pdf'));
+await copyFile(resolve(destination, 'docs/plywood-assembly-guide.pdf'), resolve(root, 'design/cloud-radio/generated/cloud/plywood-assembly-guide.pdf'));
 // Retain notices for installed packages, including dependencies bundled by Mermaid.
 const lock = JSON.parse(await readFile(resolve(root, 'package-lock.json'), 'utf8'));
 const notices = ['Third-party package notices for the static website.\nOriginal project code: MIT.\n'];

@@ -15,7 +15,7 @@ There are no alphabet or standalone overlays, and no separate letter selection f
 | `letter_drawing` | Stroke data and drawing and celebration timing |
 | `audio` | Recordings, ALSA device, amplifier pin, volume, and volume cap |
 | `lesson` | Selected letters and idle timers |
-| `controls` | Press guard and exit timing for the optional photo player |
+| `controls` | Physical button guard and exit timing |
 
 The current alphabet uses A, D, G, M, P, T, W, in that order.
 The default animations run at 4 FPS, matching the former standalone configuration.
@@ -63,3 +63,21 @@ Run `make restart` after updating this checkout on the Pi.
 The installer replaces the service units so the player and splash use the single configuration.
 Old preset or selection files left on a device have no effect.
 Before an upgrade, preserve any device-specific settings in the current `config.json`.
+
+## Protection against repeated button presses
+
+The physical buttons ignore additional actions while a card slides, a character animation runs, or the alphabet speaks.
+Ignored presses produce no sound and do not queue actions.
+A paused letter drawing can resume with another CENTER hold after speech ends.
+
+The fifth physical press within two seconds shows a sad face.
+All five buttons share this count, including presses that the app ignores.
+The face clears and the buttons work again after two seconds without a press.
+Further presses extend this pause.
+A held button counts once, and a release cannot trigger a rejected CENTER action.
+An active recording continues during the pause.
+
+The audio watchdog replaces a stalled or failed playback stream without restarting the lesson.
+It detects a stream that accepts no audio for one second.
+Three recovery attempts within ten seconds cause an audio error if playback fails again.
+SSH keyboard controls remain available for adult testing.

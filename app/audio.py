@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import shutil
@@ -223,6 +224,8 @@ class StreamingAudioPlayer:
         self._active = False
         self._process = self._thread = self._log = None
         self._error = None
+        self._last_write = 0.0
+        self._recoveries = []
         self._stop_event = threading.Event()
         self._lock = threading.Lock()
         self._speech = b""
@@ -261,6 +264,8 @@ class StreamingAudioPlayer:
             import fcntl
             if hasattr(fcntl, "F_SETPIPE_SZ") and hasattr(self._process.stdin, "fileno"):
                 fcntl.fcntl(self._process.stdin.fileno(), fcntl.F_SETPIPE_SZ, 4096)
+            self._error = None
+            self._last_write = time.monotonic()
             self._stop_event.clear()
             self._thread = threading.Thread(target=self._stream, args=(self._process,), daemon=True)
             self._thread.start()
@@ -331,6 +336,7 @@ class StreamingAudioPlayer:
                     written = process.stdin.write(remaining)
                     if not written:
                         raise RuntimeError("The audio stream stopped accepting samples.")
+                    self._last_write = time.monotonic()
                     remaining = remaining[written:]
         except Exception as error:
             if not self._stop_event.is_set():
@@ -344,12 +350,12 @@ class StreamingAudioPlayer:
 
     @property
     def playing(self):
-        if self._error:
+        self.recover()
+        # Also handle a worker that exits between the watchdog check and this poll.
+        while self._process and (self._error or self._process.poll() is not None):
+            self.recover()
+        if self._error and self._process is None:
             raise self._error
-        code = self._process.poll() if self._process else None
-        if code is not None:
-            detail = self.log_path.read_text(errors="replace")[-2000:].strip()
-            raise RuntimeError(f"Audio playback failed (aplay exit {code}): {detail}")
         if self.simulate and self._active and time.monotonic() - self._started >= self.duration:
             self._active = False
             self._position = self.duration
@@ -371,7 +377,26 @@ class StreamingAudioPlayer:
         with self._lock:
             self._effects.clear()
 
-    def close(self):
+    def recover(self):
+        """Recycle an exited or stalled ALSA worker; keep the lesson and PCM cache."""
+        if self.simulate or self._process is None:
+            return False
+        now = time.monotonic()
+        if (not self._error and self._process.poll() is None
+                and now - self._last_write < 1.0):
+            return False
+        # A missing/broken device should report a fault, never spawn workers in a loop.
+        self._recoveries = [stamp for stamp in self._recoveries if now - stamp < 10]
+        if len(self._recoveries) >= 3:
+            detail = self._error or f"aplay exit {self._process.poll()}"
+            raise RuntimeError(f"Audio stream failed repeatedly ({detail}); check the ALSA device and amplifier.")
+        self._recoveries.append(now)
+        self._close_stream()
+        self.start()
+        logging.getLogger(__name__).warning("Restarted the audio stream after a playback failure or stall.")
+        return True
+
+    def _close_stream(self):
         self._stop_event.set()
         if self._process and self._process.poll() is None:
             self._process.terminate()
@@ -387,5 +412,8 @@ class StreamingAudioPlayer:
         if self._log:
             self._log.close()
         self._process = self._thread = self._log = None
+
+    def close(self):
+        self._close_stream()
         self.silence()
         self._cache.clear()

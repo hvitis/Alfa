@@ -8,6 +8,24 @@ def font(size):
         return ImageFont.load_default(size=size)
 
 
+def sad_face_frame(size):
+    """A quiet visual request to slow down, readable without text."""
+    width, height = size
+    frame = Image.new("RGB", size, "#fffdf5")
+    draw = ImageDraw.Draw(frame)
+    cx, cy = width // 2, height // 2
+    radius = min(width, height) * 3 // 8
+    ink = "#304b5f"
+    draw.ellipse((cx - radius, cy - radius, cx + radius, cy + radius),
+                 fill="#f5d878", outline=ink, width=4)
+    eye = max(3, radius // 15)
+    for x in (cx - radius // 3, cx + radius // 3):
+        draw.ellipse((x - eye, cy - radius // 4 - eye, x + eye, cy - radius // 4 + eye), fill=ink)
+    draw.arc((cx - radius // 2, cy + radius // 5, cx + radius // 2, cy + radius),
+             200, 340, fill=ink, width=5)
+    return frame
+
+
 def screen_patterns(size):
     width, height = size
     for color in ("red", "green", "blue", "white", "black"):

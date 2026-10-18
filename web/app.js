@@ -193,7 +193,7 @@ function selectWire(id) {
 function renderWires() {
   const pcb = $('#hardware-controller').value === 'pcb';
   $('#pcb-controls').hidden = !pcb; $('#pcb-details').hidden = !pcb;
-  for (const element of document.querySelectorAll('#panel-hardware .wiring-heading, #wiring-table, #panel-hardware .selected-wire, #panel-hardware label[for="circuit-filter"], #circuit-filter, #hardware-wiring-note')) element.hidden = pcb;
+  for (const element of document.querySelectorAll('#panel-hardware .wiring-heading, #wiring-table, #panel-hardware .selected-wire, #panel-hardware label[for="circuit-filter"], #circuit-filter, #hardware-wiring-note, #hardware-diagram-card')) element.hidden = pcb;
   if (pcb) {
     $('#controller-title').textContent=t('pcb.title'); $('#controller-description').textContent=t('pcb.description');
     $('#pico-notice').hidden=true;

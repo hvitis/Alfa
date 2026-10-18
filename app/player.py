@@ -1,6 +1,8 @@
 import random
+import time
 
-from .ui import Gallery, player_frame
+from .buttons import MashGuard
+from .ui import Gallery, player_frame, sad_face_frame
 
 
 # Select the character once, then use its matching prepared recording after the slide.
@@ -22,6 +24,27 @@ class PlayerSession:
         self.card_motion = None
         self.idle = None
         self.pending_character = None
+        self.mash_guard = MashGuard()
+
+    @property
+    def buttons_paused(self):
+        return self.mash_guard.blocked(time.monotonic())
+
+    def accept_press(self, button, now):
+        # Count every debounced press, including presses ignored while output is busy.
+        if not self.mash_guard.accept(now):
+            self.release("center")
+            return False
+        self.update_character()
+        if self.pending_character:
+            return False
+        if self.card_motion and self.card_motion.render_key() is not None:
+            return False
+        if self.animation and self.animation.index() is not None:
+            return False
+        if self.drawing and self.audio.playing:
+            return False
+        return True
 
     def card(self):
         from PIL import Image
@@ -67,7 +90,9 @@ class PlayerSession:
         self.animation.start(name, minimum_seconds=duration)
 
     def feedback(self, button, accepted=True):
-        name = "tick" if not accepted else "whoosh" if button in ("left", "right") else "pop" if button == "center" else "tick"
+        if not accepted:
+            return
+        name = "whoosh" if button in ("left", "right") else "pop" if button == "center" else "tick"
         self.audio.effect(name)
 
     def stop_drawing(self):
@@ -79,6 +104,8 @@ class PlayerSession:
 
     @property
     def animation_fps(self):
+        if self.buttons_paused:
+            return None
         if self.idle and self.idle.peeking:
             return 10
         if self.card_motion and self.card_motion.active:
@@ -181,6 +208,8 @@ class PlayerSession:
 
     def frame(self):
         self.update_character()
+        if self.buttons_paused:
+            return sad_face_frame(self.card().size)
         if self.idle and self.idle.peeking:
             return self.idle.frame(self.card())
         if self.card_motion:
@@ -202,6 +231,8 @@ class PlayerSession:
 
     def render_key(self):
         self.update_character()
+        if self.buttons_paused:
+            return ("buttons-paused",)
         if self.idle and (self.idle.peeking or self.idle.sleeping):
             return (self.gallery.index, "idle", self.idle.render_key())
         if self.card_motion:

@@ -1,6 +1,7 @@
 import math
 import statistics
 import time
+from collections import deque
 
 from .media import atomic_json
 
@@ -74,6 +75,30 @@ class PressGuard:
         return True
 
 
+class MashGuard:
+    """Pause after five presses in two seconds, until two seconds of quiet."""
+    def __init__(self, seconds=2.0, limit=4):
+        self.seconds, self.limit = seconds, limit
+        self.presses = deque(maxlen=limit + 1)
+        self.until = None
+
+    def blocked(self, now):
+        if self.until is not None and now >= self.until:
+            self.until = None
+            self.presses.clear()
+        return self.until is not None
+
+    def accept(self, now):
+        paused = self.blocked(now)
+        while self.presses and now - self.presses[0] >= self.seconds:
+            self.presses.popleft()
+        self.presses.append(now)
+        if paused or len(self.presses) > self.limit:
+            self.until = now + self.seconds
+            return False
+        return True
+
+
 class CenterPress:
     """Emit one drawing action on hold, or one replay action on short release."""
     def __init__(self, seconds=0.6):
@@ -83,6 +108,9 @@ class CenterPress:
 
     def press(self, now):
         self.since, self.drawn = now, False
+
+    def cancel(self):
+        self.since, self.drawn = None, False
 
     def update(self, now):
         if self.since is not None and not self.drawn and now - self.since >= self.seconds:

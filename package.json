@@ -11,7 +11,8 @@
     "test:viewer": "node --test web/hardware-visualisation/tests/*.test.js",
     "build:site": "python3 web/build.py _site",
     "render:assets": "node web/render-assets.mjs",
-    "export:pdf": "node web/export-pdf.mjs"
+    "export:pdf": "node web/export-pdf.mjs",
+    "export:plywood-pdf": "node web/export-plywood-guide.mjs"
   },
   "devDependencies": {
     "markdown-it": "14.1.0",

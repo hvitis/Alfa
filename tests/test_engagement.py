@@ -221,14 +221,53 @@ class EngagementTests(unittest.TestCase):
             self.assertIsNone(motion.frame())
             self.assertFalse(motion.active)
 
-    def test_every_accepted_and_guarded_press_has_an_effect(self):
+    def test_only_accepted_presses_have_an_effect(self):
         session = self.session()
         with patch.object(self.audio, 'effect') as effect:
             for button, expected in [('left', 'whoosh'), ('right', 'whoosh'), ('center', 'pop'), ('up', 'tick'), ('down', 'tick')]:
                 session.feedback(button)
                 effect.assert_called_with(expected)
+                count = effect.call_count
                 session.feedback(button, accepted=False)
-                effect.assert_called_with('tick')
+                self.assertEqual(effect.call_count, count)
+
+    def test_buttons_cannot_interrupt_a_slide_speech_or_character(self):
+        session = self.session()
+        with patch('app.audio.time.monotonic', side_effect=self.clock):
+            self.assertTrue(session.accept_press('right', self.now))
+            session.action('right')
+            speech = self.audio._speech
+            self.now = .1
+            self.assertFalse(session.accept_press('left', self.now))
+            self.assertFalse(session.accept_press('center', self.now))
+            self.assertEqual(self.audio._speech, speech)
+            self.assertEqual(session.gallery.index, 1)
+            self.now = max(self.audio.duration, 2.1) + .1
+            self.assertTrue(session.accept_press('up', self.now))
+            session.action('up')
+            self.assertFalse(session.accept_press('down', self.now + .1))
+            self.now += .3
+            session.render_key()
+            self.assertIsNotNone(session.animation.active)
+            self.now += .5
+            self.assertFalse(session.accept_press('right', self.now))
+            self.now += session.animation.duration + .1
+            self.assertTrue(session.accept_press('right', self.now))
+
+    def test_fifth_press_releases_held_pencil_and_does_not_restart_audio(self):
+        session = self.session()
+        with patch('app.audio.time.monotonic', side_effect=self.clock):
+            session.accept_press('center', self.now)
+            session.action('draw')
+            started = self.audio._started
+            for i in range(1, 5):
+                self.now = i * .1
+                self.assertFalse(session.accept_press('right', self.now))
+            self.assertTrue(session.buttons_paused)
+            self.assertIsNone(session.hold_clock.since)
+            self.assertEqual(self.audio._started, started)
+            self.assertEqual(session.drawing.serial, 1)
+            self.assertEqual(session.gallery.index, 0)
 
     def test_mixer_adds_effect_without_restarting_speech_and_stop_keeps_the_effect(self):
         speech = struct.pack('<hh', 10000, -10000) * 4800
@@ -448,9 +487,65 @@ class EngagementTests(unittest.TestCase):
         self.assertTrue(any(sleeping for _, _, sleeping, _ in snapshots))
         self.assertEqual(sessions[0].last_action, 'Which letter?')
         self.assertEqual(sessions[0].drawing.serial, 0)
-        self.assertEqual([call.args[0] for call in effect.call_args_list], ['pop', 'tick', 'tick'])
+        self.assertEqual([call.args[0] for call in effect.call_args_list], ['pop', 'tick'])
         display.set_awake.assert_any_call(False)
         display.set_awake.assert_any_call(True)
+
+    def test_real_loop_counts_busy_presses_and_shows_sad_over_native_frames(self):
+        self.settings.data['lesson']['letters'] = ['A', 'B']
+        script = iter([(0, ('press', 'up')), (.05, ('release', 'up')), (.3, None),
+                       (.5, ('press', 'left')), (.6, ('release', 'left')),
+                       (.8, ('press', 'center')), (1, ('release', 'center')),
+                       (1.1, ('press', 'down')), (1.2, ('release', 'down')),
+                       (1.4, ('press', 'right')), (1.5, ('release', 'right')),
+                       (2, ('press', 'center')), (4, ('release', 'center')),
+                       (4.1, None), (10, ('press', 'right')), (10.1, ('release', 'right'))])
+        sessions, actions = [], []
+        event = [None]
+        outer = self
+
+        class Keyboard:
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self):
+                try:
+                    outer.now, event[0] = next(script)
+                except StopIteration:
+                    raise KeyboardInterrupt from None
+                return ''
+
+        class Session(PlayerSession):
+            def __init__(self, *args):
+                super().__init__(*args)
+                sessions.append(self)
+
+            def action(self, button):
+                actions.append((outer.now, button))
+                super().action(button)
+
+        debounce = Mock()
+        debounce.update.side_effect = lambda *_: event[0]
+        display = Mock(spec=['show', 'show_rgb565', 'close'])
+        with patch('app.app.prepare_images', return_value=self.paths), patch('app.app.display_resource', return_value=display), \
+             patch('app.app.CharacterAnimation', side_effect=lambda *args, **kwargs: CharacterAnimation(*args, **kwargs, clock=self.clock)), \
+             patch('app.app.adc_resource', return_value=Mock()), patch('app.app.load_calibration', return_value={}), \
+             patch('app.app.classify', return_value='center'), patch('app.app.Debouncer', return_value=debounce), \
+             patch('app.app.StreamingAudioPlayer', return_value=self.audio), patch('app.app.PlayerSession', Session), \
+             patch('app.app.Keyboard', Keyboard), patch('app.app.time.monotonic', side_effect=self.clock), \
+             patch('app.app.time.sleep'), patch.object(self.audio, 'effect', wraps=self.audio.effect) as effect:
+            with self.assertRaises(KeyboardInterrupt):
+                run_gallery(self.settings, standalone=True)
+        from app.ui import sad_face_frame
+        sad = sad_face_frame((240, 320)).tobytes()
+        sad_calls = [i for i, call in enumerate(display.method_calls)
+                     if call[0] == 'show' and call.args[0].tobytes() == sad]
+        self.assertTrue(sad_calls, 'The sad face must override native animation/card transfers')
+        self.assertTrue(any(call[0] == 'show_rgb565' for call in display.method_calls[sad_calls[0] + 1:]),
+                        'The normal display must return without another press')
+        self.assertEqual(actions, [(0, 'up'), (10, 'right')])
+        self.assertEqual([call.args[0] for call in effect.call_args_list], ['tick', 'whoosh'])
+        self.assertEqual(sessions[0].gallery.index, 1)
+        self.assertIsNone(sessions[0].hold_clock.since)
 
 
 if __name__ == '__main__':

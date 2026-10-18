@@ -12,6 +12,7 @@ MEMBERS = (
     "README.md", "build.py", "run-cad.sh", "parameters.json", "manifest.json", "verification.json",
     "front.stl", "rear.stl", "battery_door.stl", "cloud-radio.step", "cloud-radio.glb",
     "snap-coupon-0.2.stl", "snap-coupon-0.3.stl", "snap-coupon-0.4.stl",
+    "plywood-assembly-guide.pdf",
 )
 
 

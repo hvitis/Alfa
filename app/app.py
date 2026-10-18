@@ -207,6 +207,9 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
         def show_frame():
             if session.idle and session.idle.sleeping:
                 return
+            if session.buttons_paused:
+                presenter.show(session.frame())
+                return
             if ((session.card_motion and session.card_motion.active)
                     or (session.idle and session.idle.peeking)):
                 presenter.show(session.frame())
@@ -275,7 +278,7 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
             watchdog.tick()
             if isinstance(display, LatestDisplay):
                 display.check()
-            # Detect ALSA worker failures even when a full-screen card has no progress UI.
+            # Recover the audio stream without restarting the lesson or the device.
             _ = audio.playing
             for key in keyboard.read().lower():
                 if key in ("q", "\x03"):
@@ -299,17 +302,18 @@ def run_gallery(settings, simulate=False, keyboard_only=False, once=False, no_au
                     if session.idle:
                         session.idle.touch()
                     if kind == "press":
-                        accepted = guard.accept(now)
+                        accepted = session.accept_press(button, now) and guard.accept(now)
                         session.feedback(button, accepted)
-                        if button == "center" and session.drawing:
-                            physical_center = True
-                        if not accepted:
-                            continue
-                        if button == "center":
+                        if session.buttons_paused:
+                            center_press.cancel()
+                            center_since = None
+                            physical_center = False
+                        if accepted and button == "center":
                             center_since = now
                             if session.drawing:
+                                physical_center = True
                                 center_press.press(now)
-                        else:
+                        elif accepted:
                             perform_action(button)
                     elif button == "center":
                         physical_center = False
