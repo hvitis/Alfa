@@ -94,6 +94,16 @@ export function bilingualDevPlugin() {
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = new URL(req.url ?? '/', 'http://localhost');
+        if (url.pathname === '/v1') {
+          res.statusCode = 302;
+          res.setHeader('Location', `/v1/${url.search}`);
+          res.end();
+          return;
+        }
+        if (url.pathname.startsWith('/v1/')) {
+          req.url = req.url.replace(/^\/v1(\/|$)/, '/v1-snapshot$1');
+          return next();
+        }
         if(url.pathname==='/pcb') {
           res.statusCode=302;res.setHeader('Location',`/pcb/${url.search}`);res.end();return;
         }

@@ -72,7 +72,11 @@ export function createCloudScene() {
         }
         const id = node.name.startsWith('component_') ? node.name.slice(10)
           : node.name.startsWith('connector_') ? node.name.slice(10)
-          : node.name === 'screen' ? 'lcd' : node.name.startsWith('button_') ? 'keypad' : null;
+          : node.name === 'screen' ? 'lcd'
+          : node.name.startsWith('cap_button_') ? node.name.slice(4)
+          : node.name.startsWith('bezel_button_') ? node.name.slice(6)
+          : node.name.startsWith('button_') ? node.name
+          : null;
         if (id && hardware.has(id)) {
           object.userData.moduleId = hardware.get(id).parent || id;
           object.userData.hoverInfo = { id, title: tr(hardware.get(id).title), kind: tr('Hardware') };

@@ -234,41 +234,20 @@ def make(p):
         front += record(cylinder(x,y,t,2.4,lz-t),f"F-L{index:02}","LCD mounting post","front")
         front -= cylinder(x, y, 1, 1.1, lz+1)
 
-    # Two shared windows keep the unmeasured four-button pattern provisional.
-    key = items["keypad"]
-    kx, ky, kz = key["origin"]
-    kw, kh, _ = key["size"]
-    cx, cy = kx+kw/2, ky+kh/2
-    angle=key.get("rotation_deg",0)
-    window = b.Polygon(*[(x, y) for x, y in [(-27,-14),(27,-14),(27,-9),(32,-9),
-                         (32,9),(27,9),(27,14),(-27,14),(-27,9),(-32,9),(-32,-9),(-27,-9)]], align=None)
-    window = b.Pos(cx,cy)*b.Rot(0,0,angle)*window
-    window = b.fillet(window.vertices(), radius=1)
-    bridge=p["keypad_bridge"]
-    gap_start=-kh/2+bridge["single_button_zone"]
-    bridge_center=gap_start+bridge["clear_gap"]/2
-    strip=b.Pos(cx,cy)*b.Rot(0,0,angle)*rr(bridge_center-bridge["width"]/2,-kw/2-2,bridge["width"],kw+4,.7)
-    # Preserve the face across the measured gap instead of inserting a loose part.
-    cutouts=window-strip
-    a=math.radians(angle)
-    roots=[]
-    for vertex in cutouts.vertices():
-        dx,dy=vertex.X-cx,vertex.Y-cy
-        along=dx*math.cos(a)+dy*math.sin(a)
-        across=-dx*math.sin(a)+dy*math.cos(a)
-        if abs(abs(along-bridge_center)-bridge["width"]/2)<.001 and abs(abs(across)-14)<.001:
-            roots.append(vertex)
-    if len(roots)!=4:raise ValueError("Expected four keypad bridge roots")
-    # Fillet the openings, adding front-face material at all four junctions.
-    cutouts=b.fillet(roots,radius=bridge["root_radius"])
-    front -= slab(cutouts,-1,t+2)
-    record(slab(window-cutouts,0,t),"F-K05","Rounded keypad bridge · 4 mm / R8","front")
-    diagonal = 4.5 / math.sqrt(2)
-    for index,(x,y) in enumerate(((x,y) for x in (kx+diagonal,kx+kw-diagonal) for y in (ky+diagonal,ky+kh-diagonal)),1):
-        front += record(slotted_pad(x,y,kz,"y" if angle==90 else "x"),f"F-K{index:02}","Keypad mounting slot","front")
-    # Short slots are reachable from the front with M2.5 bolts; the corners of
-    # the window retain the board. Set height using insulating spacers.
+    # 6 Arcade Push Buttons (28 mm diameter mounting hole, 33 mm bezel):
+    # 1 top, 1 bottom, 1 left of screen, 1 right of screen, 1 left side wall, 1 right side wall
+    front -= record(cylinder(0, 118, -1, 14, t+2), "F-BTN01", "Top arcade button hole 28 mm", "front")
+    front -= record(cylinder(0, 20, -1, 14, t+2), "F-BTN02", "Bottom arcade button hole 28 mm", "front")
+    front -= record(cylinder(48, 68, -1, 14, t+2), "F-BTN03", "Left arcade button hole 28 mm", "front")
+    front -= record(cylinder(-48, 68, -1, 14, t+2), "F-BTN04", "Right arcade button hole 28 mm", "front")
 
+    # 2 side wall arcade buttons (28 mm diameter mounting hole)
+    side_left_hole = b.Pos(105, 50, 21.5) * b.Rot(0, 90, 0) * b.Cylinder(14, 20, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
+    front -= record(side_left_hole, "F-BTN05", "Left side arcade button hole 28 mm", "front")
+    side_right_hole = b.Pos(-105, 50, 21.5) * b.Rot(0, 90, 0) * b.Cylinder(14, 20, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
+    front -= record(side_right_hole, "F-BTN06", "Right side arcade button hole 28 mm", "front")
+
+    diagonal = 4.5 / math.sqrt(2)
     speaker = items["speaker"]
     sx, sy, sz = speaker["origin"]
     for dx in range(-12, 13, 6):
@@ -278,14 +257,11 @@ def make(p):
     for index,(x,y) in enumerate(((x,y) for x in (sx+diagonal,sx+40-diagonal) for y in (sy+diagonal,sy+40-diagonal)),1):
         front += record(slotted_pad(x,y,sz),f"F-SP{index:02}","Speaker mounting slot","front")
 
-    # Small-board supports with 5 mm adjustment. No assumed hole pattern.
-    # Boards are retained by insulated cable ties through the paired slots.
-    for name in ("amp", "adc", "divider"):
-        item = items[name]
-        x, y, z = item["origin"]
-        w, h, _ = item["size"]
-        for index,yy in enumerate((y-4,y+h+4),1):
-            front += record(slotted_pad(x+w/2,yy,z),f"F-{name.upper()}{index:02}",item["title"]+" support slot","front")
+    amp = items["amp"]
+    ax, ay, az = amp["origin"]
+    aw, ah, _ = amp["size"]
+    for index,yy in enumerate((ay-4,ay+ah+4),1):
+        front += record(slotted_pad(ax+aw/2,yy,az),f"F-AMP{index:02}","Amplifier support slot","front")
 
     # The battery cradle is supported from the perimeter. Upper shelves grow
     # inward from the side walls; no tall towers stand between the controls.
@@ -459,20 +435,29 @@ def make(p):
     for item in p["components"]:
         x, y, z = item["origin"]
         w, h, d = item["size"]
-        if item["id"] in ("pi", "lcd", "keypad"):
+        if item["id"] == "pi":
             shape = box(x, y, z, w, h, 1.6)
-            if item["id"] == "pi":
-                for hx in (x+3.5, x+61.5):
-                    for hy in (y+3.5, y+52.5):
-                        shape -= cylinder(hx, hy, z-1, 1.375, 4)
-            elif item["id"] == "lcd":
-                for hx in (x+2.5, x+w-2.5):
-                    for hy in (y+2.5, y+h-2.5):
-                        shape -= cylinder(hx, hy, z-1, 1.5, 4)
+            for hx in (x+3.5, x+61.5):
+                for hy in (y+3.5, y+52.5):
+                    shape -= cylinder(hx, hy, z-1, 1.375, 4)
+        elif item["id"] == "lcd":
+            shape = box(x, y, z, w, h, 1.6)
+            for hx in (x+2.5, x+w-2.5):
+                for hy in (y+2.5, y+h-2.5):
+                    shape -= cylinder(hx, hy, z-1, 1.5, 4)
+        elif item["id"].startswith("button_"):
+            if "side" not in item["id"]:
+                cx = x + w / 2
+                cy = y + h / 2
+                shape = cylinder(cx, cy, 3, 13.8, d)
+            elif "left" in item["id"]:
+                cy = y + h / 2
+                cz = z + d / 2
+                shape = b.Pos(x + w / 2, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(13.8, w, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
             else:
-                for hx in (x+diagonal, x+w-diagonal):
-                    for hy in (y+diagonal, y+h-diagonal):
-                        shape -= cylinder(hx, hy, z-1, 1.5, 4)
+                cy = y + h / 2
+                cz = z + d / 2
+                shape = b.Pos(x + w / 2, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(13.8, w, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
         elif item["id"] == "speaker":
             shape = box(x, y, z, w, h, 1.2)
             for hx in (x+diagonal, x+w-diagonal):
@@ -486,11 +471,23 @@ def make(p):
 
     extras = {}
     extras["screen"] = color(box(lx+2.2, ly+10.8, .6, 30.6, 40.8, 4.8), "screen", "#162f40")
-    # Illustrative caps; use shared opening until actual centres are measured.
-    for i, (xx, yy) in enumerate([(gap_start-5.5,0),(gap_start+bridge["clear_gap"]+5.5,0),(13,7),(13,-7),(25,0)]):
-        a=math.radians(angle)
-        bx,by=cx+xx*math.cos(a)-yy*math.sin(a),cy+xx*math.sin(a)+yy*math.cos(a)
-        extras[f"button_{i}"] = color(cylinder(bx, by, .3, 5.5, 5.6), f"button_{i}", "#f2c75c")
+    for btn in p["components"]:
+        if not btn["id"].startswith("button_"): continue
+        if "side" not in btn["id"]:
+            cx = btn["origin"][0] + btn["size"][0] / 2
+            cy = btn["origin"][1] + btn["size"][1] / 2
+            extras[f"bezel_{btn['id']}"] = color(cylinder(cx, cy, -3, 16.5, 3), f"bezel_{btn['id']}", "#1e293b")
+            extras[f"cap_{btn['id']}"] = color(cylinder(cx, cy, -4, 12, 2.5), f"cap_{btn['id']}", btn["color"])
+        elif "left" in btn["id"]:
+            cy = btn["origin"][1] + btn["size"][1] / 2
+            cz = btn["origin"][2] + btn["size"][2] / 2
+            extras[f"bezel_{btn['id']}"] = color(b.Pos(104.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(16.5, 3, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER)), f"bezel_{btn['id']}", "#1e293b")
+            extras[f"cap_{btn['id']}"] = color(b.Pos(106.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(12, 2.5, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER)), f"cap_{btn['id']}", btn["color"])
+        else:
+            cy = btn["origin"][1] + btn["size"][1] / 2
+            cz = btn["origin"][2] + btn["size"][2] / 2
+            extras[f"bezel_{btn['id']}"] = color(b.Pos(-104.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(16.5, 3, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER)), f"bezel_{btn['id']}", "#1e293b")
+            extras[f"cap_{btn['id']}"] = color(b.Pos(-106.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(12, 2.5, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER)), f"cap_{btn['id']}", btn["color"])
     for item in p["keepouts"]:
         extras[item["id"]] = color(box(*item["origin"], *item["size"]), "connector_"+item["id"], "#5b6670")
 
@@ -610,7 +607,8 @@ def verify(p, parts, electronics, outer, features):
     check("Snap elastic-strain screening <= 2%",strain<=.02,{"estimated_strain":round(strain,5),"assumed_limit":.02})
     check("Four enclosure screw axes",len(p["exterior_screws"])==3 and len(p["battery_door_screw"])==2)
     items={item["id"]:item for item in p["components"]}
-    check("Front layout: LCD left and keypad right", items["lcd"]["origin"][0]>0 and items["keypad"]["origin"][0]+items["keypad"]["size"][0]<0)
+    check("Front layout: 6 arcade buttons present", len([c for c in p["components"] if c["id"].startswith("button_")]) == 6)
+    check("LCD centered horizontally on front cover", abs(items["lcd"]["origin"][0]+items["lcd"]["size"][0]/2) < 0.1)
     hand_sweep=slab(handle_profile(p),-1,p["case"]["depth"]+2)
     for name,shape in parts.items():
         vol=overlap(shape,hand_sweep)
@@ -646,22 +644,8 @@ def verify(p, parts, electronics, outer, features):
     for index,(x,y) in enumerate(p["exterior_screws"],1):
         distance=outer.outer_wire().distance_to(b.Vertex(x,y,0))
         check(f"Case screw {index} beside perimeter wall",5.2<=distance<=p["case"]["wall"]+5.2,round(distance,3))
-    key=items["keypad"]; bx=key["origin"][0];by=key["origin"][1]+p["keypad_bridge"]["single_button_zone"]
-    gap=p["keypad_bridge"]["clear_gap"];width=p["keypad_bridge"]["width"]
-    probe=box(bx+.1,by+(gap-width)/2+.1,.1,key["size"][0]-.2,width-.2,p["case"]["wall"]-.2)
-    check("Keypad bridge fills the measured gap across both long sides",abs(overlap(parts["front"],probe)-probe.volume)<.02)
-    check("Keypad bridge leaves 2.5 mm each side",(gap-width)/2>=2.5)
-    # The large opening fillets fill all four former square corners.
-    for x in (bx+1.5,bx+key["size"][0]-1.5):
-        for y in (by+(gap-width)/2-.5,by+(gap+width)/2+.5):
-            root_probe=box(x-.1,y-.1,.1,.2,.2,p["case"]["wall"]-.2)
-            check("Rounded bridge root adds cover material",abs(overlap(parts["front"],root_probe)-root_probe.volume)<.001)
-    for y in (by-5.5,by+gap+5.5):
-        keep=cylinder(bx+key["size"][0]/2,y,-.1,8,p["case"]["wall"]+.2)
-        gap_probe=box(bx-1,by,-.1,key["size"][0]+2,gap,p["case"]["wall"]+.2)
-        check("Keypad bridge and roots clear nearest cap plus 2.5 mm",overlap(parts["front"],keep & gap_probe)<.02)
-        cap=cylinder(bx+key["size"][0]/2,y,-.1,5.5,p["case"]["wall"]+.2)
-        check("Keypad nominal cap clears front face",overlap(parts["front"],cap)<.02)
+    check("Arcade button mounting holes: 28 mm diameter", all(b.get("diameter_mm") == 28 for b in p["components"] if b["id"].startswith("button_")))
+    check("Speaker mounted in upper lobe", items["speaker"]["origin"][1] >= 100)
     check("Frame feature IDs unique",len({f["id"] for f in features})==len(features))
     return {"revision": p["revision"], "checks": checks, "passed": all(c["pass"] for c in checks),
             "limitations": ["Not FEA. PETG print strength and fatigue require physical testing.",
@@ -732,7 +716,7 @@ def build(check_only=False):
             print("Verification failed; last good published files retained.",flush=True)
             return False
         manifest={"revision":p["revision"],"outer_mm":[round(v,2) for v in parts["front"].bounding_box().size][:2]+[p["case"]["depth"]],
-                  "core_mm":[210,190,p["case"]["depth"]],"side_relief":p["side_relief"],"keypad_bridge":p["keypad_bridge"],
+                  "core_mm":[210,190,p["case"]["depth"]],"side_relief":p["side_relief"],"arcade_buttons":[c for c in p["components"] if c["id"].startswith("button_")],
                   "allowance_mm":5,"material":p["material"],"components":p["components"],"keepouts":p["keepouts"],"handle":p["handle"],
                   "fasteners":p["fasteners"],"checks_count":len(report["checks"]),"passed":True,"files":["front.stl","rear.stl","battery_door.stl","cloud-radio.step","cloud-radio.zip"],
                   "print_parts":list(parts),"frame_features":features,

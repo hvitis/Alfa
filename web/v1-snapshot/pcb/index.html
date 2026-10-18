@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <base href="../">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Zintegrowany shield Raspberry Pi 3: ADC, wzmacniacz i dzielnik na jednej płytce. Model 3D i pliki KiCad prototypu.">
+  <meta name="theme-color" content="#fdf7ed">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pl_PL" data-i18n-content="meta.ogLocale">
+  <meta property="og:locale:alternate" content="en_US" data-i18n-content="meta.ogLocaleAlt">
+  <meta property="og:site_name" content="Alfa · Małe laboratorium radia" data-i18n-content="meta.ogSite">
+  <meta property="og:title" content="Alfa · Raspi 3 PCB shield">
+  <meta property="og:description" content="Zintegrowany shield Raspberry Pi 3: ADC, wzmacniacz i dzielnik na jednej płytce. Model 3D i pliki KiCad prototypu.">
+  <meta property="og:url" content="https://hvitis.github.io/Alfa/pcb/">
+  <meta property="og:image" content="https://hvitis.github.io/Alfa/og-pcb.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="Alfa Raspberry Pi 3 shield rendered from the KiCad PCB">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Alfa · Raspi 3 PCB shield">
+  <meta name="twitter:description" content="Zintegrowany shield Raspberry Pi 3: ADC, wzmacniacz i dzielnik na jednej płytce. Model 3D i pliki KiCad prototypu.">
+  <meta name="twitter:image" content="https://hvitis.github.io/Alfa/og-pcb.png">
+  <meta name="twitter:image:alt" content="Alfa Raspberry Pi 3 shield rendered from KiCad">
+  <link rel="canonical" href="https://hvitis.github.io/Alfa/pcb/">
+  <link rel="alternate" hreflang="pl" href="https://hvitis.github.io/Alfa/">
+  <link rel="alternate" hreflang="en" href="https://hvitis.github.io/Alfa/en/">
+  <link rel="alternate" hreflang="x-default" href="https://hvitis.github.io/Alfa/">
+  <title>Alfa · Raspi 3 PCB shield</title>
+  <link rel="icon" href="./assets/alpha-DTCKaVoh.svg" type="image/svg+xml">
+  <script type="module" crossorigin src="./assets/index-BB_l1bAB.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CY8vqJWF.css">
+</head>
+<body>
+  <a class="skip-link" href="#content" data-i18n="nav.skip">Przejdź do treści</a>
+  <header class="masthead">
+    <a class="brand" href="./" data-i18n-href="brand.href" aria-label="Strona główna Alfa" data-i18n-aria-label="brand.home"><span class="brand-symbol" aria-hidden="true">α</span><span>alfa<small data-i18n="brand.tagline">MAŁE LABORATORIUM RADIA</small></span></a>
+    <nav class="site-nav" role="tablist" aria-label="Nawigacja główna" data-i18n-aria-label="tabs.label">
+      <button id="nav-glowna" class="nav-btn nav-home active" role="tab" aria-selected="true" aria-controls="panel-glowna" data-tab="glowna"><svg class="home-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> <span data-i18n="nav.home">Główna</span></button>
+      <button id="nav-obudowa" class="nav-btn" role="tab" aria-selected="false" aria-controls="panel-obudowa" data-tab="obudowa" tabindex="-1"><span data-i18n="nav.obudowa">Obudowa</span></button>
+      <button id="nav-elektronika" class="nav-btn" role="tab" aria-selected="false" aria-controls="panel-elektronika" data-tab="elektronika" tabindex="-1"><span data-i18n="nav.elektronika">Elektronika</span></button>
+      <button id="nav-oprogramowanie" class="nav-btn" role="tab" aria-selected="false" aria-controls="panel-oprogramowanie" data-tab="oprogramowanie" tabindex="-1"><span data-i18n="nav.oprogramowanie">Oprogramowanie</span></button>
+      <button id="nav-inne" class="nav-btn" role="tab" aria-selected="false" aria-controls="panel-inne" data-tab="inne" tabindex="-1"><span data-i18n="nav.inne">Inne</span></button>
+    </nav>
+    <div class="header-links">
+      <nav class="lang-switch" aria-label="Język" data-i18n-aria-label="lang.nav"><a href="./" hreflang="pl" lang="pl" aria-current="page">PL</a><a href="./en/" hreflang="en" lang="en">EN</a></nav>
+      <a href="https://github.com/hvitis/Alfa"><span data-i18n="header.code">Zajrzyj do kodu</span> <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+  <main id="content">
+    <!-- PANEL 0: GŁÓWNA (HOME) -->
+    <section id="panel-glowna" role="tabpanel" aria-labelledby="nav-glowna">
+      <div class="intro">
+        <div class="intro-copy">
+          <p class="eyebrow"><span class="tiny-star" aria-hidden="true">✳</span> <span data-i18n="hero.eyebrow">MAŁE RADIO. DUŻE POMYSŁY.</span></p>
+          <h1 data-i18n="hero.title">Małe radio.<br><span>Duża wyobraźnia.</span></h1>
+          <p data-i18n="hero.lead">Małe radio i cały świat do odkrycia.<br>Obróć je, zajrzyj do środka i zobacz, jak składa się każda część.</p>
+        </div>
+        <div class="intro-art" aria-hidden="true"><span class="art-sticker" data-i18n="hero.sticker">BAW SIĘ. TWÓRZ. DZIWIJ.</span><svg viewBox="0 0 380 250" fill="none"><ellipse cx="194" cy="219" rx="129" ry="12" fill="#d8d0e9"/><path d="M54 157C30 135 42 95 72 91C64 57 100 32 128 50C146 15 202 20 215 49C249 27 292 50 289 83C327 81 349 119 326 150L326 185Q326 204 306 204H78Q55 204 55 181Z" fill="#d3c8ef" stroke="#39305b" stroke-width="3"/><path d="M42 150C18 128 30 88 60 84C52 50 88 25 116 43C134 8 190 13 203 42C237 20 280 43 277 76C315 74 337 112 314 143L314 178Q314 197 294 197H66Q43 197 43 174Z" fill="#e6f5fb" stroke="#39305b" stroke-width="3"/><rect x="128" y="48" width="83" height="23" rx="11.5" fill="#fdf7ed" stroke="#39305b" stroke-width="3"/><rect x="78" y="97" width="67" height="76" rx="9" fill="#9edbce" stroke="#39305b" stroke-width="3"/><text x="110" y="150" text-anchor="middle" font-family="Verdana,sans-serif" font-size="43" font-weight="bold" fill="#39305b">α</text><g fill="#39305b"><circle cx="177" cy="100" r="2.5"/><circle cx="188" cy="100" r="2.5"/><circle cx="199" cy="100" r="2.5"/><circle cx="177" cy="111" r="2.5"/><circle cx="188" cy="111" r="2.5"/><circle cx="199" cy="111" r="2.5"/></g><g fill="#ffe68c" stroke="#39305b" stroke-width="2.5"><circle cx="256" cy="101" r="10"/><circle cx="244" cy="125" r="10"/><circle cx="268" cy="125" r="10"/><circle cx="256" cy="149" r="10"/><circle cx="256" cy="174" r="10"/></g><path d="m328 29 4 12 12 4-12 4-4 12-4-12-12-4 12-4Z" fill="#f3a5bf" stroke="#39305b" stroke-width="2.5"/><path d="M18 57 25 43M27 62l13-5M16 39l-2-12M341 166l14 7M337 177l6 13" stroke="#9c83c8" stroke-width="4" stroke-linecap="round"/><circle cx="300" cy="19" r="5" fill="#9edbce"/><circle cx="30" cy="194" r="7" fill="#f3a5bf"/></svg></div>
+      </div>
+      <div class="feature-cards">
+        <!-- Card 1: Obudowa -->
+        <article class="shade-card" data-card="obudowa">
+          <div class="shade-card-media">
+            <img src="./assets/cloud-render-KIkEXyDn.png" class="card-media-img" alt="Druk 3D obudowy chmurki" data-i18n-alt="card.obudowa.alt1">
+          </div>
+          <div class="shade-card-body">
+            <h3 data-i18n="card.obudowa.title">Obudowa</h3>
+            <p data-i18n="card.obudowa.desc">Dwa światy rzemiosła: pastelowa chmurka z druku 3D lub ciepła obudowa ze sklejki brzozowej. Pliki STL, STEP i plany 1:1.</p>
+            <button type="button" class="card-nav-btn" data-target="obudowa"><span data-i18n="card.obudowa.btn">Odkryj obudowy</span> <span aria-hidden="true">→</span></button>
+          </div>
+        </article>
+
+        <!-- Card 2: Elektronika -->
+        <article class="shade-card" data-card="elektronika">
+          <div class="shade-card-media">
+            <img src="./assets/wiring-diagram-BH6wg-Sh.svg" width="1100" height="780" class="card-media-img" alt="Kompletny schemat ideowy połączeń elektrycznych" data-i18n-alt="card.elektronika.alt1">
+          </div>
+          <div class="shade-card-body">
+            <h3 data-i18n="card.elektronika.title">Elektronika</h3>
+            <p data-i18n="card.elektronika.desc">Od połączeń GPIO i płytek po dedykowany shield Pi 3. Schematy ideowe, interaktywny model 3D okablowania i pliki KiCad.</p>
+            <button type="button" class="card-nav-btn" data-target="elektronika"><span data-i18n="card.elektronika.btn">Zobacz elektronikę</span> <span aria-hidden="true">→</span></button>
+          </div>
+        </article>
+
+        <!-- Card 3: Oprogramowanie -->
+        <article class="shade-card" data-card="oprogramowanie">
+          <div class="shade-card-media code-media">
+            <div class="code-preview-window" aria-label="Fragment kodu aplikacji Alfa">
+              <div class="code-window-bar">
+                <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
+                <span class="code-filename">app/player.py</span>
+              </div>
+              <pre class="code-preview-body"><code><span class="ck">class</span> <span class="cn">PlayerSession</span>:
+  <span class="cs">"""Offline audio &amp; letters"""</span>
+  <span class="ck">def</span> <span class="cf">__init__</span>(self, img, snd, audio):
+    self.gallery = Gallery(img)
+    self.audio = audio
+    self.guard = MashGuard()
+
+  <span class="ck">def</span> <span class="cf">accept_press</span>(self, key, now):
+    <span class="ck">if not</span> self.guard.accept(now):
+      <span class="ck">return</span> <span class="cb">False</span>
+    <span class="ck">return</span> self.handle(key)</code></pre>
+            </div>
+          </div>
+          <div class="shade-card-body">
+            <h3 data-i18n="card.oprogramowanie.title">Oprogramowanie</h3>
+            <p data-i18n="card.oprogramowanie.desc">Aplikacja w Pythonie działająca bez sieci. Pętla zdarzeń, obsługa I²S DAC, buforowane wejścia oraz interaktywny symulator nauki 32 liter.</p>
+            <button type="button" class="card-nav-btn" data-target="oprogramowanie"><span data-i18n="card.oprogramowanie.btn">Poznaj oprogramowanie</span> <span aria-hidden="true">→</span></button>
+          </div>
+        </article>
+
+        <!-- Card 4: Inne -->
+        <article class="shade-card" data-card="inne">
+          <div class="shade-card-media">
+            <img src="./assets/pdf-preview-B8jO6a_c.png" class="card-media-img" alt="Podgląd strony dokumentacji PDF" data-i18n-alt="card.inne.alt1">
+          </div>
+          <div class="shade-card-body">
+            <h3 data-i18n="card.inne.title">Inne</h3>
+            <p data-i18n="card.inne.desc">Materiały edukacyjne, fikcyjny rekord ADR według norm wyrobów medycznych (MDR) oraz kompletne pakiety projektu do pobrania.</p>
+            <button type="button" class="card-nav-btn" data-target="inne"><span data-i18n="card.inne.btn">Przejdź do materiałów</span> <span aria-hidden="true">→</span></button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PANEL 1: OBUDOWA -->
+    <section id="panel-obudowa" role="tabpanel" aria-labelledby="nav-obudowa" hidden>
+      <div class="subpage-top-nav" role="group" aria-label="Sekcja obudowy" data-i18n-aria-label="obudowa.subnav.label">
+        <button type="button" class="big-subnav-btn active" data-subview="filament" data-i18n="obudowa.btn.filament">Filament</button>
+        <button type="button" class="big-subnav-btn" data-subview="sklejka" data-i18n="obudowa.btn.sklejka">Sklejka</button>
+      </div>
+      <input type="hidden" id="obudowa-view" value="filament">
+
+      <!-- SUBVIEW 1: FILAMENT (DRUK 3D) -->
+      <div id="subview-filament" class="subview-panel">
+        <div class="section-bar"><div><p class="eyebrow" data-i18n="cloud.eyebrow">MAŁA CHMURKA, ZBUDOWANA, BY TRZYMAĆ.</p><h2 data-i18n="cloud.h2">Radio-chmurka.</h2></div><span id="cloud-revision" class="prototype-badge">PETG / PROTOTYPE 05</span></div>
+        <div class="scene-layout"><div id="print-slot" class="scene-slot"></div><aside class="inspector"><span class="section-number" data-i18n="cloud.kicker">01 / DRUK 3D</span><h3 data-i18n="cloud.h3">Trzy części. Jedna mała chmurka.</h3><p data-i18n="cloud.lead">Miękka chmurka z zaokrąglonymi barkami i wyniesionym uchwytem na środku styku przodu i tyłu. LCD po lewej, pięć przycisków po prawej. Poziome drzwiczki baterii są pod uchwytem z tyłu. Trzy drukowane części, cztery śruby obudowy.</p><dl id="cloud-facts" class="facts"></dl>
+          <span class="field-label" data-i18n="cloud.modeLabel">Widok złożenia</span>
+          <div class="pill-group" data-for="cloud-mode" role="group" aria-label="Widok złożenia" data-i18n-aria-label="cloud.modeLabel">
+            <button type="button" class="pill-btn active" data-value="assembled" data-i18n="cloud.mode.assembled">Złożone</button>
+            <button type="button" class="pill-btn" data-value="exploded" data-i18n="cloud.mode.exploded">Rozstrzelone</button>
+            <button type="button" class="pill-btn" data-value="inside" data-i18n="cloud.mode.inside">W środku</button>
+            <button type="button" class="pill-btn" data-value="battery_open" data-i18n="cloud.mode.battery">Dostęp do baterii</button>
+          </div>
+          <input type="hidden" id="cloud-mode" value="assembled">
+          <div class="check-fields"><label><input id="cloud-labels" type="checkbox"> <span data-i18n="cloud.labels">Pokaż identyfikatory ramy i nazwy sprzętu</span></label><label><input id="cloud-clearances" type="checkbox"> <span data-i18n="cloud.clearances">Pokaż naddatek pasowania 5 mm</span></label></div><p class="notice" data-i18n="cloud.notice">Pasowanie prototypu: niepewne wymiary mają 5 mm naddatku łącznie, 2,5 mm na stronę. Wydrukuj kupony zatrzasków i sprawdź swój sprzęt przed złożeniem.</p><p id="cloud-verification" class="cloud-verification" role="status"></p><a href="./cloud/README.md" class="text-link" download><span data-i18n="cloud.guide">Instrukcja złożenia i testów fizycznych</span> ↙</a></aside></div>
+        <div class="cloud-downloads"><div><p class="eyebrow" data-i18n="download.eyebrow">GOTOWE NA TWÓJ STÓŁ</p><h3 data-i18n="download.h3">Wydrukuj swoją chmurkę.</h3><p data-i18n="download.lead">Pliki STL są w milimetrach i zawierają orientację druku. Złożenie STEP zachowuje edytowalne bryły.</p></div><div class="download-buttons"><div class="stl-action-group"><a href="./cloud/front.stl" download class="stl-download-link" aria-label="Pobierz STL skorupy przedniej" data-i18n-aria-label="download.frontAria"><span data-i18n="download.front">Skorupa przednia</span><span class="stl-action-hint"><svg class="action-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><small>STL</small></span></a><button type="button" class="stl-view-button" data-stl="front" aria-label="Podgląd skorupy przedniej w przeglądarce STL" data-i18n-aria-label="stl.viewFront" aria-pressed="true" title="Podgląd skorupy przedniej w 3D" data-i18n-title="download.frontTitle"><svg class="action-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div><div class="stl-action-group"><a href="./cloud/rear.stl" download class="stl-download-link" aria-label="Pobierz STL skorupy tylnej" data-i18n-aria-label="download.rearAria"><span data-i18n="download.rear">Skorupa tylna</span><span class="stl-action-hint"><svg class="action-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><small>STL</small></span></a><button type="button" class="stl-view-button" data-stl="rear" aria-label="Podgląd skorupy tylnej w przeglądarce STL" data-i18n-aria-label="stl.viewRear" aria-pressed="false" title="Podgląd skorupy tylnej w 3D" data-i18n-title="download.rearTitle"><svg class="action-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div><div class="stl-action-group"><a href="./cloud/battery_door.stl" download class="stl-download-link" aria-label="Pobierz STL drzwiczek baterii" data-i18n-aria-label="download.doorAria"><span data-i18n="download.door">Drzwiczki baterii</span><span class="stl-action-hint"><svg class="action-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><small>STL</small></span></a><button type="button" class="stl-view-button" data-stl="battery_door" aria-label="Podgląd drzwiczek baterii w przeglądarce STL" data-i18n-aria-label="stl.viewDoor" aria-pressed="false" title="Podgląd drzwiczek baterii w 3D" data-i18n-title="download.doorTitle"><svg class="action-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div><a href="./cloud/cloud-radio.step" download data-i18n="download.step">Złożenie CAD <small>STEP ↙</small></a><a href="./cloud/cloud-radio.zip" download class="download-all" data-i18n="download.zip">Cały projekt <small>ZIP ↙</small></a></div></div>
+        <div class="cloud-customizer"><section id="cloud-colors" class="cloud-colors" aria-label="Kolory podglądu obudowy" data-i18n-aria-label="colors.section"></section><div id="stl-viewer" class="stl-viewer-card" aria-label="Podgląd pojedynczej części STL" data-i18n-aria-label="stl.viewerAria"><div class="stl-viewer-top"><span class="scene-badge stl-badge">STL · <span id="stl-current-name" data-i18n="part.front">Skorupa przednia</span></span><div class="stl-part-buttons" role="group" aria-label="Wybierz część STL do podglądu" data-i18n-aria-label="stl.group"><button type="button" class="stl-part-btn active" data-stl-select="front" aria-pressed="true" data-i18n="stl.front">Przód</button><button type="button" class="stl-part-btn" data-stl-select="rear" aria-pressed="false" data-i18n="stl.rear">Tył</button><button type="button" class="stl-part-btn" data-stl-select="battery_door" aria-pressed="false" data-i18n="stl.door">Drzwiczki baterii</button></div><button id="stl-reset-camera" class="camera-button" aria-label="Zresetuj widok kamery" data-i18n-aria-label="stl.resetAria">↺ <span data-i18n="stl.reset">Reset</span></button></div><div id="stl-viewport" class="stl-viewport" role="region" aria-label="Obszar podglądu części STL" data-i18n-aria-label="stl.viewport"></div><div id="stl-viewer-status" class="stl-viewer-status" role="status" data-i18n="stl.status">Skorupa przednia · Przeciągnij, aby obracać · Kółko przybliża</div><div class="stl-viewer-bottom"><span data-i18n="stl.hint"><b>Przeciągnij</b>, aby obracać <span class="separator">/</span> <b>kółko</b> przybliża</span><span class="viewer-indicator"><span id="stl-file-info">front.stl</span> · 3D STL</span></div></div></div>
+        <section id="cloud-pricing" class="cloud-pricing" aria-label="Szacowany koszt budowy i elementy" data-i18n-aria-label="pricing.section">
+          <div class="pricing-header">
+            <div>
+              <p class="eyebrow"><span class="tiny-star" aria-hidden="true">✳</span> <span data-i18n="pricing.eyebrow">SZACOWANY KOSZT BUDOWY · POLSCY DOSTAWCY</span></p>
+              <h3 data-i18n="pricing.h3">Koszt budowy i zestawienie elementów.</h3>
+              <p data-i18n="pricing.lead">Ceny elementów pochodzą wprost z polskich sklepów elektronicznych i dla makerów (Botland, Kamami, Gotronik, sklep.msalamon.pl, Allegro). Rzeczywiste ceny i dostępność mogą się różnić.</p>
+            </div>
+            <div class="pricing-summary-card">
+              <span class="pricing-badge" data-i18n="pricing.badge">SZACOWANA SUMA</span>
+              <div class="pricing-total-value">~390 – 480 <small>PLN</small></div>
+              <p class="pricing-subtext" data-i18n="pricing.subStatic">Kompletne radio od zera (~90–110 €).<br><strong>Tylko ~155 PLN</strong>, jeśli masz już Pi 3 i filament PETG!</p>
+            </div>
+          </div>
+          <div class="pricing-controls">
+            <div class="pricing-control-block">
+              <span class="field-label" data-i18n="pricing.caseLabel">Obudowa</span>
+              <div class="pill-group" data-for="pricing-case" role="group" aria-label="Obudowa" data-i18n-aria-label="pricing.caseLabel">
+                <button type="button" class="pill-btn active" data-value="3d-print" data-i18n="pricing.case.3d">Obudowa z druku 3D</button>
+                <button type="button" class="pill-btn" data-value="plywood-house" data-i18n="pricing.case.house">Sklejka (Little House Radio)</button>
+                <button type="button" class="pill-btn" data-value="plywood-case" data-i18n="pricing.case.original">Sklejka (oryginalna skrzynka)</button>
+              </div>
+              <input type="hidden" id="pricing-case" value="3d-print">
+            </div>
+            <div class="pricing-control-block">
+              <span class="field-label" data-i18n="pricing.controllerLabel">Elementy</span>
+              <div class="pill-group" data-for="pricing-controller" role="group" aria-label="Elementy" data-i18n-aria-label="pricing.controllerLabel">
+                <button type="button" class="pill-btn active" data-value="pi3" data-i18n="pricing.controller.pi">Na bazie Raspberry Pi 3</button>
+                <button type="button" class="pill-btn" data-value="pico" data-i18n="pricing.controller.pico">Na bazie Pico</button>
+              </div>
+              <input type="hidden" id="pricing-controller" value="pi3">
+            </div>
+          </div>
+          <div class="filament-estimate-card" id="pricing-material-card">
+            <div class="filament-header">
+              <div>
+                <span class="section-number" id="material-section-number" data-i18n="material.3d-print.section">ZUŻYCIE FILAMENTU</span>
+                <h4 id="material-title" data-i18n="material.3d-print.title">Szacunek filamentu do druku 3D</h4>
+              </div>
+              <span class="filament-badge" id="material-badge" data-i18n="material.3d-print.badge">PETG · ~440 g łącznie</span>
+            </div>
+            <p class="filament-desc" id="material-desc" data-i18n="material.3d-print.desc">Obliczone z produkcyjnych brył CAD dla PETG (gęstość 1,27 g/cm³), ciętych dyszą 0,4 mm, warstwą 0,2 mm, 5 obrysami (ścianka 2,0 mm), 6 warstwami góra/dół i wypełnieniem 25%:</p>
+            <div class="filament-stats" id="material-stats"></div>
+          </div>
+          <div class="pricing-table-wrap">
+            <table id="pricing-table">
+              <caption data-i18n="pricing.caption">Elementy z polskich sklepów elektronicznych · kliknij nagłówek, aby sortować · odnośniki otwierają się w nowej karcie.</caption>
+              <thead>
+                <tr>
+                  <th scope="col" aria-sort="none"><button type="button" class="pricing-sort-btn" data-sort-key="name"><span data-i18n="table.component">Element</span><span class="sort-icon" aria-hidden="true">↕</span></button></th>
+                  <th scope="col" aria-sort="none"><button type="button" class="pricing-sort-btn" data-sort-key="function"><span data-i18n="table.function">Funkcja w urządzeniu</span><span class="sort-icon" aria-hidden="true">↕</span></button></th>
+                  <th scope="col" aria-sort="none"><button type="button" class="pricing-sort-btn" data-sort-key="price"><span data-i18n="table.price">Szacowana cena</span><span class="sort-icon" aria-hidden="true">↕</span></button></th>
+                  <th scope="col" aria-sort="none"><button type="button" class="pricing-sort-btn" data-sort-key="supplier"><span data-i18n="table.where">Gdzie szukać (PL)</span><span class="sort-icon" aria-hidden="true">↕</span></button></th>
+                </tr>
+              </thead>
+              <tbody id="pricing-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+        <details class="cloud-details"><summary data-i18n="cloud.details.hw">Wymiary sprzętu i weryfikacja</summary><p data-i18n="cloud.details.hwLead">Rysunki producenta określają Pi i LCD. Wymiary od dostawców i pozostałe kształty złączy są wstępne. Naddatek pasowania nie dowodzi wytrzymałości wydruku.</p><div class="table-wrap"><table><caption data-i18n="cloud.table.caption">Źródła i wymiary nominalne; niepewne wymiary dostają dodatkowe 5 mm.</caption><thead><tr><th data-i18n="cloud.th.component">Element</th><th data-i18n="cloud.th.size">Wymiar nominalny, mm</th><th data-i18n="cloud.th.source">Źródło / pewność</th></tr></thead><tbody id="cloud-hardware"></tbody></table></div><a href="./cloud/verification.json" download class="text-link"><span data-i18n="cloud.checksDownload">Pobierz sprawdzenia geometrii i siatek</span> ↙</a><p data-i18n="cloud.physical">Nadal potrzebne są sprawdzenia fizyczne: cykle zatrzasków, trzymanie śrub, trzymanie baterii, upadki i temperatury pracy. Procedura jest w instrukcji złożenia.</p></details>
+        <details class="cloud-details"><summary data-i18n="cloud.details.frame">Spis identyfikatorów ramy</summary><p data-i18n="cloud.details.frameLead">Najedź albo stuknij widoczną powierzchnię, aby zobaczyć jej identyfikator i nazwę. Wybierz widok rozstrzelony i obróć model, żeby obejrzeć mocowania wewnętrzne. Włącz identyfikatory ramy, aby pokazać ich położenie.</p><div class="table-wrap"><table><caption data-i18n="cloud.frame.caption">Identyfikatory opisują cechy trzech drukowanych części.</caption><thead><tr><th data-i18n="cloud.th.id">ID</th><th data-i18n="cloud.th.feature">Cecha</th><th data-i18n="cloud.th.part">Część drukowana</th></tr></thead><tbody id="cloud-frame"></tbody></table></div></details>
+      </div>
+
+      <!-- SUBVIEW 2: SKLEJKA -->
+      <div id="subview-sklejka" class="subview-panel" hidden>
+        <div class="section-bar">
+          <div><p class="eyebrow" data-i18n="plywood.eyebrow">OBUDOWA</p><h2 data-i18n="plywood.h2">Dom dla elektroniki.</h2></div>
+          <div class="pill-group" data-for="plywood-project" role="group" aria-label="Projekt" data-i18n-aria-label="plywood.projectLabel">
+            <button type="button" class="pill-btn active" data-value="house" data-i18n="plywood.opt.house">Little House Radio</button>
+            <button type="button" class="pill-btn" data-value="case" data-i18n="plywood.opt.case">Oryginalna skrzynka ze sklejki</button>
+          </div>
+          <input type="hidden" id="plywood-project" value="house">
+        </div>
+        <div class="scene-layout"><div id="plywood-slot" class="scene-slot"></div><aside class="inspector"><span class="section-number" data-i18n="plywood.kicker">02 / SKLEJKA</span><h3 id="plywood-title" data-i18n="plywood.model.house.title">Little House Radio</h3><p id="plywood-description" data-i18n="plywood.model.house.description">Obudowa ze sklejki z otwieranym dachem, miejscem na elektronikę i uchwytem do noszenia.</p><dl id="plywood-facts" class="facts"></dl>
+          <span class="field-label" data-i18n="plywood.modeLabel">Widok złożenia</span>
+          <div class="pill-group" id="assembly-mode-group" data-for="assembly-mode" role="group" aria-label="Widok złożenia" data-i18n-aria-label="plywood.modeLabel">
+            <button type="button" class="pill-btn active" data-value="assembled" data-i18n="plywood.mode.assembled">Złożone</button>
+            <button type="button" class="pill-btn" data-value="roof_open" data-i18n="plywood.mode.roof">Dach otwarty</button>
+            <button type="button" class="pill-btn" data-value="inside" data-i18n="plywood.mode.inside">W środku</button>
+            <button type="button" class="pill-btn" data-value="exploded" data-i18n="plywood.mode.exploded">Rozstrzelone</button>
+          </div>
+          <input type="hidden" id="assembly-mode" value="assembled">
+          <div class="check-fields"><label><input id="show-wood" type="checkbox" checked> <span data-i18n="plywood.wood">Pokaż sklejkę</span></label><label><input id="show-labels" type="checkbox"> <span data-i18n="plywood.componentLabels">Pokaż etykiety elementów</span></label></div><div class="inspector-note"><span class="note-mark">↗</span><p data-i18n="plywood.note">To siatki CAD tego projektu. Obróć model, otwórz dach albo zajrzyj do środka, aby zobaczyć, jak części do siebie pasują.</p></div><a id="plywood-source" class="text-link" href="https://github.com/hvitis/Alfa/tree/main/design/house-radio"><span data-i18n="plywood.source">Pliki projektu i instrukcja wykonania</span> ↗</a><a href="./cloud/cloud-radio.zip" download="cloud-radio.zip" class="inspector-download-button" data-i18n="plywood.inspectorDownload">Pobierz cały projekt · cloud-radio.zip ↙</a></aside></div>
+        <div class="plywood-downloads">
+          <div>
+            <p class="eyebrow" data-i18n="plywood.download.eyebrow">PAKIET WARSZTATOWY I DOKUMENTACJA</p>
+            <h3 data-i18n="plywood.download.h3">Pobierz cały projekt.</h3>
+            <p data-i18n="plywood.download.lead">Kompletne archiwum projektu cloud-radio rozszerzone o ilustrowaną instrukcję montażu obudowy ze sklejki, konfigurację Raspberry Pi 3, atlas połączeń oraz plany 1:1 do druku.</p>
+          </div>
+          <div class="download-buttons">
+            <a href="./docs/plywood-assembly-guide.pdf" download class="secondary" data-i18n="plywood.download.pdf">Instrukcja PDF <small>PDF ↙</small></a>
+            <a href="./cloud/cloud-radio.zip" download="cloud-radio.zip" class="download-all plywood-big-download" data-i18n="plywood.download.zip">Pobierz cały projekt <small>cloud-radio.zip ↙</small></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 2: ELEKTRONIKA -->
+    <section id="panel-elektronika" role="tabpanel" aria-labelledby="nav-elektronika" hidden>
+      <div class="subpage-top-nav" role="group" aria-label="Platforma sterownika" data-i18n-aria-label="elektronika.subnav.label">
+        <button type="button" class="big-subnav-btn active" data-controller="raspberry" data-i18n="elektronika.btn.pi">Raspi 3</button>
+        <button type="button" class="big-subnav-btn" data-controller="pico" data-i18n="elektronika.btn.pico">Pico</button>
+        <button type="button" class="big-subnav-btn" data-controller="pcb" data-i18n="elektronika.btn.pcb">PCB</button>
+      </div>
+      <input type="hidden" id="hardware-controller" value="raspberry">
+
+      <div class="section-bar"><div><p class="eyebrow" data-i18n="hw.eyebrow">POŁĄCZENIA</p><h2 data-i18n="hw.h2">Pójdź za każdym przewodem.</h2></div></div>
+      <div class="scene-layout"><div id="hardware-slot" class="scene-slot"></div><aside class="inspector"><span class="section-number" data-i18n="hw.kicker">03 / ELEKTRONIKA</span><h3 id="controller-title" data-i18n="controller.pi.title">Raspberry Pi 3</h3><p id="controller-description" data-i18n="controller.pi.description">Działający sterownik linuksowy. Obejrzyj każde połączenie wyświetlacza, dźwięku, przycisków, ADC i zasilania.</p><p id="pico-notice" class="notice" hidden data-i18n="hw.picoNotice">Proponowane okablowanie Pico. Aplikacja linuksowa działa na Raspberry Pi; Pico wymaga osobnego firmware i dźwięku przez PIO.</p><div id="pcb-controls" hidden><p class="notice" data-i18n="pcb.notice">Prototyp A · eksport KiCad. Montaż, temperatura i działanie na sprzęcie wymagają sprawdzenia.</p>
+        <span class="field-label" data-i18n="pcb.mode">Widok płytki</span>
+        <div class="pill-group" data-for="pcb-mode" role="group" aria-label="Widok płytki" data-i18n-aria-label="pcb.mode">
+          <button type="button" class="pill-btn active" data-value="assembled" data-i18n="pcb.assembled">Shield na Raspberry Pi 3</button>
+          <button type="button" class="pill-btn" data-value="board" data-i18n="pcb.board">Sama płytka PCB</button>
+          <button type="button" class="pill-btn" data-value="exploded" data-i18n="pcb.exploded">Widok rozstrzelony</button>
+        </div>
+        <input type="hidden" id="pcb-mode" value="assembled">
+        <div class="check-fields"><label><input id="pcb-labels" type="checkbox" checked> <span data-i18n="pcb.labels">Pokaż elementy i złącza</span></label></div><dl class="facts"><div><dt data-i18n="pcb.size">Płytka</dt><dd>65 × 56 × 1.6 mm</dd></div><div><dt data-i18n="pcb.layers">Warstwy miedzi</dt><dd>2</dd></div><div><dt data-i18n="pcb.mount">Rozstaw otworów</dt><dd>58 × 49 mm</dd></div></dl><p data-i18n="pcb.envelope">Geometria płytki i elementów pochodzi z KiCad. Raspberry Pi i dolne gniazdo są uproszczonymi obrysami. Wysokość montażu wymaga pomiaru.</p></div>
+        <span class="field-label" data-i18n="hw.circuitLabel">Obwód</span>
+        <div class="pill-group chips" data-for="circuit-filter" role="group" aria-label="Obwód" data-i18n-aria-label="hw.circuitLabel">
+          <button type="button" class="pill-btn active" data-value="all" data-i18n="hw.circuit.all">Wszystkie połączenia</button>
+          <button type="button" class="pill-btn" data-value="LCD" data-i18n="hw.circuit.lcd">Wyświetlacz / SPI</button>
+          <button type="button" class="pill-btn" data-value="Audio" data-i18n="hw.circuit.audio">Dźwięk / I²S</button>
+          <button type="button" class="pill-btn" data-value="ADC" data-i18n="hw.circuit.adc">ADC / I²C</button>
+          <button type="button" class="pill-btn" data-value="Keypad" data-i18n="hw.circuit.keypad">Przyciski / dzielnik</button>
+          <button type="button" class="pill-btn" data-value="Power" data-i18n="hw.circuit.power">Zasilanie</button>
+        </div>
+        <input type="hidden" id="circuit-filter" value="all">
+        <div class="selected-wire"><span class="eyebrow" data-i18n="hw.selected">WYBRANE POŁĄCZENIE</span><p id="wire-detail" role="status" data-i18n="hw.choose">Wybierz przewód na rysunku albo w tabeli poniżej.</p><button id="clear-wire" class="secondary" data-i18n="hw.clear">Pokaż wszystkie przewody</button></div><div id="hardware-wiring-note" class="inspector-note"><span class="note-mark">!</span><p data-i18n="hw.warning">Odłącz zasilanie przed zmianą przewodów. Dwa rezystory 10 kΩ obniżają sygnał OUT klawiatury przed ADC A0. Minusa głośnika nie łącz z GND.</p></div></aside></div>
+      <div id="hardware-diagram-card" class="hardware-diagram-card">
+        <div class="diagram-header">
+          <div>
+            <p class="eyebrow" data-i18n="hw.diagramEyebrow">SCHEMAT IDEOWY POŁĄCZEŃ</p>
+            <h3 data-i18n="hw.diagramH3">Kompletny schemat elektryczny.</h3>
+            <p data-i18n="hw.diagramLead">Wszystkie moduły, szyny sygnałowe, dzielnik napięcia i zasilanie podłączone do 40-pinowego złącza GPIO Raspberry Pi 3. Skalowalny schemat wektorowy.</p>
+          </div>
+          <div class="diagram-actions">
+            <a href="./docs/wiring-diagram.svg" download="alfa-wiring-diagram.svg" class="text-link" data-i18n="hw.diagramDownload">Pobierz schemat wektorowy <small>SVG ↙</small></a>
+          </div>
+        </div>
+        <div class="hardware-diagram-viewport" role="region" aria-label="Kompletny schemat połączeń elektrycznych" data-i18n-aria-label="hw.diagramAria">
+          <img src="./docs/wiring-diagram.svg" width="1100" height="780" alt="Kompletny schemat elektryczny Alfa Radio z Raspberry Pi 3" data-i18n-alt="hw.diagramAlt" class="hardware-diagram-img">
+        </div>
+      </div>
+      <div class="wiring-heading"><div><p class="eyebrow" data-i18n="hw.atlasEyebrow">PEŁNY ATLAS OKABLOWANIA</p><h3 data-i18n="hw.atlasH3">Każde połączenie, oba końce.</h3></div><span id="wire-count" class="count"></span></div>
+      <div class="table-wrap"><table id="wiring-table"><caption id="wiring-caption" data-i18n="wiring.caption.pi">Okablowanie Raspberry Pi 3 · numery sterownika to fizyczne piny złącza.</caption><thead><tr><th scope="col" data-i18n="hw.th.wire">Przewód</th><th scope="col" data-i18n="hw.th.signal">Obwód / sygnał</th><th scope="col" data-i18n="hw.th.from">Od</th><th scope="col" data-i18n="hw.th.to">Do</th></tr></thead><tbody id="wiring-body"></tbody></table></div>
+      <div id="pcb-details" class="pcb-details" hidden>
+        <div class="wiring-heading"><div><p class="eyebrow" data-i18n="pcb.kicker">SHIELD / PROTOTYP A</p><h3 data-i18n="pcb.files">Projekt i pliki wykonawcze</h3></div></div>
+        <p data-i18n="pcb.integration">ADC ADS1115, wzmacniacz MAX98357A, dwa rezystory dzielnika i elementy zasilania są bezpośrednio na płytce. Pozostają trzy przewody do LCD, klawiatury i głośnika.</p>
+        <div class="pcb-downloads"><a id="pcb-archive" class="secondary" download data-i18n="pcb.download">Pobierz pełny prototyp · ZIP</a><a id="pcb-schematic" class="secondary" download data-i18n="pcb.schematic">Schemat · PDF</a><a id="pcb-step" class="secondary" download data-i18n="pcb.step">Model mechaniczny · STEP</a><a id="pcb-gerbers" class="secondary" download data-i18n="pcb.gerbers">Gerber + otwory · wersja robocza</a></div>
+        <p class="notice" data-i18n="pcb.order">Do wyceny i przeglądu wykonawcy. Przed zamówieniem: sprawdź wysokość gniazda i dystansów, przewody JST oraz dopasowanie do obudowy. Próby elektryczne i termiczne nadal są potrzebne.</p>
+        <div class="table-wrap"><table><caption data-i18n="pcb.caption">Elementy do montażu na shieldzie</caption><thead><tr><th data-i18n="pcb.ref">Oznaczenie</th><th data-i18n="pcb.part">Element</th><th data-i18n="pcb.assembly">Montaż</th></tr></thead><tbody id="pcb-parts"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- PANEL 3: OPROGRAMOWANIE -->
+    <section id="panel-oprogramowanie" role="tabpanel" aria-labelledby="nav-oprogramowanie" hidden>
+      <div class="section-bar"><div><p class="eyebrow" data-i18n="sw.eyebrow">OPROGRAMOWANIE</p><h2 data-i18n="sw.h2">Od naciśnięcia przycisku do odpowiedzi.</h2></div></div>
+
+      <article class="device-tile" id="device-demo" tabindex="0" aria-labelledby="device-title">
+        <div class="device-copy">
+          <p class="eyebrow" data-i18n="play.eyebrow">APLIKACJA Z RASPBERRY PI</p>
+          <p class="device-badge" data-i18n="play.badge">PRZYTRZYMAJ, ABY RYSOWAĆ</p>
+          <p class="device-title" id="device-title" data-i18n="play.title">Ekran po lewej. Przyciski po prawej.</p>
+          <p data-i18n="play.lead">Lekcja alfabetu z Raspberry Pi. Naciśnij krótko dolny przycisk, aby usłyszeć literę. Przytrzymaj przez 0,6 sekundy, aby rysować. Puść, aby zatrzymać ołówek.</p>
+          <p class="device-note" data-i18n="play.recordings">Nagrania głosu zostają na Pi. Tutaj te same przyciski prowadzą tę samą lekcję.</p>
+          <ul class="device-legend">
+            <li data-i18n="play.legend.letters">Lewo i prawo zmieniają literę i odtwarzają jej dźwięk.</li>
+            <li data-i18n="play.legend.listen">Górny odtwarza słuchanie i wsuwa kartę z góry.</li>
+            <li data-i18n="play.legend.say">Przycisk pod nimi mówi „powiedz ze mną”, czeka, a potem chwali.</li>
+            <li data-i18n="play.legend.draw">Naciśnij krótko dolny przycisk, aby powtórzyć dźwięk. Przytrzymaj przez 0,6 sekundy, aby zacząć lub wznowić rysowanie.</li>
+          </ul>
+          <p class="device-keys" id="device-keys" data-i18n="play.keys">Strzałki w lewo i w prawo zmieniają litery. Spacja lub Enter powtarza dźwięk po krótkim naciśnięciu, a po przytrzymaniu rysuje.</p>
+        </div>
+        <div class="device-stage">
+          <p id="device-status" class="device-status" role="status" data-i18n="play.loading">Wczytywanie alfabetu…</p>
+          <div class="device-face">
+            <div class="lcd"><canvas id="device-screen" width="480" height="640" role="img" aria-label="Ekran Raspberry Pi" data-i18n-aria-label="play.screen" data-ready="false" data-phase="card" data-held="false"></canvas></div>
+            <div class="keypad-board" role="group" aria-label="Pięć przycisków analogowych" data-i18n-aria-label="play.group" aria-describedby="device-keys">
+              <span class="keypad-hole hole-tl" aria-hidden="true"></span>
+              <span class="keypad-hole hole-tr" aria-hidden="true"></span>
+              <span class="keypad-hole hole-bl" aria-hidden="true"></span>
+              <span class="keypad-hole hole-br" aria-hidden="true"></span>
+              <button type="button" class="pad" data-button="up" aria-pressed="false" aria-label="Posłuchaj litery" data-i18n-aria-label="play.up"></button>
+              <button type="button" class="pad" data-button="left" aria-pressed="false" aria-label="Poprzednia litera" data-i18n-aria-label="play.left"></button>
+              <button type="button" class="pad" data-button="right" aria-pressed="false" aria-label="Następna litera" data-i18n-aria-label="play.right"></button>
+              <button type="button" class="pad" data-button="down" aria-pressed="false" aria-label="Powiedz ze mną" data-i18n-aria-label="play.down"></button>
+              <button type="button" class="pad" data-button="center" aria-pressed="false" aria-label="Naciśnij krótko, aby usłyszeć literę. Przytrzymaj przez 0,6 sekundy, aby rysować" data-i18n-aria-label="play.center"></button>
+              <span class="keypad-pins" aria-hidden="true">OUT · VCC · GND</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <div id="software-implementation">
+        <div class="diagram-heading"><div><span class="section-number" data-i18n="sw.implKicker">04 / IMPLEMENTACJA</span><h3 data-i18n="sw.implH3">Jedna pętla. Jawne granice sprzętu.</h3><p data-i18n="sw.implLead">Obecna aplikacja na Raspberry Pi: od startu i przygotowania mediów po wejście, wyświetlacz, dźwięk i sprzątanie.</p></div><a href="./docs/architecture.mmd" download class="text-link"><span data-i18n="sw.mermaidLink">Źródło Mermaid</span> ↙</a></div>
+        <div class="diagram-scroll" tabindex="0" role="region" aria-label="Diagram architektury oprogramowania" data-i18n-aria-label="sw.diagram"><div id="architecture-diagram" aria-busy="true"></div></div>
+        <div class="diagram-legend"><span><i class="swatch runtime"></i> <span data-i18n="sw.legend.flow">Przepływ sterowania</span></span><span><i class="swatch physical"></i> <span data-i18n="sw.legend.physical">Sprzęt fizyczny</span></span><span><i class="swatch simulation"></i> <span data-i18n="sw.legend.sim">Symulacja</span></span></div>
+        <details class="diagram-source"><summary data-i18n="sw.mermaidSummary">Przeczytaj definicję Mermaid</summary><pre><code id="mermaid-source"></code></pre></details>
+      </div>
+
+      <div id="software-design" class="document-layout">
+        <aside class="document-meta"><span class="section-number" data-i18n="sw.designKicker">04 / PROJEKT</span><h3 data-i18n="sw.designH3">Decyzje stojące za kodem.</h3><p data-i18n="sw.designLead">Rejestr decyzji architektonicznej dla istniejącej aplikacji Pythona działającej offline.</p><div class="document-tag">ADR 0001 <span data-i18n="sw.designTag">ZAPISANE</span></div><a href="./docs/adr.pdf" download class="text-link" data-i18n="sw.adrPdf">Ilustrowany ADR <small>PDF, EN ↙</small></a><br><a href="./docs/adr.pl.md" data-i18n-href="sw.adrHref" download class="text-link" data-i18n="sw.adrMd">Pobierz źródło ADR</a></aside>
+        <article id="adr-content" class="prose" aria-label="Rejestr decyzji architektonicznej"></article>
+      </div>
+    </section>
+
+    <!-- PANEL 4: INNE -->
+    <section id="panel-inne" role="tabpanel" aria-labelledby="nav-inne" hidden>
+      <div class="section-bar">
+        <div>
+          <p class="eyebrow" data-i18n="inne.eyebrow">MATERIAŁY I PAKIETY</p>
+          <h2 data-i18n="inne.h2">Materiały edukacyjne i pobieranie.</h2>
+          <p data-i18n="inne.lead">Wszystko w jednym miejscu: fikcyjny przykład ADR dla oprogramowania medycznego oraz kompletne archiwa i pakiety do pobrania.</p>
+        </div>
+      </div>
+
+      <div class="project-downloads-hub">
+        <div class="downloads-hub-header">
+          <h3 data-i18n="inne.downloads.title">Pakiety do pobrania</h3>
+          <p data-i18n="inne.downloads.lead">Pobierz pełne archiwa projektu do druku, wycinania i uruchomienia na sprzęcie.</p>
+        </div>
+        <div class="downloads-hub-grid">
+          <a href="./cloud/cloud-radio.zip" download="Alfa-Build-Kit.zip" class="hub-download-card featured">
+            <span class="hub-tag">KOMPLETNY ZESTAW</span>
+            <strong data-i18n="inne.download.complete">Pobierz cały projekt · Alfa-Build-Kit.zip</strong>
+            <small>Zawiera modele CAD, rysunki, atlas połączeń, aplikację oraz plany 1:1</small>
+            <span class="hub-btn">Pobierz ZIP ↙</span>
+          </a>
+          <a href="./cloud/cloud-radio.zip" download="cloud-radio.zip" class="hub-download-card">
+            <span class="hub-tag">DRUK 3D</span>
+            <strong data-i18n="inne.download.cloud">Pakiet CAD chmurki · cloud-radio.zip</strong>
+            <small>STL, STEP, orientacja druku, instrukcja</small>
+            <span class="hub-btn">Pobierz ZIP ↙</span>
+          </a>
+          <a href="./docs/plywood-assembly-guide.pdf" download class="hub-download-card">
+            <span class="hub-tag">WARSZTAT</span>
+            <strong data-i18n="inne.download.plywood">Przewodnik montażu ze sklejki · PDF</strong>
+            <small>Ilustrowana instrukcja montażu 1:1</small>
+            <span class="hub-btn">Pobierz PDF ↙</span>
+          </a>
+        </div>
+      </div>
+
+      <div id="software-teaching" class="document-layout">
+        <aside class="document-meta">
+          <span class="section-number" data-i18n="sw.teachKicker">04 / SZKOLENIE</span>
+          <h3 data-i18n="sw.teachH3">Jak napisać ADR dla oprogramowania wyrobu medycznego.</h3>
+          <p data-i18n="sw.teachLead">Fikcyjny przykład ćwiczeniowy. Pokazuje, co MDR, IEC 62304 i ISO 14971 dodają do zwykłego ADR.</p>
+          <div class="document-tag">AL-ADR-0001 <span data-i18n="sw.teachTag">FIKCJA</span></div>
+          <p class="teaching-notice" data-i18n="sw.teachNotice"><b>Materiał szkoleniowy.</b> To nie jest wyrób medyczny. Wyłącznie do celów edukacyjnych.</p>
+          <button type="button" id="show-teaching-adr-btn" class="teaching-adr-toggle" aria-expanded="false" aria-controls="teaching-adr-content"><span data-i18n="inne.showAdr">Pokaż przykładowy ADR</span></button>
+          <div class="teaching-links">
+            <a href="./docs/teaching-material-adr-example-not-a-medical-device.pdf" download class="text-link" data-i18n="sw.teachPdf">ADR szkoleniowy <small>PDF, EN ↙</small></a><br>
+            <a href="./docs/teaching-adr.pl.md" data-i18n-href="sw.teachHref" download class="text-link" data-i18n="sw.teachMd">Pobierz źródło ADR</a>
+          </div>
+        </aside>
+        <article id="teaching-adr-content" class="prose teaching-document" aria-label="Materiał szkoleniowy: fikcyjny rejestr decyzji architektonicznej. To nie jest wyrób medyczny." data-i18n-aria-label="sw.teachArticle" hidden></article>
+      </div>
+    </section>
+
+    <div id="viewer-card" class="viewer-card" hidden><div class="viewport-top"><span id="scene-label" class="scene-badge" data-i18n="viewer.badge">RADIO-CHMURKA / CAD DO DRUKU</span><button id="reset-camera" class="camera-button" aria-label="Zresetuj kamerę" data-i18n-aria-label="viewer.resetAria">↺ <span data-i18n="viewer.reset">Resetuj widok</span></button></div><div id="viewport" role="region" aria-label="Interaktywna przeglądarka 3D projektu" data-i18n-aria-label="viewer.viewport"></div><div id="viewer-status" role="status" data-i18n="viewer.status">Wczytywanie modelu 3D…</div><div class="viewport-bottom"><span data-i18n="viewer.drag"><b>Przeciągnij</b>, aby obracać <span class="separator">/</span> <b>kółko</b> przybliża</span><span class="viewer-indicator"><i></i> <span data-i18n="viewer.live">Interaktywne 3D</span></span></div></div>
+    <p id="app-status" class="app-status" role="status" data-i18n="status.loading">Wczytywanie danych projektu…</p>
+  </main>
+  <footer><span class="footer-brand"><span aria-hidden="true">α</span> <span data-i18n="footer.tagline">Małe radio. Duża wyobraźnia.</span></span><p class="footer-notice" data-i18n="footer.notice">To nie jest wyrób medyczny. Wyłącznie do celów edukacyjnych.</p><div><a href="./THIRD-PARTY-LICENSES.txt" data-i18n="footer.licenses">Licencje bibliotek</a><a href="https://github.com/hvitis/Alfa/blob/main/LICENSE"><span data-i18n="footer.share">Zrobione, aby się dzielić</span> ↗</a></div></footer>
+</body>
+</html>

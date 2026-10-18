@@ -1,0 +1,26 @@
+flowchart TB
+  CLI["python -m app"] --> Config["Settings.load · one config.json"]
+  Config --> Startup["Startup · prepared media + resource acquisition"]
+  Splash["Optional boot splash · Unix socket handoff"] --> Startup
+  Startup --> Loop["Control loop · app/app.py"]
+  ADC["Keypad → ADS1x15 / I2C"] --> Guard["Calibration · Debouncer · PressGuard"]
+  Guard --> Loop
+  Keyboard["SSH keyboard"] --> Loop
+  Loop --> Player["PlayerSession · navigation and actions"]
+  Cache["app.media · PNG / WAV / RGB565 cache"] --> Player
+  Player --> Lessons["LetterLesson / CharacterAnimation"]
+  Player --> Frame["frame + render_key"]
+  Lessons --> Frame
+  Frame --> Presenter["AnimationPresenter / WireFrames"]
+  Presenter --> Display["ST7789 · RGB565 over SPI"]
+  Presenter --> Preview["PreviewDisplay · simulated PNG"]
+  Player --> Audio["StreamingAudioPlayer · PCM worker + volume cap"]
+  Audio --> ALSA["aplay / ALSA → I2S → MAX98357A + speaker"]
+  Loop --> Watchdog["ServiceWatchdog → systemd"]
+  Loop --> Cleanup["On exit · stop audio and release resources"]
+  classDef entry fill:#e7ddfa,color:#39305b,stroke:#8b7bad,stroke-width:2px
+  classDef physical fill:#fff0b5,color:#39305b,stroke:#b39754
+  classDef simulation fill:#d6f2e3,color:#39305b,stroke:#7caa94
+  class CLI,Loop,Player entry
+  class ADC,Display,ALSA physical
+  class Preview simulation

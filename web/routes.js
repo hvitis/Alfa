@@ -3,10 +3,10 @@ export const routeFields = [
   ['controller','hardware-controller','raspberry',['raspberry','pico','pcb']],
   ['enclosure','obudowa-view','filament',['filament','plywood']],
   ['pcb-mode','pcb-mode','assembled',['assembled','board','exploded']],
-  ['project','plywood-project','house',['house','case']],
-  ['assembly','assembly-mode','assembled',['assembled','roof_open','inside','exploded','enclosure','internals']],
+  ['project','plywood-project','case',['case','house']],
+  ['assembly','assembly-mode','enclosure',['enclosure','internals','exploded','assembled','roof_open','inside']],
   ['cloud-mode','cloud-mode','assembled',['assembled','exploded','inside','battery_open']],
-  ['circuit','circuit-filter','all',['all','LCD','Audio','ADC','Keypad','Power']],
+  ['circuit','circuit-filter','all',['all','LCD','Audio','ADC','Keypad','Buttons','Power']],
 ];
 
 export function readRoute(url) {

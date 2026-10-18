@@ -7,8 +7,8 @@
         "rear": "#70acd9",
         "battery_door": "#fff0b5"
       },
-      "revision": "prototype-6",
-      "checks": 205
+      "revision": "prototype-v2-arcade",
+      "checks": 258
     },
     "exploded": {
       "colors": {
@@ -16,8 +16,8 @@
         "rear": "#70acd9",
         "battery_door": "#fff0b5"
       },
-      "revision": "prototype-6",
-      "checks": 205
+      "revision": "prototype-v2-arcade",
+      "checks": 258
     },
     "rear": {
       "colors": {
@@ -25,8 +25,8 @@
         "rear": "#70acd9",
         "battery_door": "#fff0b5"
       },
-      "revision": "prototype-6",
-      "checks": 205
+      "revision": "prototype-v2-arcade",
+      "checks": 258
     },
     "side": {
       "colors": {
@@ -34,8 +34,35 @@
         "rear": "#70acd9",
         "battery_door": "#fff0b5"
       },
-      "revision": "prototype-6",
-      "checks": 205
+      "revision": "prototype-v2-arcade",
+      "checks": 258
+    },
+    "connections": {
+      "colors": {
+        "front": "#86bfea",
+        "rear": "#70acd9",
+        "battery_door": "#fff0b5"
+      },
+      "revision": "prototype-v2-arcade",
+      "checks": 258
+    },
+    "case_inside": {
+      "colors": {
+        "front": "#86bfea",
+        "rear": "#70acd9",
+        "battery_door": "#fff0b5"
+      },
+      "revision": "prototype-v2-arcade",
+      "checks": 258
+    },
+    "roentgen": {
+      "colors": {
+        "front": "#86bfea",
+        "rear": "#70acd9",
+        "battery_door": "#fff0b5"
+      },
+      "revision": "prototype-v2-arcade",
+      "checks": 258
     }
   }
 }

@@ -56,7 +56,9 @@ export function createCaseScene(initialMode = 'enclosure') {
     ['switch', 'USB switch · measure housing'],
   ];
 
+  const MODES = ['enclosure', 'internals', 'exploded'];
   function loadModel(name) {
+    if (!MODES.includes(name)) name = 'enclosure';
     if (cached.has(name)) return Promise.resolve(cached.get(name));
     if (typeof window !== 'undefined' && window.__CASE_GLB__ && window.__CASE_GLB__[name]) {
       return new Promise((resolve, reject) => {

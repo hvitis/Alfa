@@ -34,6 +34,7 @@ export function createWorkshopScene(config) {
   let mode = config.defaultMode ?? facts.modes[0], model = null, wood = true, showLabels = false, filter = 'all', wire = '', selection = null;
 
   function load(name) {
+    if (!facts.modes.includes(name)) name = config.defaultMode ?? facts.modes[0];
     if (cached.has(name)) return Promise.resolve(cached.get(name));
     if (typeof window === 'undefined') return Promise.resolve(null);   // Node tests: state only
     if (typeof window !== 'undefined' && window.__RADIO_GLB__ && window.__RADIO_GLB__[name]) {

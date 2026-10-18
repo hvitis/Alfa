@@ -28,8 +28,8 @@ const teachingHTML = () => getLocale() === 'en' ? teachingEn : teachingPl;
 
 function plywoodModels() {
   return {
-    house: { title: t('plywood.model.house.title'), description: t('plywood.model.house.description'), modes: [['assembled', t('plywood.mode.assembled')], ['roof_open', t('plywood.mode.roof')], ['inside', t('plywood.mode.inside')], ['exploded', t('plywood.mode.exploded')]], size: houseData.outer_mm, folder: 'house-radio' },
     case: { title: t('plywood.model.case.title'), description: t('plywood.model.case.description'), modes: [['enclosure', t('plywood.mode.assembled')], ['internals', t('plywood.mode.internals')], ['exploded', t('plywood.mode.exploded')]], size: [caseData.parameters.case.width, caseData.parameters.case.height, caseData.parameters.case.depth], folder: 'wooden-case' },
+    house: { title: t('plywood.model.house.title'), description: t('plywood.model.house.description'), modes: [['assembled', t('plywood.mode.assembled')], ['roof_open', t('plywood.mode.roof')], ['inside', t('plywood.mode.inside')], ['exploded', t('plywood.mode.exploded')]], size: houseData.outer_mm, folder: 'house-radio' },
   };
 }
 const picoData = createPicoData();
@@ -47,16 +47,16 @@ function syncPillGroup(groupEl, value) {
 
 function initPillGroup(groupEl, inputEl, onChange) {
   if (!groupEl || !inputEl) return;
-  for (const btn of groupEl.querySelectorAll('.pill-btn')) {
-    btn.addEventListener('click', () => {
-      const val = btn.dataset.value;
-      if (inputEl.value === val) return;
-      inputEl.value = val;
-      syncPillGroup(groupEl, val);
-      inputEl.dispatchEvent(new Event('change', { bubbles: true }));
-      if (onChange) onChange(val);
-    });
-  }
+  groupEl.addEventListener('click', event => {
+    const btn = event.target.closest('.pill-btn');
+    if (!btn || !groupEl.contains(btn)) return;
+    const val = btn.dataset.value;
+    if (inputEl.value === val) return;
+    inputEl.value = val;
+    syncPillGroup(groupEl, val);
+    inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+    if (onChange) onChange(val);
+  });
 }
 
 function languageLinks() {
@@ -129,10 +129,13 @@ function restoreRoute() {
   setEnclosureSubView(route.values['obudowa-view'] || 'filament', false);
   setController(route.values['hardware-controller'] || 'raspberry', false);
   fillPlywood();
+  const project = plywoodModels()[$('#plywood-project').value];
+  const curAssembly = route.values['assembly-mode'];
+  const validAssembly = project.modes.some(([val]) => val === curAssembly) ? curAssembly : project.modes[0][0];
   const assembly = $('#assembly-mode');
   if (assembly) {
-    assembly.value = route.values['assembly-mode'];
-    syncPillGroup($('#assembly-mode-group'), route.values['assembly-mode']);
+    assembly.value = validAssembly;
+    syncPillGroup($('#assembly-mode-group'), validAssembly);
   }
   renderWires();
   selectedWire = '';
@@ -298,6 +301,8 @@ function selectWire(id) {
 
 function renderWires() {
   const pcb = $('#hardware-controller').value === 'pcb';
+  const pcbWip = $('#pcb-wip-card');
+  if (pcbWip) pcbWip.hidden = !pcb;
   $('#pcb-controls').hidden = !pcb; $('#pcb-details').hidden = !pcb;
   for (const element of document.querySelectorAll('#panel-elektronika .wiring-heading, #wiring-table, #panel-elektronika .selected-wire, #panel-elektronika [data-for="circuit-filter"], #panel-elektronika .field-label[data-i18n="hw.circuitLabel"], #hardware-wiring-note, #hardware-diagram-card')) element.hidden = pcb;
   if (pcb) {
@@ -346,10 +351,16 @@ async function renderTeachingDiagram() {
 }
 
 async function showSoftware() {
-  diagramPromise ??= import('./software.js').then(({ renderArchitecture }) => renderArchitecture($('#architecture-diagram'), architecture, { label: t('software.diagramLabel') }));
-  await diagramPromise;
-  devicePromise ??= import('./device-app.js').then(({ mountDevice }) => mountDevice($('#device-demo')));
-  (await devicePromise).setActive(true);
+  const diagramEl = $('#architecture-diagram');
+  if (diagramEl) {
+    diagramPromise ??= import('./software.js').then(({ renderArchitecture }) => renderArchitecture(diagramEl, architecture, { label: t('software.diagramLabel') }));
+    await diagramPromise;
+  }
+  const deviceEl = $('#device-demo');
+  if (deviceEl) {
+    devicePromise ??= import('./device-app.js').then(({ mountDevice }) => mountDevice(deviceEl));
+    (await devicePromise).setActive(true);
+  }
 }
 
 async function activate(name, updateHash = true) {
@@ -390,11 +401,14 @@ async function activate(name, updateHash = true) {
 
 async function start() {
   const response = await fetch('./data/manifest.json');
-  if (!response.ok) throw new Error(`Specifications returned HTTP ${response.status}`);
-  repository = (await response.json()).repository;
-  $('#adr-content').innerHTML = adrHTML();
-  $('#teaching-adr-content').innerHTML = teachingHTML();
-  $('#mermaid-source').textContent = architecture;
+  const manifest = await response.json();
+  repository = manifest.repository;
+  const adrEl = $('#adr-content');
+  if (adrEl) adrEl.innerHTML = adrHTML();
+  const teachingEl = $('#teaching-adr-content');
+  if (teachingEl) teachingEl.innerHTML = teachingHTML();
+  const mermaidEl = $('#mermaid-source');
+  if (mermaidEl) mermaidEl.textContent = architecture;
 
   // Initialize pill groups
   initPillGroup($('[data-for="cloud-mode"]'), $('#cloud-mode'), () => handle(viewer?.setMode($('#cloud-mode').value)));
@@ -403,6 +417,7 @@ async function start() {
   initPillGroup($('[data-for="plywood-project"]'), $('#plywood-project'), () => { fillPlywood(); handle(showScene()); });
   initPillGroup($('[data-for="circuit-filter"]'), $('#circuit-filter'), val => { selectedWire = ''; viewer?.filter(val); renderWires(); selectWire(''); });
   initPillGroup($('[data-for="pcb-mode"]'), $('#pcb-mode'), val => handle(viewer?.setMode(val)));
+  initPillGroup($('#assembly-mode-group'), $('#assembly-mode'), val => handle(viewer?.setMode(val)));
   $('#assembly-mode')?.addEventListener('change', () => handle(viewer?.setMode($('#assembly-mode').value)));
 
   // Subpage top navigation
@@ -411,6 +426,23 @@ async function start() {
   }
   for (const btn of document.querySelectorAll('[data-controller]')) {
     btn.addEventListener('click', () => setController(btn.dataset.controller));
+  }
+
+  // Version dropdown toggle
+  const versionBtn = $('#version-btn');
+  const versionSwitch = $('#version-switch');
+  if (versionBtn && versionSwitch) {
+    versionBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = versionSwitch.classList.toggle('open');
+      versionBtn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', (e) => {
+      if (!versionSwitch.contains(e.target)) {
+        versionSwitch.classList.remove('open');
+        versionBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
   }
 
   // Main page feature card buttons

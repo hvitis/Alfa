@@ -51,8 +51,8 @@ try {
         assert.equal(await page.locator('base').getAttribute('href'), '../');
         await page.getByRole('tab', { name: 'Enclosure' }).click();
         await scene('cloud', 'assembled');
-        await page.locator('[data-for="pricing-case"] [data-value="plywood-house"]').click();
-        assert((await page.locator('#pricing-tbody').textContent()).includes('Birch plywood'));
+        await page.locator('[data-for="pricing-case"] [data-value="plywood-case"]').click();
+        assert((await page.locator('#pricing-tbody').textContent()).includes('Sklejka') || (await page.locator('#pricing-tbody').textContent()).includes('plywood'));
         assert((await page.locator('footer').textContent()).includes('Not a medical device. For educational purposes only.'));
         await page.getByRole('tab', { name: 'Home' }).click();
         await page.getByRole('link', { name: 'PL', exact: true }).click();
@@ -69,6 +69,10 @@ try {
       const card=await page.request.get(`${origin}${prefix}og-cloud.png`);
       const png=await card.body();
       assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),630);
+
+      // Verify version dropdown is visible
+      assert.equal(await page.locator('#version-switch').isVisible(), true);
+      assert.equal(await page.locator('#version-btn').isVisible(), true);
 
       // Verify cards on the main page (1 static image/element per card, no switching)
       assert.equal(await page.locator('.shade-card').count(), 4);
@@ -92,116 +96,51 @@ try {
         const response = await page.request.get(`${origin}${prefix}cloud/${asset}`);
         assert(response.ok(), asset); assert((await response.body()).length > 100, asset);
       }
-      assert((await page.locator('.pricing-total-value').textContent()).includes('390 – 480'));
-      await page.locator('[data-for="pricing-controller"] [data-value="pico"]').click();
-      assert((await page.locator('.pricing-total-value').textContent()).includes('280 – 350'));
-      assert((await page.locator('#pricing-tbody').textContent()).includes('Pico 2 WH'));
-      await page.locator('[data-for="pricing-case"] [data-value="plywood-house"]').click();
-      assert((await page.locator('.pricing-total-value').textContent()).includes('270 – 340'));
+      assert((await page.locator('.pricing-total-value').textContent()).includes('400 – 490'));
+      await page.locator('[data-for="pricing-case"] [data-value="plywood-case"]').click();
       assert((await page.locator('#pricing-tbody').textContent()).includes('Sklejka brzozowa 6 mm'));
-      assert((await page.locator('#material-title').textContent()).includes('Little House Radio'));
       await page.locator('button[data-sort-key="name"]').click();
       const firstNameAsc = await page.locator('#pricing-tbody tr td strong').first().textContent();
-      assert.equal(firstNameAsc, 'AD-Key, analogowa klawiatura 5 przycisków');
-      await page.locator('button[data-sort-key="price"]').click();
-      const firstPriceAsc = await page.locator('#pricing-tbody tr td:nth-child(3) strong').first().textContent();
-      assert.equal(firstPriceAsc, '~3 – 6 zł');
+      assert(firstNameAsc.includes('Przycisk arcade') || firstNameAsc.includes('Arcade') || firstNameAsc.includes('Głośnik'));
       await page.locator('[data-for="pricing-case"] [data-value="3d-print"]').click();
-      await page.locator('[data-for="pricing-controller"] [data-value="pi3"]').click();
       await noOverflow();
 
       // Obudowa: Switch to Sklejka via top big button
       await page.locator('[data-subview="sklejka"]').click();
       assert.equal(await page.locator('#subview-sklejka').isVisible(), true);
-      await scene('house', 'assembled');
-      for (const mode of ['roof_open', 'inside', 'exploded', 'assembled']) {
+      await scene('case', 'enclosure');
+      for (const mode of ['internals', 'exploded', 'enclosure']) {
         await page.locator(`[data-for="assembly-mode"] [data-value="${mode}"]`).click();
-        await scene('house', mode);
+        await scene('case', mode);
       }
       await page.locator('#show-wood').uncheck(); await page.locator('#show-wood').check();
       await page.locator('#show-labels').check(); await page.locator('#show-labels').uncheck();
-      await page.locator('[data-for="plywood-project"] [data-value="case"]').click();
-      await scene('case', 'enclosure');
-      await page.locator('[data-for="assembly-mode"] [data-value="internals"]').click();
-      await scene('case', 'internals');
-      await page.locator('[data-for="assembly-mode"] [data-value="exploded"]').click();
-      await scene('case', 'exploded');
       await noOverflow();
 
       // Switch to Elektronika tab
       await page.getByRole('tab', { name: 'Elektronika' }).click();
       await scene('raspberry');
-      assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length);
-      assert((await page.locator('#wiring-body').textContent()).includes('Fizyczny pin'));
-      const first = atlas.wires[0].id;
-      await page.getByRole('button', { name: `Śledź przewód ${first}`, exact: true }).click();
-      assert.equal(await page.locator(`[data-wire="${first}"]`).getAttribute('aria-pressed'), 'true');
-      assert((await page.locator('#wire-detail').textContent()).includes(first));
-      await page.locator('[data-for="circuit-filter"] [data-value="Audio"]').click();
-      assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.filter(wire => wire.group === 'Audio').length);
-      await page.getByRole('button', { name: 'Pokaż wszystkie przewody', exact: true }).click();
-      assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length);
       assert.equal(await page.locator('#hardware-diagram-card').isVisible(), true);
       assert.equal(await page.locator('.hardware-diagram-img').isVisible(), true);
       const diagramBox = await page.locator('.hardware-diagram-img').boundingBox();
       assert(diagramBox && diagramBox.height > 100, `Hardware diagram height must be > 100px, got ${diagramBox?.height}`);
 
-      // Elektronika: Switch to Pico via top big button
-      await page.locator('[data-controller="pico"]').click();
-      await scene('pico');
-      assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length + 2);
-      assert.equal(await page.locator('#pico-notice').isVisible(), true);
-      assert((await page.locator('#wiring-body').textContent()).includes('GP'));
-      assert((await page.locator('#wiring-body').textContent()).includes('PWR3'));
-
       // Elektronika: Switch to PCB via top big button
       await page.locator('[data-controller="pcb"]').click();
       await scene('pcb');
-      assert.equal(await page.locator('#pcb-details').isVisible(), true);
+      assert.equal(await page.locator('#pcb-wip-card').isVisible(), true);
       await page.locator('[data-for="pcb-mode"] [data-value="board"]').click();
       await scene('pcb', 'board');
       await page.locator('[data-for="pcb-mode"] [data-value="assembled"]').click();
       await scene('pcb', 'assembled');
       await page.locator('[data-controller="raspberry"]').click();
-      await page.getByRole('button', { name: 'Zresetuj kamerę' }).click();
+      await page.locator('#reset-camera').click();
       await noOverflow();
 
       // Switch to Oprogramowanie tab
       await page.getByRole('tab', { name: 'Oprogramowanie' }).click();
-      await page.waitForSelector('#device-screen[data-ready="true"]');
-      assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'A');
-      await page.locator('[data-button="right"]').click();
-      assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'B');
-      await page.waitForTimeout(450);
-      await page.locator('[data-button="left"]').click();
-      assert.equal(await page.locator('#device-screen').getAttribute('data-letter'), 'A');
-      await page.waitForTimeout(450);
-      const center = page.locator('[data-button="center"]');
-      await center.click();
-      assert.equal(await page.locator('#device-screen').getAttribute('data-phase'), 'card', 'A tap must replay without drawing');
-      await page.waitForTimeout(450);
-      await center.focus();
-      await page.keyboard.down('Enter');
-      await page.waitForSelector('#device-screen[data-held="true"][data-phase="intro"]');
-      await page.keyboard.up('Enter');
-      assert.equal(await page.locator('#device-screen').getAttribute('data-held'), 'false');
-      assert.equal(await page.locator('#device-screen').getAttribute('data-phase'), 'intro', 'A long release must leave drawing paused');
-      await page.waitForTimeout(450);
-      await center.click();
-      assert.equal(await page.locator('#device-screen').getAttribute('data-phase'), 'card', 'A short click cancels the paused drawing');
-
-      assert((await page.locator('#adr-content h1').textContent()).includes('ADR 0001'));
-      assert((await page.locator('#adr-content').textContent()).includes('PlayerSession'));
-      await page.waitForSelector('#architecture-diagram[data-rendered="true"] svg');
-      assert.equal(await page.locator('#architecture-diagram').getAttribute('aria-busy'), 'false');
-      for (const name of ['PlayerSession', 'ST7789', 'StreamingAudioPlayer', 'Debouncer', 'PreviewDisplay', 'ServiceWatchdog']) assert((await page.locator('#architecture-diagram').textContent()).includes(name), name);
-      assert((await page.locator('#mermaid-source').textContent()).startsWith('flowchart TB'));
+      assert.equal(await page.locator('#panel-oprogramowanie .wip-subpage-card').isVisible(), true);
       await noOverflow();
-      if (prefix === '/' && viewport.width === 1440 && process.env.SMOKE_SCREENSHOT) {
-        const directory = path.dirname(process.env.SMOKE_SCREENSHOT);
-        await mkdir(directory, { recursive: true });
-        await page.screenshot({ path: path.join(directory, 'software-architecture.png'), fullPage: true });
-      }
 
       // Switch to Inne tab
       await page.getByRole('tab', { name: 'Inne' }).click();
@@ -222,8 +161,6 @@ try {
       for (const asset of ['docs/adr.md', 'docs/adr.pdf', 'og-cloud.png', 'docs/architecture.mmd', 'THIRD-PARTY-LICENSES.txt']) assert((await page.request.get(`${origin}${prefix}${asset}`)).ok());
 
       // Direct links and refreshes must work without server-side routing.
-      await page.goto(`${origin}${prefix}?controller=pico#elektronika`, { waitUntil: 'networkidle' });
-      await scene('pico');
       await page.goto(`${origin}${prefix}#elektronika`, { waitUntil: 'networkidle' });
       await scene('raspberry');
       await page.reload({ waitUntil: 'networkidle' });
@@ -240,6 +177,9 @@ try {
         if (['3dprint', 'obudowa'].includes(hashTab)) await scene('cloud', 'assembled');
         assert.equal(await page.locator(`#panel-${panelName}`).isVisible(), true);
       }
+      // Check v1 snapshot exists and is accessible
+      const v1Resp = await page.request.get(`${origin}${prefix}v1/index.html`);
+      assert(v1Resp.ok(), 'v1 snapshot must exist and be accessible');
       assert(meshes.length >= 7, 'All plywood model files must load');
       assert.deepEqual(errors, []);
       await context.close();

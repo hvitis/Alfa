@@ -1,12 +1,12 @@
 {
-  "revision": "prototype-6",
+  "revision": "prototype-v2-arcade",
   "checks": [
     {
       "check": "front: valid connected solid",
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 211136.27
+        "volume_mm3": 203642.48
       }
     },
     {
@@ -131,32 +131,92 @@
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: keypad / front",
+      "check": "Nominal fit: button_top / front",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: keypad / rear",
+      "check": "Nominal fit: button_top / rear",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: keypad / battery_door",
+      "check": "Nominal fit: button_top / battery_door",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: speaker / front",
+      "check": "Nominal fit: button_bottom / front",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: speaker / rear",
+      "check": "Nominal fit: button_bottom / rear",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: speaker / battery_door",
+      "check": "Nominal fit: button_bottom / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_left / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_left / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_left / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_right / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_right / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_right / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_side_left / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_side_left / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_side_left / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_side_right / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_side_right / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_side_right / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -176,36 +236,6 @@
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: adc / front",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: adc / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: adc / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: divider / front",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: divider / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: divider / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Nominal fit: switch / front",
       "pass": true,
       "detail": 0.0
@@ -217,6 +247,21 @@
     },
     {
       "check": "Nominal fit: switch / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: speaker / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: speaker / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: speaker / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -236,12 +281,32 @@
       "detail": 0
     },
     {
-      "check": "Expanded envelope inside shell: keypad",
+      "check": "Expanded envelope inside shell: button_top",
       "pass": true,
       "detail": 0
     },
     {
-      "check": "Expanded envelope inside shell: speaker",
+      "check": "Expanded envelope inside shell: button_bottom",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_left",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_right",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_side_left",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_side_right",
       "pass": true,
       "detail": 0
     },
@@ -251,17 +316,12 @@
       "detail": 0
     },
     {
-      "check": "Expanded envelope inside shell: adc",
-      "pass": true,
-      "detail": 0
-    },
-    {
-      "check": "Expanded envelope inside shell: divider",
-      "pass": true,
-      "detail": 0
-    },
-    {
       "check": "Expanded envelope inside shell: switch",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: speaker",
       "pass": true,
       "detail": 0
     },
@@ -306,12 +366,32 @@
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: battery / keypad",
+      "check": "Expanded clearance: battery / button_top",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: battery / speaker",
+      "check": "Expanded clearance: battery / button_bottom",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_left",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_right",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_side_left",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_side_right",
       "pass": true,
       "detail": 0.0
     },
@@ -321,17 +401,12 @@
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: battery / adc",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: battery / divider",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Expanded clearance: battery / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / speaker",
       "pass": true,
       "detail": 0.0
     },
@@ -366,12 +441,32 @@
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: pi / keypad",
+      "check": "Expanded clearance: pi / button_top",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: pi / speaker",
+      "check": "Expanded clearance: pi / button_bottom",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_left",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_right",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_side_left",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_side_right",
       "pass": true,
       "detail": 0.0
     },
@@ -381,17 +476,12 @@
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: pi / adc",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: pi / divider",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Expanded clearance: pi / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / speaker",
       "pass": true,
       "detail": 0.0
     },
@@ -411,12 +501,32 @@
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: lcd / keypad",
+      "check": "Expanded clearance: lcd / button_top",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: lcd / speaker",
+      "check": "Expanded clearance: lcd / button_bottom",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_left",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_right",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_side_left",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_side_right",
       "pass": true,
       "detail": 0.0
     },
@@ -426,17 +536,12 @@
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: lcd / adc",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: lcd / divider",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Expanded clearance: lcd / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / speaker",
       "pass": true,
       "detail": 0.0
     },
@@ -466,122 +571,357 @@
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / speaker",
+      "check": "Expanded clearance: button_top / button_bottom",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / amp",
+      "check": "Expanded clearance: button_top / button_left",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / adc",
+      "check": "Expanded clearance: button_top / button_right",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / divider",
+      "check": "Expanded clearance: button_top / button_side_left",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / switch",
+      "check": "Expanded clearance: button_top / button_side_right",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / pi_ports",
+      "check": "Expanded clearance: button_top / amp",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / gpio",
+      "check": "Expanded clearance: button_top / switch",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / pi_power",
+      "check": "Expanded clearance: button_top / speaker",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / bank_plug",
+      "check": "Expanded clearance: button_top / pi_ports",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / usb_join",
+      "check": "Expanded clearance: button_top / gpio",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: keypad / lcd_cable",
+      "check": "Expanded clearance: button_top / pi_power",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / amp",
+      "check": "Expanded clearance: button_top / bank_plug",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / adc",
+      "check": "Expanded clearance: button_top / usb_join",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / divider",
+      "check": "Expanded clearance: button_top / lcd_cable",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / switch",
+      "check": "Expanded clearance: button_bottom / button_left",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / pi_ports",
+      "check": "Expanded clearance: button_bottom / button_right",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / gpio",
+      "check": "Expanded clearance: button_bottom / button_side_left",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / pi_power",
+      "check": "Expanded clearance: button_bottom / button_side_right",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / bank_plug",
+      "check": "Expanded clearance: button_bottom / amp",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / usb_join",
+      "check": "Expanded clearance: button_bottom / switch",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: speaker / lcd_cable",
+      "check": "Expanded clearance: button_bottom / speaker",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: amp / adc",
+      "check": "Expanded clearance: button_bottom / pi_ports",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: amp / divider",
+      "check": "Expanded clearance: button_bottom / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_right",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_side_left",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_side_right",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / speaker",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_side_left",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_side_right",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / speaker",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_side_right",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / speaker",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / amp",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / speaker",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / lcd_cable",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Expanded clearance: amp / switch",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / speaker",
       "pass": true,
       "detail": 0.0
     },
@@ -616,77 +956,7 @@
       "detail": 0.0
     },
     {
-      "check": "Expanded clearance: adc / divider",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: adc / switch",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: adc / pi_ports",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: adc / gpio",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: adc / pi_power",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: adc / bank_plug",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: adc / usb_join",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: adc / lcd_cable",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: divider / switch",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: divider / pi_ports",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: divider / gpio",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: divider / pi_power",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: divider / bank_plug",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: divider / usb_join",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Expanded clearance: divider / lcd_cable",
+      "check": "Expanded clearance: switch / speaker",
       "pass": true,
       "detail": 0.0
     },
@@ -712,6 +982,36 @@
     },
     {
       "check": "Expanded clearance: switch / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / pi_ports",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / gpio",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / pi_power",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / bank_plug",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / usb_join",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / lcd_cable",
       "pass": true,
       "detail": 0.0
     },
@@ -889,7 +1189,12 @@
       "detail": null
     },
     {
-      "check": "Front layout: LCD left and keypad right",
+      "check": "Front layout: 6 arcade buttons present",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "LCD centered horizontally on front cover",
       "pass": true,
       "detail": null
     },
@@ -982,52 +1287,12 @@
       "detail": 7.084
     },
     {
-      "check": "Keypad bridge fills the measured gap across both long sides",
+      "check": "Arcade button mounting holes: 28 mm diameter",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Keypad bridge leaves 2.5 mm each side",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Rounded bridge root adds cover material",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Rounded bridge root adds cover material",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Rounded bridge root adds cover material",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Rounded bridge root adds cover material",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Keypad bridge and roots clear nearest cap plus 2.5 mm",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Keypad nominal cap clears front face",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Keypad bridge and roots clear nearest cap plus 2.5 mm",
-      "pass": true,
-      "detail": null
-    },
-    {
-      "check": "Keypad nominal cap clears front face",
+      "check": "Speaker mounted in upper lobe",
       "pass": true,
       "detail": null
     },
@@ -1040,10 +1305,10 @@
       "check": "front: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 45378,
+        "triangles": 43816,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 207970.31,
+        "volume_mm3": 200372.53,
         "removed_degenerate_triangles": 2
       }
     },
@@ -1113,10 +1378,10 @@
   ],
   "meshes": {
     "front": {
-      "triangles": 45378,
+      "triangles": 43816,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 207970.31,
+      "volume_mm3": 200372.53,
       "removed_degenerate_triangles": 2
     },
     "rear": {
@@ -1155,5 +1420,5 @@
       "removed_degenerate_triangles": 0
     }
   },
-  "checks_count": 205
+  "checks_count": 258
 }

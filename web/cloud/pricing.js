@@ -49,43 +49,17 @@ export const PRICING_ITEMS = [
     ]
   },
   {
-    id: 'periph-keypad',
-    name: 'AD-Key 5-button analog keypad',
-    function: 'Five front tactile control buttons on single analog ADC line',
-    priceText: '~10,49 zł',
-    min: 10.49,
-    max: 10.49,
+    id: 'periph-arcade-buttons',
+    name: '6 × Arcade Push Button 33mm (SPST)',
+    function: 'Six durable arcade push buttons with microswitches wired directly to Pi GPIO',
+    priceText: '~47,31 zł (7,60–8,10 zł / pcs)',
+    min: 47.31,
+    max: 48,
     caseType: 'all',
     controllerType: 'all',
     links: [
-      { name: 'sklep.msalamon.pl ↗', url: 'https://sklep.msalamon.pl/produkt/modul-ad-key-klawiatura-5-przyciskow/' }
-    ]
-  },
-  {
-    id: 'periph-dac',
-    name: 'MAX98357A I2S 3W Class-D DAC & Amp',
-    function: 'Direct I2S digital audio output powering the internal speaker',
-    priceText: '~10,30 zł',
-    min: 10.30,
-    max: 10.30,
-    caseType: 'all',
-    controllerType: 'all',
-    links: [
-      { name: 'Gotronik ↗', url: 'https://www.gotronik.pl/modul-wzmacniacza-audio-i2s-3w-klasa-d-dacmax98357-p-13866.html' }
-    ]
-  },
-  {
-    id: 'periph-adc',
-    name: 'ADS1115 16-bit 4-channel I2C ADC',
-    function: 'High-resolution ADC converter reading analog key resistor divider',
-    priceText: '~18 – 24 zł',
-    min: 18,
-    max: 24,
-    caseType: 'all',
-    controllerType: 'all',
-    links: [
-      { name: 'Gotronik ↗', url: 'https://www.gotronik.pl/ads1115-modul-czterokanalowego-przetwornika-adc-16-bit-i2c-p-4187.html' },
-      { name: 'Botland ↗', url: 'https://botland.com.pl/przetworniki-a-c-i-c-a/4187-ads1115-przetwornik-ac-16-bitowy-4-kanalowy-i2c.html' }
+      { name: 'Allegro / Botland ↗', url: 'https://allegro.pl/kategoria/elektronika?string=Arcade%20Push%20Button%2033mm' },
+      { name: 'Gotronik ↗', url: 'https://www.gotronik.pl' }
     ]
   },
   {

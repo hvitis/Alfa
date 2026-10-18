@@ -6,7 +6,7 @@ import { writeEnglishPage } from './i18n-html.mjs';
 import {pcbPage} from './pcb/page.mjs';
 import {renderPcbImages} from './pcb/render.mjs';
 import MarkdownIt from 'markdown-it';
-import { readFile, writeFile, mkdir, copyFile, readdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, readdir, cp } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -23,6 +23,7 @@ await writeFile(resolve(web, '.generated/teaching-adr.pl.html'), renderTeaching(
 await renderPcbImages();
 await build({ configFile: resolve(web, 'vite.config.js'), logLevel: 'warn', build: { outDir: destination } });
 await writeEnglishPage(destination);
+await cp(resolve(web, 'v1-snapshot'), resolve(destination, 'v1'), { recursive: true });
 await mkdir(resolve(destination,'pcb'),{recursive:true});
 await writeFile(resolve(destination,'pcb/index.html'),pcbPage(await readFile(resolve(destination,'index.html'),'utf8')));
 await copyFile(resolve(web,'assets/og-pcb.png'),resolve(destination,'og-pcb.png'));
@@ -36,7 +37,7 @@ await copyFile(resolve(web, 'content/teaching-adr.pl.md'), resolve(destination, 
 await copyFile(resolve(web, 'content/architecture.mmd'), resolve(destination, 'docs/architecture.mmd'));
 await copyFile(resolve(web, 'assets/wiring-diagram.svg'), resolve(destination, 'docs/wiring-diagram.svg'));
 await mkdir(resolve(destination, 'assets'), { recursive: true });
-for (const file of ['house-preview.png', 'pcb-render.svg', 'pdf-preview.png', 'software-architecture.png', 'wiring-diagram.svg']) {
+for (const file of ['cloud-render.png', 'house-preview.png', 'pcb-render.svg', 'pdf-preview.png', 'software-architecture.png', 'wiring-diagram.svg']) {
   await copyFile(resolve(web, `assets/${file}`), resolve(destination, `assets/${file}`));
 }
 await writeFile(resolve(destination, '.nojekyll'), '');

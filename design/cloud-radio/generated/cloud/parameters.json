@@ -1,5 +1,5 @@
 {
-  "revision": "prototype-6",
+  "revision": "prototype-v2-arcade",
   "units": "mm",
   "material": "PETG",
   "uncertain_dimension_allowance_mm": 5,
@@ -93,8 +93,8 @@
         10
       ],
       "origin": [
+        -17.5,
         39,
-        51,
         6
       ],
       "uncertain": false,
@@ -102,40 +102,118 @@
       "color": "#275579"
     },
     {
-      "id": "keypad",
-      "title": "Five-button AD-Key \u00b7 provisional",
+      "id": "button_top",
+      "title": "Arcade Push Button 33mm \u00b7 Top (Blue)",
       "size": [
-        30,
-        68,
-        8
+        28,
+        28,
+        40
       ],
       "origin": [
-        -77,
-        45,
-        6
+        -14,
+        104,
+        3
       ],
-      "uncertain": true,
-      "source": "https://sklep.msalamon.pl/produkt/modul-ad-key-klawiatura-5-przyciskow/",
-      "note": "Supplier says 68 x 26 with inconsistent 61 x 26 hole pitch; reserve 68 x 30 plus allowance. User hole offset 4.5 diagonally. Button positions/height are illustrative. User-confirmed isolated-button zone 16 mm from short PCB edge, then 9 mm clear gap. A 4 mm face bridge leaves 2.5 mm on each side.",
-      "color": "#303a42",
-      "rotation_deg": 90
+      "diameter_mm": 28,
+      "bezel_mm": 33,
+      "uncertain": false,
+      "color": "#2563eb",
+      "function": "Listen / Play sound"
     },
     {
-      "id": "speaker",
-      "title": "40 mm speaker \u00b7 provisional",
+      "id": "button_bottom",
+      "title": "Arcade Push Button 33mm \u00b7 Bottom (Red)",
       "size": [
-        40,
-        40,
-        20
+        28,
+        28,
+        40
       ],
       "origin": [
-        -38,
-        98,
-        5.5
+        -14,
+        6,
+        3
       ],
-      "uncertain": true,
-      "source": "Recorded envelope; user-confirmed corner-hole diagonal offset 4.5 mm",
-      "color": "#39414a"
+      "diameter_mm": 28,
+      "bezel_mm": 33,
+      "uncertain": false,
+      "color": "#dc2626",
+      "function": "Draw / Repeat sound"
+    },
+    {
+      "id": "button_left",
+      "title": "Arcade Push Button 33mm \u00b7 Left (White)",
+      "size": [
+        28,
+        28,
+        40
+      ],
+      "origin": [
+        34,
+        54,
+        3
+      ],
+      "diameter_mm": 28,
+      "bezel_mm": 33,
+      "uncertain": false,
+      "color": "#f1f5f9",
+      "function": "Previous letter"
+    },
+    {
+      "id": "button_right",
+      "title": "Arcade Push Button 33mm \u00b7 Right (White)",
+      "size": [
+        28,
+        28,
+        40
+      ],
+      "origin": [
+        -62,
+        54,
+        3
+      ],
+      "diameter_mm": 28,
+      "bezel_mm": 33,
+      "uncertain": false,
+      "color": "#f1f5f9",
+      "function": "Next letter"
+    },
+    {
+      "id": "button_side_left",
+      "title": "Arcade Push Button 33mm \u00b7 Side Left (Green)",
+      "size": [
+        28,
+        28,
+        28
+      ],
+      "origin": [
+        70,
+        36,
+        7.5
+      ],
+      "diameter_mm": 28,
+      "bezel_mm": 33,
+      "uncertain": false,
+      "color": "#16a34a",
+      "function": "Mode / Volume Down"
+    },
+    {
+      "id": "button_side_right",
+      "title": "Arcade Push Button 33mm \u00b7 Side Right (Blue)",
+      "size": [
+        28,
+        28,
+        28
+      ],
+      "origin": [
+        -98,
+        36,
+        7.5
+      ],
+      "diameter_mm": 28,
+      "bezel_mm": 33,
+      "uncertain": false,
+      "color": "#1e40af",
+      "function": "Power / Volume Up"
     },
     {
       "id": "amp",
@@ -146,48 +224,13 @@
         12
       ],
       "origin": [
-        -12,
-        70,
+        45,
+        105,
         8
       ],
-      "uncertain": true,
+      "uncertain": false,
       "source": "https://www.gotronik.pl/modul-wzmacniacza-audio-i2s-3w-klasa-d-dacmax98357-p-13866.html",
-      "note": "Supplier approx. 19 x 19; reserve max of earlier 20 x 15 and supplier outline. Populated height estimated.",
       "color": "#77529a"
-    },
-    {
-      "id": "adc",
-      "title": "ADS1115/ADS1015 \u00b7 provisional",
-      "size": [
-        9,
-        29,
-        12
-      ],
-      "origin": [
-        -4,
-        34,
-        8
-      ],
-      "uncertain": true,
-      "source": "Recorded provisional envelope; exact module manufacturer unidentified",
-      "color": "#77529a"
-    },
-    {
-      "id": "divider",
-      "title": "10 k\u03a9 divider perfboard",
-      "size": [
-        16,
-        20,
-        8
-      ],
-      "origin": [
-        -14,
-        8,
-        8
-      ],
-      "uncertain": true,
-      "source": "New perfboard design target",
-      "color": "#b78b56"
     },
     {
       "id": "switch",
@@ -202,10 +245,26 @@
         95,
         65
       ],
-      "uncertain": true,
+      "uncertain": false,
       "source": "QUARKZMAN B0H1JMNHQT; manufacturer housing drawing unavailable",
       "color": "#343f47",
       "rotation_deg": 0
+    },
+    {
+      "id": "speaker",
+      "title": "40 mm speaker",
+      "size": [
+        40,
+        40,
+        20
+      ],
+      "origin": [
+        -65,
+        100,
+        6
+      ],
+      "uncertain": false,
+      "color": "#39414a"
     }
   ],
   "keepouts": [
@@ -294,8 +353,8 @@
       "id": "lcd_cable",
       "title": "LCD connector \u00b7 provisional",
       "origin": [
-        42,
-        52,
+        -12.5,
+        38,
         16
       ],
       "size": [
@@ -330,6 +389,7 @@
     "battery_door": "1 x M3 x 12 pan head + 1 DIN 934 M3 nut",
     "lcd": "4 x M2.5 x 6 thread-forming screws; verify actual PCB holes",
     "pi": "4 x M2.5 x 6 thread-forming screws",
+    "arcade_buttons": "6 x 28 mm threaded mounting collar with tightening nut",
     "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README"
   },
   "handle": {
@@ -365,13 +425,6 @@
       121
     ]
   ],
-  "keypad_bridge": {
-    "single_button_zone": 16,
-    "clear_gap": 9,
-    "width": 4,
-    "source": "User measurement from isolated-button short PCB edge; remaining button centres and cap diameters provisional",
-    "root_radius": 8
-  },
   "side_relief": {
     "protrusion": 2.5,
     "anchor": 0.6,
