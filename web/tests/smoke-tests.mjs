@@ -70,10 +70,11 @@ try {
       const png=await card.body();
       assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),630);
 
-      // Verify shade cards on the main page
+      // Verify cards on the main page (1 static image/element per card, no switching)
       assert.equal(await page.locator('.shade-card').count(), 4);
-      assert.equal(await page.locator('.shade-card .shade-layer.layer-primary').count(), 4);
-      assert.equal(await page.locator('.shade-card .shade-layer.layer-secondary').count(), 4);
+      assert.equal(await page.locator('.shade-card .card-media-img').count(), 3);
+      assert.equal(await page.locator('.shade-card .code-preview-window').count(), 1);
+      assert.equal(await page.locator('.shade-card .shade-layer').count(), 0);
 
       // Navigate to Obudowa via the card button
       await page.locator('.shade-card[data-card="obudowa"] .card-nav-btn').click();
@@ -140,6 +141,10 @@ try {
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.filter(wire => wire.group === 'Audio').length);
       await page.getByRole('button', { name: 'Pokaż wszystkie przewody', exact: true }).click();
       assert.equal(await page.locator('#wiring-body tr').count(), atlas.wires.length);
+      assert.equal(await page.locator('#hardware-diagram-card').isVisible(), true);
+      assert.equal(await page.locator('.hardware-diagram-img').isVisible(), true);
+      const diagramBox = await page.locator('.hardware-diagram-img').boundingBox();
+      assert(diagramBox && diagramBox.height > 100, `Hardware diagram height must be > 100px, got ${diagramBox?.height}`);
 
       // Elektronika: Switch to Pico via top big button
       await page.locator('[data-controller="pico"]').click();
@@ -200,6 +205,8 @@ try {
 
       // Switch to Inne tab
       await page.getByRole('tab', { name: 'Inne' }).click();
+      assert.equal(await page.locator('#teaching-adr-content').isVisible(), false);
+      await page.locator('#show-teaching-adr-btn').click();
       await page.waitForSelector('#teaching-adr-content .teaching-diagram[data-rendered="true"] svg');
       const teaching = await page.locator('#teaching-adr-content').textContent();
       for (const phrase of ['TEACHING MATERIAL · NOT A MEDICAL DEVICE · FOR EDUCATIONAL PURPOSES ONLY', 'Read this first', 'Alfa is not a medical device', 'Alfa-L does not exist', 'Nobody signed anything']) assert(teaching.includes(phrase), phrase);

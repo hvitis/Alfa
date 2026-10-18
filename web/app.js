@@ -380,8 +380,10 @@ async function activate(name, updateHash = true) {
       device?.setActive(false);
     }
     if (name === 'inne') {
-      teachingPromise ??= renderTeachingDiagram();
-      await teachingPromise;
+      if (!$('#teaching-adr-content').hidden) {
+        teachingPromise ??= renderTeachingDiagram();
+        await teachingPromise;
+      }
     }
   }
 }
@@ -433,6 +435,20 @@ async function start() {
   $('#cloud-labels')?.addEventListener('change', () => viewer?.setLabels($('#cloud-labels').checked));
   $('#cloud-clearances')?.addEventListener('change', () => viewer?.setClearances($('#cloud-clearances').checked));
   $('#pcb-labels')?.addEventListener('change', () => viewer?.setLabels($('#pcb-labels').checked));
+  const teachingToggle = $('#show-teaching-adr-btn');
+  const teachingContent = $('#teaching-adr-content');
+  if (teachingToggle && teachingContent) {
+    teachingToggle.addEventListener('click', async () => {
+      const willShow = teachingContent.hidden;
+      teachingContent.hidden = !willShow;
+      teachingToggle.setAttribute('aria-expanded', String(willShow));
+      teachingToggle.querySelector('span').textContent = willShow ? t('inne.hideAdr') : t('inne.showAdr');
+      if (willShow) {
+        teachingPromise ??= renderTeachingDiagram();
+        await teachingPromise;
+      }
+    });
+  }
   $('#clear-wire')?.addEventListener('click', () => {
     $('#circuit-filter').value = 'all';
     syncPillGroup(document.querySelector('[data-for="circuit-filter"]'), 'all');

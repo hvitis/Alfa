@@ -218,6 +218,7 @@
 .hardware-diagram-img {
   width: 100%;
   max-width: 100%;
+  aspect-ratio: 1100 / 780;
   height: auto;
   display: block;
 }

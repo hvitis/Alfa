@@ -44,7 +44,6 @@
     </nav>
     <div class="header-links">
       <nav class="lang-switch" aria-label="Język" data-i18n-aria-label="lang.nav"><a href="./" hreflang="pl" lang="pl" aria-current="page">PL</a><a href="./en/" hreflang="en" lang="en">EN</a></nav>
-      <span class="offline-label"><i></i> <span data-i18n="header.explore">Zrobione do odkrywania</span></span>
       <a href="https://github.com/hvitis/Alfa"><span data-i18n="header.code">Zajrzyj do kodu</span> <span aria-hidden="true">↗</span></a>
     </div>
   </header>
@@ -63,9 +62,7 @@
         <!-- Card 1: Obudowa -->
         <article class="shade-card" data-card="obudowa">
           <div class="shade-card-media">
-            <img src="./assets/cloud-render.png" class="shade-layer layer-primary" alt="Druk 3D obudowy chmurki" data-i18n-alt="card.obudowa.alt1">
-            <img src="./assets/house-preview.png" class="shade-layer layer-secondary" alt="Obudowa domku Little House ze sklejki" data-i18n-alt="card.obudowa.alt2">
-            <span class="shade-hint" aria-hidden="true">3D · Sklejka</span>
+            <img src="./assets/cloud-render.png" class="card-media-img" alt="Druk 3D obudowy chmurki" data-i18n-alt="card.obudowa.alt1">
           </div>
           <div class="shade-card-body">
             <h3 data-i18n="card.obudowa.title">Obudowa</h3>
@@ -77,9 +74,7 @@
         <!-- Card 2: Elektronika -->
         <article class="shade-card" data-card="elektronika">
           <div class="shade-card-media">
-            <img src="./assets/wiring-diagram.svg" class="shade-layer layer-primary" alt="Kompletny schemat ideowy połączeń elektrycznych" data-i18n-alt="card.elektronika.alt1">
-            <img src="./assets/pcb-render.svg" class="shade-layer layer-secondary" alt="Czerwony render płytki PCB shielda z KiCad" data-i18n-alt="card.elektronika.alt2">
-            <span class="shade-hint" aria-hidden="true">Schemat · PCB</span>
+            <img src="./assets/wiring-diagram.svg" width="1100" height="780" class="card-media-img" alt="Kompletny schemat ideowy połączeń elektrycznych" data-i18n-alt="card.elektronika.alt1">
           </div>
           <div class="shade-card-body">
             <h3 data-i18n="card.elektronika.title">Elektronika</h3>
@@ -91,7 +86,7 @@
         <!-- Card 3: Oprogramowanie -->
         <article class="shade-card" data-card="oprogramowanie">
           <div class="shade-card-media code-media">
-            <div class="code-preview-window shade-layer layer-primary" aria-label="Fragment kodu aplikacji Alfa">
+            <div class="code-preview-window" aria-label="Fragment kodu aplikacji Alfa">
               <div class="code-window-bar">
                 <span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span>
                 <span class="code-filename">app/player.py</span>
@@ -108,8 +103,6 @@
       <span class="ck">return</span> <span class="cb">False</span>
     <span class="ck">return</span> self.handle(key)</code></pre>
             </div>
-            <img src="./assets/software-architecture.png" class="shade-layer layer-secondary" alt="Diagram architektury oprogramowania" data-i18n-alt="card.oprogramowanie.alt2">
-            <span class="shade-hint" aria-hidden="true">Kod · Architektura</span>
           </div>
           <div class="shade-card-body">
             <h3 data-i18n="card.oprogramowanie.title">Oprogramowanie</h3>
@@ -121,9 +114,7 @@
         <!-- Card 4: Inne -->
         <article class="shade-card" data-card="inne">
           <div class="shade-card-media">
-            <img src="./assets/pdf-preview.png" class="shade-layer layer-primary" alt="Podgląd strony dokumentacji PDF" data-i18n-alt="card.inne.alt1">
-            <img src="./assets/house-preview.png" class="shade-layer layer-secondary" alt="Okładka przewodnika warsztatowego" data-i18n-alt="card.inne.alt2">
-            <span class="shade-hint" aria-hidden="true">PDF · Warsztat</span>
+            <img src="./assets/pdf-preview.png" class="card-media-img" alt="Podgląd strony dokumentacji PDF" data-i18n-alt="card.inne.alt1">
           </div>
           <div class="shade-card-body">
             <h3 data-i18n="card.inne.title">Inne</h3>
@@ -295,7 +286,7 @@
           </div>
         </div>
         <div class="hardware-diagram-viewport" role="region" aria-label="Kompletny schemat połączeń elektrycznych" data-i18n-aria-label="hw.diagramAria">
-          <img src="./docs/wiring-diagram.svg" alt="Kompletny schemat elektryczny Alfa Radio z Raspberry Pi 3" data-i18n-alt="hw.diagramAlt" class="hardware-diagram-img" loading="lazy">
+          <img src="./docs/wiring-diagram.svg" width="1100" height="780" alt="Kompletny schemat elektryczny Alfa Radio z Raspberry Pi 3" data-i18n-alt="hw.diagramAlt" class="hardware-diagram-img">
         </div>
       </div>
       <div class="wiring-heading"><div><p class="eyebrow" data-i18n="hw.atlasEyebrow">PEŁNY ATLAS OKABLOWANIA</p><h3 data-i18n="hw.atlasH3">Każde połączenie, oba końce.</h3></div><span id="wire-count" class="count"></span></div>
@@ -405,10 +396,13 @@
           <p data-i18n="sw.teachLead">Fikcyjny przykład ćwiczeniowy. Pokazuje, co MDR, IEC 62304 i ISO 14971 dodają do zwykłego ADR.</p>
           <div class="document-tag">AL-ADR-0001 <span data-i18n="sw.teachTag">FIKCJA</span></div>
           <p class="teaching-notice" data-i18n="sw.teachNotice"><b>Materiał szkoleniowy.</b> To nie jest wyrób medyczny. Wyłącznie do celów edukacyjnych.</p>
-          <a href="./docs/teaching-material-adr-example-not-a-medical-device.pdf" download class="text-link" data-i18n="sw.teachPdf">ADR szkoleniowy <small>PDF, EN ↙</small></a><br>
-          <a href="./docs/teaching-adr.pl.md" data-i18n-href="sw.teachHref" download class="text-link" data-i18n="sw.teachMd">Pobierz źródło ADR</a>
+          <button type="button" id="show-teaching-adr-btn" class="teaching-adr-toggle" aria-expanded="false" aria-controls="teaching-adr-content"><span data-i18n="inne.showAdr">Pokaż przykładowy ADR</span></button>
+          <div class="teaching-links">
+            <a href="./docs/teaching-material-adr-example-not-a-medical-device.pdf" download class="text-link" data-i18n="sw.teachPdf">ADR szkoleniowy <small>PDF, EN ↙</small></a><br>
+            <a href="./docs/teaching-adr.pl.md" data-i18n-href="sw.teachHref" download class="text-link" data-i18n="sw.teachMd">Pobierz źródło ADR</a>
+          </div>
         </aside>
-        <article id="teaching-adr-content" class="prose teaching-document" aria-label="Materiał szkoleniowy: fikcyjny rejestr decyzji architektonicznej. To nie jest wyrób medyczny." data-i18n-aria-label="sw.teachArticle"></article>
+        <article id="teaching-adr-content" class="prose teaching-document" aria-label="Materiał szkoleniowy: fikcyjny rejestr decyzji architektonicznej. To nie jest wyrób medyczny." data-i18n-aria-label="sw.teachArticle" hidden></article>
       </div>
     </section>
 
