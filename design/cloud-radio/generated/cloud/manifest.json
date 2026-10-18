@@ -695,12 +695,12 @@
       "title": "Left side arcade button hole 28 mm",
       "part": "front",
       "origin": [
-        95.0,
+        75.0,
         36.0,
         7.5
       ],
       "size": [
-        20.0,
+        60.0,
         28.0,
         28.0
       ]
@@ -710,12 +710,12 @@
       "title": "Right side arcade button hole 28 mm",
       "part": "front",
       "origin": [
-        -115.0,
+        -135.0,
         36.0,
         7.5
       ],
       "size": [
-        20.0,
+        60.0,
         28.0,
         28.0
       ]

@@ -242,9 +242,9 @@ def make(p):
     front -= record(cylinder(-48, 68, -1, 14, t+2), "F-BTN04", "Right arcade button hole 28 mm", "front")
 
     # 2 side wall arcade buttons (28 mm diameter mounting hole)
-    side_left_hole = b.Pos(105, 50, 21.5) * b.Rot(0, 90, 0) * b.Cylinder(14, 20, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
+    side_left_hole = b.Pos(105, 50, 21.5) * b.Rot(0, 90, 0) * b.Cylinder(14, 60, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
     front -= record(side_left_hole, "F-BTN05", "Left side arcade button hole 28 mm", "front")
-    side_right_hole = b.Pos(-105, 50, 21.5) * b.Rot(0, 90, 0) * b.Cylinder(14, 20, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
+    side_right_hole = b.Pos(-105, 50, 21.5) * b.Rot(0, 90, 0) * b.Cylinder(14, 60, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
     front -= record(side_right_hole, "F-BTN06", "Right side arcade button hole 28 mm", "front")
 
     diagonal = 4.5 / math.sqrt(2)

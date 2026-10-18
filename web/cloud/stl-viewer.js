@@ -70,7 +70,11 @@ export function createStlViewer(container, options = {}) {
     mesh.geometry.computeBoundingSphere();
     const sphere = mesh.geometry.boundingSphere;
     const distance = (sphere?.radius || 100) * 2.3;
-    camera.position.set(distance * 0.7, distance * 0.6, distance * 0.9);
+    if (currentPart === 'front') {
+      camera.position.set(distance * 0.45, distance * 0.35, -distance * 1.1);
+    } else {
+      camera.position.set(distance * 0.7, distance * 0.6, distance * 0.9);
+    }
     camera.lookAt(0, 0, 0);
     controls.target.set(0, 0, 0);
     controls.update();

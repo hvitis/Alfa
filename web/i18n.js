@@ -617,7 +617,7 @@ const polish = {
   'hero.eyebrow': 'MAŁE RADIO. DUŻE POMYSŁY.',
   'hero.title': 'Małe radio.<br><span>Duża wyobraźnia.</span>',
   'hero.lead': 'Małe radio i cały świat do odkrycia.<br>Obróć je, zajrzyj do środka i zobacz, jak składa się każda część.',
-  'hero.sticker': 'BAW SIĘ. TWÓRZ. DZIWIJ.',
+  'hero.sticker': 'BAW SIĘ. TWÓRZ. UCZ.',
   'tabs.label': 'Warstwy projektu',
   'tab.3dprint': 'Druk 3D',
   'tab.plywood': 'Sklejka',

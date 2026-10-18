@@ -77,9 +77,12 @@ def panel_holes(name, p):
                [(x, y, 3.5) for x, y in p["rear_screws"]] + \
                [(x, y, 4) for x in (30, 40, 50, 60, 70) for y in (146, 154)]
     if name in ("left", "right"):
-        holes = [(26, y - t, 4) for y in (74, 86, 98, 110, 122)]
+        holes = []
         if name == "left":
+            holes.append((26, 70 - t, 28))
             holes += [(26, 132 - t, 3.5), (26, 188 - t, 3.5)]
+        if name == "right":
+            holes.append((26, 130 - t, 28))
         return holes
     if name in ("top", "bottom"):
         return [(x, 26, 4) for x in (30, 45, 60, 90, 105, 120)]
@@ -97,7 +100,9 @@ def panel_profile(name, p):
     shape = rect(0, 0, w, h)
     if name == "front":
         shape -= rect(*p["lcd"]["window"], radius=2)
-        shape -= keypad_window(p)
+        for key in ("top", "bottom", "left", "right"):
+            bx, by = p["arcade_buttons"][key]["centre"]
+            shape -= circle(bx, by, 14)
     elif name == "left":
         # General clearance window, covered by a screwed plywood plate.
         # Housing fit is provisional until the selected cable is measured.
@@ -234,9 +239,7 @@ def wire_shape(wire, p, explode=0):
 
 def electronic_parts(p, explode=0):
     parts = []
-    for name, color in (("pi", "#287557"), ("keypad", "#242933"),
-                        ("lcd", "#255988"), ("amp", "#69418b"),
-                        ("adc", "#69418b"), ("divider", "#b78046")):
+    for name, color in (("pi", "#287557"), ("lcd", "#255988"), ("amp", "#69418b")):
         shift = explode if name == "pi" else -explode
         if name == "lcd":
             origin = list(p[name]["origin"])
@@ -258,22 +261,59 @@ def electronic_parts(p, explode=0):
     parts.append(box([x + 10, y + 10, 6 - explode], [49, 85, 3], "battery_foam_and_Velcro", "#50575a"))
     for band_y in (104, 158):
         parts.append(box([x, band_y, z + 14 - explode], [69, 12, 1], "battery_retention_band", "#59646a"))
-    # User supplied overall speaker size; internal profile is an illustrative envelope.
+    # Speaker
     x, y, z = p["speaker"]["origin"]
     parts.append(box([x, y, z - explode], [40, 40, 1.2], "speaker_square_frame", "#292d33"))
     parts.append(disc(x + 20, y + 20, z + 1.2 - explode, 18, 8.8, "speaker_cone_body", "#343b43"))
     parts.append(disc(x + 20, y + 20, z + 10 - explode, 12, 10, "speaker_magnet", "#1c2026"))
-    # Actual display area; 1.8 mm along-board offset is inferred, not a machining datum.
-    parts.append(box([26.7, 28.4, 6 - explode], [30.6, 40.8, 4], "LCD_active_area", "#f2f0de"))
+    # Centered display area and letter M
+    parts.append(box([59.7, 78.4, 6 - explode], [30.6, 40.8, 4], "LCD_active_area", "#f2f0de"))
     m_points = [(-10, -10), (-5, -10), (0, 0), (5, -10), (10, -10),
                 (10, 10), (6, 10), (6, -3), (0, 6), (-6, -3), (-6, 10), (-10, 10)]
-    letter = bd.extrude(bd.Polygon(*[(42 + dx, -49 - dy) for dx, dy in m_points], align=None), amount=.05)
+    letter = bd.extrude(bd.Polygon(*[(75 + dx, -99 - dy) for dx, dy in m_points], align=None), amount=.05)
     letter = letter.moved(bd.Location((0, 0, 5.95 - explode)))
     letter.label, letter.color = "letter_M_on_screen", srgb("#193951")
     parts.append(letter)
-    for i, (x, y) in enumerate(p["keypad"]["button_centres"]):
-        parts.append(box([x - 4, y - 4, 3 - explode], [8, 8, 4], f"key_switch_{i + 1}", "#48505a"))
-        parts.append(disc(x, y, 1 - explode, 6, 2, f"yellow_button_{i + 1}", "#f0c52d"))
+    # 4 Front Arcade Push Buttons (33 mm bezel, 28 mm body)
+    arcade_front = [
+        ("top", 75, 35, "#2563eb", "Top Arcade Button 33mm (Blue)"),
+        ("bottom", 75, 165, "#dc2626", "Bottom Arcade Button 33mm (Red)"),
+        ("left", 25, 100, "#f8fafc", "Left Arcade Button 33mm (White)"),
+        ("right", 125, 100, "#f8fafc", "Right Arcade Button 33mm (White)"),
+    ]
+    for btn_id, bx, by, bcolor, blabel in arcade_front:
+        parts.append(disc(bx, by, -3.5 - explode, 16.5, 3.5, f"arcade_{btn_id}_bezel", bcolor))
+        parts.append(disc(bx, by, -4.5 - explode, 12, 2.5, f"arcade_{btn_id}_cap", bcolor))
+        parts.append(disc(bx, by, -explode, 14, 30, f"arcade_{btn_id}_body", "#1e1e24"))
+        parts.append(box([bx - 14, by - 9, 30 - explode], [28, 18, 15], f"arcade_{btn_id}_switch", "#111827"))
+    # 2 Side Wall Arcade Buttons
+    # Side Left (Green): X = 0, Y = 70, Z = 32
+    bezel_l = bd.Pos(-1.75, -70, 32) * bd.Rot(0, 90, 0) * bd.Cylinder(16.5, 3.5)
+    bezel_l.label, bezel_l.color = "arcade_side_left_bezel", srgb("#16a34a")
+    parts.append(bezel_l)
+    cap_l = bd.Pos(-3.5, -70, 32) * bd.Rot(0, 90, 0) * bd.Cylinder(12, 2.5)
+    cap_l.label, cap_l.color = "arcade_side_left_cap", srgb("#16a34a")
+    parts.append(cap_l)
+    body_l = bd.Pos(15, -70, 32) * bd.Rot(0, 90, 0) * bd.Cylinder(14, 30)
+    body_l.label, body_l.color = "arcade_side_left_body", srgb("#1e1e24")
+    parts.append(body_l)
+    sw_l = bd.Pos(36, -70, 32) * bd.Box(15, 28, 18)
+    sw_l.label, sw_l.color = "arcade_side_left_switch", srgb("#111827")
+    parts.append(sw_l)
+    # Side Right (Blue): X = 150, Y = 130, Z = 32
+    bezel_r = bd.Pos(151.75, -130, 32) * bd.Rot(0, 90, 0) * bd.Cylinder(16.5, 3.5)
+    bezel_r.label, bezel_r.color = "arcade_side_right_bezel", srgb("#1e40af")
+    parts.append(bezel_r)
+    cap_r = bd.Pos(153.5, -130, 32) * bd.Rot(0, 90, 0) * bd.Cylinder(12, 2.5)
+    cap_r.label, cap_r.color = "arcade_side_right_cap", srgb("#1e40af")
+    parts.append(cap_r)
+    body_r = bd.Pos(135, -130, 32) * bd.Rot(0, 90, 0) * bd.Cylinder(14, 30)
+    body_r.label, body_r.color = "arcade_side_right_body", srgb("#1e1e24")
+    parts.append(body_r)
+    sw_r = bd.Pos(114, -130, 32) * bd.Box(15, 28, 18)
+    sw_r.label, sw_r.color = "arcade_side_right_switch", srgb("#111827")
+    parts.append(sw_r)
+
     # Pi connectors, in the rotated 85 x 56 PCB envelope; no side port cutouts are needed.
     rear = explode
     parts.append(box([32.5, 116.5, 32.4 + rear], [15, 25.5, 16], "Pi_Ethernet_envelope", "#b2b8be"))
@@ -285,15 +325,10 @@ def electronic_parts(p, explode=0):
     parts.append(box([28, 61.8, 42.9 + rear], [6, 8, 5.5], "Pi_microUSB_socket", "#aab2b9"))
     parts.append(box([10, 61, 38.5 + rear], [18, 10, 9], "microUSB_right_angle_plug_keepout", "#22272d"))
     parts.append(box([100.5, 52, 10 - explode], [14, 30, 12], "Baseus_USB_C_plug_keepout", "#22272d"))
-    # Board headers use the photographed label order. Simplified bodies retain measured board sizes.
+    # Board headers
     parts.append(box([51.5, 99, 11.6 - explode], [19, 4, 8.4], "amp_7_pin_header", "#d7b82a"))
     parts.append(box([56, 89, 11.6 - explode], [10, 5, 5], "amp_speaker_terminal", "#73b98d"))
-    parts.append(box([65, 136.5, 10.6 - explode], [2.5, 25.4, 5.4], "adc_10_pin_header", "#282c33"))
-    parts.append(box([52, 154.5, 7 - explode], [6, 10, 4], "keypad_right_angle_header", "#242933"))
-    for y in (179, 186):
-        parts.append(box([57, y, 10.6 - explode], [7, 2, 2], "10k_resistor", "#bead74"))
     parts.append(box(p["switch"]["origin"], p["switch"]["size"], "inline_USB_switch_PROVISIONAL", "#30373e"))
-    # Actuator faces outward through the side cover; its size must be measured.
     actuator = bd.Solid.make_cylinder(7, 2, bd.Plane(origin=(-2, -160, 32), z_dir=(1, 0, 0)))
     actuator.label, actuator.color = "switch_actuator_PROVISIONAL", srgb("#242a30")
     parts.append(actuator)

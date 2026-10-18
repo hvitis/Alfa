@@ -316,52 +316,54 @@
   <!-- ================= DIRECT WIRES ================= -->
   <!-- 1. LCD to Pi 3 -->
   <!-- VCC (LCD -> Pi Pin 1: 3.3V) -->
-  <path d="M 255 145 L 310 145 L 310 86 L 380 86" class="wire" stroke="#ef4444" stroke-width="2"/>
-  <!-- GND (LCD -> Pi Pin 6: GND) -->
-  <path d="M 255 168 L 305 168 L 305 625 L 670 625 L 670 156 L 650 156" class="wire" stroke="#1e293b" stroke-width="2"/>
+  <path d="M 255 145 L 340 145 L 340 166 L 420 166" class="wire" stroke="#ef4444" stroke-width="2.5"/>
+  <!-- GND (LCD -> Pi Pin 6: GND) via top -->
+  <path d="M 255 168 L 330 168 L 330 92 L 720 92 L 720 206 L 690 206" class="wire" stroke="#1e293b" stroke-width="2.5"/>
   <!-- DIN (LCD -> Pi Pin 19: GPIO 10) -->
-  <path d="M 255 191 L 320 191 L 320 266 L 380 266" class="wire" stroke="#3b82f6" stroke-width="2"/>
+  <path d="M 255 191 L 345 191 L 345 346 L 420 346" class="wire" stroke="#3b82f6" stroke-width="2.5"/>
   <!-- CLK (LCD -> Pi Pin 23: GPIO 11) -->
-  <path d="M 255 214 L 325 214 L 325 306 L 380 306" class="wire" stroke="#f97316" stroke-width="2"/>
-  <!-- CS (LCD -> Pi Pin 24: GPIO 8) -->
-  <path d="M 255 237 L 330 237 L 330 310 L 630 310 L 630 310 L 650 310" class="wire" stroke="#eab308" stroke-width="2"/>
-  <!-- DC (LCD -> Pi Pin 22: GPIO 25) -->
-  <path d="M 255 260 L 335 260 L 335 290 L 640 290 L 650 290" class="wire" stroke="#10b981" stroke-width="2"/>
+  <path d="M 255 214 L 350 214 L 350 386 L 420 386" class="wire" stroke="#f97316" stroke-width="2.5"/>
+  <!-- CS (LCD -> Pi Pin 24: GPIO 8) via top -->
+  <path d="M 255 237 L 320 237 L 320 116 L 735 116 L 735 386 L 690 386" class="wire" stroke="#eab308" stroke-width="2.5"/>
+  <!-- DC (LCD -> Pi Pin 22: GPIO 25) via top -->
+  <path d="M 255 260 L 325 260 L 325 108 L 730 108 L 730 366 L 690 366" class="wire" stroke="#10b981" stroke-width="2.5"/>
   <!-- RST (LCD -> Pi Pin 13: GPIO 27) -->
-  <path d="M 255 283 L 340 283 L 340 206 L 380 206" class="wire" stroke="#8b5cf6" stroke-width="2"/>
-  <!-- BL (LCD -> Pi Pin 18: GPIO 24) -->
-  <path d="M 255 306 L 345 306 L 345 250 L 650 250" class="wire" stroke="#ec4899" stroke-width="2"/>
+  <path d="M 255 283 L 355 283 L 355 286 L 420 286" class="wire" stroke="#8b5cf6" stroke-width="2.5"/>
+  <!-- BL (LCD -> Pi Pin 18: GPIO 24) via top -->
+  <path d="M 255 306 L 315 306 L 315 100 L 725 100 L 725 326 L 690 326" class="wire" stroke="#ec4899" stroke-width="2.5"/>
 
   <!-- 2. Buttons to Pi 3 GPIO -->
   <!-- Top Button -> Pin 29 (GPIO 5) -->
-  <path d="M 295 416 L 340 416 L 340 366 L 380 366" class="wire" stroke="#2563eb" stroke-width="2.5"/>
+  <path d="M 295 416 L 350 416 L 350 446 L 420 446" class="wire" stroke="#2563eb" stroke-width="2.5"/>
   <!-- Bottom Button -> Pin 31 (GPIO 6) -->
-  <path d="M 295 471 L 345 471 L 345 386 L 380 386" class="wire" stroke="#dc2626" stroke-width="2.5"/>
+  <path d="M 295 471 L 355 471 L 355 466 L 420 466" class="wire" stroke="#dc2626" stroke-width="2.5"/>
   <!-- Left Button -> Pin 33 (GPIO 13) -->
-  <path d="M 295 526 L 350 526 L 350 406 L 380 406" class="wire" stroke="#64748b" stroke-width="2.5"/>
+  <path d="M 295 526 L 360 526 L 360 486 L 420 486" class="wire" stroke="#64748b" stroke-width="2.5"/>
   <!-- Right Button -> Pin 37 (GPIO 26) -->
-  <path d="M 295 581 L 355 581 L 355 446 L 380 446" class="wire" stroke="#64748b" stroke-width="2.5"/>
-  <!-- Side Left Button -> Pin 36 (GPIO 16) -->
-  <path d="M 295 636 L 360 636 L 360 640 L 665 640 L 665 430 L 650 430" class="wire" stroke="#16a34a" stroke-width="2.5"/>
-  <!-- Side Right Button -> Pin 32 (GPIO 12) -->
-  <path d="M 295 691 L 365 691 L 365 650 L 675 650 L 675 390 L 650 390" class="wire" stroke="#1e40af" stroke-width="2.5"/>
+  <path d="M 295 581 L 365 581 L 365 526 L 420 526" class="wire" stroke="#64748b" stroke-width="2.5"/>
+  <!-- Side Left Button -> Pin 36 (GPIO 16) via bottom -->
+  <path d="M 295 636 L 370 636 L 370 615 L 725 615 L 725 506 L 690 506" class="wire" stroke="#16a34a" stroke-width="2.5"/>
+  <!-- Side Right Button -> Pin 32 (GPIO 12) via bottom -->
+  <path d="M 295 691 L 375 691 L 375 625 L 735 625 L 735 466 L 690 466" class="wire" stroke="#1e40af" stroke-width="2.5"/>
+  <!-- Buttons Ground Bus -> Pin 30 (GND) via bottom -->
+  <path d="M 238 725 L 380 725 L 380 635 L 745 635 L 745 446 L 690 446" class="wire" stroke="#1e293b" stroke-width="2.5"/>
 
   <!-- 3. Amp to Pi 3 -->
   <!-- VIN -> Pi Pin 2 (5V) -->
-  <path d="M 820 145 L 770 145 L 770 86 L 650 86" class="wire" stroke="#ef4444" stroke-width="2"/>
+  <path d="M 820 145 L 755 145 L 755 166 L 690 166" class="wire" stroke="#ef4444" stroke-width="2.5"/>
   <!-- GND -> Pi Pin 14 (GND) -->
-  <path d="M 820 170 L 765 170 L 765 206 L 650 206" class="wire" stroke="#1e293b" stroke-width="2"/>
+  <path d="M 820 170 L 760 170 L 760 286 L 690 286" class="wire" stroke="#1e293b" stroke-width="2.5"/>
   <!-- SD -> Pi Pin 16 (GPIO 23) -->
-  <path d="M 820 195 L 760 195 L 760 226 L 650 226" class="wire" stroke="#ec4899" stroke-width="2"/>
+  <path d="M 820 195 L 765 195 L 765 306 L 690 306" class="wire" stroke="#ec4899" stroke-width="2.5"/>
   <!-- DIN -> Pi Pin 40 (GPIO 21) -->
-  <path d="M 820 245 L 755 245 L 755 470 L 650 470" class="wire" stroke="#10b981" stroke-width="2"/>
+  <path d="M 820 245 L 770 245 L 770 546 L 690 546" class="wire" stroke="#10b981" stroke-width="2.5"/>
   <!-- BCLK -> Pi Pin 12 (GPIO 18) -->
-  <path d="M 820 270 L 750 270 L 750 186 L 650 186" class="wire" stroke="#3b82f6" stroke-width="2"/>
-  <!-- LRC -> Pi Pin 35 (GPIO 19) -->
-  <path d="M 820 295 L 745 295 L 745 426 L 380 426" class="wire" stroke="#eab308" stroke-width="2"/>
+  <path d="M 820 270 L 775 270 L 775 266 L 690 266" class="wire" stroke="#3b82f6" stroke-width="2.5"/>
+  <!-- LRC -> Pi Pin 35 (GPIO 19) via bottom -->
+  <path d="M 820 295 L 780 295 L 780 645 L 350 645 L 350 506 L 420 506" class="wire" stroke="#eab308" stroke-width="2.5"/>
 
   <!-- 4. Amp to Speaker -->
-  <path d="M 1055 195 L 1070 195 L 1070 405 L 850 405" class="wire" stroke="#10b981" stroke-width="2"/>
-  <path d="M 1055 225 L 1060 225 L 1060 430 L 850 430" class="wire" stroke="#1e293b" stroke-width="2"/>
+  <path d="M 1055 195 L 1070 195 L 1070 405 L 850 405" class="wire" stroke="#10b981" stroke-width="2.5"/>
+  <path d="M 1055 225 L 1060 225 L 1060 430 L 850 430" class="wire" stroke="#1e293b" stroke-width="2.5"/>
 
 </svg>
