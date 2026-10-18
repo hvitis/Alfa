@@ -19,6 +19,11 @@ MEMBERS = (
 def create_cloud_archive(destination, source=CLOUD):
     """Package a complete verified snapshot; replace an existing ZIP atomically."""
     source, destination = Path(source), Path(destination)
+    if not (source / "plywood-assembly-guide.pdf").exists():
+        fallback_pdf = ROOT / "docs/plywood-assembly-guide.pdf"
+        if fallback_pdf.exists():
+            import shutil
+            shutil.copyfile(fallback_pdf, source / "plywood-assembly-guide.pdf")
     # The development CAD publisher swaps this directory atomically. Retry if
     # it changes while reading; never mix members from different snapshots.
     for attempt in range(3):

@@ -58,4 +58,7 @@ id_ed25519
 # Download archives are created during the static website build.
 /design/cloud-radio/generated/cloud/*.zip
 
-.agents
+# Agent tools and skills
+.agents/
+.claude/
+skills-lock.json

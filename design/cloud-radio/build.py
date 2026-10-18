@@ -724,6 +724,10 @@ def build(check_only=False):
         (staging/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
         for name in ("parameters.json","README.md","build.py","run-cad.sh"):
             shutil.copyfile(ROOT/name,staging/name)
+        if (OUTPUT / "plywood-assembly-guide.pdf").exists():
+            shutil.copyfile(OUTPUT / "plywood-assembly-guide.pdf", staging / "plywood-assembly-guide.pdf")
+        elif (ROOT.parents[1] / "docs/plywood-assembly-guide.pdf").exists():
+            shutil.copyfile(ROOT.parents[1] / "docs/plywood-assembly-guide.pdf", staging / "plywood-assembly-guide.pdf")
         # Directory swap avoids half-written GLBs and mixed download revisions.
         backup=OUTPUT.with_name(".previous-cloud")
         if backup.exists():shutil.rmtree(backup)

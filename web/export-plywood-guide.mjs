@@ -44,16 +44,27 @@ export async function exportPlywoodGuide(destination) {
   }))).every(Boolean);
 
   if (!hasSources) {
-    try {
-      await access(prebuilt);
-      await mkdir(dirname(destination), { recursive: true });
-      if (resolve(destination) !== prebuilt) {
-        await copyFile(prebuilt, destination);
-      }
-      console.log(`Using prebuilt Plywood Assembly Guide PDF: ${destination}`);
-      return destination;
-    } catch {
-      // Proceed to try loading assets if prebuilt is missing as well
+    const candidates = [
+      prebuilt,
+      resolve(root, 'docs/plywood-assembly-guide.pdf'),
+      resolve(root, 'web/.generated/plywood-assembly-guide.pdf')
+    ];
+    for (const candidate of candidates) {
+      try {
+        await access(candidate);
+        await mkdir(dirname(destination), { recursive: true });
+        if (resolve(destination) !== candidate) {
+          await copyFile(candidate, destination);
+        }
+        if (resolve(prebuilt) !== candidate) {
+          try {
+            await mkdir(dirname(prebuilt), { recursive: true });
+            await copyFile(candidate, prebuilt);
+          } catch {}
+        }
+        console.log(`Using prebuilt Plywood Assembly Guide PDF from ${candidate}: ${destination}`);
+        return destination;
+      } catch {}
     }
   }
 

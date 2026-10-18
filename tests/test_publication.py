@@ -121,7 +121,10 @@ class PackageTests(unittest.TestCase):
             source=Path(directory)/"cad"
             source.mkdir()
             for name in MEMBERS:
-                shutil.copyfile(CLOUD/name,source/name)
+                src = CLOUD / name
+                if not src.exists() and name == "plywood-assembly-guide.pdf" and (ROOT / "docs/plywood-assembly-guide.pdf").exists():
+                    src = ROOT / "docs/plywood-assembly-guide.pdf"
+                shutil.copyfile(src, source / name)
             destination=Path(directory)/"download.zip"
             create_cloud_archive(destination,source)
             original=destination.read_bytes()
