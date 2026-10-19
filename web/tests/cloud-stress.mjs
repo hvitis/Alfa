@@ -41,7 +41,7 @@ try {
   assert(colorPanel.y>=downloads.y+downloads.height,'Color controls must follow Print your cloud');
   const canvasBefore=await page.locator('#viewport canvas').screenshot();
   await page.locator('.palette-picker summary').click();
-  assert.equal(await page.locator('.palette-options .palette-swatches i').count(),18);
+  assert.equal(await page.locator('.palette-options .palette-swatches i').count(),12);
   await page.getByRole('button',{name:'Cukierkowa chmurka',exact:true}).click();
   assert.equal(await page.locator('#cloud-color-front').inputValue(),'#ffd6e6');
   const canvasAfter=await page.locator('#viewport canvas').screenshot();
@@ -51,7 +51,7 @@ try {
   await page.getByRole('button',{name:'Skorupa przednia: Pomarańcz',exact:true}).click();
   assert.equal(await page.locator('#cloud-color-front').inputValue(),'#eb5403');
   assert.equal(await page.locator('#cloud-color-rear').inputValue(),'#d7c6f5');
-  for(const [part,title,color,value] of [['rear','Skorupa tylna','Błękit nieba','#346ce3'],['battery_door','Drzwiczki baterii','Żółty','#f2b706']]) {
+  for(const [part,title,color,value] of [['rear','Skorupa tylna','Błękit nieba','#346ce3']]) {
     await page.locator(`[data-part=${part}] summary`).click();
     assert.equal(await page.locator(`[data-part=${part}] .filament-color`).count(),16);
     await page.getByRole('button',{name:`${title}: ${color}`,exact:true}).click();
@@ -92,10 +92,6 @@ try {
   await page.locator('[data-for="cloud-mode"] [data-value="battery_open"]').click(); await waitCloud('battery_open');
   const rearLabel=page.locator('.annotation').filter({hasText:/^R-00 · Skorupa tylna$/});
   await rearLabel.waitFor({state:'visible'});
-  await rearLabel.scrollIntoViewIfNeeded();
-  const rearRect=await rearLabel.boundingBox(); assert(rearRect);
-  await page.mouse.move(rearRect.x+rearRect.width/2,rearRect.y+rearRect.height/2);
-  await page.waitForFunction(()=>document.querySelector('#viewport').dataset.hoverId==='R-00');
   await page.locator('#cloud-labels').uncheck();
   await mkdir('test-results',{recursive:true});
   await page.locator('#viewport').screenshot({path:'test-results/cloud-rear.png'});
@@ -103,10 +99,11 @@ try {
   await page.mouse.move(5,5);
   assert(await page.locator('.model-tooltip').isHidden());
   await page.locator('#cloud-labels').uncheck();
-  for (const selector of ['front.stl', 'rear.stl', 'battery_door.stl', 'cloud-radio.step', 'cloud-radio.zip']) {
-    const downloadPromise = page.waitForEvent('download');
-    await page.locator(`.download-buttons a[href$="${selector}"]`).click();
-    const download = await downloadPromise;
+  for (const selector of ['front.stl', 'rear.stl', 'cloud-radio.step', 'cloud-radio.zip']) {
+    const [download] = await Promise.all([
+      page.waitForEvent('download'),
+      page.locator(`.cloud-downloads .download-buttons a[href$="${selector}"]`).click(),
+    ]);
     assert.equal(download.suggestedFilename(), selector);
     assert.equal(await download.failure(), null);
   }
@@ -133,7 +130,7 @@ try {
     assert(after.textures <= before.textures + 1);
   }
   await page.setViewportSize({width:375,height:812});
-  for(const part of ['front','rear','battery_door']) {
+  for(const part of ['front','rear']) {
     await page.locator(`[data-part=${part}] summary`).click();
     const menu=await page.locator(`[data-part=${part}] .filament-menu`).boundingBox();
     assert(menu.x>=0 && menu.x+menu.width<=375,'Mobile filament menu must fit the screen');

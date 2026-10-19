@@ -1,68 +1,121 @@
-# Alfa cloud radio — PETG prototype 6
+# Alfa cloud — two shells, horizontal battery and Pi
 
-This enclosure has two snap-together shells and a separate battery door.
-Three M3 screws secure the rear shell. One M3 screw secures the battery door.
-The battery door has two retaining tabs. It lifts out after removal of its screw.
-The cloud has a flat base and smooth, tangent-connected lobes. Its core dimensions remain 210 × 190 × 86 mm. Rounded side relief adds up to 2.5 mm per side; the print field is 216 × 210 mm.
-The front and rear rims have a 1.4 mm radius. The integrated handle has a 64 × 22 mm through-opening.
-The handle follows the existing crown. Its raised grip is 20 mm deep and centered on the joint between the shells.
-Each shell forms 9.85 mm of the grip, with a 0.3 mm joint gap.
-The front and rear have full-width rounded shoulders instead of rectangular finger recesses.
-The roof has 8 mm body rounds, 10 mm handle root rounds, and a rounded crown.
-A closed 3 mm roof separates the fingers from the electronics. The handle crown is solid.
-The four former upright tips beside the handle are removed.
-The horizontal battery door stays in the lower back, away from the handle.
-No separate handle or extra printed part is required.
-The three case screw posts join the outer wall. Their axes sit 5.2–8.2 mm from the outer outline.
-The battery upper supports join the side walls. There are no tall supports between the controls.
-Short component mounts stay at the component corners or beside their edges.
-The preview identifies the shells as F-00, R-00, and B-00.
-Frame features have IDs for their mounts, snaps, shelves, fences, and handle halves.
-Hover over a visible surface to see its ID and name. The labels option shows frame IDs and hardware names.
-The exploded view exposes the internal frame features.
-Viewed from the front, the LCD is on the left and the keypad is vertical on the right.
-Native CAD +X points left in that front view. Y points up and Z goes into the case.
+The enclosure has **two printed parts**, with no screws joining them.
+Two bottom locating tongues engage matching receivers. Pivot the front closed, then engage five releasable snaps around the perimeter.
+The rear shell contains the battery cradle and the Pi shelf. The rear panel is continuous: there is no separate battery door.
 
-The side walls have shallow rounded cumulus caps. The core cavity, handle, shoulders, joint, snaps, and screw access stay unchanged.
-The caps are integral with each shell. They do not create ventilation holes or extra parts.
-Enable build-plate supports for the downward-facing cap curves as required by the slicer.
+Nominal core: **210 × 245 × 86 mm**. The side cloud caps add up to 2.5 mm per side.
+Depth is 24 mm less than the previous 110 mm enclosure. The extra height creates a bottom electronics compartment below the arcade controls.
+Walls are 3 mm PETG. Both shells print on their outside faces.
 
-## Status and dimensions
+## Bottom stack and clearance
 
-This is a fit prototype. Physical strength, fatigue, drops, and operating temperatures are not yet measured.
-The verification report records digital checks separately from those physical tests.
+Native X is width, Y is height and Z is front-to-back depth. Viewed from the front, +X points left.
 
-The [Pi drawing](https://datasheets.raspberrypi.com/rpi3/raspberry-pi-3-b-mechanical-drawing.pdf) defines the controller outline and mounting pattern.
-The [Waveshare drawing](https://files.waveshare.com/upload/6/6d/2inch_LCD_Module_2D_Drawing.pdf) defines the LCD outline and 30 × 53 mm mounting pattern.
-The LCD active area is 30.6 × 40.8 mm. Its position in this prototype follows the drawing view and needs a powered fit check.
-The user confirmed the battery dimensions, 69 × 106 × 14 mm.
-Its USB-C socket is at the center of the 69 × 14 mm end face.
-The bank lies horizontally, with a 106 × 69 mm footprint and its socket toward the right in native CAD coordinates.
-The Pi sits above the bank. An angled power plug and the harness still need a physical fit check.
-The 20 mm grip depth is a prototype choice for the requested three-year-old user.
-Actual hand size and comfortable grip vary. An adult must check the printed grip with the child before use.
+| Item | Orientation and position |
+| --- | --- |
+| Baseus power bank | Flat in XZ: 106 mm wide × 69 mm deep × 14 mm thick. Bottom Y=7 mm; top Y=21 mm. |
+| Battery cradle | Integral rear-shell side rails, floor seats and removable foam/strap retention. |
+| Shelf above bank | Y=24–27 mm, leaving 3 mm above the nominal bank. |
+| Raspberry Pi 3 | Flat in XZ: 85 × 56 mm footprint; PCB Y=30–31.6 mm. Component side points upward. |
+| Pi support | Four short posts on the shelf. Internal M2.5 PCB screws are separate from the screwless shell joint. |
+| GPIO harness | Reserved above the horizontal PCB, including the existing 5 mm uncertain-dimension allowance. |
+| Controls | Raised 55 mm from the previous layout to clear the bottom stack. |
 
-The remaining modules have incomplete mechanical documentation.
-The [amplifier supplier](https://www.gotronik.pl/modul-wzmacniacza-audio-i2s-3w-klasa-d-dacmax98357-p-13866.html) gives an approximate 19 × 19 mm outline.
-The [keypad supplier](https://sklep.msalamon.pl/produkt/modul-ad-key-klawiatura-5-przyciskow/) gives a 68 × 26 mm outline and an inconsistent 61 × 26 mm mounting pattern.
-The keypad envelope reserves 68 × 30 mm. Two shared windows avoid five unverified button openings.
-The isolated-button zone extends 16 mm from its short PCB edge, followed by a 9 mm clear gap.
-A flush 4 mm front bridge crosses that gap between the two long sides, with 2.5 mm clearance on each side.
-The four opening corners beside the bridge have 8 mm radii, adding cover material at its roots.
-The individual button centres, cap diameters, and travel still need a physical fit check.
-The ADC envelope reserves 9 × 29 mm. The QUARKZMAN body reserves 18 × 40 × 12 mm.
-These dimensions and populated heights remain provisional.
+The six arcade buttons retain the user-confirmed 33 mm bezels, 28 mm mounting holes and 66 mm overall height.
+The case conservatively reserves the full 66 mm behind each mounting face plus 12 mm at the wire exit.
+Exact below-panel depth and retaining-nut outside diameter remain unknown. Each nut has a provisional 42 mm diameter × 6 mm axial allowance.
+Printed mounting holes are 28.4 mm. Flat side seats and internal nut recesses accommodate the curved wall.
+Check collar reach through the side seat, populated PCB heights, spade terminals and actual wire bends before a full print.
 
-The fit allowance adds **5 mm total to each uncertain dimension**, or 2.5 mm per side.
-For the connected GPIO sockets, the PCB mating plane stays fixed. The extra depth extends toward the front instead.
-The battery cradle also reserves 5 mm for foam and removal clearance.
-The allowance does not apply to screw holes, the LCD window, or snap joints.
-Adjustable slots and insulating cable ties retain the unverified boards.
-The user supplied a 4.5 mm diagonal corner offset for speaker and keypad holes.
-Each corresponding edge offset is 4.5 / √2 = 3.182 mm.
-Hole diameters on these unbranded parts remain unverified.
+The LCD, amplifier, speaker and switch keep their existing mounting arrangements above or beside the bottom compartment.
+The analog keypad, ADC and divider are absent from this arcade version.
+Rear ventilation is beside and above the bottom stack.
 
-## Build and live preview
+## Join and open the two shells
+
+To close:
+
+1. Route the harness between the front controls and the lower Pi, leaving a service loop.
+2. Keep wires clear of all snap beams and the joint lip.
+3. Insert the two lower tongues into the rear receivers.
+4. Pivot the front toward the rear. The receivers provide clearance for the locating tongues during this motion.
+5. Press the sides and crown until all five snaps engage. Check the seam around the case.
+
+To open, disconnect power. Press the perimeter release pads inward and ease the front away, starting at the top.
+Support the front while releasing the remaining snaps, then pivot it forward and withdraw the lower tongues.
+Do not pull on the harness. If a prototype is tight, use a plastic opening tool and adjust its clearance rather than forcing a beam.
+The locating tongues are not a permanent hinge. There is no separate hinge pin or third printed shell component.
+
+## Remove the battery
+
+1. Remove the front shell as described above.
+2. Disconnect the side-facing USB-C plug through the cradle side recess.
+3. Release the retaining strap and remove any front foam shim.
+4. Slide the bank toward the front, below the Pi shelf.
+
+The shelf and Pi stay with the rear shell. The CAD check uses a battery extraction envelope with 5 mm extra width and height.
+No fixed front stop obstructs that extraction path. Use removable foam and the strap to secure the bank in operation.
+The USB-C plug and cable still need a physical fit check.
+
+## Print preparation
+
+The taller parts require approximately **220 × 250 mm of usable print area**, including the suggested brim.
+The 3MF files are centered on an assumed **256 × 256 mm bed**. A 220 × 220 mm bed is too short in the supplied orientation.
+Check your printer before printing; preserve 100% scale for the hardware fit.
+
+| Setting | Starting point |
+| --- | --- |
+| Material | PETG |
+| Nozzle / layer | 0.4 / 0.2 mm |
+| Perimeters | 5 |
+| Top / bottom layers | 6 / 6 |
+| Infill | 25% gyroid |
+| Brim | 2 mm; include it in plate placement |
+| Orientation | Front and rear outside faces down; the exported models already have Z minimum at zero |
+
+Load one shell per plate. The rear shelf is integral and prints as a rib growing from the rear cover in this orientation.
+Inspect side bores, cloud caps, horizontal PCB mounting posts and snap overhangs for support needs.
+Keep support material out of release recesses, snap beams and PCB pilot holes.
+Use calibrated PETG temperatures for the actual printer and filament.
+
+Print the button coupon and shell snap coupons first. The button coupon has 28.0, 28.4 and 28.8 mm holes from left to right.
+The snap coupons compare 0.2, 0.3 and 0.4 mm clearance; the shell default is 0.3 mm.
+They screen fit, not complete joint strength or long-term fatigue.
+
+The STL and 3MF files have identical checked meshes and explicit print orientation. The 3MF containers store millimeters.
+STEP and GLB retain the assembled frame, including the horizontal electronics orientation.
+`print-settings.json` lists starting settings and pending checks. No printer-specific G-code is supplied.
+Inspect every slicer layer, especially the shelf, snap roots, bridges and first layer, before printing.
+
+## Assembly hardware
+
+| Location | Hardware |
+| --- | --- |
+| Front-to-rear shell connection | None; integral tongues and five releasable snaps |
+| Battery access door | None; no separate door exists |
+| Pi / LCD | Four M2.5 × 6 internal PCB screws each; check actual hole diameters |
+| Arcade buttons | Their original retaining nuts |
+| Speaker | M2.5 bolts, insulating spacers and washers to suit the actual unit |
+| Amplifier / switch | Insulating ties and foam shims in the adjustable mounting slots |
+| Battery | Foam shims and removable retaining strap |
+
+The Pi mounting pattern is 58 × 49 mm, now in the horizontal XZ plane. The LCD pattern remains 30 × 53 mm.
+Retain the bank in its bottom cradle, fit the Pi on the shelf, connect the harness and confirm full button travel.
+Test display alignment while powered. Do not let screws or spacers touch circuit tracks.
+
+## Verification and limits
+
+`verification.json` records connected solids, assembled shell clearance, button bodies, provisional nuts, connected harness envelopes, battery extraction, closure features, print bounds and saved STL topology/winding/volume.
+Each 3MF is generated from its checked STL and reopened to verify scale, triangle indices and bed placement.
+Nominal hardware fits are digital checks. Physical fit, release force, snap fatigue, vibration, drops and operating temperatures remain untested.
+The beam calculation is a simple strain screen, not FEA or a prediction of printed PETG fatigue.
+
+Before service, test repeated opening and closing with the intended print settings, check that every snap retains the front, and verify that the strap holds an inert battery-sized mass.
+Measure the actual nut, connector and terminal dimensions. Check the powered Pi and battery temperatures with the LCD and audio operating.
+Recheck affected fits after a geometry or material change.
+
+## Rebuild and view
 
 From the repository root:
 
@@ -71,130 +124,16 @@ bash design/cloud-radio/run-cad.sh
 make dev
 ```
 
-Open <http://127.0.0.1:8000/#3dprint>.
-The CAD script uses the existing pinned cadgen 0.7.21 environment.
-The first run needs `uv`, Python 3.13, and access to the dependency index.
-Later automatic rebuilds use the cached environment without network access.
-
-Change `design/cloud-radio/parameters.json` or `build.py` to rebuild the model.
-The browser reloads after the geometry checks and exports succeed.
-A failed rebuild keeps the last valid model and downloads.
-The terminal and `last-failed-verification.json` contain the failure details.
-Restart the server after a change to the server configuration.
+Open <http://127.0.0.1:8000/#3dprint>. The current page is v2; the archived v1 remains separate.
+The front-open view shows access to the bottom stack. The inside and exploded views show the rear-integral cradle and shelf.
+Change `parameters.json` or `build.py` to rebuild with the pinned cadgen environment.
+A failed CAD check preserves the last valid preview and downloads.
 
 ```sh
 make site
 npm run test:smoke
-make stress
+.venv/bin/python -m unittest tests.test_cloud_print
 ```
 
-The static export includes every model and download. GitHub Pages needs no CAD software or backend.
-The website build creates the ZIP from the verified CAD exports. ZIP files are not tracked in Git.
-The development server creates the same download on demand. CI does not need CAD software to create the ZIP.
-The ZIP contains the STL files, STEP assembly, GLB model, parameters, source, guide, and verification report.
-The source build script uses `../wooden-case/run-cad.sh` in this repository.
-The ZIP can be used for printing without that script.
-
-## Print preparation
-
-1. Print the snap coupons from the ZIP first.
-2. Compare the 0.2, 0.3, and 0.4 mm clearance variants.
-3. Use the 0.3 mm variant for the default enclosure.
-4. If it binds, adjust the clearance parameter and rebuild before the full print.
-5. Load each STL separately in the slicer.
-6. Use millimeters and 100% scale.
-7. Use PETG, a 0.4 mm nozzle, and a 0.2 mm layer height.
-8. Use at least five perimeters, six top/bottom layers, and 25% infill.
-9. Use a 2 mm brim on a 220 × 220 mm bed; include the brim when checking slicer placement.
-10. Enable supports from the build plate for internal towers, rebates, and snap overhangs.
-11. Block supports in small pilot holes and nut pockets.
-12. Inspect the sliced toolpaths before printing.
-
-STL files already have their print orientation and Z=0 base.
-The front prints on its outside face. The rear and battery door print on their outside faces.
-The STEP assembly retains the assembled coordinate system.
-Support removal must leave each snap beam free along its length.
-
-## Hardware and assembly
-
-| Location | Hardware |
-| --- | --- |
-| Rear shell | Three M3 × 55 pan-head screws and three DIN 934 M3 nuts |
-| Battery door | One M3 × 12 pan-head screw and one DIN 934 M3 nut |
-| Pi | Four M2.5 × 6 thread-forming screws into printed pilot holes |
-| LCD | Four M2.5 × 6 thread-forming screws; confirm the actual PCB hole diameter |
-| Speaker and keypad | M2.5 bolts, washers, nuts, and insulating spacers to match the actual stack |
-| Small boards and switch | Insulating cable ties and foam shims through the adjustable mounting slots |
-| Battery | Closed-cell foam shims and a reusable retaining strap through the cradle slots |
-
-1. Remove supports and sharp edges.
-2. Check that each shell is a single intact part.
-3. Fit the four M3 nuts before the electronics.
-4. Check each nut for full seating in its pocket.
-5. Fit the Pi to the rear supports, with its components toward the front.
-6. Fit the LCD to the front supports.
-7. Check the screen position with the LCD powered.
-8. Fit the speaker with a soft gasket.
-9. Set keypad height with insulating spacers.
-10. Check full travel of all five buttons.
-11. Retain the amplifier, ADC, and divider with insulating cable ties and spacers.
-12. Retain the complete QUARKZMAN switch body with ties and foam shims.
-13. Check that its actuator moves freely through the rear opening.
-14. Route the existing power chain and signal wires between the mounts.
-15. Keep wires clear of snap beams, screw towers, and the battery removal path.
-16. Secure the battery with foam shims and its strap.
-17. Keep its side-facing USB-C plug accessible through the door extension.
-18. Engage the shell lip and all four snaps.
-19. Fit the three rear screws by hand.
-20. Insert both battery door tabs and fit its screw.
-
-The small-board supports use slots with 5 mm travel rather than unverified fixed hole patterns.
-Foam and insulating spacers compensate for unknown PCB heights.
-The front corners retain the keypad board around the shared button opening.
-Screws must not press the display glass or touch circuit tracks.
-The screw lengths assume standard pan heads and DIN 934 nuts.
-
-## Battery access
-
-1. Shut down the Pi and disconnect power.
-2. Remove the battery door screw.
-3. Lift the door beside its screw and release the two bottom tabs.
-4. Disconnect the USB-C plug through the side extension.
-5. Release the battery strap.
-6. Pull the bank straight out through the rear opening.
-
-The digital check tests the bank removal path with an extra 5 mm in width and height.
-The bank shares its USB-C port for output and charging.
-The real plug still needs a fit check before final assembly.
-
-## Physical test record — pending
-
-These are development tests for an adult. They are not a child-product certification.
-Use an inert mass with the battery dimensions for mechanical tests.
-
-| Test | Procedure | Acceptance |
-| --- | --- | --- |
-| Initial fit | Fit every component and connect the complete harness. | No forced cables, trapped wires, board bending, or preloaded buttons. |
-| Child grip fit | After the adult mechanical tests pass, check the unpowered enclosure with the child under adult supervision. | Fingers wrap the thin grip comfortably. The rounded shoulders stay clear of the hand. |
-| Snap cycles | Open and close the shells 50 times without their screws. | All four snaps engage. No cracks, whitening, or permanent bend. |
-| Screw service | Remove and refit all four enclosure screws 20 times by hand. | Nuts stay seated. Bosses do not crack. Screw heads remain recessed. |
-| Handle retention | Pull the integrated handle upward with 50 N for 10 seconds, three times, with inert mass fitted. | No cracks, permanent bend, or opening of the shell seam. |
-| Door retention | Pull the closed door outward with 30 N for 10 seconds, three times. | The door and both tabs remain engaged. No cracks. |
-| Battery retention | Apply 20 N to the inert bank in each principal direction for 10 seconds. | The strap and cradle retain the bank. No contact with electronics. |
-| Development drops | Drop the fully secured enclosure with inert mass from 0.75 m onto plywood in six face orientations. | Shells and door stay closed. No loose internal parts or sharp broken edges. |
-| Powered operation | Run the LCD and representative audio for two hours under adult observation. | Record ambient, Pi, bank, and case temperatures. No throttling or bank protection trips. |
-
-Compare recorded temperatures with the limits for the actual bank, PETG filament, and electronics.
-Repeat the affected tests after a geometry, material, or print-setting change.
-Keep the print settings, part revision, measured force, temperatures, and photographs with the test record.
-
-## Digital verification
-
-The generator checks connected solids, print-bed size, nominal collisions, and expanded component envelopes.
-It checks the battery extraction sweep and the saved STL edge topology, winding, and volume.
-STL vertices are joined at 0.0001 mm resolution. Collapsed triangles are removed before the topology check.
-The snap calculation is a cantilever strain estimate with an assumed 2% limit.
-It is not finite-element analysis and does not predict print fatigue or impact strength.
-Connector models are simplified envelopes. The fit allowance cannot guarantee dimensions that are still unknown.
-The browser stress test runs 100 cycles of tab changes, assembly views, and viewport changes.
-It also checks static subpaths, downloads, direct hash routes, and bounded geometry counts in development.
+The ZIP contains the two shell meshes, fit coupons, STEP, GLB, source, parameters, print settings and verification report.
+The included runner refers to `../wooden-case/run-cad.sh` inside this repository. Printing the supplied models does not require the CAD environment.

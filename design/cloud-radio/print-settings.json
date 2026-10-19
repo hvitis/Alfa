@@ -1,0 +1,28 @@
+{
+  "process": "FDM",
+  "material": "PETG",
+  "units": "mm",
+  "scale_percent": 100,
+  "assumed_build_volume_mm": [
+    256,
+    256,
+    100
+  ],
+  "nozzle_diameter_mm": 0.4,
+  "layer_height_mm": 0.2,
+  "perimeters": 5,
+  "top_solid_layers": 6,
+  "bottom_solid_layers": 6,
+  "infill_percent": 25,
+  "infill_pattern": "gyroid",
+  "brim_width_mm": 2,
+  "supports": "Inspect side-button bores, cloud caps, PCB mounting posts and snap overhangs. Do not fill snap beams, release recesses or internal PCB pilot holes.",
+  "orientation": "All STL and 3MF files have their outside face on the bed and Z minimum at zero. Load one enclosure part per plate.",
+  "temperatures": "Use the calibrated PETG profile for your actual printer and filament.",
+  "validation_status": {
+    "mesh_and_scale": "Checked automatically during CAD export",
+    "slicer_toolpath_preview": "Pending: no printer or slicer profile selected",
+    "physical_fit": "Pending: print button and snap coupons first",
+    "gcode": "Not supplied: generate for the actual printer after checking layer preview"
+  }
+}

@@ -9,7 +9,7 @@
 
 **Little radio. Big imagination.**
 
-A pastel cloud, five yellow buttons, and 32 Polish letters to explore. Alfa plays music and letter lessons offline on a Raspberry Pi.
+A pastel cloud, six arcade buttons, and 32 Polish letters to explore. Alfa plays music and letter lessons offline on a Raspberry Pi.
 Print the cloud in your favorite colors, fit the electronics, and make it your own.
 
 [Live showcase](https://hvitis.github.io/Alfa/) · [Latest build kit](https://github.com/hvitis/Alfa/releases/latest) · [Hardware guide](docs/hardware-guide.md) · [Documentation](docs/README.md)
@@ -19,7 +19,7 @@ Print the cloud in your favorite colors, fit the electronics, and make it your o
 | Rendered hardware connections | Inside look through back case | Roentgen look through all elements |
 | --- | --- | --- |
 | ![Rendered 3D hardware connections between controller, display, buttons, audio amplifier, and power](docs/images/hardware-connections.png) | ![Inside look through the back case showing internal placement and wiring](docs/images/inside-back-case.png) | ![Translucent roentgen view through all elements of the cloud radio](docs/images/roentgen-look.png) |
-| [Interactive wiring atlas](https://hvitis.github.io/Alfa/#hardware) | [Plywood case internals](design/wooden-case/README.md) | [Cloud assembly & 3D print](design/cloud-radio/README.md) |
+| [Interactive wiring atlas](https://hvitis.github.io/Alfa/#hardware) | [Cloud internals and assembly](design/cloud-radio/README.md) | [Cloud assembly & 3D print](design/cloud-radio/README.md) |
 
 **Explore the build atlas:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Plywood](https://hvitis.github.io/Alfa/#plywood) · [Hardware](https://hvitis.github.io/Alfa/#hardware) · [Software](https://hvitis.github.io/Alfa/#software)
 
@@ -64,7 +64,7 @@ The [CAD folders](design/) contain the enclosure sources. The website includes t
 - <!-- feature:hardware-simulation --> **Hardware simulation:** Save display previews on your computer without GPIO, SPI, or I²C devices.
 - <!-- feature:static-showcase --> **Static showcase:** Explore Plywood, 3DPrint, Hardware, and Software tabs, with 3D models, controller wiring, an ADR, and rendered Mermaid.
 - <!-- feature:verified-distribution --> **Verified distribution:** Build a runtime kit with a neutral demo card, checksums, validation reports, and an electronics BOM.
-- <!-- feature:enclosure-research --> **Enclosure research:** Inspect the printable cloud and both plywood projects. Cloud downloads include STL, STEP, snap coupons, and the assembly guide.
+- <!-- feature:enclosure-research --> **Enclosure research:** Inspect the printable cloud and both plywood projects. The cloud uses two shells that join without screws, with a flat battery at the bottom and a horizontal Pi on the shelf above. It is 86 mm deep and 245 mm tall. Downloads include STL, 3MF, STEP, snap coupons and the assembly guide; the assumed bed is 256 × 256 mm.
 
 ## Quick start
 
@@ -107,7 +107,7 @@ CI exports the static showcase and runs Chromium checks at the domain root and a
 Browser checks cover both plywood models, the printable cloud, both wiring atlases, the illustrated ADR PDF, rendered Mermaid, social images, and local assets.
 `make build` also runs the packaged simulator and verifies archive contents and SHA-256 checksums.
 
-The cloud is a fit prototype. Its digital geometry checks do not replace physical print, grip, snap, drop, and temperature tests.
+The cloud is a fit prototype. Its digital geometry checks do not replace physical print, locating-tab, snap, drop, and temperature tests.
 Physical wiring, acoustic volume, enclosure fit, and media redistribution rights require separate review.
 The software pipeline does not certify those properties.
 

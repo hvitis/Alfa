@@ -1,30 +1,39 @@
 {
-  "revision": "prototype-v2-arcade",
+  "revision": "prototype-v2-horizontal-stack-86mm",
   "checks": [
     {
       "check": "front: valid connected solid",
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 203642.48
+        "volume_mm3": 248636.05
       }
     },
     {
       "check": "front: retains full lower frame",
       "pass": true,
       "detail": [
-        214.97,
-        189.999,
-        79.5
+        214.915,
+        245.0,
+        58.0
       ]
     },
     {
       "check": "front: fits configured print field",
       "pass": true,
       "detail": [
-        214.97,
-        189.999,
-        79.5
+        214.915,
+        245.0,
+        58.0
+      ]
+    },
+    {
+      "check": "front: fits build height",
+      "pass": true,
+      "detail": [
+        214.915,
+        245.0,
+        58.0
       ]
     },
     {
@@ -32,56 +41,38 @@
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 172943.71
+        "volume_mm3": 255261.7
       }
     },
     {
       "check": "rear: retains full lower frame",
       "pass": true,
       "detail": [
-        214.97,
-        189.999,
-        42.7
+        215.0,
+        245.0,
+        80.0
       ]
     },
     {
       "check": "rear: fits configured print field",
       "pass": true,
       "detail": [
-        214.97,
-        189.999,
-        42.7
+        215.0,
+        245.0,
+        80.0
       ]
     },
     {
-      "check": "battery_door: valid connected solid",
-      "pass": true,
-      "detail": {
-        "solids": 1,
-        "volume_mm3": 33925.23
-      }
-    },
-    {
-      "check": "battery_door: fits configured print field",
+      "check": "rear: fits build height",
       "pass": true,
       "detail": [
-        147.0,
-        83.0,
-        4.8
+        215.0,
+        245.0,
+        80.0
       ]
     },
     {
       "check": "Assembled shells: front / rear do not interfere",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Assembled shells: front / battery_door do not interfere",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Assembled shells: rear / battery_door do not interfere",
       "pass": true,
       "detail": 0.0
     },
@@ -96,22 +87,12 @@
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: battery / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Nominal fit: pi / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: pi / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: pi / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -126,22 +107,12 @@
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: lcd / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Nominal fit: button_top / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: button_top / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: button_top / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -156,22 +127,12 @@
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: button_bottom / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Nominal fit: button_left / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: button_left / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: button_left / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -186,22 +147,12 @@
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: button_right / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Nominal fit: button_side_left / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: button_side_left / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: button_side_left / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -216,22 +167,12 @@
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: button_side_right / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Nominal fit: amp / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: amp / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: amp / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -246,22 +187,12 @@
       "detail": 0.0
     },
     {
-      "check": "Nominal fit: switch / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Nominal fit: speaker / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: speaker / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Nominal fit: speaker / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -356,6 +287,66 @@
       "detail": 0
     },
     {
+      "check": "Expanded envelope inside shell: button_top_nut",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_top_wires",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_bottom_nut",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_bottom_wires",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_left_nut",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_left_wires",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_right_nut",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_right_wires",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_side_left_nut",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_side_left_wires",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_side_right_nut",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "check": "Expanded envelope inside shell: button_side_right_wires",
+      "pass": true,
+      "detail": 0
+    },
+    {
       "check": "Expanded clearance: battery / pi",
       "pass": true,
       "detail": 0.0
@@ -436,6 +427,66 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: battery / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: battery / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: pi / lcd",
       "pass": true,
       "detail": 0.0
@@ -497,6 +548,66 @@
     },
     {
       "check": "Expanded clearance: pi / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi / button_side_right_wires",
       "pass": true,
       "detail": 0.0
     },
@@ -571,6 +682,66 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: lcd / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: button_top / button_bottom",
       "pass": true,
       "detail": 0.0
@@ -641,6 +812,56 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: button_top / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: button_bottom / button_left",
       "pass": true,
       "detail": 0.0
@@ -706,6 +927,56 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: button_bottom / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: button_left / button_right",
       "pass": true,
       "detail": 0.0
@@ -766,6 +1037,56 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: button_left / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: button_right / button_side_left",
       "pass": true,
       "detail": 0.0
@@ -821,6 +1142,56 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: button_right / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: button_side_left / button_side_right",
       "pass": true,
       "detail": 0.0
@@ -871,6 +1242,56 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: button_side_left / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: button_side_right / amp",
       "pass": true,
       "detail": 0.0
@@ -916,6 +1337,56 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: button_side_right / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_right / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: amp / switch",
       "pass": true,
       "detail": 0.0
@@ -956,6 +1427,66 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: amp / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: amp / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: switch / speaker",
       "pass": true,
       "detail": 0.0
@@ -982,6 +1513,66 @@
     },
     {
       "check": "Expanded clearance: switch / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: switch / button_side_right_wires",
       "pass": true,
       "detail": 0.0
     },
@@ -1016,6 +1607,66 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: speaker / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: speaker / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: pi_ports / bank_plug",
       "pass": true,
       "detail": 0.0
@@ -1027,6 +1678,66 @@
     },
     {
       "check": "Expanded clearance: pi_ports / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_ports / button_side_right_wires",
       "pass": true,
       "detail": 0.0
     },
@@ -1046,6 +1757,66 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: gpio / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: gpio / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: pi_power / bank_plug",
       "pass": true,
       "detail": 0.0
@@ -1061,6 +1832,66 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: pi_power / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: pi_power / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: bank_plug / usb_join",
       "pass": true,
       "detail": 0.0
@@ -1071,7 +1902,487 @@
       "detail": 0.0
     },
     {
+      "check": "Expanded clearance: bank_plug / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: bank_plug / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Expanded clearance: usb_join / lcd_cable",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: usb_join / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_top_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_top_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: lcd_cable / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_nut / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_bottom_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_bottom_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_top_wires / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_nut / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_nut / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_nut / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_nut / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_nut / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_nut / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_nut / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_nut / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_wires / button_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_wires / button_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_wires / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_wires / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_wires / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_wires / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_wires / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_bottom_wires / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_nut / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_nut / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_nut / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_nut / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_nut / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_nut / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_wires / button_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_wires / button_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_wires / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_wires / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_wires / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_left_wires / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right_nut / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right_nut / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right_nut / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right_nut / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right_wires / button_side_left_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right_wires / button_side_left_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right_wires / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_right_wires / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left_nut / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left_nut / button_side_right_wires",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left_wires / button_side_right_nut",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Expanded clearance: button_side_left_wires / button_side_right_wires",
       "pass": true,
       "detail": 0.0
     },
@@ -1086,22 +2397,12 @@
       "detail": 0.0
     },
     {
-      "check": "Connector clearance: pi_ports / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Connector clearance: gpio / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Connector clearance: gpio / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Connector clearance: gpio / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -1116,22 +2417,12 @@
       "detail": 0.0
     },
     {
-      "check": "Connector clearance: pi_power / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Connector clearance: bank_plug / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Connector clearance: bank_plug / rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Connector clearance: bank_plug / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -1146,11 +2437,6 @@
       "detail": 0.0
     },
     {
-      "check": "Connector clearance: usb_join / battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
       "check": "Connector clearance: lcd_cable / front",
       "pass": true,
       "detail": 0.0
@@ -1161,133 +2447,390 @@
       "detail": 0.0
     },
     {
-      "check": "Connector clearance: lcd_cable / battery_door",
+      "check": "Connector clearance: button_top_nut / front",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Battery removal +5 mm swept clearance: front",
+      "check": "Connector clearance: button_top_nut / rear",
       "pass": true,
       "detail": 0.0
     },
     {
-      "check": "Battery removal +5 mm swept clearance: rear",
+      "check": "Connector clearance: button_top_wires / front",
       "pass": true,
-      "detail": 0.0025
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_top_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_bottom_nut / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_bottom_nut / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_bottom_wires / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_bottom_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_left_nut / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_left_nut / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_left_wires / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_left_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_right_nut / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_right_nut / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_right_wires / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_right_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_side_left_nut / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_side_left_nut / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_side_left_wires / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_side_left_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_side_right_nut / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_side_right_nut / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_side_right_wires / front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_side_right_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Bank slides forward below shelf after front removal",
+      "pass": true,
+      "detail": null
     },
     {
       "check": "Snap elastic-strain screening <= 2%",
       "pass": true,
       "detail": {
-        "estimated_strain": 0.00694,
+        "estimated_strain": 0.00764,
         "assumed_limit": 0.02
       }
     },
     {
-      "check": "Four enclosure screw axes",
+      "check": "Exactly two printed shell parts",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Front layout: 6 arcade buttons present",
+      "check": "No shell screws or battery door",
       "pass": true,
       "detail": null
     },
     {
-      "check": "LCD centered horizontally on front cover",
+      "check": "Five snaps and two locating tongues",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Integrated handle through-opening: front",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Integrated handle through-opening: rear",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Integrated handle through-opening: battery_door",
-      "pass": true,
-      "detail": 0.0
-    },
-    {
-      "check": "Handle opening at least 64 x 22 mm",
+      "check": "Snap 1 retains front",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Horizontal battery door remains below handle",
+      "check": "Snap 1 releases inward",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Grip depth <= 20 mm",
+      "check": "Snap 2 retains front",
       "pass": true,
       "detail": null
     },
     {
-      "check": "No raised side tip: front left",
+      "check": "Snap 2 releases inward",
       "pass": true,
       "detail": null
     },
     {
-      "check": "No raised side tip: front right",
+      "check": "Snap 3 retains front",
       "pass": true,
       "detail": null
     },
     {
-      "check": "No raised side tip: rear left",
+      "check": "Snap 3 releases inward",
       "pass": true,
       "detail": null
     },
     {
-      "check": "No raised side tip: rear right",
+      "check": "Snap 4 retains front",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Handle centred on shell joint",
+      "check": "Snap 4 releases inward",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Equal handle depth in both shells",
+      "check": "Snap 5 retains front",
       "pass": true,
-      "detail": {
-        "front_mm": 9.85,
-        "rear_mm": 9.85,
-        "seam_mm": 0.3
-      }
+      "detail": null
     },
     {
-      "check": "Front and rear grip volumes within 0.1%",
+      "check": "Snap 5 releases inward",
       "pass": true,
-      "detail": {
-        "front_mm3": 9814.714,
-        "rear_mm3": 9814.708,
-        "relative_error": 5e-07
-      }
+      "detail": null
     },
     {
-      "check": "Case screw 1 beside perimeter wall",
+      "check": "Tongue 1 pivot clearance at 0 degrees",
       "pass": true,
-      "detail": 6.907
+      "detail": null
     },
     {
-      "check": "Case screw 2 beside perimeter wall",
+      "check": "Tongue 1 pivot clearance at 5 degrees",
       "pass": true,
-      "detail": 5.813
+      "detail": null
     },
     {
-      "check": "Case screw 3 beside perimeter wall",
+      "check": "Tongue 1 pivot clearance at 10 degrees",
       "pass": true,
-      "detail": 7.084
+      "detail": null
     },
     {
-      "check": "Arcade button mounting holes: 28 mm diameter",
+      "check": "Tongue 1 pivot clearance at 15 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Tongue 1 pivot clearance at 20 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Tongue 2 pivot clearance at 0 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Tongue 2 pivot clearance at 5 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Tongue 2 pivot clearance at 10 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Tongue 2 pivot clearance at 15 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Tongue 2 pivot clearance at 20 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery hatch replaced by continuous rear cover",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery lies flat along XZ",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Pi lies flat along XZ",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Pi shelf above bank",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Depth below previous 110 mm",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Six arcade buttons present",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "LCD centered horizontally",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Handle absent",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Arcade barrel has radial print allowance",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final opening unobstructed: button_top",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final opening unobstructed: button_bottom",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final opening unobstructed: button_left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final opening unobstructed: button_right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final opening unobstructed: button_side_left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final opening unobstructed: button_side_right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Structural shell wall >= 2.4 mm",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Full 66 mm assembly reserved: button_top",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Additional wire exit space: button_top",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Full 66 mm assembly reserved: button_bottom",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Additional wire exit space: button_bottom",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Full 66 mm assembly reserved: button_left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Additional wire exit space: button_left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Full 66 mm assembly reserved: button_right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Additional wire exit space: button_right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Full 66 mm assembly reserved: button_side_left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Additional wire exit space: button_side_left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Full 66 mm assembly reserved: button_side_right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Additional wire exit space: button_side_right",
       "pass": true,
       "detail": null
     },
@@ -1305,33 +2848,66 @@
       "check": "front: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 43816,
+        "triangles": 39252,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 200372.53,
-        "removed_degenerate_triangles": 2
+        "volume_mm3": 247106.71,
+        "print_bounds_mm": [
+          214.915,
+          245.0,
+          58.0
+        ],
+        "removed_degenerate_triangles": 0,
+        "container_3mf": {
+          "unit": "millimeter",
+          "triangles": 39252,
+          "matches_stl": true,
+          "bed_centered": true
+        }
       }
     },
     {
       "check": "rear: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 38044,
+        "triangles": 30632,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 169508.5,
-        "removed_degenerate_triangles": 0
+        "volume_mm3": 254682.79,
+        "print_bounds_mm": [
+          215.0,
+          245.0,
+          80.0
+        ],
+        "removed_degenerate_triangles": 0,
+        "container_3mf": {
+          "unit": "millimeter",
+          "triangles": 30632,
+          "matches_stl": true,
+          "bed_centered": true
+        }
       }
     },
     {
-      "check": "battery_door: saved STL manifold and outward winding",
+      "check": "button-fit-coupon: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 1310,
+        "triangles": 1032,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 33924.91,
-        "removed_degenerate_triangles": 0
+        "volume_mm3": 7503.32,
+        "print_bounds_mm": [
+          110.0,
+          40.0,
+          3.0
+        ],
+        "removed_degenerate_triangles": 0,
+        "container_3mf": {
+          "unit": "millimeter",
+          "triangles": 1032,
+          "matches_stl": true,
+          "bed_centered": true
+        }
       }
     },
     {
@@ -1342,7 +2918,18 @@
         "watertight": true,
         "consistent_winding": true,
         "volume_mm3": 1984.48,
-        "removed_degenerate_triangles": 0
+        "print_bounds_mm": [
+          58.0,
+          10.0,
+          24.0
+        ],
+        "removed_degenerate_triangles": 0,
+        "container_3mf": {
+          "unit": "millimeter",
+          "triangles": 76,
+          "matches_stl": true,
+          "bed_centered": true
+        }
       }
     },
     {
@@ -1353,7 +2940,18 @@
         "watertight": true,
         "consistent_winding": true,
         "volume_mm3": 1990.36,
-        "removed_degenerate_triangles": 0
+        "print_bounds_mm": [
+          58.0,
+          10.0,
+          24.0
+        ],
+        "removed_degenerate_triangles": 0,
+        "container_3mf": {
+          "unit": "millimeter",
+          "triangles": 76,
+          "matches_stl": true,
+          "bed_centered": true
+        }
       }
     },
     {
@@ -1364,7 +2962,18 @@
         "watertight": true,
         "consistent_winding": true,
         "volume_mm3": 1996.0,
-        "removed_degenerate_triangles": 0
+        "print_bounds_mm": [
+          58.0,
+          10.0,
+          24.0
+        ],
+        "removed_degenerate_triangles": 0,
+        "container_3mf": {
+          "unit": "millimeter",
+          "triangles": 76,
+          "matches_stl": true,
+          "bed_centered": true
+        }
       }
     }
   ],
@@ -1378,47 +2987,113 @@
   ],
   "meshes": {
     "front": {
-      "triangles": 43816,
+      "triangles": 39252,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 200372.53,
-      "removed_degenerate_triangles": 2
+      "volume_mm3": 247106.71,
+      "print_bounds_mm": [
+        214.915,
+        245.0,
+        58.0
+      ],
+      "removed_degenerate_triangles": 0,
+      "container_3mf": {
+        "unit": "millimeter",
+        "triangles": 39252,
+        "matches_stl": true,
+        "bed_centered": true
+      }
     },
     "rear": {
-      "triangles": 38044,
+      "triangles": 30632,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 169508.5,
-      "removed_degenerate_triangles": 0
+      "volume_mm3": 254682.79,
+      "print_bounds_mm": [
+        215.0,
+        245.0,
+        80.0
+      ],
+      "removed_degenerate_triangles": 0,
+      "container_3mf": {
+        "unit": "millimeter",
+        "triangles": 30632,
+        "matches_stl": true,
+        "bed_centered": true
+      }
     },
-    "battery_door": {
-      "triangles": 1310,
+    "button-fit-coupon": {
+      "triangles": 1032,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 33924.91,
-      "removed_degenerate_triangles": 0
+      "volume_mm3": 7503.32,
+      "print_bounds_mm": [
+        110.0,
+        40.0,
+        3.0
+      ],
+      "removed_degenerate_triangles": 0,
+      "container_3mf": {
+        "unit": "millimeter",
+        "triangles": 1032,
+        "matches_stl": true,
+        "bed_centered": true
+      }
     },
     "snap-coupon-0.2": {
       "triangles": 76,
       "watertight": true,
       "consistent_winding": true,
       "volume_mm3": 1984.48,
-      "removed_degenerate_triangles": 0
+      "print_bounds_mm": [
+        58.0,
+        10.0,
+        24.0
+      ],
+      "removed_degenerate_triangles": 0,
+      "container_3mf": {
+        "unit": "millimeter",
+        "triangles": 76,
+        "matches_stl": true,
+        "bed_centered": true
+      }
     },
     "snap-coupon-0.3": {
       "triangles": 76,
       "watertight": true,
       "consistent_winding": true,
       "volume_mm3": 1990.36,
-      "removed_degenerate_triangles": 0
+      "print_bounds_mm": [
+        58.0,
+        10.0,
+        24.0
+      ],
+      "removed_degenerate_triangles": 0,
+      "container_3mf": {
+        "unit": "millimeter",
+        "triangles": 76,
+        "matches_stl": true,
+        "bed_centered": true
+      }
     },
     "snap-coupon-0.4": {
       "triangles": 76,
       "watertight": true,
       "consistent_winding": true,
       "volume_mm3": 1996.0,
-      "removed_degenerate_triangles": 0
+      "print_bounds_mm": [
+        58.0,
+        10.0,
+        24.0
+      ],
+      "removed_degenerate_triangles": 0,
+      "container_3mf": {
+        "unit": "millimeter",
+        "triangles": 76,
+        "matches_stl": true,
+        "bed_centered": true
+      }
     }
   },
-  "checks_count": 258
+  "checks_count": 568
 }

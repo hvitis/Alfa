@@ -1,6 +1,6 @@
 import { t } from '../i18n.js';
 
-const PARTS = ['front', 'rear', 'battery_door'];
+const PARTS = ['front', 'rear'];
 const PALETTES = [
   ['cloud-blue', ['#86bfea', '#70acd9', '#fff0b5']],
   ['candy-cloud', ['#ffd6e6', '#d7c6f5', '#fff0b5']],
@@ -74,7 +74,7 @@ export function createCloudColorControls(container, onChange) {
   }
   function update() {
     const values = PARTS.map(id => colors[id]);
-    const selected = PALETTES.find(([, palette]) => palette.every((color, i) => color === values[i]));
+    const selected = PALETTES.find(([, palette]) => PARTS.every((_, i) => palette[i] === values[i]));
     const selectedName = selected ? t(`palette.${selected[0]}`) : t('colors.custom');
     paletteName.textContent = selectedName;
     current.replaceChildren(swatches(values));
@@ -100,7 +100,7 @@ export function createCloudColorControls(container, onChange) {
     button.dataset.palette = id;
     const text = document.createElement('span');
     text.textContent = t(`palette.${id}`);
-    button.append(swatches(values), text);
+    button.append(swatches(values.slice(0, PARTS.length)), text);
     button.addEventListener('click', () => {
       PARTS.forEach((part, i) => { colors[part] = values[i]; });
       update();

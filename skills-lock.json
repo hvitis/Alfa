@@ -12,6 +12,12 @@
       "sourceType": "github",
       "skillPath": "engineering-team/skills/embedded-iot-mentor/SKILL.md",
       "computedHash": "7a4a7e36e15a3d8b508e3fdfe214bed9525fb264a2d793786f253f093e9e0f4f"
+    },
+    "meshy-3d-printing": {
+      "source": "meshy-dev/meshy-3d-agent",
+      "sourceType": "github",
+      "skillPath": "skills/meshy-3d-printing/SKILL.md",
+      "computedHash": "e29001a5505e1e7716a4cde4397cde5a5a01ba2604a88992cb6f854c9bb552ce"
     }
   }
 }

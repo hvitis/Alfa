@@ -37,7 +37,7 @@ The Pages workflow publishes `_site/` after those checks pass on `main`.
 ## Views
 
 - **Plywood:** Little House Radio and the original case, with assembly modes, orbit controls, wood visibility, and labels.
-- **3DPrint:** PETG cloud enclosure, assembly views, frame IDs, hover names, preset color palettes, individual PETG swatch dropdowns and custom color pickers, fit allowances, STL/STEP/ZIP downloads, and geometry checks.
+- **3DPrint:** PETG cloud enclosure, assembly views, frame IDs, hover names, preset color palettes, individual PETG swatch dropdowns and custom color pickers, fit allowances, STL/3MF/STEP/ZIP downloads, and geometry checks.
 - **Hardware:** Complete Raspberry Pi and Pico wiring atlases, circuit filters, and selectable wire endpoints.
 - **Software:** A Design dropdown shows the ADR. Implementation shows the rendered Mermaid architecture. Teaching example (MDR) shows the watermarked, fictional teaching ADR with PDF and Markdown downloads.
 

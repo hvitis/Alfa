@@ -107,7 +107,7 @@ export const PRICING_ITEMS = [
   {
     id: 'case-3d-filament',
     name: 'PETG filament 1 kg spool',
-    function: 'Rosa3D / Devil Design / Fiberlogy for durable printable shells (~440 g needed)',
+    function: 'PETG for two integral shells; determine filament mass in the slicer',
     priceText: '~59 – 79 zł',
     min: 59,
     max: 79,
@@ -120,8 +120,8 @@ export const PRICING_ITEMS = [
   },
   {
     id: 'case-3d-fasteners',
-    name: 'Fasteners, perfboard & wiring',
-    function: '3× M3×55, 1× M3×12, 4× M3 nuts, 8× M2.5×6 screws, 10kΩ resistors, perfboard, cable ties',
+    name: 'PCB mounting hardware & wiring',
+    function: '8× M2.5×6 internal PCB screws, original button nuts, insulating ties, wires, foam and battery strap',
     priceText: '~15 – 20 zł',
     min: 15,
     max: 20,
@@ -216,16 +216,16 @@ export const PRICING_ITEMS = [
 
 export const MATERIAL_SPECS = {
   '3d-print': {
-    sectionNumber: 'FILAMENT USAGE',
-    title: '3D Print filament estimation',
-    badge: 'PETG · ~440 g total',
-    desc: 'Calculated from the production CAD solid models for PETG (density 1.27 g/cm³), sliced with 0.4 mm nozzle, 0.2 mm layer height, 5 perimeters (2.0 mm wall), 6 top/bottom layers, and 25% infill:',
+    sectionNumber: 'PRINT PREPARATION',
+    title: 'Two PETG shells',
+    badge: 'PETG · 86 mm deep',
+    desc: 'The rear includes the battery cradle and horizontal Pi shelf. Final filament mass and supports depend on your slicer profile.',
     stats: [
-      { dt: 'Front shell (F-00)', dd: '~195 g', small: 'Solid volume: 208 cm³' },
-      { dt: 'Rear shell (R-00)', dd: '~165 g', small: 'Solid volume: 170 cm³' },
-      { dt: 'Battery door (B-00)', dd: '~32 g', small: 'Solid volume: 34 cm³' },
-      { dt: 'Supports & brim', dd: '~45–55 g', small: 'Bed supports & 2 mm brim' },
-      { dt: 'Spool requirement', dd: '1 × 1 kg spool', small: '~59 – 79 PLN · covers build + tests', isTotal: true }
+      { dt: 'Front shell (F-00)', dd: '1 part', small: 'Five snaps and two locating tongues' },
+      { dt: 'Rear shell (R-00)', dd: '1 part', small: 'Integral cradle and Pi shelf' },
+      { dt: 'Case joint', dd: 'No screws', small: 'Insert lower tabs, pivot and snap closed' },
+      { dt: 'Build plate', dd: '256 × 256 mm', small: 'Check brim and 245 mm model height' },
+      { dt: 'Filament and supports', dd: 'Check slicer', small: 'PETG, 0.2 mm layers; slice before printing', isTotal: true }
     ]
   },
   'plywood-house': {

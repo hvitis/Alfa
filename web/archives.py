@@ -10,8 +10,11 @@ ROOT = Path(__file__).resolve().parents[1]
 CLOUD = ROOT / "design/cloud-radio/generated/cloud"
 MEMBERS = (
     "README.md", "build.py", "run-cad.sh", "parameters.json", "manifest.json", "verification.json",
-    "front.stl", "rear.stl", "battery_door.stl", "cloud-radio.step", "cloud-radio.glb",
+    "front.stl", "rear.stl", "cloud-radio.step", "cloud-radio.glb",
     "snap-coupon-0.2.stl", "snap-coupon-0.3.stl", "snap-coupon-0.4.stl",
+    "front.3mf", "rear.3mf", "button-fit-coupon.stl",
+    "button-fit-coupon.3mf", "print-settings.json",
+    "snap-coupon-0.2.3mf", "snap-coupon-0.3.3mf", "snap-coupon-0.4.3mf",
     "plywood-assembly-guide.pdf",
 )
 

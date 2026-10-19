@@ -262,7 +262,7 @@ async function showScene() {
 function fillCloud(data) {
   $('#cloud-revision').textContent = t('cloud.revision', { revision: data.revision.replace('prototype-', 'PROTOTYPE ') });
   $('#cloud-facts').replaceChildren();
-  for (const [label, value] of [[t('facts.width'), `${data.outer_mm[0]} mm`], [t('facts.height'), `${data.outer_mm[1]} mm`], [t('facts.depth'), `${data.outer_mm[2]} mm`], [t('facts.material'), data.material], ...(data.handle?.grip_depth ? [[t('facts.grip'), `${data.handle.grip_depth} mm`], [t('facts.battery'), t('facts.batteryHorizontal')]] : [])]) {
+  for (const [label, value] of [[t('facts.width'), `${data.outer_mm[0]} mm`], [t('facts.height'), `${data.outer_mm[1]} mm`], [t('facts.depth'), `${data.outer_mm[2]} mm`], [t('facts.material'), data.material], ...(data.shelf ? [[t('facts.battery'), t('facts.batteryHorizontal')], ['Raspberry Pi', t('facts.batteryHorizontal')]] : [])]) {
     const item = document.createElement('div'), term = document.createElement('dt'), detail = document.createElement('dd');
     term.textContent = label; detail.textContent = value; item.append(term, detail); $('#cloud-facts').append(item);
   }
@@ -270,7 +270,7 @@ function fillCloud(data) {
   $('#cloud-hardware').replaceChildren();
   for (const part of data.components) {
     const row = document.createElement('tr');
-    for (const text of [`${part.id} · ${tr(part.title)}`, part.size.join(' × '), `${part.uncertain ? t('cloud.provisionalPrefix') : ''}${tr(part.source)}`]) {
+    for (const text of [`${part.id} · ${tr(part.title)}`, part.size.join(' × '), `${part.uncertain || part.mechanically_verified === false ? t('cloud.provisionalPrefix') : ''}${tr(part.source)}`]) {
       const cell = document.createElement('td'); cell.textContent = text; row.append(cell);
     }
     $('#cloud-hardware').append(row);

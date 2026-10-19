@@ -13,16 +13,16 @@ export function createCloudScene() {
   root.add(frontLight);
   const labels = new THREE.Group(), clearances = new THREE.Group();
   root.add(labels, clearances);
-  const pickables = [], shells = {}, data = { components: [] }, labelAnchors = [];
-  const partMaterials = {}, colors = {front:'#86bfea',rear:'#70acd9',battery_door:'#fff0b5'};
+  const pickables = [], shells = {}, data = { components: [] }, labelAnchors = [], portOutlines = [];
+  const partMaterials = {}, colors = {front:'#86bfea',rear:'#70acd9'};
   function applyColors() { for(const [part,materials] of Object.entries(partMaterials)) for(const material of materials) material.color.set(colors[part]); }
   let mode = 'assembled', showLabels = false, showClearances = false, request = 0;
   function apply() {
     for (const [name, node] of Object.entries(shells)) {
       node.position.copy(node.userData.home);
       node.visible = mode !== 'inside';
-      if (mode === 'exploded') node.position.z += name === 'front' ? -48 : name === 'rear' ? 60 : 115;
-      if (mode === 'battery_open' && name === 'battery_door') { node.position.z += 90; node.position.y -= 15; }
+      if (mode === 'exploded') node.position.z += name === 'front' ? -85 : 45;
+      if (mode === 'battery_open' && name === 'front') node.position.z -= 115;
     }
     for (const {label, home, part} of labelAnchors) {
       label.position.copy(home);
@@ -31,6 +31,7 @@ export function createCloudScene() {
     }
     labels.visible = showLabels;
     clearances.visible = showClearances;
+    for(const mesh of portOutlines)mesh.visible=showClearances;
   }
   const readyPromise = (async () => {
     const response = await fetch('./cloud/manifest.json');
@@ -78,6 +79,13 @@ export function createCloudScene() {
           : node.name.startsWith('button_') ? node.name
           : null;
         if (id && hardware.has(id)) {
+          // The aggregate ports envelope covers the entire horizontal PCB.
+          // Show that reservation as an optional outline so the board remains
+          // visible in the normal assembly and shelf views.
+          if(id==='pi_ports'){
+            object.material=new THREE.MeshBasicMaterial({color:'#a7824c',wireframe:true,transparent:true,opacity:.5});
+            object.visible=showClearances;portOutlines.push(object);
+          }
           object.userData.moduleId = hardware.get(id).parent || id;
           object.userData.hoverInfo = { id, title: tr(hardware.get(id).title), kind: tr('Hardware') };
           pickables.push(object); break;
@@ -98,6 +106,7 @@ export function createCloudScene() {
       const bounds = new THREE.Box3().setFromObject(shells[item.name]);
       const position = bounds.getCenter(new THREE.Vector3());
       position.z = item.name === 'front' ? bounds.min.z : bounds.max.z;
+      if(item.name==='front'&&data.shelf){position.x=0;position.y=35;}
       addLabel(`${item.id} · ${tr(item.title)}`, position.toArray(), item.name);
     }
     for (const feature of data.frame_features || []) {
@@ -143,6 +152,6 @@ export function createCloudScene() {
     setLabels(value) { showLabels = value; apply(); },
     setClearances(value) { showClearances = value; apply(); },
     selectModule() {},
-    getCameraPreset: () => ({ position: mode === 'battery_open' ? new THREE.Vector3(-140,155,420) : new THREE.Vector3(140,155,-420), target: new THREE.Vector3(0,85,43) }),
+    getCameraPreset: () => ({ position: new THREE.Vector3(140,180,-420), target: new THREE.Vector3(0,120,43) }),
   };
 }

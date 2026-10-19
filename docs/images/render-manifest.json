@@ -4,65 +4,187 @@
     "assembled": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9",
-        "battery_door": "#fff0b5"
+        "rear": "#70acd9"
       },
-      "revision": "prototype-v2-arcade",
-      "checks": 258
+      "revision": "prototype-v2-horizontal-stack-86mm",
+      "checks": 568,
+      "scene": "cloud",
+      "view": "assembled",
+      "visibleParts": [
+        "front",
+        "rear"
+      ],
+      "hardware": [
+        "battery",
+        "pi",
+        "lcd",
+        "button_top",
+        "button_bottom",
+        "button_left",
+        "button_right",
+        "button_side_left",
+        "button_side_right",
+        "amp",
+        "switch",
+        "speaker"
+      ]
     },
     "exploded": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9",
-        "battery_door": "#fff0b5"
+        "rear": "#70acd9"
       },
-      "revision": "prototype-v2-arcade",
-      "checks": 258
+      "revision": "prototype-v2-horizontal-stack-86mm",
+      "checks": 568,
+      "scene": "cloud",
+      "view": "exploded",
+      "visibleParts": [
+        "front",
+        "rear"
+      ],
+      "hardware": [
+        "battery",
+        "pi",
+        "lcd",
+        "button_top",
+        "button_bottom",
+        "button_left",
+        "button_right",
+        "button_side_left",
+        "button_side_right",
+        "amp",
+        "switch",
+        "speaker"
+      ]
     },
     "rear": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9",
-        "battery_door": "#fff0b5"
+        "rear": "#70acd9"
       },
-      "revision": "prototype-v2-arcade",
-      "checks": 258
+      "revision": "prototype-v2-horizontal-stack-86mm",
+      "checks": 568,
+      "scene": "cloud",
+      "view": "rear",
+      "visibleParts": [
+        "front",
+        "rear"
+      ],
+      "hardware": [
+        "battery",
+        "pi",
+        "lcd",
+        "button_top",
+        "button_bottom",
+        "button_left",
+        "button_right",
+        "button_side_left",
+        "button_side_right",
+        "amp",
+        "switch",
+        "speaker"
+      ]
     },
     "side": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9",
-        "battery_door": "#fff0b5"
+        "rear": "#70acd9"
       },
-      "revision": "prototype-v2-arcade",
-      "checks": 258
+      "revision": "prototype-v2-horizontal-stack-86mm",
+      "checks": 568,
+      "scene": "cloud",
+      "view": "side",
+      "visibleParts": [
+        "front",
+        "rear"
+      ],
+      "hardware": [
+        "battery",
+        "pi",
+        "lcd",
+        "button_top",
+        "button_bottom",
+        "button_left",
+        "button_right",
+        "button_side_left",
+        "button_side_right",
+        "amp",
+        "switch",
+        "speaker"
+      ]
     },
     "connections": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9",
-        "battery_door": "#fff0b5"
+        "rear": "#70acd9"
       },
-      "revision": "prototype-v2-arcade",
-      "checks": 258
+      "revision": "prototype-v2-horizontal-stack-86mm",
+      "checks": 568,
+      "scene": "complete-setup",
+      "view": "connections",
+      "visibleParts": [],
+      "hardware": [
+        "pi",
+        "lcd",
+        "amp",
+        "speaker",
+        "arcade_buttons"
+      ]
     },
     "case_inside": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9",
-        "battery_door": "#fff0b5"
+        "rear": "#70acd9"
       },
-      "revision": "prototype-v2-arcade",
-      "checks": 258
+      "revision": "prototype-v2-horizontal-stack-86mm",
+      "checks": 568,
+      "scene": "cloud",
+      "view": "inside_back",
+      "visibleParts": [
+        "rear"
+      ],
+      "hardware": [
+        "battery",
+        "pi",
+        "lcd",
+        "button_top",
+        "button_bottom",
+        "button_left",
+        "button_right",
+        "button_side_left",
+        "button_side_right",
+        "amp",
+        "switch",
+        "speaker"
+      ]
     },
     "roentgen": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9",
-        "battery_door": "#fff0b5"
+        "rear": "#70acd9"
       },
-      "revision": "prototype-v2-arcade",
-      "checks": 258
+      "revision": "prototype-v2-horizontal-stack-86mm",
+      "checks": 568,
+      "scene": "cloud",
+      "view": "roentgen",
+      "visibleParts": [
+        "front",
+        "rear"
+      ],
+      "hardware": [
+        "battery",
+        "pi",
+        "lcd",
+        "button_top",
+        "button_bottom",
+        "button_left",
+        "button_right",
+        "button_side_left",
+        "button_side_right",
+        "amp",
+        "switch",
+        "speaker"
+      ]
     }
   }
 }

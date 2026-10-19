@@ -9,7 +9,7 @@
 
 **Małe radio. Wielka wyobraźnia.**
 
-Pastelowa chmurka, pięć żółtych przycisków i 32 polskie litery do odkrycia. Alfa odtwarza muzykę i lekcje liter bez sieci.
+Pastelowa chmurka, sześć przycisków arcade i 32 polskie litery do odkrycia. Alfa odtwarza muzykę i lekcje liter bez sieci.
 Wydrukuj obudowę w swoich kolorach, zamontuj elektronikę i stwórz własne radio.
 
 [Prezentacja w przeglądarce](https://hvitis.github.io/Alfa/) · [Najnowszy pakiet](https://github.com/hvitis/Alfa/releases/latest) · [Instrukcja sprzętu](docs/hardware-guide.md) · [Dokumentacja](docs/README.md)
@@ -19,7 +19,7 @@ Wydrukuj obudowę w swoich kolorach, zamontuj elektronikę i stwórz własne rad
 | Połączenia układu | Wnętrze obudowy od tyłu | Widok rentgenowski elementów |
 | --- | --- | --- |
 | ![Trójwymiarowy model połączeń kontrolera, ekranu, przycisków, wzmacniacza i zasilania](docs/images/hardware-connections.png) | ![Widok wnętrza obudowy od tyłu z rozmieszczeniem modułów i przewodów](docs/images/inside-back-case.png) | ![Prześwietlenie rentgenowskie wszystkich wewnętrznych elementów i obudowy chmurki](docs/images/roentgen-look.png) |
-| [Interaktywny schemat połączeń](https://hvitis.github.io/Alfa/#hardware) | [Wnętrze i montaż obudowy](design/wooden-case/README.md) | [Pliki do druku chmurki](design/cloud-radio/README.md) |
+| [Interaktywny schemat połączeń](https://hvitis.github.io/Alfa/#hardware) | [Wnętrze i montaż chmurki](design/cloud-radio/README.md) | [Pliki do druku chmurki](design/cloud-radio/README.md) |
 
 **Odkryj warsztat:** [3DPrint](https://hvitis.github.io/Alfa/#3dprint) · [Sklejka](https://hvitis.github.io/Alfa/#plywood) · [Elektronika](https://hvitis.github.io/Alfa/#hardware) · [Oprogramowanie](https://hvitis.github.io/Alfa/#software)
 
@@ -66,7 +66,7 @@ Tabela używa tych samych nazw co wersja angielska, aby automatycznie wykrywać 
 - <!-- feature:hardware-simulation --> **Symulacja sprzętu:** Komputer zapisuje podgląd ekranu bez urządzeń GPIO, SPI i I²C.
 - <!-- feature:static-showcase --> **Prezentacja statyczna:** Zakładki Plywood, 3DPrint, Hardware i Software zawierają modele 3D, połączenia kontrolerów, ilustrowany PDF ADR i diagram Mermaid.
 - <!-- feature:verified-distribution --> **Sprawdzany pakiet:** Pakiet zawiera neutralny obraz demonstracyjny, sumy kontrolne, raporty walidacji i zestawienie elektroniki.
-- <!-- feature:enclosure-research --> **Projekty obudów:** Prezentacja obejmuje drukowaną chmurkę i oba projekty ze sklejki. Pliki chmurki zawierają STL, STEP, próbki zatrzasków i instrukcję montażu.
+- <!-- feature:enclosure-research --> **Projekty obudów:** Prezentacja obejmuje drukowaną chmurkę i oba projekty ze sklejki. Chmurka ma dwie skorupy łączone bez śrub, poziomą baterię na dole i Pi na półce nad nią. Ma 86 mm głębokości i 245 mm wysokości. Pliki zawierają STL, 3MF, STEP, próbki zatrzasków i instrukcję; zalecany stół to 256 × 256 mm.
 
 ## Szybki start
 
@@ -134,7 +134,7 @@ Problemy bezpieczeństwa zgłaszaj zgodnie z [SECURITY.md](SECURITY.md).
 [Licencja MIT](LICENSE) obejmuje oryginalny kod i dokumentację techniczną.
 Plik [Informacje o zasobach i zależnościach](docs/third-party-notices.md) opisuje wyłączenia dotyczące zasobów i informacje o zależnościach.
 
-Obudowa jest prototypem do sprawdzenia dopasowania. Próby fizyczne uchwytu, zatrzasków, upadków i temperatury są nadal wymagane.
+Obudowa jest prototypem do sprawdzenia dopasowania. Próby fizyczne języków ustalających, zatrzasków, upadków i temperatury są nadal wymagane.
 Grafiki postaci i nagrania wymagają osobnego przeglądu praw przed publikacją. Zobacz [listę czynności przed publikacją](docs/publishing.md).
 Obrazy w README i karty społecznościowe są oryginalnymi renderami CAD.
 

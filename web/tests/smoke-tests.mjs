@@ -86,15 +86,18 @@ try {
       await scene('cloud', 'assembled');
       if (prefix === '/' && viewport.width === 1440 && process.env.SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.SMOKE_SCREENSHOT, fullPage: true });
       assert((await page.locator('#cloud-facts').textContent()).includes('PETG'));
+      assert((await page.locator('#cloud-facts').textContent()).includes('86 mm'));
+      assert.equal(await page.locator('.cloud-downloads a[href$=".3mf"]').count(),2);
       for (const mode of ['exploded', 'inside', 'battery_open', 'assembled']) {
         await page.locator(`[data-for="cloud-mode"] [data-value="${mode}"]`).click();
         await scene('cloud', mode);
       }
       await page.locator('#cloud-labels').check(); await page.locator('#cloud-labels').uncheck();
       await page.locator('#cloud-clearances').check(); await page.locator('#cloud-clearances').uncheck();
-      for (const asset of ['front.stl', 'rear.stl', 'battery_door.stl', 'cloud-radio.step', 'cloud-radio.zip', 'README.md', 'verification.json']) {
+      for (const asset of ['front.stl', 'rear.stl', 'front.3mf', 'rear.3mf', 'button-fit-coupon.stl', 'print-settings.json', 'cloud-radio.step', 'cloud-radio.zip', 'README.md', 'verification.json']) {
         const response = await page.request.get(`${origin}${prefix}cloud/${asset}`);
         assert(response.ok(), asset); assert((await response.body()).length > 100, asset);
+        if(asset.endsWith('.3mf'))assert.equal((await response.body()).readUInt32LE(0),0x04034b50,'3MF download must be a ZIP container');
       }
       assert((await page.locator('.pricing-total-value').textContent()).includes('400 – 490'));
       await page.locator('[data-for="pricing-case"] [data-value="plywood-case"]').click();
