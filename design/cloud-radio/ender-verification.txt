@@ -1,0 +1,12 @@
+OpenSCAD: OpenSCAD version 2021.01 (/usr/bin/openscad)
+PASS  all            view       compiles
+PASS  front          printable  212.0 x 215.0 x 58.0 mm, 1 body, 222083 mm3, overhang>45deg 492 mm2, flat ceilings 1053 mm2, first layer 1 region 363.4 cm2 -> ../tmp/ender-verified/cloud-ender-front.stl
+PASS  rear           printable  210.0 x 215.0 x 80.0 mm, 1 body, 232652 mm3, overhang>45deg 99 mm2, flat ceilings 425 mm2, first layer 1 region 392.4 cm2 -> ../tmp/ender-verified/cloud-ender-rear.stl
+PASS  clash_shells   clash      empty (no collision)
+PASS  button_coupon  printable  110.0 x 40.0 x 3.0 mm, 1 body, 7503 mm3, overhang>45deg 0 mm2, flat ceilings 0 mm2, first layer 1 region 25.0 cm2 -> ../tmp/ender-verified/cloud-ender-button_coupon.stl
+PASS  plate_snap_02  layout     58.0 x 10.0 x 24.0 mm, 2 bodies, 2589 mm3, overhang>45deg 0 mm2, flat ceilings 33 mm2 -> ../tmp/ender-verified/cloud-ender-plate_snap_02.stl
+PASS  plate_snap_03  layout     58.0 x 10.0 x 24.0 mm, 2 bodies, 2583 mm3, overhang>45deg 0 mm2, flat ceilings 34 mm2 -> ../tmp/ender-verified/cloud-ender-plate_snap_03.stl
+PASS  plate_snap_04  layout     58.0 x 10.0 x 24.0 mm, 2 bodies, 2576 mm3, overhang>45deg 0 mm2, flat ceilings 34 mm2 -> ../tmp/ender-verified/cloud-ender-plate_snap_04.stl
+PASS  clash_mid      clash      empty (no collision)
+PASS  clash_open     clash      empty (no collision)
+GATE: PASS (10 of 10 parts pass)

@@ -536,6 +536,12 @@ footer div { display: flex; gap: 22px; }
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.shade-card-media:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
 }
 .shade-card-media .card-media-img {
   width: 100%;
@@ -544,6 +550,11 @@ footer div { display: flex; gap: 22px; }
   padding: 10px;
   display: block;
   box-sizing: border-box;
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+.shade-card-media:hover .card-media-img {
+  transform: scale(1.03);
 }
 .shade-card-media.code-media {
   background: #252038;
@@ -562,6 +573,11 @@ footer div { display: flex; gap: 22px; }
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+.shade-card-media:hover .code-preview-window {
+  transform: scale(1.02);
 }
 .code-window-bar {
   display: flex;

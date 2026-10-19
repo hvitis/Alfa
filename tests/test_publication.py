@@ -132,6 +132,22 @@ class PackageTests(unittest.TestCase):
                 os.utime(file,(1700000000,1700000000))
             create_cloud_archive(destination,source)
             self.assertEqual(destination.read_bytes(),original)
+            # A build during CAD generation may still use the previous verified
+            # revision, which has no OpenSCAD wrapper. It must remain buildable.
+            manifest_path=source/"manifest.json"
+            original_manifest=manifest_path.read_bytes()
+            manifest=json.loads(original_manifest)
+            manifest["files"]=[name for name in manifest["files"] if name!="cloud-ender.scad"]
+            manifest_path.write_text(json.dumps(manifest))
+            wrapper=(source/"cloud-ender.scad").read_bytes()
+            (source/"cloud-ender.scad").unlink()
+            create_cloud_archive(destination,source)
+            with zipfile.ZipFile(destination) as archive:
+                self.assertNotIn("cloud-ender.scad",archive.namelist())
+            manifest_path.write_bytes(original_manifest)
+            (source/"cloud-ender.scad").write_bytes(wrapper)
+            create_cloud_archive(destination,source)
+            self.assertEqual(destination.read_bytes(),original)
             verification=json.loads((source/"verification.json").read_text())
             verification["passed"]=False
             (source/"verification.json").write_text(json.dumps(verification))

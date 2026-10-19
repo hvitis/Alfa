@@ -1,0 +1,2 @@
+# Native CAD solids are generated artifacts; preserve bytes and avoid text diffs.
+*.brep binary

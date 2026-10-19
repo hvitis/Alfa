@@ -18,6 +18,12 @@
       "sourceType": "github",
       "skillPath": "skills/meshy-3d-printing/SKILL.md",
       "computedHash": "e29001a5505e1e7716a4cde4397cde5a5a01ba2604a88992cb6f854c9bb552ce"
+    },
+    "parametric-3d-printing": {
+      "source": "flowful-ai/cad-skill",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "e53defb632f82334a8fff8d9707c7bf11a3c4554331d5f7e58c4b76b0f66759d"
     }
   }
 }

@@ -1,20 +1,20 @@
 {
-  "revision": "prototype-v2-horizontal-stack-86mm",
+  "revision": "prototype-v2-ender-smooth-215mm",
   "checks": [
     {
       "check": "front: valid connected solid",
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 248636.05
+        "volume_mm3": 224550.52
       }
     },
     {
       "check": "front: retains full lower frame",
       "pass": true,
       "detail": [
-        214.915,
-        245.0,
+        212.0,
+        215.0,
         58.0
       ]
     },
@@ -22,8 +22,8 @@
       "check": "front: fits configured print field",
       "pass": true,
       "detail": [
-        214.915,
-        245.0,
+        212.0,
+        215.0,
         58.0
       ]
     },
@@ -31,25 +31,40 @@
       "check": "front: fits build height",
       "pass": true,
       "detail": [
-        214.915,
-        245.0,
+        212.0,
+        215.0,
         58.0
       ]
+    },
+    {
+      "check": "front: fits Ender usable travel with brim",
+      "pass": true,
+      "detail": {
+        "part_mm": [
+          212.0,
+          215.0
+        ],
+        "brim_mm": 2,
+        "usable_xy_mm": [
+          220,
+          220
+        ]
+      }
     },
     {
       "check": "rear: valid connected solid",
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 255261.7
+        "volume_mm3": 233582.02
       }
     },
     {
       "check": "rear: retains full lower frame",
       "pass": true,
       "detail": [
+        210.0,
         215.0,
-        245.0,
         80.0
       ]
     },
@@ -57,8 +72,8 @@
       "check": "rear: fits configured print field",
       "pass": true,
       "detail": [
+        210.0,
         215.0,
-        245.0,
         80.0
       ]
     },
@@ -66,10 +81,25 @@
       "check": "rear: fits build height",
       "pass": true,
       "detail": [
+        210.0,
         215.0,
-        245.0,
         80.0
       ]
+    },
+    {
+      "check": "rear: fits Ender usable travel with brim",
+      "pass": true,
+      "detail": {
+        "part_mm": [
+          210.0,
+          215.0
+        ],
+        "brim_mm": 2,
+        "usable_xy_mm": [
+          220,
+          220
+        ]
+      }
     },
     {
       "check": "Assembled shells: front / rear do not interfere",
@@ -2695,6 +2725,16 @@
       "detail": null
     },
     {
+      "check": "Complete front shell pivot clearance at 10 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Complete front shell pivot clearance at 20 degrees",
+      "pass": true,
+      "detail": null
+    },
+    {
       "check": "Battery hatch replaced by continuous rear cover",
       "pass": true,
       "detail": null
@@ -2775,6 +2815,16 @@
       "detail": null
     },
     {
+      "check": "Shoulder profile at cavity mouth >= 2.4 mm",
+      "pass": true,
+      "detail": 2.4911
+    },
+    {
+      "check": "Fairing preserves flat bottom sole",
+      "pass": true,
+      "detail": null
+    },
+    {
       "check": "Full 66 mm assembly reserved: button_top",
       "pass": true,
       "detail": null
@@ -2848,19 +2898,19 @@
       "check": "front: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 39252,
+        "triangles": 19616,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 247106.71,
+        "volume_mm3": 222084.38,
         "print_bounds_mm": [
-          214.915,
-          245.0,
+          212.0,
+          215.0,
           58.0
         ],
         "removed_degenerate_triangles": 0,
         "container_3mf": {
           "unit": "millimeter",
-          "triangles": 39252,
+          "triangles": 19616,
           "matches_stl": true,
           "bed_centered": true
         }
@@ -2870,19 +2920,19 @@
       "check": "rear: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 30632,
+        "triangles": 11448,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 254682.79,
+        "volume_mm3": 232652.94,
         "print_bounds_mm": [
+          210.0,
           215.0,
-          245.0,
           80.0
         ],
         "removed_degenerate_triangles": 0,
         "container_3mf": {
           "unit": "millimeter",
-          "triangles": 30632,
+          "triangles": 11448,
           "matches_stl": true,
           "bed_centered": true
         }
@@ -2914,10 +2964,10 @@
       "check": "snap-coupon-0.2: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 76,
+        "triangles": 84,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 1984.48,
+        "volume_mm3": 2589.28,
         "print_bounds_mm": [
           58.0,
           10.0,
@@ -2926,7 +2976,7 @@
         "removed_degenerate_triangles": 0,
         "container_3mf": {
           "unit": "millimeter",
-          "triangles": 76,
+          "triangles": 84,
           "matches_stl": true,
           "bed_centered": true
         }
@@ -2936,10 +2986,10 @@
       "check": "snap-coupon-0.3: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 76,
+        "triangles": 84,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 1990.36,
+        "volume_mm3": 2582.56,
         "print_bounds_mm": [
           58.0,
           10.0,
@@ -2948,7 +2998,7 @@
         "removed_degenerate_triangles": 0,
         "container_3mf": {
           "unit": "millimeter",
-          "triangles": 76,
+          "triangles": 84,
           "matches_stl": true,
           "bed_centered": true
         }
@@ -2958,10 +3008,10 @@
       "check": "snap-coupon-0.4: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 76,
+        "triangles": 84,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 1996.0,
+        "volume_mm3": 2575.6,
         "print_bounds_mm": [
           58.0,
           10.0,
@@ -2970,10 +3020,34 @@
         "removed_degenerate_triangles": 0,
         "container_3mf": {
           "unit": "millimeter",
-          "triangles": 76,
+          "triangles": 84,
           "matches_stl": true,
           "bed_centered": true
         }
+      }
+    },
+    {
+      "check": "Saved BREP preserves every assembly solid",
+      "pass": true,
+      "detail": {
+        "source_solids": 45,
+        "saved_solids": 45
+      }
+    },
+    {
+      "check": "front: saved BREP preserves shell volume and bounds",
+      "pass": true,
+      "detail": {
+        "source_volume_mm3": 224550.5211191307,
+        "matching_saved_solids": 1
+      }
+    },
+    {
+      "check": "rear: saved BREP preserves shell volume and bounds",
+      "pass": true,
+      "detail": {
+        "source_volume_mm3": 233582.01983039425,
+        "matching_saved_solids": 1
       }
     }
   ],
@@ -2987,37 +3061,37 @@
   ],
   "meshes": {
     "front": {
-      "triangles": 39252,
+      "triangles": 19616,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 247106.71,
+      "volume_mm3": 222084.38,
       "print_bounds_mm": [
-        214.915,
-        245.0,
+        212.0,
+        215.0,
         58.0
       ],
       "removed_degenerate_triangles": 0,
       "container_3mf": {
         "unit": "millimeter",
-        "triangles": 39252,
+        "triangles": 19616,
         "matches_stl": true,
         "bed_centered": true
       }
     },
     "rear": {
-      "triangles": 30632,
+      "triangles": 11448,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 254682.79,
+      "volume_mm3": 232652.94,
       "print_bounds_mm": [
+        210.0,
         215.0,
-        245.0,
         80.0
       ],
       "removed_degenerate_triangles": 0,
       "container_3mf": {
         "unit": "millimeter",
-        "triangles": 30632,
+        "triangles": 11448,
         "matches_stl": true,
         "bed_centered": true
       }
@@ -3041,10 +3115,10 @@
       }
     },
     "snap-coupon-0.2": {
-      "triangles": 76,
+      "triangles": 84,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 1984.48,
+      "volume_mm3": 2589.28,
       "print_bounds_mm": [
         58.0,
         10.0,
@@ -3053,16 +3127,16 @@
       "removed_degenerate_triangles": 0,
       "container_3mf": {
         "unit": "millimeter",
-        "triangles": 76,
+        "triangles": 84,
         "matches_stl": true,
         "bed_centered": true
       }
     },
     "snap-coupon-0.3": {
-      "triangles": 76,
+      "triangles": 84,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 1990.36,
+      "volume_mm3": 2582.56,
       "print_bounds_mm": [
         58.0,
         10.0,
@@ -3071,16 +3145,16 @@
       "removed_degenerate_triangles": 0,
       "container_3mf": {
         "unit": "millimeter",
-        "triangles": 76,
+        "triangles": 84,
         "matches_stl": true,
         "bed_centered": true
       }
     },
     "snap-coupon-0.4": {
-      "triangles": 76,
+      "triangles": 84,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 1996.0,
+      "volume_mm3": 2575.6,
       "print_bounds_mm": [
         58.0,
         10.0,
@@ -3089,11 +3163,11 @@
       "removed_degenerate_triangles": 0,
       "container_3mf": {
         "unit": "millimeter",
-        "triangles": 76,
+        "triangles": 84,
         "matches_stl": true,
         "bed_centered": true
       }
     }
   },
-  "checks_count": 568
+  "checks_count": 577
 }

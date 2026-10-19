@@ -1,5 +1,5 @@
 {
-  "revision": "prototype-v2-horizontal-stack-86mm",
+  "revision": "prototype-v2-ender-smooth-215mm",
   "units": "mm",
   "material": "PETG",
   "uncertain_dimension_allowance_mm": 5,
@@ -10,16 +10,213 @@
     "seam_gap": 0.3,
     "fit_clearance": 0.3,
     "bed": [
-      256,
-      256
+      220,
+      220
     ],
     "print_limit": [
-      252,
-      252
+      216,
+      216
     ],
-    "edge_radius": 1.4,
     "build_height_mm": 100,
-    "height_extension": 55
+    "height_extension": 0,
+    "height_mm": 215,
+    "outline_segments_mm": [
+      [
+        [
+          -85,
+          0
+        ],
+        [
+          85,
+          0
+        ]
+      ],
+      [
+        [
+          85,
+          0
+        ],
+        [
+          104,
+          0
+        ],
+        [
+          105,
+          44
+        ],
+        [
+          105,
+          85
+        ]
+      ],
+      [
+        [
+          105,
+          85
+        ],
+        [
+          105,
+          140
+        ]
+      ],
+      [
+        [
+          105,
+          140
+        ],
+        [
+          105,
+          165
+        ],
+        [
+          99,
+          180
+        ],
+        [
+          83,
+          186
+        ]
+      ],
+      [
+        [
+          83,
+          186
+        ],
+        [
+          75,
+          189
+        ],
+        [
+          76,
+          207
+        ],
+        [
+          61,
+          210
+        ]
+      ],
+      [
+        [
+          61,
+          210
+        ],
+        [
+          43,
+          213.6
+        ],
+        [
+          27,
+          206
+        ],
+        [
+          17,
+          207
+        ]
+      ],
+      [
+        [
+          17,
+          207
+        ],
+        [
+          3,
+          208.4
+        ],
+        [
+          -5,
+          215
+        ],
+        [
+          -23,
+          215
+        ]
+      ],
+      [
+        [
+          -23,
+          215
+        ],
+        [
+          -46,
+          215
+        ],
+        [
+          -58,
+          204
+        ],
+        [
+          -65,
+          202
+        ]
+      ],
+      [
+        [
+          -65,
+          202
+        ],
+        [
+          -79,
+          198
+        ],
+        [
+          -80,
+          185
+        ],
+        [
+          -87,
+          180
+        ]
+      ],
+      [
+        [
+          -87,
+          180
+        ],
+        [
+          -101,
+          170
+        ],
+        [
+          -105,
+          156
+        ],
+        [
+          -105,
+          140
+        ]
+      ],
+      [
+        [
+          -105,
+          140
+        ],
+        [
+          -105,
+          85
+        ]
+      ],
+      [
+        [
+          -105,
+          85
+        ],
+        [
+          -105,
+          40
+        ],
+        [
+          -104,
+          0
+        ],
+        [
+          -85,
+          0
+        ]
+      ]
+    ],
+    "bed_chamfer_mm": 0.4,
+    "skin_inset_mm": 1.8,
+    "skin_blend_depth_mm": 5.0
   },
   "snap": {
     "width": 8,
@@ -29,12 +226,12 @@
     "engagement": 0.7,
     "sites": [
       [
-        105,
+        104.85,
         75,
         90
       ],
       [
-        -105,
+        -104.85,
         75,
         -90
       ],
@@ -50,7 +247,7 @@
       ],
       [
         -23,
-        245,
+        215,
         180
       ]
     ]
@@ -611,25 +808,9 @@
     "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README"
   },
   "side_relief": {
-    "protrusion": 2.5,
-    "anchor": 0.6,
-    "rows": [
-      45,
-      85,
-      150,
-      178
-    ],
-    "front_depths": [
-      17,
-      29
-    ],
-    "rear_depths": [
-      60,
-      73
-    ],
-    "radius": 14,
-    "protected_from_y": 195,
-    "style": "Shallow cloud caps outside the core; integral to the two shells"
+    "enabled": false,
+    "protrusion": 0,
+    "style": "Continuous smooth side walls; no decorative bumps"
   },
   "buttons": {
     "mount_hole_mm": 28.4,
@@ -652,7 +833,8 @@
       70
     ],
     "pivot_angle_deg": 20,
-    "release_travel_mm": 1.1
+    "release_travel_mm": 1.1,
+    "pivot_y_mm": 0
   },
   "shelf": {
     "battery_ceiling_y": 24,
@@ -661,5 +843,21 @@
     "front_z": 6,
     "width": 124,
     "battery_removal": "toward front after front shell and battery strap are removed"
+  },
+  "printer": {
+    "family": "Creality Ender",
+    "physical_bed_mm": [
+      235,
+      235
+    ],
+    "usable_xy_mm": [
+      220,
+      220
+    ],
+    "nozzle_mm": 0.4,
+    "layer_mm": 0.2,
+    "brim_mm": 2,
+    "bed_edge_margin_mm": 5.5,
+    "assumptions": "Exact Ender model unconfirmed; conservative 220 mm XY travel inside the user-confirmed 235 mm plate. 0.4 mm nozzle."
   }
 }

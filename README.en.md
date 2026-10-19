@@ -64,7 +64,7 @@ The [CAD folders](design/) contain the enclosure sources. The website includes t
 - <!-- feature:hardware-simulation --> **Hardware simulation:** Save display previews on your computer without GPIO, SPI, or I²C devices.
 - <!-- feature:static-showcase --> **Static showcase:** Explore Plywood, 3DPrint, Hardware, and Software tabs, with 3D models, controller wiring, an ADR, and rendered Mermaid.
 - <!-- feature:verified-distribution --> **Verified distribution:** Build a runtime kit with a neutral demo card, checksums, validation reports, and an electronics BOM.
-- <!-- feature:enclosure-research --> **Enclosure research:** Inspect the printable cloud and both plywood projects. The cloud uses two shells that join without screws, with a flat battery at the bottom and a horizontal Pi on the shelf above. It is 86 mm deep and 245 mm tall. Downloads include STL, 3MF, STEP, snap coupons and the assembly guide; the assumed bed is 256 × 256 mm.
+- <!-- feature:enclosure-research --> **Enclosure research:** Inspect the printable cloud and both plywood projects. The cloud uses two shells that join without screws, with a flat battery at the bottom and a horizontal Pi on the shelf above. It is 86 mm deep and 215 mm tall. Downloads include STL, 3MF, BREP, snap coupons and the assembly guide; the conservative Ender travel area is 220 × 220 mm.
 
 ## Quick start
 
@@ -97,7 +97,7 @@ make check
 make serve
 ```
 
-Open `http://127.0.0.1:8000`. Use Node.js 22 for the browser checks.
+Open the local URL printed by `make serve`. The OS selects a free port; optionally use `make serve SERVE_PORT=53173`. Use Node.js 22 for the browser checks.
 Read [build-guide.md](docs/build-guide.md) for Linux prerequisites and environment details.
 
 ## Automated validation
@@ -135,5 +135,5 @@ The [MIT license](LICENSE) covers original code and technical documentation.
 Existing character artwork and recordings require a separate rights review before public visibility.
 Read the [publication checklist](docs/publishing.md). The README and social cards use original CAD renders.
 
-To recreate these images, run `make serve`, then `npm run render:assets`. Run `make site` to export the illustrated ADR PDF.
+To recreate these images, run `make dev`, then `npm run render:assets`. Run `make site` to export the illustrated ADR PDF.
 The GitHub social card is [.github/social-preview.png](.github/social-preview.png).

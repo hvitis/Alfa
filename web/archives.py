@@ -9,8 +9,8 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 CLOUD = ROOT / "design/cloud-radio/generated/cloud"
 MEMBERS = (
-    "README.md", "build.py", "run-cad.sh", "parameters.json", "manifest.json", "verification.json",
-    "front.stl", "rear.stl", "cloud-radio.step", "cloud-radio.glb",
+    "README.md", "build.py", "run-cad.sh", "parameters.json", "manifest.json", "verification.json", "cloud-ender.scad",
+    "front.stl", "rear.stl", "cloud-radio.brep", "cloud-radio.glb",
     "snap-coupon-0.2.stl", "snap-coupon-0.3.stl", "snap-coupon-0.4.stl",
     "front.3mf", "rear.3mf", "button-fit-coupon.stl",
     "button-fit-coupon.3mf", "print-settings.json",
@@ -32,7 +32,11 @@ def create_cloud_archive(destination, source=CLOUD):
     for attempt in range(3):
         before = source.stat().st_ino
         try:
-            contents = {name: (source / name).read_bytes() for name in MEMBERS}
+            # Older verified snapshots predate the OpenSCAD inspection wrapper.
+            # Keep them buildable while a newer CAD snapshot is being prepared.
+            published = json.loads((source / "manifest.json").read_bytes())
+            members = tuple(name for name in MEMBERS if name != "cloud-ender.scad" or name in published.get("files", []))
+            contents = {name: (source / name).read_bytes() for name in members}
         except FileNotFoundError:
             if attempt < 2 and source.stat().st_ino != before:
                 continue

@@ -81,7 +81,7 @@ def expanded(item, allowance):
     return box(*origin, *size)
 
 
-def cloud_profile(extension=0):
+def cloud_profile(extension=0, outline=None):
     # Tangent-continuous Bezier lobes: the old circle unions had sharp valleys.
     # The 170 mm sole remains flat; the sides and cloud crown blend smoothly.
     segments = [
@@ -97,7 +97,9 @@ def cloud_profile(extension=0):
         [(-105,85), (-105,40), (-104,0), (-85,0)],
     ]
     # Extend only the straight lower side runs; retain the cloud lobe radii.
-    if extension:
+    if outline:
+        segments=[[tuple(point) for point in segment] for segment in outline]
+    elif extension:
         segments=[segments[0],segments[1],[(105,85),(105,85+extension)]] + [
             [(x,y+extension) for x,y in segment] for segment in segments[2:-1]
         ] + [[(-105,85+extension),(-105,85)],segments[-1]]
@@ -108,17 +110,29 @@ def cloud_profile(extension=0):
     return b.Face(b.Wire(edges))
 
 
-def rounded_rim(profile, surface_z, radius, direction=1, opening=False):
-    # Parallel profiles follow a quarter circle. A native smooth loft avoids
-    # OCCT rolling-ball failures at tangent joins between the cloud lobes.
+def bed_chamfer(profile, surface_z, amount, direction=1):
+    # A 45-degree underside replaces the old rounded lower rim, whose first
+    # layers expanded too quickly for face-down PETG printing on an Ender.
+    return b.loft([b.Pos(0,0,surface_z)*b.offset(profile,amount=-amount),
+                   b.Pos(0,0,surface_z+direction*amount)*profile],ruled=True)
+
+
+def fairing_profile(profile, inset, width, height):
+    # Scale about the bottom centre: the sole stays on Y=0 while the crown
+    # and sides ease into the flat front/rear face. Hardware is never scaled.
+    return b.scale(profile,by=((width-2*inset)/width,(height-inset)/height,1),about=(0,0,0)).faces()[0]
+
+
+def smooth_skin(profile, surface_z, c, direction=1):
+    inset=c["skin_inset_mm"];run=c["skin_blend_depth_mm"];ef=c["bed_chamfer_mm"]
+    face=fairing_profile(profile,inset,210,c["height_mm"])
+    skin=bed_chamfer(face,surface_z,ef,direction)
     sections=[]
     for i in range(9):
-        angle=(math.pi/2)*i/8
-        z=radius*(1-math.cos(angle))
-        inset=radius*(1-math.sin(angle))
-        face=b.offset(profile,amount=inset if opening else -inset) if inset>1e-8 else profile
-        sections.append(b.Pos(0,0,surface_z+direction*z)*face)
-    return b.loft(sections)
+        u=i/8
+        section=fairing_profile(profile,inset*(1-u)**2,210,c["height_mm"])
+        sections.append(b.Pos(0,0,surface_z+direction*(ef+run*u))*section)
+    return skin+b.loft(sections)
 
 
 def place_snap(shape, site):
@@ -148,12 +162,14 @@ def make(p):
                          "origin":[round(v,4) for v in bb.min],
                          "size":[round(v,4) for v in bb.size]})
         return shape
-    outer = cloud_profile(c["height_extension"])
+    outer = cloud_profile(c["height_extension"],c.get("outline_segments_mm"))
     inside = b.offset(outer, amount=-t)
     ring = outer - inside
-    radius=c["edge_radius"]
-    front = rounded_rim(outer,0,radius) + slab(outer,radius,t-radius) + slab(ring,t,split-t)
-    rear = slab(ring,split+gap,depth-t-split-gap) + slab(outer,depth-t,t-radius) + rounded_rim(outer,depth,radius,-1)
+    skin_depth=c["bed_chamfer_mm"]+c["skin_blend_depth_mm"]
+    front = smooth_skin(outer,0,c) + slab(outer,skin_depth,split-skin_depth)
+    front -= slab(inside,t,split-t+1)
+    rear = slab(outer,split+gap,depth-skin_depth-split-gap) + smooth_skin(outer,depth,c,-1)
+    rear -= slab(inside,split+gap-1,depth-t-split-gap+1)
     lip = b.offset(outer, amount=-t-gap) - b.offset(outer, amount=-t-1.5)
     lip = slab(lip, split, 3)
 
@@ -256,39 +272,7 @@ def make(p):
     for x in (-82,74):
         rear-=slab(rr(x,12,8,16,2),depth-t-1,t+2)
 
-    # Rounded caps only add material outside the original core. The shallow
-    # anchor stays within the existing wall; crown and joint are masked.
-    relief=p["side_relief"]
-    protected=slab(b.offset(outer,amount=-relief["anchor"]),-1,depth+2)
-    wire=outer.outer_wire()
-    samples=[wire.position_at(i/1600) for i in range(1601)]
-    core_parts={"front":front,"rear":rear}
-    for name,depths in (("front",relief["front_depths"]),("rear",relief["rear_depths"])):
-        shape=core_parts[name]
-        mask=box(-110,8,5 if name=="front" else split+6,220,relief["protected_from_y"]-8,32 if name=="front" else depth-split-11)
-        for side in (-1,1):
-            for row,y in enumerate(relief["rows"]):
-                point=min((v for v in samples if side*v.X>75),key=lambda v:abs(v.Y-y))
-                # Outward normal from neighbouring points on the native wire.
-                u=min(range(len(samples)),key=lambda i:(samples[i]-point).length)
-                tangent=samples[min(u+1,1600)]-samples[max(0,u-1)]
-                nx,ny=tangent.Y,-tangent.X
-                length=math.hypot(nx,ny);nx/=length;ny/=length
-                if nx*side<0:nx,ny=-nx,-ny
-                for z in depths:
-                    r=relief["radius"]+(row%2)
-                    cap=b.Pos(point.X-nx*(r-relief["protrusion"]),point.Y-ny*(r-relief["protrusion"]),z)*b.Sphere(r)
-                    cap=(cap-protected) & mask
-                    shape=shape.fuse(cap)
-            # One ID per side keeps the frame reference readable.
-        addition=shape-core_parts[name]
-        if overlap(addition,protected)>.02:
-            raise ValueError("Side relief entered the protected core")
-        if overlap(addition,box(-120,relief["protected_from_y"],-1,240,80,depth+2))>.02:
-            raise ValueError("Side relief changed the protected cloud crown")
-        record(addition,"F-C01" if name=="front" else "R-C01","Rounded cumulus side relief",name)
-        if name=="front":front=shape
-        else:rear=shape
+    # Continuous smooth side walls; no decorative caps or bumps.
     # Flat annular lands let side bezels seat on the curved cloud. Their inner
     # faces are at +/-99 mm; conservative 66 mm bodies extend to +/-40 mm.
     for index,item in enumerate((v for v in buttons if "side" in v["id"]),1):
@@ -492,6 +476,8 @@ def verify(p, parts, electronics, outer, features):
         check(name+": fits configured print field", bb.size.X <= p["case"]["print_limit"][0]+.01 and bb.size.Y <= p["case"]["print_limit"][1]+.01,
               [round(v,3) for v in bb.size])
         check(name+": fits build height",bb.size.Z<=p["case"]["build_height_mm"],[round(v,3) for v in bb.size])
+        brim=p["printer"]["brim_mm"]
+        check(name+": fits Ender usable travel with brim",all(v+2*brim<=limit+.01 for v,limit in zip((bb.size.X,bb.size.Y),p["printer"]["usable_xy_mm"])),{"part_mm":[round(bb.size.X,3),round(bb.size.Y,3)],"brim_mm":brim,"usable_xy_mm":p["printer"]["usable_xy_mm"]})
     for (na,a),(nc,c) in combinations(parts.items(),2):
         vol = overlap(a,c)
         check(f"Assembled shells: {na} / {nc} do not interfere", vol < .01, round(vol,5))
@@ -555,8 +541,12 @@ def verify(p, parts, electronics, outer, features):
     for index,x in enumerate(p["closure"]["tongue_x"],1):
         tongue=box(x-6,1.5,p["case"]["split"]-2,12,1.6,9)
         for angle in (0,5,10,15,20):
-            pivoted=b.Pos(0,2.3,p["case"]["split"])*b.Rot(-angle,0,0)*b.Pos(0,-2.3,-p["case"]["split"])*tongue
+            pivot_y=p["closure"]["pivot_y_mm"]
+            pivoted=b.Pos(0,pivot_y,p["case"]["split"])*b.Rot(-angle,0,0)*b.Pos(0,-pivot_y,-p["case"]["split"])*tongue
             check(f"Tongue {index} pivot clearance at {angle} degrees",overlap(parts["rear"],pivoted)<.02)
+    for angle in (10,20):
+        pivoted=b.Pos(0,p["closure"]["pivot_y_mm"],p["case"]["split"])*b.Rot(-angle,0,0)*b.Pos(0,-p["closure"]["pivot_y_mm"],-p["case"]["split"])*parts["front"]
+        check(f"Complete front shell pivot clearance at {angle} degrees",overlap(parts["rear"],pivoted)<.02)
     back_probe=box(-50,5,p["case"]["depth"]-p["case"]["wall"],100,18,p["case"]["wall"])
     check("Battery hatch replaced by continuous rear cover",overlap(parts["rear"],back_probe)>=back_probe.volume-.02)
     items={item["id"]:item for item in p["components"]}
@@ -573,6 +563,13 @@ def verify(p, parts, electronics, outer, features):
         if not item["id"].startswith("button_"):continue
         check("Final opening unobstructed: "+item["id"],sum(overlap(shape,button_hole(item,p)) for shape in parts.values())<.02)
     check("Structural shell wall >= 2.4 mm",p["case"]["wall"]>=2.4)
+    c=p["case"]
+    u=(c["wall"]-c["bed_chamfer_mm"])/c["skin_blend_depth_mm"]
+    mouth=fairing_profile(outer,c["skin_inset_mm"]*(1-u)**2,210,c["height_mm"])
+    inner_profile=b.offset(outer,amount=-c["wall"]).faces()[0]
+    mouth_wall=mouth.outer_wire().distance_to(inner_profile.outer_wire())
+    check("Shoulder profile at cavity mouth >= 2.4 mm",mouth_wall>=2.4,round(mouth_wall,4))
+    check("Fairing preserves flat bottom sole",all(abs(fairing_profile(outer,c["skin_inset_mm"]*(1-v)**2,210,c["height_mm"]).bounding_box().min.Y)<.001 for v in (0,.5,1)))
     for item in p["components"]:
         if not item["id"].startswith("button_"):continue
         axial=item["size"][0 if "side" in item["id"] else 2]
@@ -601,14 +598,16 @@ def coupons(p):
         stem=box(0,0,0,24,8,3)+box(3,3,3,8,1.5,18)
         wedge=b.Plane.YZ*b.Polygon((2,18.8),(4.5,18.8),(4.5,21),(3,21),align=None)
         stem += b.Pos(3,0,0)*b.extrude(wedge,amount=8)
-        receiver=box(34,0,0,24,10,3)+box(37,0,3,8+2*clearance,3,21)
-        receiver -= box(36, -1, 18.8-clearance, 10+2*clearance, 6, 2.2+2*clearance)
+        receiver=box(34,0,0,24,10,3)+box(37,0,3,18,3,21)
+        # Keep two side pillars around the bridge: a full-width cut detached
+        # the top of the older receiver from its base.
+        receiver -= box(42-clearance, -1, 18.8-clearance, 8+2*clearance, 6, 2.2+2*clearance)
         out[f"snap-coupon-{clearance:.1f}"]=b.Compound(children=[stem,receiver])
     return out
 
 
 def build(check_only=False):
-    source_names=("parameters.json","README.md","build.py","run-cad.sh","print-settings.json")
+    source_names=("parameters.json","README.md","build.py","run-cad.sh","print-settings.json","cloud-ender.scad")
     source_snapshot={name:(ROOT/name).read_bytes() for name in source_names}
     p=json.loads(source_snapshot["parameters.json"])
     assert p["uncertain_dimension_allowance_mm"]==5, "This prototype specifies 5 mm total allowance"
@@ -629,7 +628,7 @@ def build(check_only=False):
     try:
         meshes={}
         for name,shape in {**parts,**coupons(p)}.items():
-            # Print bed Z=0, both shell outside faces down. STEP/GLB retain
+            # Print bed Z=0, both shell outside faces down. BREP/GLB retain
             # the assembled frame, so all exports describe identical geometry.
             printable=shape
             if name=="rear":
@@ -647,9 +646,15 @@ def build(check_only=False):
             meshes[name]=mesh
             report["checks"].append({"check":name+": saved STL manifold and outward winding", "pass":mesh["watertight"] and mesh["consistent_winding"] and mesh["volume_mm3"]>0,"detail":mesh})
         assembly=b.Compound(children=list(parts.values())+list(electronics.values())+list(extras.values()),label="cloud_radio")
-        b.export_step(assembly,staging/"cloud-radio.step")
-        step_path=staging/"cloud-radio.step"
-        step_path.write_text("\n".join(line.rstrip() for line in step_path.read_text().splitlines())+"\n")
+        # The STEP writer drops curved extrusion faces in this model. Publish
+        # the native solid representation and require a lossless readback.
+        b.export_brep(assembly,staging/"cloud-radio.brep")
+        restored=b.import_brep(staging/"cloud-radio.brep")
+        restored_solids=list(restored.solids())
+        report["checks"].append({"check":"Saved BREP preserves every assembly solid", "pass":restored.is_valid and len(restored_solids)==len(assembly.solids()), "detail":{"source_solids":len(assembly.solids()),"saved_solids":len(restored_solids)}})
+        for name,shape in parts.items():
+            matches=[s for s in restored_solids if abs(s.volume-shape.volume)<1e-6 and all(abs(a-c)<1e-6 for a,c in zip(s.bounding_box().min,shape.bounding_box().min)) and all(abs(a-c)<1e-6 for a,c in zip(s.bounding_box().max,shape.bounding_box().max))]
+            report["checks"].append({"check":name+": saved BREP preserves shell volume and bounds", "pass":len(matches)==1, "detail":{"source_volume_mm3":shape.volume,"matching_saved_solids":len(matches)}})
         b.export_gltf(assembly,staging/"cloud-radio.glb",binary=True,linear_deflection=.08,angular_deflection=.15)
         report["passed"]=all(c["pass"] for c in report["checks"])
         report["meshes"]=meshes
@@ -661,17 +666,18 @@ def build(check_only=False):
             print("Verification failed; last good published files retained.",flush=True)
             return False
         manifest={"revision":p["revision"],"outer_mm":[round(v,2) for v in parts["front"].bounding_box().size][:2]+[p["case"]["depth"]],
-                  "core_mm":[210,190+p["case"]["height_extension"],p["case"]["depth"]],"side_relief":p["side_relief"],"arcade_buttons":[c for c in p["components"] if c["id"].startswith("button_")],
+                  "core_mm":[210,p["case"]["height_mm"],p["case"]["depth"]],"side_relief":p["side_relief"],"arcade_buttons":[c for c in p["components"] if c["id"].startswith("button_")],
                   "allowance_mm":5,"material":p["material"],"components":p["components"],"keepouts":p["keepouts"],"closure":p["closure"],"shelf":p["shelf"],"print_bed_mm":p["case"]["bed"],
-                  "fasteners":p["fasteners"],"checks_count":len(report["checks"]),"passed":True,"files":["front.stl","rear.stl","cloud-radio.step","cloud-radio.zip"],
+                  "fasteners":p["fasteners"],"checks_count":len(report["checks"]),"passed":True,"files":["front.stl","rear.stl","cloud-radio.brep","cloud-radio.zip"],
                   "print_parts":list(parts),"frame_features":features,
                   "frame_parts":[{"id":"F-00","name":"front","title":"Front shell"},{"id":"R-00","name":"rear","title":"Rear shell"}],"limits":report["limitations"]}
         (staging/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
         manifest["buttons"]=p["buttons"]
-        manifest["files"] += ["front.3mf","rear.3mf","button-fit-coupon.stl","print-settings.json"]
+        manifest["files"] += ["front.3mf","rear.3mf","button-fit-coupon.stl","print-settings.json","cloud-ender.scad"]
         (staging/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
         for name,contents in source_snapshot.items():
-            (staging/name).write_bytes(contents)
+            # The inspection wrapper lives beside the meshes in the ZIP.
+            (staging/name).write_bytes(contents.replace(b'generated/cloud/',b'') if name.endswith('.scad') else contents)
         if (OUTPUT / "plywood-assembly-guide.pdf").exists():
             shutil.copyfile(OUTPUT / "plywood-assembly-guide.pdf", staging / "plywood-assembly-guide.pdf")
         elif (ROOT.parents[1] / "docs/plywood-assembly-guide.pdf").exists():

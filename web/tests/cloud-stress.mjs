@@ -99,7 +99,7 @@ try {
   await page.mouse.move(5,5);
   assert(await page.locator('.model-tooltip').isHidden());
   await page.locator('#cloud-labels').uncheck();
-  for (const selector of ['front.stl', 'rear.stl', 'cloud-radio.step', 'cloud-radio.zip']) {
+  for (const selector of ['front.stl', 'rear.stl', 'cloud-radio.brep', 'cloud-radio.zip']) {
     const [download] = await Promise.all([
       page.waitForEvent('download'),
       page.locator(`.cloud-downloads .download-buttons a[href$="${selector}"]`).click(),

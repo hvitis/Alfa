@@ -60,7 +60,7 @@ try {
         await page.waitForSelector('html[lang="pl"][data-ready="true"]');
       }
       assert.equal(await page.locator('html').getAttribute('lang'), 'pl');
-      assert.deepEqual(await page.getByRole('tab').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['Główna', 'Obudowa', 'Elektronika', 'Oprogramowanie', 'Inne']);
+      assert.deepEqual(await page.locator('.site-nav [role="tab"]').allTextContents().then(items => items.map(text => text.trim().replace(/^\d+\s*/, ''))), ['Główna', 'Obudowa', 'Elektronika', 'Oprogramowanie', 'Inne']);
       await page.getByRole('tab', { name: 'Główna' }).click();
       assert.equal(await page.locator('meta[property="og:image"]').getAttribute('content'),'https://hvitis.github.io/Alfa/og-cloud.png');
       assert.equal(await page.locator('meta[name="twitter:card"]').getAttribute('content'),'summary_large_image');
@@ -80,6 +80,11 @@ try {
       assert.equal(await page.locator('.shade-card .code-preview-window').count(), 1);
       assert.equal(await page.locator('.shade-card .shade-layer').count(), 0);
 
+      // Navigate via card image and verify it navigates to page just as button does
+      await page.locator('.shade-card[data-card="elektronika"] .card-media-img').click();
+      assert.equal(await page.locator('#panel-elektronika').isVisible(), true);
+      await page.getByRole('tab', { name: 'Główna' }).click();
+
       // Navigate to Obudowa via the card button
       await page.locator('.shade-card[data-card="obudowa"] .card-nav-btn').click();
       assert.equal(await page.locator('#panel-obudowa').isVisible(), true);
@@ -88,13 +93,24 @@ try {
       assert((await page.locator('#cloud-facts').textContent()).includes('PETG'));
       assert((await page.locator('#cloud-facts').textContent()).includes('86 mm'));
       assert.equal(await page.locator('.cloud-downloads a[href$=".3mf"]').count(),2);
+      const enderTab=page.locator('#print-tab-ender'),bambuTab=page.locator('#print-tab-bambu');
+      assert(await page.locator('#print-roadmap').evaluate(element=>parseFloat(getComputedStyle(element).marginTop)>=24),'Roadmap has space above it');
+      assert.equal(await enderTab.getAttribute('aria-selected'),'true','Ender is the default printing roadmap');
+      assert.equal(await page.locator('#print-panel-ender').isVisible(),true);
+      await bambuTab.click();
+      assert.equal(await page.locator('#print-panel-bambu').isVisible(),true);
+      assert.equal(await page.locator('#print-panel-ender').isVisible(),false);
+      assert((await page.locator('#print-panel-bambu').textContent()).includes('Bambu Studio'));
+      await bambuTab.press('ArrowLeft');
+      assert.equal(await enderTab.getAttribute('aria-selected'),'true');
+      assert.equal(await page.locator('#print-panel-ender li').count(),4);
       for (const mode of ['exploded', 'inside', 'battery_open', 'assembled']) {
         await page.locator(`[data-for="cloud-mode"] [data-value="${mode}"]`).click();
         await scene('cloud', mode);
       }
       await page.locator('#cloud-labels').check(); await page.locator('#cloud-labels').uncheck();
       await page.locator('#cloud-clearances').check(); await page.locator('#cloud-clearances').uncheck();
-      for (const asset of ['front.stl', 'rear.stl', 'front.3mf', 'rear.3mf', 'button-fit-coupon.stl', 'print-settings.json', 'cloud-radio.step', 'cloud-radio.zip', 'README.md', 'verification.json']) {
+      for (const asset of ['front.stl', 'rear.stl', 'front.3mf', 'rear.3mf', 'button-fit-coupon.stl', 'print-settings.json', 'cloud-radio.brep', 'cloud-radio.zip', 'README.md', 'verification.json']) {
         const response = await page.request.get(`${origin}${prefix}cloud/${asset}`);
         assert(response.ok(), asset); assert((await response.body()).length > 100, asset);
         if(asset.endsWith('.3mf'))assert.equal((await response.body()).readUInt32LE(0),0x04034b50,'3MF download must be a ZIP container');

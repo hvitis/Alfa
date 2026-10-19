@@ -6,8 +6,8 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-horizontal-stack-86mm",
-      "checks": 568,
+      "revision": "prototype-v2-ender-smooth-215mm",
+      "checks": 577,
       "scene": "cloud",
       "view": "assembled",
       "visibleParts": [
@@ -34,8 +34,8 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-horizontal-stack-86mm",
-      "checks": 568,
+      "revision": "prototype-v2-ender-smooth-215mm",
+      "checks": 577,
       "scene": "cloud",
       "view": "exploded",
       "visibleParts": [
@@ -62,8 +62,8 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-horizontal-stack-86mm",
-      "checks": 568,
+      "revision": "prototype-v2-ender-smooth-215mm",
+      "checks": 577,
       "scene": "cloud",
       "view": "rear",
       "visibleParts": [
@@ -90,8 +90,8 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-horizontal-stack-86mm",
-      "checks": 568,
+      "revision": "prototype-v2-ender-smooth-215mm",
+      "checks": 577,
       "scene": "cloud",
       "view": "side",
       "visibleParts": [
@@ -118,8 +118,8 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-horizontal-stack-86mm",
-      "checks": 568,
+      "revision": "prototype-v2-ender-smooth-215mm",
+      "checks": 577,
       "scene": "complete-setup",
       "view": "connections",
       "visibleParts": [],
@@ -136,8 +136,8 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-horizontal-stack-86mm",
-      "checks": 568,
+      "revision": "prototype-v2-ender-smooth-215mm",
+      "checks": 577,
       "scene": "cloud",
       "view": "inside_back",
       "visibleParts": [
@@ -163,8 +163,8 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-horizontal-stack-86mm",
-      "checks": 568,
+      "revision": "prototype-v2-ender-smooth-215mm",
+      "checks": 577,
       "scene": "cloud",
       "view": "roentgen",
       "visibleParts": [

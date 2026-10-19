@@ -241,3 +241,22 @@
 }
 
 
+
+/* A short horizontal route from printer profile to a checked print. */
+.print-roadmap{margin:24px 0 28px;padding:24px;border:1px solid #d9d1e7;border-radius:20px;background:#fbf8ff;min-width:0}
+.print-roadmap-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.print-roadmap-heading h4{margin:0;font-size:1.12rem}
+.print-printer-tabs{display:flex;gap:6px;padding:4px;border-radius:14px;background:#eae4f3}
+.print-printer-tab{border:0;border-radius:10px;background:transparent;color:inherit;padding:9px 14px;cursor:pointer;font:inherit;font-weight:700;display:flex;align-items:center;gap:7px}
+.print-printer-tab[aria-selected=true]{background:#fff;box-shadow:0 2px 7px #39305b15}
+.print-printer-tab small{font-size:.66rem;font-weight:600;background:#e4f2e9;color:#35634a;padding:3px 6px;border-radius:6px}
+.print-printer-tab:focus-visible{outline:3px solid #9174c6;outline-offset:2px}
+.print-roadmap-panel[hidden]{display:none}
+.print-roadmap-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;list-style:none;margin:0 0 14px;padding:0}
+.print-roadmap-step{position:relative;min-width:0}
+.print-roadmap-step:not(:last-child)::after{content:'';position:absolute;top:17px;left:47px;right:-10px;border-top:2px dashed #d1c5e4}
+.print-step-number{display:grid;place-items:center;width:36px;height:36px;margin-bottom:12px;background:#e6dcf3;border:1px solid #d1c5e4;border-radius:50%;font-weight:800;color:#66518c}
+.print-roadmap-step strong{display:block;font-size:.94rem;line-height:1.4}
+.print-roadmap-step p{font-size:.83rem;line-height:1.6;margin:7px 0 0;color:#625a70}
+.print-roadmap-note{margin:18px 0 0;font-size:.8rem;line-height:1.6;color:#6d6479}
+@media(max-width:800px){.print-roadmap{padding:18px;max-width:100%;overflow:hidden}.print-roadmap-steps{grid-template-columns:repeat(4,180px);overflow-x:auto;padding-bottom:14px;scroll-snap-type:x proximity}.print-roadmap-step{scroll-snap-align:start}.print-printer-tabs{max-width:100%}.print-printer-tab{padding:8px 10px;font-size:.83rem}.print-roadmap-heading{gap:12px}}

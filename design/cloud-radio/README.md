@@ -4,9 +4,9 @@ The enclosure has **two printed parts**, with no screws joining them.
 Two bottom locating tongues engage matching receivers. Pivot the front closed, then engage five releasable snaps around the perimeter.
 The rear shell contains the battery cradle and the Pi shelf. The rear panel is continuous: there is no separate battery door.
 
-Nominal core: **210 × 245 × 86 mm**. The side cloud caps add up to 2.5 mm per side.
-Depth is 24 mm less than the previous 110 mm enclosure. The extra height creates a bottom electronics compartment below the arcade controls.
-Walls are 3 mm PETG. Both shells print on their outside faces.
+Nominal core: **210 × 215 × 86 mm**. The sides are continuous and smooth, with no decorative bumps. Front and rear shoulders blend over 5 mm from a 1.8 mm inset; the bottom remains a flat sole.
+Depth is 24 mm less than the previous 110 mm enclosure. The compact crown removes 30 mm of unused height from the 245 mm version while retaining the bottom electronics compartment. Hardware dimensions, coordinates and orientations are unchanged.
+Walls are 3 mm PETG. Both shells print on their outside faces. A small 0.4 mm, 45-degree bed-edge chamfer controls first-layer growth. The larger shoulders ease into the sides and crown while preserving the flat bottom plane.
 
 ## Bottom stack and clearance
 
@@ -20,7 +20,7 @@ Native X is width, Y is height and Z is front-to-back depth. Viewed from the fro
 | Raspberry Pi 3 | Flat in XZ: 85 × 56 mm footprint; PCB Y=30–31.6 mm. Component side points upward. |
 | Pi support | Four short posts on the shelf. Internal M2.5 PCB screws are separate from the screwless shell joint. |
 | GPIO harness | Reserved above the horizontal PCB, including the existing 5 mm uncertain-dimension allowance. |
-| Controls | Raised 55 mm from the previous layout to clear the bottom stack. |
+| Controls | Same full-size positions as the horizontal-stack design; no scaling of holes or hardware. |
 
 The six arcade buttons retain the user-confirmed 33 mm bezels, 28 mm mounting holes and 66 mm overall height.
 The case conservatively reserves the full 66 mm behind each mounting face plus 12 mm at the wire exit.
@@ -60,8 +60,9 @@ The USB-C plug and cable still need a physical fit check.
 
 ## Print preparation
 
-The taller parts require approximately **220 × 250 mm of usable print area**, including the suggested brim.
-The 3MF files are centered on an assumed **256 × 256 mm bed**. A 220 × 220 mm bed is too short in the supplied orientation.
+Both shells lie flat and target at most **216 × 216 mm**, or **220 × 220 mm including a 2 mm brim**.
+The user-confirmed Ender plate is **235 × 235 mm**. Because many Ender profiles expose only 220 mm of XY travel, the 3MF files use a conservative **220 × 220 mm usable bed**, with one shell centered per plate. The 235 mm physical plate alone does not establish firmware travel. Keep the purge line and bed clips clear of the model and brim.
+No top/bottom subdivisions or additional shell screws are needed. The older experimental `build_ender3.py` split design is not part of this release.
 Check your printer before printing; preserve 100% scale for the hardware fit.
 
 | Setting | Starting point |
@@ -74,17 +75,20 @@ Check your printer before printing; preserve 100% scale for the hardware fit.
 | Brim | 2 mm; include it in plate placement |
 | Orientation | Front and rear outside faces down; the exported models already have Z minimum at zero |
 
+Verified print bounds: front **212 × 215 × 58 mm**, rear **210 × 215 × 80 mm**. With a 2 mm brim, the footprints are 216 × 219 mm and 214 × 219 mm.
+
 Load one shell per plate. The rear shelf is integral and prints as a rib growing from the rear cover in this orientation.
-Inspect side bores, cloud caps, horizontal PCB mounting posts and snap overhangs for support needs.
+Use local supports at the horizontal 28.4 mm side-button bores, horizontal PCB mounting posts and snap undersides as required by the layer preview. The round button interface prevents replacing these bores with teardrop holes. Avoid filling the whole enclosure with supports.
 Keep support material out of release recesses, snap beams and PCB pilot holes.
-Use calibrated PETG temperatures for the actual printer and filament.
+Starting profile: 0.4 mm nozzle, 235 °C PETG / 75 °C bed, 240 °C first layer, 15 mm/s first layer and 25 mm/s outer walls. Use calibrated temperatures within the actual hotend and filament limits. `print-settings.json` gives the complete starting profile. A 2 mm brim fits the conservative travel area; do not add a skirt beyond it.
 
 Print the button coupon and shell snap coupons first. The button coupon has 28.0, 28.4 and 28.8 mm holes from left to right.
 The snap coupons compare 0.2, 0.3 and 0.4 mm clearance; the shell default is 0.3 mm.
 They screen fit, not complete joint strength or long-term fatigue.
 
 The STL and 3MF files have identical checked meshes and explicit print orientation. The 3MF containers store millimeters.
-STEP and GLB retain the assembled frame, including the horizontal electronics orientation.
+BREP and GLB retain the assembled frame, including the horizontal electronics orientation.
+The native BREP assembly is reopened to check solid count, shell volumes and bounds. STEP is omitted because the exporter drops curved extrusion faces from this model. The parametric Python source is included.
 `print-settings.json` lists starting settings and pending checks. No printer-specific G-code is supplied.
 Inspect every slicer layer, especially the shelf, snap roots, bridges and first layer, before printing.
 
@@ -106,10 +110,12 @@ Test display alignment while powered. Do not let screws or spacers touch circuit
 
 ## Verification and limits
 
+`cloud-ender.scad` is an OpenSCAD inspection/assembly wrapper for the exported CAD meshes, with bed-fit assertions. Edit `build.py` and `parameters.json` to change the parametric geometry; do not scale imported shells to fit hardware.
+
 `verification.json` records connected solids, assembled shell clearance, button bodies, provisional nuts, connected harness envelopes, battery extraction, closure features, print bounds and saved STL topology/winding/volume.
 Each 3MF is generated from its checked STL and reopened to verify scale, triangle indices and bed placement.
 Nominal hardware fits are digital checks. Physical fit, release force, snap fatigue, vibration, drops and operating temperatures remain untested.
-The beam calculation is a simple strain screen, not FEA or a prediction of printed PETG fatigue.
+The beam calculation is a simple strain screen, not FEA or a prediction of printed PETG fatigue. Flat shell printing leaves the snap beams along build Z: this is a layer-bond trade-off, and a coupon plus repeated-opening test is required. Keep snap roots solid. The 3 mm existing shell wall is retained for the calibrated joint; use variable-width infill between the perimeter paths.
 
 Before service, test repeated opening and closing with the intended print settings, check that every snap retains the front, and verify that the strap holds an inert battery-sized mass.
 Measure the actual nut, connector and terminal dimensions. Check the powered Pi and battery temperatures with the LCD and audio operating.
@@ -135,5 +141,5 @@ npm run test:smoke
 .venv/bin/python -m unittest tests.test_cloud_print
 ```
 
-The ZIP contains the two shell meshes, fit coupons, STEP, GLB, source, parameters, print settings and verification report.
+The ZIP contains the two shell meshes, fit coupons, BREP, GLB, source, parameters, print settings and verification report.
 The included runner refers to `../wooden-case/run-cad.sh` inside this repository. Printing the supplied models does not require the CAD environment.

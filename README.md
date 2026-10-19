@@ -66,7 +66,7 @@ Tabela używa tych samych nazw co wersja angielska, aby automatycznie wykrywać 
 - <!-- feature:hardware-simulation --> **Symulacja sprzętu:** Komputer zapisuje podgląd ekranu bez urządzeń GPIO, SPI i I²C.
 - <!-- feature:static-showcase --> **Prezentacja statyczna:** Zakładki Plywood, 3DPrint, Hardware i Software zawierają modele 3D, połączenia kontrolerów, ilustrowany PDF ADR i diagram Mermaid.
 - <!-- feature:verified-distribution --> **Sprawdzany pakiet:** Pakiet zawiera neutralny obraz demonstracyjny, sumy kontrolne, raporty walidacji i zestawienie elektroniki.
-- <!-- feature:enclosure-research --> **Projekty obudów:** Prezentacja obejmuje drukowaną chmurkę i oba projekty ze sklejki. Chmurka ma dwie skorupy łączone bez śrub, poziomą baterię na dole i Pi na półce nad nią. Ma 86 mm głębokości i 245 mm wysokości. Pliki zawierają STL, 3MF, STEP, próbki zatrzasków i instrukcję; zalecany stół to 256 × 256 mm.
+- <!-- feature:enclosure-research --> **Projekty obudów:** Prezentacja obejmuje drukowaną chmurkę i oba projekty ze sklejki. Chmurka ma dwie skorupy łączone bez śrub, poziomą baterię na dole i Pi na półce nad nią. Ma 86 mm głębokości i 215 mm wysokości. Pliki zawierają STL, 3MF, BREP, próbki zatrzasków i instrukcję; użyteczne pole Endera to 220 × 220 mm.
 
 ## Szybki start
 
@@ -99,7 +99,7 @@ make check
 make serve
 ```
 
-Otwórz `http://127.0.0.1:8000`. Testy przeglądarki wymagają Node.js 22.
+Otwórz lokalny adres wypisany przez `make serve`. System wybiera wolny port; opcjonalnie ustaw `make serve SERVE_PORT=53173`. Testy przeglądarki wymagają Node.js 22.
 Plik [build-guide.md](docs/build-guide.md) opisuje wymagania Linuksa i środowisko.
 
 ## Automatyczna walidacja
@@ -138,5 +138,5 @@ Obudowa jest prototypem do sprawdzenia dopasowania. Próby fizyczne języków us
 Grafiki postaci i nagrania wymagają osobnego przeglądu praw przed publikacją. Zobacz [listę czynności przed publikacją](docs/publishing.md).
 Obrazy w README i karty społecznościowe są oryginalnymi renderami CAD.
 
-Aby odtworzyć obrazy, uruchom `make serve`, a potem `npm run render:assets`. Polecenie `make site` eksportuje ilustrowany PDF ADR.
+Aby odtworzyć obrazy, uruchom `make dev`, a potem `npm run render:assets`. Polecenie `make site` eksportuje ilustrowany PDF ADR.
 Karta GitHub: [.github/social-preview.png](.github/social-preview.png).

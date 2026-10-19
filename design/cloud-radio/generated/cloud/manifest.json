@@ -1,35 +1,19 @@
 {
-  "revision": "prototype-v2-horizontal-stack-86mm",
+  "revision": "prototype-v2-ender-smooth-215mm",
   "outer_mm": [
-    214.92,
-    245.0,
+    212.0,
+    215.0,
     86
   ],
   "core_mm": [
     210,
-    245,
+    215,
     86
   ],
   "side_relief": {
-    "protrusion": 2.5,
-    "anchor": 0.6,
-    "rows": [
-      45,
-      85,
-      150,
-      178
-    ],
-    "front_depths": [
-      17,
-      29
-    ],
-    "rear_depths": [
-      60,
-      73
-    ],
-    "radius": 14,
-    "protected_from_y": 195,
-    "style": "Shallow cloud caps outside the core; integral to the two shells"
+    "enabled": false,
+    "protrusion": 0,
+    "style": "Continuous smooth side walls; no decorative bumps"
   },
   "arcade_buttons": [
     {
@@ -717,7 +701,8 @@
       70
     ],
     "pivot_angle_deg": 20,
-    "release_travel_mm": 1.1
+    "release_travel_mm": 1.1,
+    "pivot_y_mm": 0
   },
   "shelf": {
     "battery_ceiling_y": 24,
@@ -728,8 +713,8 @@
     "battery_removal": "toward front after front shell and battery strap are removed"
   },
   "print_bed_mm": [
-    256,
-    256
+    220,
+    220
   ],
   "fasteners": {
     "enclosure": "None: bottom locating tongues and five integral release snaps",
@@ -738,17 +723,18 @@
     "arcade_buttons": "6 x original button retaining nuts; 28.4 mm printed holes for nominal 28 mm barrels; verify nut clearance",
     "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README"
   },
-  "checks_count": 568,
+  "checks_count": 577,
   "passed": true,
   "files": [
     "front.stl",
     "rear.stl",
-    "cloud-radio.step",
+    "cloud-radio.brep",
     "cloud-radio.zip",
     "front.3mf",
     "rear.3mf",
     "button-fit-coupon.stl",
-    "print-settings.json"
+    "print-settings.json",
+    "cloud-ender.scad"
   ],
   "print_parts": [
     "front",
@@ -760,7 +746,7 @@
       "title": "Snap hook",
       "part": "front",
       "origin": [
-        100.2,
+        100.05,
         70.0,
         36.0
       ],
@@ -775,7 +761,7 @@
       "title": "Snap hook",
       "part": "front",
       "origin": [
-        -104.2,
+        -104.05,
         70.0,
         36.0
       ],
@@ -821,7 +807,7 @@
       "part": "front",
       "origin": [
         -28.0,
-        240.2,
+        210.2,
         36.0
       ],
       "size": [
@@ -1293,36 +1279,6 @@
         6.0,
         8.0,
         7.0
-      ]
-    },
-    {
-      "id": "F-C01",
-      "title": "Rounded cumulus side relief",
-      "part": "front",
-      "origin": [
-        -107.5,
-        36.6948,
-        8.7084
-      ],
-      "size": [
-        215.0,
-        149.9037,
-        28.2916
-      ]
-    },
-    {
-      "id": "R-C01",
-      "title": "Rounded cumulus side relief",
-      "part": "rear",
-      "origin": [
-        -107.5,
-        36.6948,
-        57.0
-      ],
-      "size": [
-        215.0,
-        149.9037,
-        24.0
       ]
     },
     {

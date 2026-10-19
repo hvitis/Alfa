@@ -224,7 +224,7 @@ export const MATERIAL_SPECS = {
       { dt: 'Front shell (F-00)', dd: '1 part', small: 'Five snaps and two locating tongues' },
       { dt: 'Rear shell (R-00)', dd: '1 part', small: 'Integral cradle and Pi shelf' },
       { dt: 'Case joint', dd: 'No screws', small: 'Insert lower tabs, pivot and snap closed' },
-      { dt: 'Build plate', dd: '256 × 256 mm', small: 'Check brim and 245 mm model height' },
+      { dt: 'Build plate', dd: '220 × 220 mm', small: 'Ender 235 mm plate; 2 mm brim included' },
       { dt: 'Filament and supports', dd: 'Check slicer', small: 'PETG, 0.2 mm layers; slice before printing', isTotal: true }
     ]
   },

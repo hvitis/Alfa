@@ -4,13 +4,14 @@ PYTHON := $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 INSTALL_ARGS ?=
 FIRMWARE_ARGS ?=
 AUDIO_ARGS ?=
+SERVE_PORT ?= 0
 
 .PHONY: help install check site serve smoke build clean update reset restart start stop status logs run test preview public mapping firmware-splash firmware-splash-install firmware-splash-remove firmware-splash-status letter-audio pcb pcb-check prepare-commit
 
 help:
 	@printf '%s\n' 'make pcb             Regenerate PCB manufacturing files and web previews (Docker)' 'make pcb-check       Check that PCB exports match the source files' 'make prepare-commit  Refresh PCB files and rebuild the website before staging'
 	@printf '%s\n' 'make firmware-splash          Prepare the pre-Linux LCD image and program' 'make firmware-splash-install  Back up boot files and enable the firmware splash (Pi 3)' 'make firmware-splash-status   Inspect the prepared bundle and boot configuration' 'make firmware-splash-remove   Remove the firmware splash and keep the Linux splash'
-	@printf '%s\n' 'make install  Install development dependencies in .venv and node_modules' 'make check    Validate repository, run unit tests, and check JavaScript' 'make site     Export the static showcase' 'make serve    Export and serve the showcase at http://127.0.0.1:8000' 'make smoke    Run Chromium checks at root and a repository subpath' 'make build    Run all checks and package the runtime build kit' 'make clean    Remove only generated publication files'
+	@printf '%s\n' 'make install  Install development dependencies in .venv and node_modules' 'make check    Validate repository, run unit tests, and check JavaScript' 'make site     Export the static showcase' 'make serve    Export and serve locally on a free port (URL printed at startup)' 'make smoke    Run Chromium checks at root and a repository subpath' 'make build    Run all checks and package the runtime build kit' 'make clean    Remove only generated publication files'
 	@printf '%s\n' 'make update   Pull newest code, update dependencies, reinstall and restart on the Pi' 'make reset    Same complete update as make update' 'make restart  Reinstall and restart the current checkout without pulling' 'make start    Start the installed service' 'make stop     Stop the service and release its GPIO pins' 'make status   Show service status' 'make logs     Follow service logs (Ctrl+C exits)' 'make run      Stop the service, run the alphabet manually, then restore the service' 'make mapping  Assign buttons after fitting them horizontally or vertically in the case' 'make test     Run hardware-free tests' 'make preview  Regenerate the drawing GIF and contact sheet' 'make letter-audio  Regenerate synthesized letter sounds for updated manifest text' 'Add INSTALL_ARGS=--no-audio for a silent service update'
 
 update reset:
@@ -83,7 +84,7 @@ prepare-commit:
 	$(MAKE) pcb-check
 
 serve: site
-	$(PYTHON) -m http.server 8000 --bind 127.0.0.1 --directory _site
+	$(PYTHON) -u -m http.server $(SERVE_PORT) --bind 127.0.0.1 --directory _site
 
 dev:
 	$(PYTHON) web/dev.py

@@ -4,8 +4,8 @@
   "units": "mm",
   "scale_percent": 100,
   "assumed_build_volume_mm": [
-    256,
-    256,
+    220,
+    220,
     100
   ],
   "nozzle_diameter_mm": 0.4,
@@ -16,13 +16,41 @@
   "infill_percent": 25,
   "infill_pattern": "gyroid",
   "brim_width_mm": 2,
-  "supports": "Inspect side-button bores, cloud caps, PCB mounting posts and snap overhangs. Do not fill snap beams, release recesses or internal PCB pilot holes.",
+  "supports": "Local support needed at horizontal side-button bores, short horizontal Pi posts and selected snap undersides. Inspect layer preview. Block snap flex gaps, release recesses, battery corridor and PCB pilot holes; avoid filling the full interior.",
   "orientation": "All STL and 3MF files have their outside face on the bed and Z minimum at zero. Load one enclosure part per plate.",
-  "temperatures": "Use the calibrated PETG profile for your actual printer and filament.",
+  "temperatures": {
+    "nozzle_celsius_start": 235,
+    "bed_celsius_start": 75,
+    "initial_layer_nozzle_celsius_start": 240,
+    "note": "Starting points only; stay within the actual Ender hotend and filament limits."
+  },
   "validation_status": {
     "mesh_and_scale": "Checked automatically during CAD export",
-    "slicer_toolpath_preview": "Pending: no printer or slicer profile selected",
+    "slicer_toolpath_preview": "Pending: exact Ender model and slicer unconfirmed; inspect support placement and every layer before generating G-code.",
     "physical_fit": "Pending: print button and snap coupons first",
-    "gcode": "Not supplied: generate for the actual printer after checking layer preview"
-  }
+    "gcode": "Not supplied: printer-specific G-code must be generated in the actual Ender machine profile."
+  },
+  "printer": "Creality Ender; user-specified 235 x 235 mm plate; conservative 220 x 220 mm usable XY",
+  "physical_bed_mm": [
+    235,
+    235
+  ],
+  "usable_xy_mm": [
+    220,
+    220
+  ],
+  "speeds_mm_s": {
+    "first_layer": 15,
+    "outer_wall": 25,
+    "inner_wall": 35,
+    "infill": 45,
+    "bridges": 20
+  },
+  "cooling": {
+    "first_layers_percent": 0,
+    "regular_percent": 35,
+    "bridge_percent": 100
+  },
+  "snap_regions": "Use solid infill around snap roots; Z-oriented beams remain a print-strength and fatigue test item.",
+  "adhesion": "2 mm outer brim; no skirt outside brim. Keep purge line and bed clips outside part/brim. Use a compatible release layer when PETG is printed on glass or smooth PEI."
 }

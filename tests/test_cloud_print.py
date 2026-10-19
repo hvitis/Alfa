@@ -28,6 +28,9 @@ class CloudPrintTests(unittest.TestCase):
         self.assertTrue(all(s['origin'][1] + s['size'][1] < n['origin'][1]
                             for s in sides for n in navigation))
         self.assertEqual(p['case']['depth'], 86)
+        self.assertEqual(p['case']['height_mm'], 215)
+        self.assertEqual(p['case']['bed'], [220, 220])
+        self.assertEqual(p['printer']['physical_bed_mm'], [235, 235])
         self.assertNotIn('handle', p)
         self.assertNotIn('battery_door', p)
         self.assertEqual(p['closure']['shell_screws'], 0)
@@ -62,13 +65,17 @@ class CloudPrintTests(unittest.TestCase):
                     self.assertAlmostEqual(span(stl), span(vertices), places=4)
                 self.assertAlmostEqual(min(v[2] for v in vertices), 0, places=5)
                 for axis in (0, 1):
-                    self.assertGreaterEqual(min(v[axis] for v in vertices), 0)
-                    self.assertLessEqual(max(v[axis] for v in vertices), 256)
+                    self.assertGreaterEqual(min(v[axis] for v in vertices), 2, 'Keep room for the brim')
+                    self.assertLessEqual(max(v[axis] for v in vertices), 218, 'Brim must fit the 220 mm travel')
 
     def test_delivered_report_has_no_failed_geometry_or_mesh_checks(self):
         report = json.loads((CLOUD / 'verification.json').read_text())
         self.assertTrue(report['passed'])
         self.assertFalse([v for v in report['checks'] if not v['pass']])
+        brep = [v for v in report['checks'] if 'BREP' in v['check']]
+        self.assertEqual(len(brep), 3, 'Native CAD must pass solid and shell readback checks')
+        self.assertTrue((CLOUD / 'cloud-radio.brep').is_file())
+        self.assertFalse((CLOUD / 'cloud-radio.step').exists(), 'Do not publish the incomplete STEP export')
         for name, mesh in report['meshes'].items():
             with self.subTest(part=name):
                 self.assertTrue(mesh['watertight'])

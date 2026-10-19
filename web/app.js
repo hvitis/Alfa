@@ -7,6 +7,7 @@ import './pcb/style.css';
 import {createCloudColorControls} from './cloud/colors.js';
 import {createStlViewer} from './cloud/stl-viewer.js';
 import {initPricing} from './cloud/pricing.js';
+import {initPrintRoadmap} from './cloud/print-roadmap.js';
 import { createPi3ArcadeData } from './hardware-visualisation/src/data/arcadePiSetup.js';
 const raspberryData = createPi3ArcadeData();
 import houseData from './hardware-visualisation/src/data/radio-house.json' with { type: 'json' };
@@ -21,6 +22,7 @@ import pcbStep from '../design/pi3-shield/generated/shield.step?url';
 import pcbGerbers from '../design/pi3-shield/generated/fabrication-draft.zip?url';
 
 const $ = selector => document.querySelector(selector);
+initPrintRoadmap();
 const tabs = [...document.querySelectorAll('[data-tab]')];
 const status = $('#app-status'), viewerStatus = $('#viewer-status');
 const adrHTML = () => getLocale() === 'en' ? adrEn : adrPl;
@@ -450,11 +452,21 @@ async function start() {
     });
   }
 
-  // Main page feature card buttons
-  for (const btn of document.querySelectorAll('.card-nav-btn')) {
-    btn.addEventListener('click', () => {
-      const target = btn.dataset.target;
+  // Main page feature card buttons, media, and images
+  for (const el of document.querySelectorAll('.card-nav-btn, .shade-card-media, .card-media-img')) {
+    el.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const target = el.dataset.target || el.closest('.shade-card')?.dataset.card;
       if (target) handle(activate(target));
+    });
+  }
+  for (const media of document.querySelectorAll('.shade-card-media')) {
+    media.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        const target = media.dataset.target || media.closest('.shade-card')?.dataset.card;
+        if (target) handle(activate(target));
+      }
     });
   }
 
