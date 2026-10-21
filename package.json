@@ -15,7 +15,7 @@
     "export:plywood-pdf": "node web/export-plywood-guide.mjs"
   },
   "devDependencies": {
-    "markdown-it": "14.1.0",
+    "markdown-it": "14.3.3",
     "mermaid": "11.12.2",
     "playwright": "1.64.0",
     "three": "0.186.1",
