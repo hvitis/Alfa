@@ -1,12 +1,12 @@
 {
-  "revision": "prototype-v2-ender-smooth-215mm",
+  "revision": "prototype-v3-even-split-thin-78mm",
   "units": "mm",
   "material": "PETG",
   "uncertain_dimension_allowance_mm": 5,
   "case": {
-    "depth": 86,
+    "depth": 78,
     "wall": 3,
-    "split": 51,
+    "split": 39,
     "seam_gap": 0.3,
     "fit_clearance": 0.3,
     "bed": [
@@ -101,43 +101,35 @@
           210
         ],
         [
-          43,
-          213.6
+          45,
+          213
         ],
         [
-          27,
-          206
-        ],
-        [
-          17,
-          207
-        ]
-      ],
-      [
-        [
-          17,
-          207
-        ],
-        [
-          3,
-          208.4
-        ],
-        [
-          -5,
+          32,
           215
         ],
         [
-          -23,
+          20,
           215
         ]
       ],
       [
         [
-          -23,
+          20,
           215
         ],
         [
-          -46,
+          -20,
+          215
+        ]
+      ],
+      [
+        [
+          -20,
+          215
+        ],
+        [
+          -44,
           215
         ],
         [
@@ -222,33 +214,33 @@
     "width": 8,
     "thickness": 1.5,
     "length": 18,
-    "root_z": 39,
+    "root_z": 27,
     "engagement": 0.7,
     "sites": [
       [
-        104.85,
-        75,
+        105,
+        65,
         90
       ],
       [
-        -104.85,
-        75,
-        -90
+        105,
+        85,
+        90
       ],
       [
         105,
-        130,
+        105,
         90
       ],
       [
         -105,
-        130,
+        80,
         -90
       ],
       [
-        -23,
-        215,
-        180
+        -105,
+        100,
+        -90
       ]
     ]
   },
@@ -263,8 +255,8 @@
       ],
       "origin": [
         -53,
-        7,
-        8
+        82,
+        3.2
       ],
       "uncertain": false,
       "source": "User-confirmed 69 x 106 x 14 bank, rotated horizontally; USB-C centred on right 69 x 14 end face",
@@ -282,8 +274,8 @@
       ],
       "origin": [
         -42.5,
-        30,
-        14
+        104,
+        16
       ],
       "uncertain": false,
       "source": "https://datasheets.raspberrypi.com/rpi3/raspberry-pi-3-b-mechanical-drawing.pdf",
@@ -300,7 +292,7 @@
       ],
       "origin": [
         -17.5,
-        104,
+        126,
         6
       ],
       "uncertain": false,
@@ -309,133 +301,117 @@
     },
     {
       "id": "button_top",
-      "title": "Arcade Push Button 33mm \u00b7 Top (Blue)",
+      "title": "Arcade Push Button 33mm · Top (Blue)",
       "size": [
         28,
-        28,
-        66
+        66,
+        28
       ],
       "origin": [
         -14,
-        169,
-        3
+        149,
+        25
       ],
+      "axis": "y",
       "diameter_mm": 28,
       "bezel_mm": 33,
       "uncertain": false,
       "color": "#2563eb",
       "function": "Listen / Play sound",
       "mechanically_verified": false,
-      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height; retaining nut and momentary SPST microswitch. Nut outside diameter and exact below-panel depth unknown."
+      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height"
     },
     {
       "id": "button_bottom",
-      "title": "Arcade Push Button 33mm \u00b7 Bottom (Red)",
+      "title": "Arcade Push Button 33mm · Bottom (Red)",
       "size": [
         28,
-        28,
-        66
+        66,
+        28
       ],
       "origin": [
         -14,
-        67,
-        3
+        0,
+        25
       ],
+      "axis": "y",
       "diameter_mm": 28,
       "bezel_mm": 33,
       "uncertain": false,
       "color": "#dc2626",
       "function": "Draw / Repeat sound",
       "mechanically_verified": false,
-      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height; retaining nut and momentary SPST microswitch. Nut outside diameter and exact below-panel depth unknown."
+      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height"
     },
     {
       "id": "button_left",
-      "title": "Arcade Push Button 33mm \u00b7 Left (White)",
+      "title": "Arcade Push Button 33mm · Left (White)",
       "size": [
+        66,
         28,
-        28,
-        66
+        28
       ],
       "origin": [
-        34,
-        119,
-        3
+        39,
+        124,
+        25
       ],
+      "axis": "x",
       "diameter_mm": 28,
       "bezel_mm": 33,
       "uncertain": false,
       "color": "#f1f5f9",
       "function": "Previous letter",
       "mechanically_verified": false,
-      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height; retaining nut and momentary SPST microswitch. Nut outside diameter and exact below-panel depth unknown."
+      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height"
     },
     {
       "id": "button_right",
-      "title": "Arcade Push Button 33mm \u00b7 Right (White)",
+      "title": "Arcade Push Button 33mm · Right (White)",
       "size": [
+        66,
         28,
-        28,
-        66
+        28
       ],
       "origin": [
-        -62,
-        119,
-        3
+        -105,
+        124,
+        25
       ],
+      "axis": "x",
       "diameter_mm": 28,
       "bezel_mm": 33,
       "uncertain": false,
       "color": "#f1f5f9",
       "function": "Next letter",
       "mechanically_verified": false,
-      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height; retaining nut and momentary SPST microswitch. Nut outside diameter and exact below-panel depth unknown."
+      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height"
     },
     {
-      "id": "button_side_left",
-      "title": "Arcade Push Button 33mm \u00b7 Side Left (Green)",
+      "id": "button_right_lower",
+      "title": "Arcade Push Button 33mm · Lower Right (Green)",
       "size": [
         66,
         28,
         28
       ],
       "origin": [
-        40,
-        88,
-        16
+        -105,
+        36,
+        25
       ],
+      "axis": "x",
       "diameter_mm": 28,
       "bezel_mm": 33,
       "uncertain": false,
       "color": "#16a34a",
-      "function": "Mode / Volume Down",
+      "function": "Power / Volume",
       "mechanically_verified": false,
-      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height; retaining nut and momentary SPST microswitch. Nut outside diameter and exact below-panel depth unknown."
-    },
-    {
-      "id": "button_side_right",
-      "title": "Arcade Push Button 33mm \u00b7 Side Right (Blue)",
-      "size": [
-        66,
-        28,
-        28
-      ],
-      "origin": [
-        -106,
-        88,
-        16
-      ],
-      "diameter_mm": 28,
-      "bezel_mm": 33,
-      "uncertain": false,
-      "color": "#1e40af",
-      "function": "Power / Volume Up",
-      "mechanically_verified": false,
-      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height; retaining nut and momentary SPST microswitch. Nut outside diameter and exact below-panel depth unknown."
+      "source": "User-confirmed: 33 mm bezel, 28 mm mounting hole, 66 mm overall height"
     },
     {
       "id": "amp",
-      "title": "MAX98357A \u00b7 provisional",
+      "title": "MAX98357A · provisional",
       "size": [
         20,
         19,
@@ -452,7 +428,7 @@
     },
     {
       "id": "switch",
-      "title": "QUARKZMAN switch \u00b7 provisional",
+      "title": "QUARKZMAN switch · provisional",
       "size": [
         18,
         40,
@@ -461,7 +437,7 @@
       "origin": [
         65,
         140,
-        68
+        56
       ],
       "uncertain": false,
       "source": "QUARKZMAN B0H1JMNHQT; manufacturer housing drawing unavailable",
@@ -491,41 +467,41 @@
       "title": "Pi connectors",
       "origin": [
         -42.5,
-        31.6,
-        12
+        105.6,
+        16
       ],
       "size": [
-        87,
-        16,
-        60
+        85,
+        14,
+        56
       ],
       "uncertain": false,
       "parent": "pi"
     },
     {
       "id": "gpio",
-      "title": "Connected GPIO sockets \u00b7 provisional",
+      "title": "Connected GPIO sockets · provisional",
       "origin": [
         -35.5,
-        31.6,
+        105.6,
         64
       ],
       "size": [
         53,
-        24,
+        20,
         8
       ],
       "uncertain": true,
       "parent": "pi",
-      "fixed_bottom_y": 31.6
+      "fixed_bottom_y": 105.6
     },
     {
       "id": "pi_power",
-      "title": "Angled micro-USB plug \u00b7 provisional",
+      "title": "Angled micro-USB plug · provisional",
       "origin": [
         -49,
-        35.6,
-        15
+        107.6,
+        17
       ],
       "size": [
         20,
@@ -537,10 +513,10 @@
     },
     {
       "id": "bank_plug",
-      "title": "Battery USB-C plug \u00b7 provisional",
+      "title": "Battery USB-C plug · provisional",
       "origin": [
         53,
-        10.75,
+        85.75,
         36.5
       ],
       "size": [
@@ -552,27 +528,11 @@
       "parent": "battery"
     },
     {
-      "id": "usb_join",
-      "title": "Connected USB-C coupling \u00b7 provisional",
-      "origin": [
-        60,
-        50,
-        55
-      ],
-      "size": [
-        16,
-        30,
-        12
-      ],
-      "uncertain": true,
-      "parent": "switch"
-    },
-    {
       "id": "lcd_cable",
-      "title": "LCD connector \u00b7 provisional",
+      "title": "LCD connector · provisional",
       "origin": [
         -12.5,
-        103,
+        126,
         16
       ],
       "size": [
@@ -587,33 +547,33 @@
       "id": "button_top_nut",
       "title": "Provisional nut clearance: button_top",
       "origin": [
-        -21.0,
-        162.0,
-        3
+        -21,
+        209,
+        18
       ],
       "size": [
         42,
-        42,
-        6
+        6,
+        42
       ],
       "parent": "button_top",
       "uncertain": false,
       "mechanically_verified": false,
       "shape": "cylinder",
-      "axis": "z"
+      "axis": "y"
     },
     {
       "id": "button_top_wires",
       "title": "Provisional wires clearance: button_top",
       "origin": [
-        -5.0,
-        178.0,
-        69
+        -5,
+        139,
+        34
       ],
       "size": [
         10,
         10,
-        12
+        10
       ],
       "parent": "button_top",
       "uncertain": false,
@@ -623,33 +583,33 @@
       "id": "button_bottom_nut",
       "title": "Provisional nut clearance: button_bottom",
       "origin": [
-        -21.0,
-        60.0,
-        3
+        -21,
+        0,
+        18
       ],
       "size": [
         42,
-        42,
-        6
+        6,
+        42
       ],
       "parent": "button_bottom",
       "uncertain": false,
       "mechanically_verified": false,
       "shape": "cylinder",
-      "axis": "z"
+      "axis": "y"
     },
     {
       "id": "button_bottom_wires",
       "title": "Provisional wires clearance: button_bottom",
       "origin": [
-        -5.0,
-        76.0,
-        69
+        -5,
+        66,
+        34
       ],
       "size": [
         10,
         10,
-        12
+        10
       ],
       "parent": "button_bottom",
       "uncertain": false,
@@ -659,33 +619,33 @@
       "id": "button_left_nut",
       "title": "Provisional nut clearance: button_left",
       "origin": [
-        27.0,
-        112.0,
-        3
+        99,
+        117,
+        18
       ],
       "size": [
+        6,
         42,
-        42,
-        6
+        42
       ],
       "parent": "button_left",
       "uncertain": false,
       "mechanically_verified": false,
       "shape": "cylinder",
-      "axis": "z"
+      "axis": "x"
     },
     {
       "id": "button_left_wires",
       "title": "Provisional wires clearance: button_left",
       "origin": [
-        43.0,
-        128.0,
-        69
+        29,
+        133,
+        34
       ],
       "size": [
         10,
         10,
-        12
+        10
       ],
       "parent": "button_left",
       "uncertain": false,
@@ -695,107 +655,71 @@
       "id": "button_right_nut",
       "title": "Provisional nut clearance: button_right",
       "origin": [
-        -69.0,
-        112.0,
-        3
+        -105,
+        117,
+        18
       ],
       "size": [
+        6,
         42,
-        42,
-        6
+        42
       ],
       "parent": "button_right",
       "uncertain": false,
       "mechanically_verified": false,
       "shape": "cylinder",
-      "axis": "z"
+      "axis": "x"
     },
     {
       "id": "button_right_wires",
       "title": "Provisional wires clearance: button_right",
       "origin": [
-        -53.0,
-        128.0,
-        69
+        -39,
+        133,
+        34
       ],
       "size": [
         10,
         10,
-        12
+        10
       ],
       "parent": "button_right",
       "uncertain": false,
       "mechanically_verified": false
     },
     {
-      "id": "button_side_left_nut",
-      "title": "Provisional nut clearance: button_side_left",
+      "id": "button_right_lower_nut",
+      "title": "Provisional nut clearance: button_right_lower",
       "origin": [
-        93,
-        81,
-        9
+        -105,
+        29,
+        18
       ],
       "size": [
         6,
         42,
         42
       ],
-      "parent": "button_side_left",
+      "parent": "button_right_lower",
       "uncertain": false,
       "mechanically_verified": false,
       "shape": "cylinder",
       "axis": "x"
     },
     {
-      "id": "button_side_left_wires",
-      "title": "Provisional wires clearance: button_side_left",
+      "id": "button_right_lower_wires",
+      "title": "Provisional wires clearance: button_right_lower",
       "origin": [
-        28,
-        97,
-        25
+        -39,
+        45,
+        34
       ],
       "size": [
-        12,
+        10,
         10,
         10
       ],
-      "parent": "button_side_left",
-      "uncertain": false,
-      "mechanically_verified": false
-    },
-    {
-      "id": "button_side_right_nut",
-      "title": "Provisional nut clearance: button_side_right",
-      "origin": [
-        -99,
-        81,
-        9
-      ],
-      "size": [
-        6,
-        42,
-        42
-      ],
-      "parent": "button_side_right",
-      "uncertain": false,
-      "mechanically_verified": false,
-      "shape": "cylinder",
-      "axis": "x"
-    },
-    {
-      "id": "button_side_right_wires",
-      "title": "Provisional wires clearance: button_side_right",
-      "origin": [
-        -40,
-        97,
-        25
-      ],
-      "size": [
-        12,
-        10,
-        10
-      ],
-      "parent": "button_side_right",
+      "parent": "button_right_lower",
       "uncertain": false,
       "mechanically_verified": false
     }
@@ -804,7 +728,7 @@
     "enclosure": "None: bottom locating tongues and five integral release snaps",
     "lcd": "4 x M2.5 x 6 thread-forming screws; verify actual PCB holes",
     "pi": "4 x M2.5 x 6 internal PCB screws on shelf posts; no screws join the shells",
-    "arcade_buttons": "6 x original button retaining nuts; 28.4 mm printed holes for nominal 28 mm barrels; verify nut clearance",
+    "arcade_buttons": "5 x original button retaining nuts; 28.4 mm printed holes for nominal 28 mm barrels; verify nut clearance",
     "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README"
   },
   "side_relief": {
@@ -837,10 +761,10 @@
     "pivot_y_mm": 0
   },
   "shelf": {
-    "battery_ceiling_y": 24,
+    "battery_ceiling_y": 99,
     "thickness": 3,
-    "pi_board_bottom_y": 30,
-    "front_z": 6,
+    "pi_board_bottom_y": 104,
+    "front_z": 18,
     "width": 124,
     "battery_removal": "toward front after front shell and battery strap are removed"
   },

@@ -4,8 +4,8 @@ The enclosure has **two printed parts**, with no screws joining them.
 Two bottom locating tongues engage matching receivers. Pivot the front closed, then engage five releasable snaps around the perimeter.
 The rear shell contains the battery cradle and the Pi shelf. The rear panel is continuous: there is no separate battery door.
 
-Nominal core: **210 × 215 × 86 mm**. The sides are continuous and smooth, with no decorative bumps. Front and rear shoulders blend over 5 mm from a 1.8 mm inset; the bottom remains a flat sole.
-Depth is 24 mm less than the previous 110 mm enclosure. The compact crown removes 30 mm of unused height from the 245 mm version while retaining the bottom electronics compartment. Hardware dimensions, coordinates and orientations are unchanged.
+Nominal core: **210 × 215 × 78 mm**, evenly split into **39 mm front and 39 mm rear shells**. The sides are continuous and smooth, with no decorative bumps. The crown features a flat 40 mm wide horizontal mounting plateau at Y=215 mm centered at X=0, ensuring the 33 mm top arcade button bezel seats flush on an even surface. Front and rear shoulders blend over 5 mm from a 1.8 mm inset; the bottom remains a flat sole.
+Depth is reduced to 78 mm by moving the navigation buttons from the front face to the perimeter walls. Front and back covers are of equal depth (39 mm each), eliminating the tall 80 mm print height on the bed.
 Walls are 3 mm PETG. Both shells print on their outside faces. A small 0.4 mm, 45-degree bed-edge chamfer controls first-layer growth. The larger shoulders ease into the sides and crown while preserving the flat bottom plane.
 
 ## Bottom stack and clearance
@@ -14,23 +14,46 @@ Native X is width, Y is height and Z is front-to-back depth. Viewed from the fro
 
 | Item | Orientation and position |
 | --- | --- |
-| Baseus power bank | Flat in XZ: 106 mm wide × 69 mm deep × 14 mm thick. Bottom Y=7 mm; top Y=21 mm. |
+| Baseus power bank | Flat in XZ: 106 mm wide × 69 mm deep × 14 mm thick. Bottom Y=82 mm; top Y=96 mm. |
 | Battery cradle | Integral rear-shell side rails, floor seats and removable foam/strap retention. |
-| Shelf above bank | Y=24–27 mm, leaving 3 mm above the nominal bank. |
-| Raspberry Pi 3 | Flat in XZ: 85 × 56 mm footprint; PCB Y=30–31.6 mm. Component side points upward. |
+| Shelf above bank | Y=99–102 mm, leaving 3 mm above the nominal bank. |
+| Raspberry Pi 3 | Flat in XZ: 85 × 56 mm footprint; PCB Y=104–105.6 mm. Component side points upward. |
 | Pi support | Four short posts on the shelf. Internal M2.5 PCB screws are separate from the screwless shell joint. |
 | GPIO harness | Reserved above the horizontal PCB, including the existing 5 mm uncertain-dimension allowance. |
-| Controls | Same full-size positions as the horizontal-stack design; no scaling of holes or hardware. |
+| Controls | 5 perimeter arcade buttons: 4 in cross position (Top, Bottom, Left, Right) + 1 lower on the right. |
 
-The six arcade buttons retain the user-confirmed 33 mm bezels, 28 mm mounting holes and 66 mm overall height.
-The case conservatively reserves the full 66 mm behind each mounting face plus 12 mm at the wire exit.
+The five arcade buttons retain the user-confirmed 33 mm bezels, 28 mm mounting holes and 66 mm overall height.
+The case conservatively reserves the full 66 mm behind each mounting face plus 10–12 mm at the wire exit.
 Exact below-panel depth and retaining-nut outside diameter remain unknown. Each nut has a provisional 42 mm diameter × 6 mm axial allowance.
-Printed mounting holes are 28.4 mm. Flat side seats and internal nut recesses accommodate the curved wall.
+Printed mounting holes are 28.4 mm. Half-circle cutouts in each shell form the circular mounting bores at the split seam.
 Check collar reach through the side seat, populated PCB heights, spade terminals and actual wire bends before a full print.
 
-The LCD, amplifier, speaker and switch keep their existing mounting arrangements above or beside the bottom compartment.
+The LCD, amplifier, speaker and switch keep their existing mounting arrangements above or beside the electronics compartment.
 The analog keypad, ADC and divider are absent from this arcade version.
 Rear ventilation is beside and above the bottom stack.
+
+## Investigation: Perpendicular (XZ) vs. Flat-to-Back (XY) Orientation
+
+An investigation was conducted on whether rotating the Raspberry Pi and power bank 90 degrees to lie flat on the rear wall (XY plane) would allow shrinking case depth even further below 78 mm:
+
+1. **Clearance Bottleneck in XY Plane**:
+   - The five 33 mm perimeter arcade buttons penetrate 66 mm inward (+ 10 mm wire allowance) from the top, bottom, and side split seams.
+   - The inner case width is 204 mm. With Left and Right buttons reaching 76 mm inward from each side, the remaining clear central corridor is only **$204 - (2 \times 76) = 52\text{ mm}$ wide**.
+   - The Baseus bank is **106 mm wide** (or 69 mm in portrait); the Raspberry Pi 3 is **85 mm wide** (or 56 mm in portrait). Neither can fit within this 52 mm clear corridor between side buttons.
+   - Consequently, any flat-to-back placement of the battery or Pi necessarily overlaps in the $(X, Y)$ plane with the button barrels and their 42 mm diameter retaining nuts.
+
+2. **Z-Stacking and Split-Seam Constraints**:
+   - Because the buttons mount symmetrically across the 50/50 split seam ($Z = D/2 = 39\text{ mm}$), their 42 mm diameter nuts ($R = 21\text{ mm}$) extend rearward to $Z = D/2 + 21 + 2.5\text{ mm (clearance)} = D/2 + 23.5\text{ mm}$.
+   - If the 14 mm battery is placed flat against the rear wall ($Z = D - 3$ to $D - 17\text{ mm}$), its front surface reaches $Z = D - 17 - 2.5\text{ mm} = D - 19.5\text{ mm}$.
+   - To avoid physical collision between the button nut and the flat battery, we must have:
+     $$D/2 + 23.5 \le D - 19.5 \implies D/2 \ge 43.0\text{ mm} \implies \mathbf{D \ge 86.0\text{ mm}}$$
+   - For the Raspberry Pi (20.6 mm tall envelope with standoffs and ports), the depth requirement would be even greater:
+     $$D/2 + 23.5 \le D - 26.1 \implies D/2 \ge 49.6\text{ mm} \implies \mathbf{D \ge 99.2\text{ mm}}$$
+
+3. **Conclusion**:
+   - Stacking the battery or Pi flat on the rear wall forces the case depth to **increase to 86–100 mm**.
+   - In contrast, the current **perpendicular (XZ) orientation** packs the components vertically along $Y$ (Bottom button $\to$ Battery $\to$ Pi $\to$ LCD), spanning depth $Z$ evenly across both front and rear shells ($Z = 3.2\text{ mm}$ to $72.2\text{ mm}$).
+   - The perpendicular orientation is the key architectural feature enabling the **78 mm overall thinness** and the **39 mm / 39 mm equal split**.
 
 ## Join and open the two shells
 
@@ -75,7 +98,7 @@ Check your printer before printing; preserve 100% scale for the hardware fit.
 | Brim | 2 mm; include it in plate placement |
 | Orientation | Front and rear outside faces down; the exported models already have Z minimum at zero |
 
-Verified print bounds: front **212 × 215 × 58 mm**, rear **210 × 215 × 80 mm**. With a 2 mm brim, the footprints are 216 × 219 mm and 214 × 219 mm.
+Verified print bounds: front **210 × 215 × 46 mm**, rear **210 × 215 × 61 mm**. With a 2 mm brim, the footprints are 214 × 219 mm. Neither part exceeds 62 mm on the build plate (previously rear was 80 mm).
 
 Load one shell per plate. The rear shelf is integral and prints as a rib growing from the rear cover in this orientation.
 Use local supports at the horizontal 28.4 mm side-button bores, horizontal PCB mounting posts and snap undersides as required by the layer preview. The round button interface prevents replacing these bores with teardrop holes. Avoid filling the whole enclosure with supports.

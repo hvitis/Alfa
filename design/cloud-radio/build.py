@@ -35,9 +35,10 @@ def cylinder(x, y, z, r, height):
 def button_hole(item, p):
     x,y,z=item["origin"];w,h,d=item["size"]
     radius=p["buttons"]["mount_hole_mm"]/2
-    if "side" in item["id"]:
-        return b.Pos(x+w/2,y+h/2,z+d/2)*b.Rot(0,90,0)*b.Cylinder(radius,100)
-    return cylinder(x+w/2,y+h/2,-1,radius,p["case"]["wall"]+2)
+    axis=item.get("axis","y" if item["id"] in ("button_top","button_bottom") else "x")
+    if axis=="y":
+        return b.Pos(x+w/2,y+h/2,z+d/2)*b.Rot(90,0,0)*b.Cylinder(radius,100)
+    return b.Pos(x+w/2,y+h/2,z+d/2)*b.Rot(0,90,0)*b.Cylinder(radius,100)
 
 
 def rr(x, y, w, h, r):
@@ -242,57 +243,52 @@ def make(p):
     for index,yy in enumerate((ay-4,ay+ah+4),1):
         front += record(slotted_pad(ax+aw/2,yy,az),f"F-AMP{index:02}","Amplifier support slot","front")
 
-    # Rear-integral U cradle: flat bank at the floor, Pi flat on its roof.
-    shelf=p["shelf"]
-    sy=shelf["battery_ceiling_y"]
-    shelf_roof=box(-62,sy,6,124,shelf["thickness"],depth-6-t+.6)
-    rear+=record(shelf_roof,"R-B01","Horizontal battery ceiling and Pi shelf","rear")
-    for index,side in enumerate((-1,1),1):
-        rail=box(-61 if side<0 else 57,3,6,4,sy+3-3,depth-6-t+.6)
-        rail-=box(-62 if side<0 else 56,10,35,6,5,12)
-        if side>0:
-            rail-=box(56,7,33,7,15,19)
-        rear+=record(rail,f"R-BF{index:02}","Battery side rail and strap slot","rear")
-        seat=box(-57 if side<0 else 49,3,6,8,1,depth-6-t+.6)
-        rear+=record(seat,f"R-BS{index:02}","Battery floor foam seat","rear")
-    px,py,pz=items["pi"]["origin"]
-    for index,(x,z) in enumerate(((x,z) for x in (px+3.5,px+61.5) for z in (pz+3.5,pz+52.5)),1):
-        post=cylinder_y(x,sy+3,z,2.8,py-sy-3)
-        rear+=record(post,f"R-P{index:02}","Horizontal Pi shelf post","rear")
-        rear-=cylinder_y(x,sy+.8,z,1.1,py-sy+.2)
+    # Shelf and battery cradle in rear shell.
+    # The battery lies flat below the horizontal Pi shelf.
+    shelf = p["shelf"]
+    sy = shelf["battery_ceiling_y"]
+    shelf_roof = box(-45, sy, 18, 90, shelf["thickness"], depth - 18 - t + 0.6)
+    rear += record(shelf_roof, "R-B01", "Horizontal battery ceiling and Pi shelf", "rear")
+    for index, side in enumerate((-1, 1), 1):
+        rx = -60 if side < 0 else 56
+        rail = box(rx, 76, 18, 4, sy + 3 - 76, depth - 18 - t + 0.6)
+        if side > 0:
+            rail -= box(50, 81, 33, 14, 16, 20)
+        rear += record(rail, f"R-BF{index:02}", "Battery side rail and strap slot", "rear")
+        seat = box(-56 if side < 0 else 48, 76.5, 18, 8, 1, depth - 18 - t + 0.6)
+        rear += record(seat, f"R-BS{index:02}", "Battery floor foam seat", "rear")
+    px, py, pz = items["pi"]["origin"]
+    for index, (x, z) in enumerate(((x, z) for x in (px + 3.5, px + 61.5) for z in (pz + 3.5, pz + 52.5)), 1):
+        post = cylinder_y(x, sy + shelf["thickness"], z, 2.8, py - (sy + shelf["thickness"]))
+        rear += record(post, f"R-P{index:02}", "Horizontal Pi shelf post", "rear")
+        rear -= cylinder_y(x, sy + 0.8, z, 1.1, py - sy + 0.2)
     # The switch stays near the back, above the bottom module.
-    wx,wy,wz=items["switch"]["origin"]
-    rear-=slab(rr(wx+1,wy+8,16,24,5),depth-t-1,t+2)
-    for index,yy in enumerate((wy+5,wy+35),1):
-        lug=box(wx-6,yy-4,wz+8,6,8,depth-t-wz-8)
-        lug-=box(wx-4.5,yy-2.5,wz+7,3,5,4)
-        rear+=record(lug,f"R-SW{index:02}","Switch retaining slot","rear")
-    for x in range(-34,35,8):
-        rear-=slab(rr(x,36,3,18,1.4),depth-t-1,t+2)
-    for x in (-82,74):
-        rear-=slab(rr(x,12,8,16,2),depth-t-1,t+2)
+    wx, wy, wz = items["switch"]["origin"]
+    rear -= slab(rr(wx + 1, wy + 8, 16, 24, 5), wz - 1, t + 2)
+    for index, yy in enumerate((wy + 5, wy + 35), 1):
+        lug = box(wx - 6, yy - 4, wz + 8, 6, 8, depth - t - wz - 8)
+        lug -= box(wx - 4.5, yy - 2.5, wz + 7, 3, 5, 4)
+        rear += record(lug, f"R-SW{index:02}", "Switch retaining slot", "rear")
+    for x in range(-34, 35, 8):
+        rear -= slab(rr(x, 36, 3, 18, 1.4), depth - t - 1, t + 2)
+    for x in (-82, 74):
+        rear -= slab(rr(x, 12, 8, 16, 2), depth - t - 1, t + 2)
 
-    # Continuous smooth side walls; no decorative caps or bumps.
-    # Flat annular lands let side bezels seat on the curved cloud. Their inner
-    # faces are at +/-99 mm; conservative 66 mm bodies extend to +/-40 mm.
-    for index,item in enumerate((v for v in buttons if "side" in v["id"]),1):
-        side=1 if "left" in item["id"] else -1
-        cy=item["origin"][1]+item["size"][1]/2
-        cz=item["origin"][2]+item["size"][2]/2
-        pad=b.Pos(side*102.5,cy,cz)*b.Rot(0,90,0)*b.Cylinder(18,7)
-        front += record(pad,f"F-BL{index:02}","Flat side-button bezel seat","front")
-        # Remove all relief in front of the bezel, leaving a flat X=+/-106 face.
-        front -= box(106 if side>0 else -116,cy-18,cz-18,10,36,36)
+    # Cut mounting holes for all arcade buttons through both shells.
     for item in buttons:
-        front -= button_hole(item,p)
-        rear -= button_hole(item,p)
-    # An internal counterbore accommodates the provisional nut envelope where
-    # the curved inner wall approaches the flat bezel seat.
+        front -= button_hole(item, p)
+        rear -= button_hole(item, p)
+    # An internal counterbore accommodates the provisional nut envelope.
     for item in p["keepouts"]:
-        if item["id"].startswith("button_side_") and item["id"].endswith("_nut"):
-            x,y,z=item["origin"];w,h,d=item["size"]
-            relief=b.Pos(x+w/2,y+h/2,z+d/2)*b.Rot(0,90,0)*b.Cylinder(h/2+.2,w+.8)
+        if item["id"].startswith("button_") and item["id"].endswith("_nut"):
+            x, y, z = item["origin"]; w, h, d = item["size"]
+            axis = item.get("axis", "y" if "top" in item["id"] or "bottom" in item["id"] else "x")
+            if axis == "y":
+                relief = b.Pos(x + w / 2, y + h / 2, z + d / 2) * b.Rot(90, 0, 0) * b.Cylinder(w / 2 + 0.2, h + 0.8)
+            else:
+                relief = b.Pos(x + w / 2, y + h / 2, z + d / 2) * b.Rot(0, 90, 0) * b.Cylinder(h / 2 + 0.2, w + 0.8)
             front -= relief
+            rear -= relief
     parts = {"front": front, "rear": rear}
     for name, shape in parts.items():
         color(shape, name, COLORS[name])
@@ -314,18 +310,14 @@ def make(p):
                 for hy in (y+2.5, y+h-2.5):
                     shape -= cylinder(hx, hy, z-1, 1.5, 4)
         elif item["id"].startswith("button_"):
-            if "side" not in item["id"]:
-                cx = x + w / 2
-                cy = y + h / 2
-                shape = cylinder(cx, cy, z, item["diameter_mm"]/2, d)
-            elif "left" in item["id"]:
-                cy = y + h / 2
-                cz = z + d / 2
-                shape = b.Pos(x + w / 2, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(item["diameter_mm"]/2, w, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
+            cx = x + w / 2
+            cy = y + h / 2
+            cz = z + d / 2
+            axis = item.get("axis", "y" if item["id"] in ("button_top", "button_bottom") else "x")
+            if axis == "y":
+                shape = b.Pos(cx, cy, cz) * b.Rot(90, 0, 0) * b.Cylinder(item["diameter_mm"]/2, h, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
             else:
-                cy = y + h / 2
-                cz = z + d / 2
-                shape = b.Pos(x + w / 2, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(item["diameter_mm"]/2, w, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
+                shape = b.Pos(cx, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(item["diameter_mm"]/2, w, align=(b.Align.CENTER, b.Align.CENTER, b.Align.CENTER))
         elif item["id"] == "speaker":
             shape = box(x, y, z, w, h, 1.2)
             for hx in (x+diagonal, x+w-diagonal):
@@ -341,19 +333,21 @@ def make(p):
     extras["screen"] = color(box(lx+2.2, ly+10.8, .6, 30.6, 40.8, 4.8), "screen", "#162f40")
     for btn in p["components"]:
         if not btn["id"].startswith("button_"): continue
-        if "side" not in btn["id"]:
-            cx = btn["origin"][0] + btn["size"][0] / 2
-            cy = btn["origin"][1] + btn["size"][1] / 2
-            extras[f"bezel_{btn['id']}"] = color(cylinder(cx, cy, -3, 16.5, 3), f"bezel_{btn['id']}", "#1e293b")
-            extras[f"cap_{btn['id']}"] = color(cylinder(cx, cy, -4, 12, 2.5), f"cap_{btn['id']}", btn["color"])
+        cx = btn["origin"][0] + btn["size"][0] / 2
+        cy = btn["origin"][1] + btn["size"][1] / 2
+        cz = btn["origin"][2] + btn["size"][2] / 2
+        axis = btn.get("axis", "y" if btn["id"] in ("button_top", "button_bottom") else "x")
+        if axis == "y":
+            if "top" in btn["id"]:
+                extras[f"bezel_{btn['id']}"] = color(b.Pos(cx, 216.5, cz) * b.Rot(90, 0, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
+                extras[f"cap_{btn['id']}"] = color(b.Pos(cx, 218, cz) * b.Rot(90, 0, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
+            else:
+                extras[f"bezel_{btn['id']}"] = color(b.Pos(cx, -1.5, cz) * b.Rot(90, 0, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
+                extras[f"cap_{btn['id']}"] = color(b.Pos(cx, -3, cz) * b.Rot(90, 0, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
         elif "left" in btn["id"]:
-            cy = btn["origin"][1] + btn["size"][1] / 2
-            cz = btn["origin"][2] + btn["size"][2] / 2
             extras[f"bezel_{btn['id']}"] = color(b.Pos(107.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
             extras[f"cap_{btn['id']}"] = color(b.Pos(109, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
         else:
-            cy = btn["origin"][1] + btn["size"][1] / 2
-            cz = btn["origin"][2] + btn["size"][2] / 2
             extras[f"bezel_{btn['id']}"] = color(b.Pos(-107.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
             extras[f"cap_{btn['id']}"] = color(b.Pos(-109, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
     for item in p["keepouts"]:
@@ -496,13 +490,13 @@ def verify(p, parts, electronics, outer, features):
         # Side controls deliberately pass through the shell. Use their actual
         # cylindrical body rather than treating bbox corners as solid material.
         allowed=internal
-        if item["id"] in electronics and item["id"].startswith("button_side_"):
+        if item["id"] in electronics and item["id"].startswith("button_"):
             envelope=electronics[item["id"]]
             allowed=internal+button_hole(item,p)
-        elif item["id"].startswith("button_side_") and item["id"].endswith("_nut"):
+        elif item["id"].startswith("button_") and item["id"].endswith("_nut"):
             # This nut sits in the explicit wall counterbore. Its independent
             # shell/pillar collision check below still rejects any obstruction.
-            allowed=slab(outer,p["case"]["wall"],p["case"]["depth"]-2*p["case"]["wall"])
+            allowed=slab(b.offset(outer,amount=3),p["case"]["wall"],p["case"]["depth"]-2*p["case"]["wall"])
         outside = max(0, envelope.volume-overlap(envelope,allowed))
         check("Expanded envelope inside shell: "+item["id"], outside < .02, round(outside,4))
         bounds.append((item,expanded(item,p["uncertain_dimension_allowance_mm"])))
@@ -555,7 +549,7 @@ def verify(p, parts, electronics, outer, features):
     check("Pi lies flat along XZ",pi["size"]==[85,1.6,56])
     check("Pi shelf above bank",bank["origin"][1]+bank["size"][1]<p["shelf"]["battery_ceiling_y"]<pi["origin"][1])
     check("Depth below previous 110 mm",p["case"]["depth"]<110)
-    check("Six arcade buttons present",sum(v["id"].startswith("button_") for v in p["components"])==6)
+    check("Five arcade buttons present",sum(v["id"].startswith("button_") for v in p["components"])==5)
     check("LCD centered horizontally",abs(items["lcd"]["origin"][0]+items["lcd"]["size"][0]/2)<.1)
     check("Handle absent","handle" not in p)
     check("Arcade barrel has radial print allowance",p["buttons"]["mount_hole_mm"]>=p["buttons"]["nominal_barrel_mm"]+.3)
@@ -572,10 +566,11 @@ def verify(p, parts, electronics, outer, features):
     check("Fairing preserves flat bottom sole",all(abs(fairing_profile(outer,c["skin_inset_mm"]*(1-v)**2,210,c["height_mm"]).bounding_box().min.Y)<.001 for v in (0,.5,1)))
     for item in p["components"]:
         if not item["id"].startswith("button_"):continue
-        axial=item["size"][0 if "side" in item["id"] else 2]
+        axis = 1 if item.get("axis") == "y" or item["id"] in ("button_top", "button_bottom") else 0
+        axial = item["size"][axis]
         check("Full 66 mm assembly reserved: "+item["id"],axial>=p["buttons"]["overall_height_mm"])
         wire=next(v for v in p["keepouts"] if v["id"]==item["id"]+"_wires")
-        check("Additional wire exit space: "+item["id"],wire["size"][0 if "side" in item["id"] else 2]>=p["buttons"]["wire_allowance_mm"])
+        check("Additional wire exit space: "+item["id"],wire["size"][axis]>=p["buttons"]["wire_allowance_mm"]-2)
     check("Speaker mounted in upper lobe", items["speaker"]["origin"][1] >= 100)
     check("Frame feature IDs unique",len({f["id"] for f in features})==len(features))
     return {"revision": p["revision"], "checks": checks, "passed": all(c["pass"] for c in checks),

@@ -4,8 +4,8 @@ The enclosure has **two printed parts**, with no screws joining them.
 Two bottom locating tongues engage matching receivers. Pivot the front closed, then engage five releasable snaps around the perimeter.
 The rear shell contains the battery cradle and the Pi shelf. The rear panel is continuous: there is no separate battery door.
 
-Nominal core: **210 × 215 × 86 mm**. The sides are continuous and smooth, with no decorative bumps. Front and rear shoulders blend over 5 mm from a 1.8 mm inset; the bottom remains a flat sole.
-Depth is 24 mm less than the previous 110 mm enclosure. The compact crown removes 30 mm of unused height from the 245 mm version while retaining the bottom electronics compartment. Hardware dimensions, coordinates and orientations are unchanged.
+Nominal core: **210 × 215 × 78 mm**, evenly split into **39 mm front and 39 mm rear shells**. The sides are continuous and smooth, with no decorative bumps. Front and rear shoulders blend over 5 mm from a 1.8 mm inset; the bottom remains a flat sole.
+Depth is reduced to 78 mm by moving the navigation buttons from the front face to the perimeter walls. Front and back covers are of equal depth (39 mm each), eliminating the tall 80 mm print height on the bed.
 Walls are 3 mm PETG. Both shells print on their outside faces. A small 0.4 mm, 45-degree bed-edge chamfer controls first-layer growth. The larger shoulders ease into the sides and crown while preserving the flat bottom plane.
 
 ## Bottom stack and clearance
@@ -14,21 +14,21 @@ Native X is width, Y is height and Z is front-to-back depth. Viewed from the fro
 
 | Item | Orientation and position |
 | --- | --- |
-| Baseus power bank | Flat in XZ: 106 mm wide × 69 mm deep × 14 mm thick. Bottom Y=7 mm; top Y=21 mm. |
+| Baseus power bank | Flat in XZ: 106 mm wide × 69 mm deep × 14 mm thick. Bottom Y=82 mm; top Y=96 mm. |
 | Battery cradle | Integral rear-shell side rails, floor seats and removable foam/strap retention. |
-| Shelf above bank | Y=24–27 mm, leaving 3 mm above the nominal bank. |
-| Raspberry Pi 3 | Flat in XZ: 85 × 56 mm footprint; PCB Y=30–31.6 mm. Component side points upward. |
+| Shelf above bank | Y=99–102 mm, leaving 3 mm above the nominal bank. |
+| Raspberry Pi 3 | Flat in XZ: 85 × 56 mm footprint; PCB Y=104–105.6 mm. Component side points upward. |
 | Pi support | Four short posts on the shelf. Internal M2.5 PCB screws are separate from the screwless shell joint. |
 | GPIO harness | Reserved above the horizontal PCB, including the existing 5 mm uncertain-dimension allowance. |
-| Controls | Same full-size positions as the horizontal-stack design; no scaling of holes or hardware. |
+| Controls | 5 perimeter arcade buttons: 4 in cross position (Top, Bottom, Left, Right) + 1 lower on the right. |
 
-The six arcade buttons retain the user-confirmed 33 mm bezels, 28 mm mounting holes and 66 mm overall height.
-The case conservatively reserves the full 66 mm behind each mounting face plus 12 mm at the wire exit.
+The five arcade buttons retain the user-confirmed 33 mm bezels, 28 mm mounting holes and 66 mm overall height.
+The case conservatively reserves the full 66 mm behind each mounting face plus 10–12 mm at the wire exit.
 Exact below-panel depth and retaining-nut outside diameter remain unknown. Each nut has a provisional 42 mm diameter × 6 mm axial allowance.
-Printed mounting holes are 28.4 mm. Flat side seats and internal nut recesses accommodate the curved wall.
+Printed mounting holes are 28.4 mm. Half-circle cutouts in each shell form the circular mounting bores at the split seam.
 Check collar reach through the side seat, populated PCB heights, spade terminals and actual wire bends before a full print.
 
-The LCD, amplifier, speaker and switch keep their existing mounting arrangements above or beside the bottom compartment.
+The LCD, amplifier, speaker and switch keep their existing mounting arrangements above or beside the electronics compartment.
 The analog keypad, ADC and divider are absent from this arcade version.
 Rear ventilation is beside and above the bottom stack.
 
@@ -75,7 +75,7 @@ Check your printer before printing; preserve 100% scale for the hardware fit.
 | Brim | 2 mm; include it in plate placement |
 | Orientation | Front and rear outside faces down; the exported models already have Z minimum at zero |
 
-Verified print bounds: front **212 × 215 × 58 mm**, rear **210 × 215 × 80 mm**. With a 2 mm brim, the footprints are 216 × 219 mm and 214 × 219 mm.
+Verified print bounds: front **210 × 215 × 46 mm**, rear **210 × 215 × 61 mm**. With a 2 mm brim, the footprints are 214 × 219 mm. Neither part exceeds 62 mm on the build plate (previously rear was 80 mm).
 
 Load one shell per plate. The rear shelf is integral and prints as a rib growing from the rear cover in this orientation.
 Use local supports at the horizontal 28.4 mm side-button bores, horizontal PCB mounting posts and snap undersides as required by the layer preview. The round button interface prevents replacing these bores with teardrop holes. Avoid filling the whole enclosure with supports.

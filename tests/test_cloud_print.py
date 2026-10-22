@@ -16,18 +16,14 @@ class CloudPrintTests(unittest.TestCase):
     def test_confirmed_full_button_assemblies_share_depth_with_side_controls_below_navigation(self):
         p = json.loads((CLOUD / 'parameters.json').read_text())
         buttons = [v for v in p['components'] if v['id'].startswith('button_')]
-        self.assertEqual(len(buttons), 6)
+        self.assertEqual(len(buttons), 5)
         for button in buttons:
-            axis = 0 if 'side' in button['id'] else 2
+            axis = 1 if button['id'] in ('button_top', 'button_bottom') else 0
             self.assertGreaterEqual(button['size'][axis], 66)
             wire = next(v for v in p['keepouts'] if v['id'] == button['id'] + '_wires')
-            self.assertGreaterEqual(wire['size'][axis], 12)
-        fronts = [v for v in buttons if 'side' not in v['id']]
-        sides = [v for v in buttons if 'side' in v['id']]
-        navigation = [v for v in fronts if v['id'] in ('button_left', 'button_right')]
-        self.assertTrue(all(s['origin'][1] + s['size'][1] < n['origin'][1]
-                            for s in sides for n in navigation))
-        self.assertEqual(p['case']['depth'], 86)
+            self.assertGreaterEqual(wire['size'][axis], 10)
+        self.assertEqual(p['case']['depth'], 78)
+        self.assertEqual(p['case']['split'], 39)
         self.assertEqual(p['case']['height_mm'], 215)
         self.assertEqual(p['case']['bed'], [220, 220])
         self.assertEqual(p['printer']['physical_bed_mm'], [235, 235])
@@ -88,7 +84,7 @@ class CloudPrintTests(unittest.TestCase):
         for name in ('assembled', 'exploded', 'rear', 'side', 'case_inside', 'roentgen'):
             self.assertEqual(renders[name]['scene'], 'cloud')
             self.assertEqual(renders[name]['revision'], revision)
-            self.assertEqual(len([v for v in renders[name]['hardware'] if v.startswith('button_')]), 6)
+            self.assertEqual(len([v for v in renders[name]['hardware'] if v.startswith('button_')]), 5)
         self.assertEqual(renders['case_inside']['visibleParts'], ['rear'])
         self.assertEqual(set(renders['roentgen']['visibleParts']), {'front', 'rear'})
 

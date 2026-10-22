@@ -1,12 +1,12 @@
 // === DESCRIPTION ===
-// Alfa cloud: two PETG shells for six 33 mm arcade controls and a Raspberry Pi 3.
-// The full-sized battery lies flat below the horizontal Pi and its integral shelf.
+// Alfa cloud: two PETG shells for five 33 mm arcade controls, LCD, and a Raspberry Pi 3.
+// The battery lies flat below the horizontal Pi and its integral shelf.
 // Compact cloud lobes target a 235 mm Ender plate, conservatively using 220 mm travel.
 // This OpenSCAD file inspects the exact CAD-exported meshes; it does not rescale them.
 // Parametric geometry and hardware positions: build.py and parameters.json.
 // Run bash run-cad.sh after editing that source, then verify this file again.
 // Terminology: front/rear -> shell modules; shelf -> R-B01 in the native CAD.
-// Dimensions: at most 216 x 216 x 100 mm per shell, outside face on the bed.
+// Dimensions: at most 216 x 216 x 50 mm per shell, outside face on the bed.
 // Coordinate system: X = width, Y = enclosure height on plate, Z = print height.
 // Assembly maps Y back to the upright height, Z to enclosure depth.
 // Shell joins use two locating tongues and five releasable snaps, without screws.
@@ -28,8 +28,8 @@ build_y = 220;
 build_z = 100;
 physical_plate = 235;
 brim = 2;
-case_depth = 86;
-split_depth = 51;
+case_depth = 78;
+split_depth = 39;
 pivot_height = 0;
 opening_angle = 20;
 tolerance = 0.3;

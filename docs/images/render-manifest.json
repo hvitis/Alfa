@@ -6,7 +6,7 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-ender-smooth-215mm",
+      "revision": "prototype-v3-even-split-thin-78mm",
       "checks": 577,
       "scene": "cloud",
       "view": "assembled",
@@ -22,8 +22,7 @@
         "button_bottom",
         "button_left",
         "button_right",
-        "button_side_left",
-        "button_side_right",
+        "button_right_lower",
         "amp",
         "switch",
         "speaker"
@@ -34,7 +33,7 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-ender-smooth-215mm",
+      "revision": "prototype-v3-even-split-thin-78mm",
       "checks": 577,
       "scene": "cloud",
       "view": "exploded",
@@ -50,8 +49,7 @@
         "button_bottom",
         "button_left",
         "button_right",
-        "button_side_left",
-        "button_side_right",
+        "button_right_lower",
         "amp",
         "switch",
         "speaker"
@@ -62,7 +60,7 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-ender-smooth-215mm",
+      "revision": "prototype-v3-even-split-thin-78mm",
       "checks": 577,
       "scene": "cloud",
       "view": "rear",
@@ -78,8 +76,7 @@
         "button_bottom",
         "button_left",
         "button_right",
-        "button_side_left",
-        "button_side_right",
+        "button_right_lower",
         "amp",
         "switch",
         "speaker"
@@ -90,7 +87,7 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-ender-smooth-215mm",
+      "revision": "prototype-v3-even-split-thin-78mm",
       "checks": 577,
       "scene": "cloud",
       "view": "side",
@@ -106,8 +103,7 @@
         "button_bottom",
         "button_left",
         "button_right",
-        "button_side_left",
-        "button_side_right",
+        "button_right_lower",
         "amp",
         "switch",
         "speaker"
@@ -118,7 +114,7 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-ender-smooth-215mm",
+      "revision": "prototype-v3-even-split-thin-78mm",
       "checks": 577,
       "scene": "complete-setup",
       "view": "connections",
@@ -127,6 +123,11 @@
         "pi",
         "lcd",
         "amp",
+        "button_top",
+        "button_bottom",
+        "button_left",
+        "button_right",
+        "button_right_lower",
         "speaker",
         "arcade_buttons"
       ]
@@ -136,7 +137,7 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-ender-smooth-215mm",
+      "revision": "prototype-v3-even-split-thin-78mm",
       "checks": 577,
       "scene": "cloud",
       "view": "inside_back",
@@ -151,8 +152,7 @@
         "button_bottom",
         "button_left",
         "button_right",
-        "button_side_left",
-        "button_side_right",
+        "button_right_lower",
         "amp",
         "switch",
         "speaker"
@@ -163,7 +163,7 @@
         "front": "#86bfea",
         "rear": "#70acd9"
       },
-      "revision": "prototype-v2-ender-smooth-215mm",
+      "revision": "prototype-v3-even-split-thin-78mm",
       "checks": 577,
       "scene": "cloud",
       "view": "roentgen",
@@ -179,8 +179,7 @@
         "button_bottom",
         "button_left",
         "button_right",
-        "button_side_left",
-        "button_side_right",
+        "button_right_lower",
         "amp",
         "switch",
         "speaker"
