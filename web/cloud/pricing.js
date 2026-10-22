@@ -50,8 +50,8 @@ export const PRICING_ITEMS = [
   },
   {
     id: 'periph-arcade-buttons',
-    name: '6 × Arcade Push Button 33mm (SPST)',
-    function: 'Six durable arcade push buttons with microswitches wired directly to Pi GPIO',
+    name: '5 × Arcade Push Button 33mm (SPST)',
+    function: 'Five durable arcade push buttons with microswitches wired directly to Pi GPIO',
     priceText: '~47,31 zł (7,60–8,10 zł / pcs)',
     min: 47.31,
     max: 48,
@@ -218,7 +218,7 @@ export const MATERIAL_SPECS = {
   '3d-print': {
     sectionNumber: 'PRINT PREPARATION',
     title: 'Two PETG shells',
-    badge: 'PETG · 86 mm deep',
+    badge: 'PETG · 78 mm deep',
     desc: 'The rear includes the battery cradle and horizontal Pi shelf. Final filament mass and supports depend on your slicer profile.',
     stats: [
       { dt: 'Front shell (F-00)', dd: '1 part', small: 'Five snaps and two locating tongues' },

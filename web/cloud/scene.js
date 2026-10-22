@@ -34,10 +34,11 @@ export function createCloudScene() {
     for(const mesh of portOutlines)mesh.visible=showClearances;
   }
   const readyPromise = (async () => {
-    const response = await fetch('./cloud/manifest.json');
+    const response = await fetch('./cloud/manifest.json', { cache: 'no-cache' });
     if (!response.ok) throw new Error(`Cloud specifications returned HTTP ${response.status}`);
     Object.assign(data, await response.json());
-    const gltf = await new GLTFLoader().loadAsync(new URL('./cloud/cloud-radio.glb', document.baseURI).href);
+    const glbUrl = new URL(`./cloud/cloud-radio.glb?v=${encodeURIComponent(data.revision || 'v3')}`, document.baseURI).href;
+    const gltf = await new GLTFLoader().loadAsync(glbUrl);
     const model = gltf.scene;
     // build123d glTF uses metres and the CAD exporter rotates its frame.
     model.rotation.x = Math.PI / 2;

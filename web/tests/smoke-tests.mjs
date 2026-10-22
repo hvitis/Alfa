@@ -30,7 +30,7 @@ try {
       const page = await context.newPage();
       page.on('pageerror', error => errors.push(error.message));
       page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
-      page.on('response', response => { if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`); if (response.url().endsWith('.glb') && response.ok()) meshes.push(response.url()); });
+      page.on('response', response => { if (response.status() >= 400) errors.push(`${response.status()} ${response.url()}`); if (new URL(response.url()).pathname.endsWith('.glb') && response.ok()) meshes.push(response.url()); });
       page.on('requestfailed', request => errors.push(`Request failed: ${request.url()} (${request.failure()?.errorText})`));
       await context.route('**/*', route => {
         if (new URL(route.request().url()).origin !== origin) { errors.push(`External runtime request: ${route.request().url()}`); return route.abort(); }
@@ -91,7 +91,7 @@ try {
       await scene('cloud', 'assembled');
       if (prefix === '/' && viewport.width === 1440 && process.env.SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.SMOKE_SCREENSHOT, fullPage: true });
       assert((await page.locator('#cloud-facts').textContent()).includes('PETG'));
-      assert((await page.locator('#cloud-facts').textContent()).includes('86 mm'));
+      assert((await page.locator('#cloud-facts').textContent()).includes('78 mm'));
       assert.equal(await page.locator('.cloud-downloads a[href$=".3mf"]').count(),2);
       const enderTab=page.locator('#print-tab-ender'),bambuTab=page.locator('#print-tab-bambu');
       assert(await page.locator('#print-roadmap').evaluate(element=>parseFloat(getComputedStyle(element).marginTop)>=24),'Roadmap has space above it');

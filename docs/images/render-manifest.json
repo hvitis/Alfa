@@ -7,7 +7,7 @@
         "rear": "#70acd9"
       },
       "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 577,
+      "checks": 456,
       "scene": "cloud",
       "view": "assembled",
       "visibleParts": [
@@ -34,7 +34,7 @@
         "rear": "#70acd9"
       },
       "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 577,
+      "checks": 456,
       "scene": "cloud",
       "view": "exploded",
       "visibleParts": [
@@ -61,7 +61,7 @@
         "rear": "#70acd9"
       },
       "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 577,
+      "checks": 456,
       "scene": "cloud",
       "view": "rear",
       "visibleParts": [
@@ -88,7 +88,7 @@
         "rear": "#70acd9"
       },
       "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 577,
+      "checks": 456,
       "scene": "cloud",
       "view": "side",
       "visibleParts": [
@@ -115,7 +115,7 @@
         "rear": "#70acd9"
       },
       "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 577,
+      "checks": 456,
       "scene": "complete-setup",
       "view": "connections",
       "visibleParts": [],
@@ -123,11 +123,6 @@
         "pi",
         "lcd",
         "amp",
-        "button_top",
-        "button_bottom",
-        "button_left",
-        "button_right",
-        "button_right_lower",
         "speaker",
         "arcade_buttons"
       ]
@@ -138,7 +133,7 @@
         "rear": "#70acd9"
       },
       "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 577,
+      "checks": 456,
       "scene": "cloud",
       "view": "inside_back",
       "visibleParts": [
@@ -164,7 +159,7 @@
         "rear": "#70acd9"
       },
       "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 577,
+      "checks": 456,
       "scene": "cloud",
       "view": "roentgen",
       "visibleParts": [

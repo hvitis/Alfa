@@ -113,7 +113,7 @@ export function createStlViewer(container, options = {}) {
     let geometry = geometryCache.get(partId);
     if (!geometry) {
       try {
-        const url = new URL(`./cloud/${STL_PARTS[partId].file}`, document.baseURI).href;
+        const url = new URL(`./cloud/${STL_PARTS[partId].file}?v=v3`, document.baseURI).href;
         geometry = await loader.loadAsync(url);
         geometry.computeVertexNormals();
         geometry.center();
