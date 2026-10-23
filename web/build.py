@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from web.project import metadata
-from web.archives import create_cloud_archive
+from web.archives import create_cloud_archive, create_wooden_case_archive
 from web.pcb.assets import ensure_pcb_assets
 
 
@@ -27,6 +27,13 @@ def export_site(destination=ROOT / "_site"):
     (generated / "manifest.json").write_text(json.dumps(metadata(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     subprocess.run(["node", str(ROOT / "web/build.mjs"), str(destination)], cwd=ROOT, check=True)
     create_cloud_archive(destination / "cloud/cloud-radio.zip")
+    create_wooden_case_archive(destination / "wooden-case/alfa-wooden-case.zip")
+    downloads = destination / "downloads"
+    downloads.mkdir(parents=True, exist_ok=True)
+    import shutil
+    shutil.copyfile(destination / "wooden-case/alfa-wooden-case.zip", downloads / "alfa-wooden-case.zip")
+    shutil.copyfile(destination / "cloud/cloud-radio.zip", downloads / "cloud-radio.zip")
+    shutil.copyfile(destination / "cloud/cloud-radio.zip", downloads / "Alfa-Build-Kit.zip")
     return destination
 
 

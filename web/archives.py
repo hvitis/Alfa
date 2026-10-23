@@ -69,6 +69,52 @@ def create_cloud_archive(destination, source=CLOUD):
     return destination
 
 
+def create_wooden_case_archive(destination):
+    """Package the birch plywood case files into a reproducible download archive."""
+    destination = Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    wooden_case_dir = ROOT / "design/wooden-case"
+    excluded = {".cad-cache", "tmp", "viewer-dist", "__pycache__", ".DS_Store"}
+    files = [p for p in wooden_case_dir.rglob("*") if p.is_file() and not any(part in excluded for part in p.relative_to(wooden_case_dir).parts)]
+    for name in ("wiring.md", "improvements-todo.md", "raspberry-pi-standalone.md"):
+        doc = ROOT / "docs" / name
+        if doc.exists():
+            files.append(doc)
+    setup_json = ROOT / "web/hardware-visualisation/src/data/setup.json"
+    if setup_json.exists():
+        files.append(setup_json)
+    planner = ROOT / "web/hardware-visualisation/case-planner"
+    if planner.exists():
+        files.extend([p for p in planner.rglob("*") if p.is_file()])
+    build_viewer = ROOT / "web/hardware-visualisation/scripts/build-case-viewer.mjs"
+    if build_viewer.exists():
+        files.append(build_viewer)
+
+    descriptor, temporary = tempfile.mkstemp(prefix=".case-archive-", suffix=".zip", dir=destination.parent)
+    os.close(descriptor)
+    try:
+        with zipfile.ZipFile(temporary, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+            for p in sorted(set(files)):
+                try:
+                    rel_path = p.relative_to(ROOT)
+                except ValueError:
+                    rel_path = p.name
+                info = zipfile.ZipInfo(str(Path("alfa-case") / rel_path), date_time=(1980, 1, 1, 0, 0, 0))
+                info.create_system = 3
+                info.external_attr = 0o100644 << 16
+                info.compress_type = zipfile.ZIP_DEFLATED
+                archive.writestr(info, p.read_bytes(), compresslevel=9)
+            start_here = zipfile.ZipInfo("alfa-case/START-HERE.txt", date_time=(1980, 1, 1, 0, 0, 0))
+            start_here.create_system = 3
+            start_here.external_attr = 0o100644 << 16
+            start_here.compress_type = zipfile.ZIP_DEFLATED
+            archive.writestr(start_here, b"Open design/wooden-case/viewer.html in a desktop browser.\nPrint design/wooden-case/PDF/a4_cutting_and_drilling.pdf at 100%.\nRead design/wooden-case/README.md before cutting.\nThis bundle contains case planning files, not the Pi application.\n", compresslevel=9)
+        os.replace(temporary, destination)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+    return destination
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("destination", type=Path)

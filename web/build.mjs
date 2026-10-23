@@ -40,6 +40,48 @@ await mkdir(resolve(destination, 'assets'), { recursive: true });
 for (const file of ['cloud-render.png', 'house-preview.png', 'pcb-render.svg', 'pdf-preview.png', 'software-architecture.png', 'wiring-diagram.svg']) {
   await copyFile(resolve(web, `assets/${file}`), resolve(destination, `assets/${file}`));
 }
+// High-resolution CAD case renders
+await mkdir(resolve(destination, 'assets/renders'), { recursive: true });
+for (const file of [
+  'cloud-assembled.png', 'cloud-exploded.png', 'cloud-rear.png', 'cloud-side.png',
+  'inside-back-case.png', 'roentgen-look.png', 'hardware-connections.png',
+  'cloud-assembly.png', 'readme-banner.png'
+]) {
+  try {
+    const src = resolve(root, `docs/images/${file}`);
+    await copyFile(src, resolve(destination, `assets/renders/${file}`));
+    await copyFile(src, resolve(destination, `assets/${file}`));
+  } catch {}
+}
+// Wooden case previews
+await mkdir(resolve(destination, 'assets/wooden-case'), { recursive: true });
+for (const file of ['enclosure.png', 'internals.png', 'exploded.png', 'a4_sheet_1.png', 'a4_sheet_2.png', 'a4_sheet_3.png', 'a4_sheet_4.png']) {
+  try {
+    await copyFile(resolve(root, `design/wooden-case/previews/${file}`), resolve(destination, `assets/wooden-case/${file}`));
+  } catch {}
+}
+// Wooden case downloadables: PDFs, STEP, DXF
+for (const pdf of ['a4_cutting_and_drilling.pdf', 'enclosure_drawing.pdf', 'placement_and_wiring.pdf']) {
+  try {
+    await copyFile(resolve(root, `design/wooden-case/PDF/${pdf}`), resolve(destination, `docs/${pdf}`));
+  } catch {}
+}
+await mkdir(resolve(destination, 'wooden-case/step'), { recursive: true });
+for (const step of ['enclosure.step', 'internals.step', 'exploded.step']) {
+  try {
+    await copyFile(resolve(root, `design/wooden-case/STEP/${step}`), resolve(destination, `wooden-case/step/${step}`));
+  } catch {}
+}
+await mkdir(resolve(destination, 'wooden-case/dxf'), { recursive: true });
+for (const dxf of ['front_cutting.dxf', 'rear_cutting.dxf', 'walls_cutting.dxf', 'accessories_cutting.dxf']) {
+  try {
+    await copyFile(resolve(root, `design/wooden-case/DXF/${dxf}`), resolve(destination, `wooden-case/dxf/${dxf}`));
+  } catch {}
+}
+// Dedicated Pi 3 PCB shield prototype download
+try {
+  await copyFile(resolve(root, 'design/pi3-shield/generated/alfa-pi3-shield-prototype.zip'), resolve(destination, 'pcb/alfa-pi3-shield-prototype.zip'));
+} catch {}
 await writeFile(resolve(destination, '.nojekyll'), '');
 await copyFile(resolve(web, 'assets/og-cloud.png'), resolve(destination, 'og-cloud.png'));
 await exportAdr(resolve(destination, 'docs/adr.pdf'));

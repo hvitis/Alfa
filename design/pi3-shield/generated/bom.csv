@@ -1,0 +1,15 @@
+Reference,Quantity,Value,Manufacturer,MPN,Footprint,Assembly,Notes
+J1,1,Pi 3 underside socket,Samtec,SSQ-120-01-G-D,Alfa:Pi_40_Underside,THT underside,"2x20 female, 2.54 mm; select socket/standoff heights as a matched pair."
+U1,1,ADS1115IDGSR,Texas Instruments,ADS1115IDGSR,Package_SO:VSSOP-10_3x3mm_P0.5mm,SMT top,16-bit ADC; address 0x48; A0 keypad input. Replaces ADS breakout.
+U2,1,MAX98357AETE+T,Analog Devices,MAX98357AETE+T,Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm,SMT top,"I2S A variant, 16-pin TQFN, gain pin open = 9 dB; left channel."
+J2,1,JST PH 8,JST,B8B-PH-K-S(LF)(SN),Connector_JST:JST_PH_B8B-PH-K_1x08_P2.00mm_Vertical,THT top,Through-hole; supplier can hand-assemble. Harness pin order is defined by this PCB.
+J3,1,JST PH 2,JST,B2B-PH-K-S(LF)(SN),Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical,THT top,Through-hole; supplier can hand-assemble. Harness pin order is defined by this PCB.
+J4,1,JST PH 3,JST,B3B-PH-K-S(LF)(SN),Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical,THT top,Through-hole; supplier can hand-assemble. Harness pin order is defined by this PCB.
+R1,1,10k 1%,Yageo,RC0805FR-0710KL,Resistor_SMD:R_0805_2012Metric,SMT top,
+R2,1,10k 1%,Yageo,RC0805FR-0710KL,Resistor_SMD:R_0805_2012Metric,SMT top,
+R3,1,1k 1%,Yageo,RC0805FR-071KL,Resistor_SMD:R_0805_2012Metric,SMT top,
+R4,1,100k 1%,Yageo,RC0805FR-07100KL,Resistor_SMD:R_0805_2012Metric,SMT top,
+C1,1,100nF 50V X7R,Murata,GRM21BR71H104KA01L,Capacitor_SMD:C_0805_2012Metric,SMT top,
+C2,1,100nF 50V X7R,Murata,GRM21BR71H104KA01L,Capacitor_SMD:C_0805_2012Metric,SMT top,
+C3,1,10uF 10V X7R,Murata,GRM31CR71A106KA01L,Capacitor_SMD:C_1206_3216Metric,SMT top,
+C4,1,47uF 10V X5R,Murata,GRM32ER61A476KE20L,Capacitor_SMD:C_1210_3225Metric,SMT top,

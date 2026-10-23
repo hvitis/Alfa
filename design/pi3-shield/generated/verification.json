@@ -1,0 +1,882 @@
+{
+  "status": "digital checks pass; hardware tests pending",
+  "count": 219,
+  "checks": [
+    {
+      "name": "schematic J1.1 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.1 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.2 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.2 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.3 = I2C_SDA",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.3 = I2C_SDA",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.4 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.4 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.5 = I2C_SCL",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.5 = I2C_SCL",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.6 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.6 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.9 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.9 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.12 = I2S_BCLK",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.12 = I2S_BCLK",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.13 = LCD_RST",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.13 = LCD_RST",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.14 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.14 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.16 = AMP_ENABLE",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.16 = AMP_ENABLE",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.17 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.17 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.18 = LCD_BL",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.18 = LCD_BL",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.19 = LCD_MOSI",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.19 = LCD_MOSI",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.20 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.20 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.22 = LCD_DC",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.22 = LCD_DC",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.23 = LCD_SCK",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.23 = LCD_SCK",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.24 = LCD_CS",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.24 = LCD_CS",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.25 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.25 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.30 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.30 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.34 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.34 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.35 = I2S_LRCLK",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.35 = I2S_LRCLK",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.39 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.39 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J1.40 = I2S_DIN",
+      "pass": true
+    },
+    {
+      "name": "PCB J1.40 = I2S_DIN",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.1 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.1 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.3 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.3 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.4 = KEY_SENSE",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.4 = KEY_SENSE",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.5 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.5 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.6 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.6 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.7 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.7 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.8 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.8 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.9 = I2C_SDA",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.9 = I2C_SDA",
+      "pass": true
+    },
+    {
+      "name": "schematic U1.10 = I2C_SCL",
+      "pass": true
+    },
+    {
+      "name": "PCB U1.10 = I2C_SCL",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.1 = I2S_DIN",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.1 = I2S_DIN",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.3 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.3 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.4 = AMP_SD",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.4 = AMP_SD",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.7 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.7 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.8 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.8 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.9 = SPK_P",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.9 = SPK_P",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.10 = SPK_N",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.10 = SPK_N",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.11 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.11 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.14 = I2S_LRCLK",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.14 = I2S_LRCLK",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.15 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.15 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.16 = I2S_BCLK",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.16 = I2S_BCLK",
+      "pass": true
+    },
+    {
+      "name": "schematic U2.17 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB U2.17 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J2.1 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "PCB J2.1 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "schematic J2.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J2.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic J2.3 = LCD_MOSI",
+      "pass": true
+    },
+    {
+      "name": "PCB J2.3 = LCD_MOSI",
+      "pass": true
+    },
+    {
+      "name": "schematic J2.4 = LCD_SCK",
+      "pass": true
+    },
+    {
+      "name": "PCB J2.4 = LCD_SCK",
+      "pass": true
+    },
+    {
+      "name": "schematic J2.5 = LCD_CS",
+      "pass": true
+    },
+    {
+      "name": "PCB J2.5 = LCD_CS",
+      "pass": true
+    },
+    {
+      "name": "schematic J2.6 = LCD_DC",
+      "pass": true
+    },
+    {
+      "name": "PCB J2.6 = LCD_DC",
+      "pass": true
+    },
+    {
+      "name": "schematic J2.7 = LCD_RST",
+      "pass": true
+    },
+    {
+      "name": "PCB J2.7 = LCD_RST",
+      "pass": true
+    },
+    {
+      "name": "schematic J2.8 = LCD_BL",
+      "pass": true
+    },
+    {
+      "name": "PCB J2.8 = LCD_BL",
+      "pass": true
+    },
+    {
+      "name": "schematic J3.1 = SPK_P",
+      "pass": true
+    },
+    {
+      "name": "PCB J3.1 = SPK_P",
+      "pass": true
+    },
+    {
+      "name": "schematic J3.2 = SPK_N",
+      "pass": true
+    },
+    {
+      "name": "PCB J3.2 = SPK_N",
+      "pass": true
+    },
+    {
+      "name": "schematic J4.1 = KEY_OUT",
+      "pass": true
+    },
+    {
+      "name": "PCB J4.1 = KEY_OUT",
+      "pass": true
+    },
+    {
+      "name": "schematic J4.2 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB J4.2 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic J4.3 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB J4.3 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic R1.1 = KEY_OUT",
+      "pass": true
+    },
+    {
+      "name": "PCB R1.1 = KEY_OUT",
+      "pass": true
+    },
+    {
+      "name": "schematic R1.2 = KEY_SENSE",
+      "pass": true
+    },
+    {
+      "name": "PCB R1.2 = KEY_SENSE",
+      "pass": true
+    },
+    {
+      "name": "schematic R2.1 = KEY_SENSE",
+      "pass": true
+    },
+    {
+      "name": "PCB R2.1 = KEY_SENSE",
+      "pass": true
+    },
+    {
+      "name": "schematic R2.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB R2.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic R3.1 = AMP_ENABLE",
+      "pass": true
+    },
+    {
+      "name": "PCB R3.1 = AMP_ENABLE",
+      "pass": true
+    },
+    {
+      "name": "schematic R3.2 = AMP_SD",
+      "pass": true
+    },
+    {
+      "name": "PCB R3.2 = AMP_SD",
+      "pass": true
+    },
+    {
+      "name": "schematic R4.1 = AMP_SD",
+      "pass": true
+    },
+    {
+      "name": "PCB R4.1 = AMP_SD",
+      "pass": true
+    },
+    {
+      "name": "schematic R4.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB R4.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic C1.1 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "PCB C1.1 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "schematic C1.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB C1.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic C2.1 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB C2.1 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic C2.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB C2.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic C3.1 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB C3.1 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic C3.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB C3.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic C4.1 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB C4.1 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic C4.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB C4.2 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic TP1.1 = +5V",
+      "pass": true
+    },
+    {
+      "name": "PCB TP1.1 = +5V",
+      "pass": true
+    },
+    {
+      "name": "schematic TP2.1 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "PCB TP2.1 = +3V3",
+      "pass": true
+    },
+    {
+      "name": "schematic TP3.1 = GND",
+      "pass": true
+    },
+    {
+      "name": "PCB TP3.1 = GND",
+      "pass": true
+    },
+    {
+      "name": "schematic TP4.1 = KEY_SENSE",
+      "pass": true
+    },
+    {
+      "name": "PCB TP4.1 = KEY_SENSE",
+      "pass": true
+    },
+    {
+      "name": "PCB has no unintended connected pads",
+      "pass": true
+    },
+    {
+      "name": "Schematic has no unintended connected pads",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 3",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 5",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 12",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 13",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 16",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 18",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 19",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 22",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 23",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 24",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 35",
+      "pass": true
+    },
+    {
+      "name": "working Pi physical pin 40",
+      "pass": true
+    },
+    {
+      "name": "HAT ID pins are unused",
+      "pass": true
+    },
+    {
+      "name": "Speaker outputs never connect to ground",
+      "pass": true
+    },
+    {
+      "name": "LCD GPIO configuration matches",
+      "pass": true
+    },
+    {
+      "name": "ADC configuration matches ADS1115 / 0x48",
+      "pass": true
+    },
+    {
+      "name": "Amplifier sleep GPIO configuration matches",
+      "pass": true
+    },
+    {
+      "name": "Pi socket is on underside",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 1 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 2 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 3 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 4 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 5 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 6 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 7 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 8 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 9 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 10 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 11 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 12 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 13 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 14 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 15 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 16 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 17 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 18 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 19 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 20 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 21 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 22 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 23 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 24 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 25 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 26 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 27 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 28 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 29 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 30 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 31 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 32 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 33 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 34 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 35 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 36 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 37 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 38 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 39 geometry",
+      "pass": true
+    },
+    {
+      "name": "Pi physical pad 40 geometry",
+      "pass": true
+    },
+    {
+      "name": "KiCad Found 0 DRC violations",
+      "pass": true
+    },
+    {
+      "name": "KiCad Found 0 unconnected pads",
+      "pass": true
+    },
+    {
+      "name": "KiCad Errors 0  Warnings 0",
+      "pass": true
+    }
+  ]
+}

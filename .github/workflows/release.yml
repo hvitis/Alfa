@@ -28,7 +28,7 @@ jobs:
     outputs:
       commit: ${{ steps.gate.outputs.commit }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', inputs.tag_name) || github.ref }}
           fetch-depth: 0
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
         with:
           ref: ${{ needs.verify-tag.outputs.commit }}
           persist-credentials: false
@@ -69,17 +69,15 @@ jobs:
           python-version: '3.12'
           cache: pip
           cache-dependency-path: requirements/*.txt
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
       - name: Install build dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
           python -m pip install -r requirements/dev.txt
           npm ci
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Build complete software kit
         run: make build PYTHON=python
       - name: Independently validate deliverables
@@ -88,13 +86,13 @@ jobs:
         run: python scripts/generate_release_notes.py "$RELEASE_TAG" > output/release-notes.md
       - name: Retain diagnostics on failure
         if: failure()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: release-failure-reports
           path: output/reports/
           if-no-files-found: ignore
       - name: Upload exact release deliverables
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: release-deliverables
           if-no-files-found: error

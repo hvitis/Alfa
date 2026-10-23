@@ -99,6 +99,30 @@
   .stl-viewer-status { left: 12px; right: 12px; bottom: 38px; }
 }
 
+/* Case Renders Gallery Showcase */
+.case-renders-section { margin-top: 36px; padding: 28px; border: 2px solid var(--ink); border-radius: 24px; background: #fffdf9; box-shadow: 4px 5px 0 #cfc3df; }
+.renders-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+.renders-header h3 { margin: 4px 0 8px; font-size: 24px; }
+.renders-header p { font-size: 13px; max-width: 580px; margin: 0; color: #4e4465; }
+.renders-tabs { display: flex; gap: 6px; flex-wrap: wrap; background: #eedeff; padding: 5px; border: 1.5px solid var(--ink); border-radius: 14px; box-shadow: 2px 2px 0 #b3a5c6; }
+.render-tab, .wooden-render-tab { border: 0; background: transparent; font: 700 12px var(--display, sans-serif); color: var(--ink); padding: 7px 12px; border-radius: 9px; cursor: pointer; transition: background .15s, color .15s; }
+.render-tab:hover, .wooden-render-tab:hover { background: var(--pink); }
+.render-tab.active, .wooden-render-tab.active { background: var(--ink); color: white; }
+.render-viewer-frame { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr); gap: 24px; align-items: center; border: 1.5px solid var(--ink); border-radius: 18px; background: #fff6e4; padding: 20px; box-shadow: 3px 3px 0 #d9cca4; }
+.render-display { position: relative; border: 1.5px solid var(--ink); border-radius: 14px; background: #fffaf0; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 380px; }
+.render-main-img { width: 100%; height: auto; max-height: 480px; object-fit: contain; display: block; transition: opacity .2s ease; }
+.render-badge-tag { position: absolute; top: 12px; left: 12px; font-size: 9px; letter-spacing: .08em; font-weight: 800; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--yellow); padding: 6px 10px; color: var(--ink); }
+.render-meta-card { display: flex; flex-direction: column; gap: 12px; }
+.render-meta-card h4 { margin: 0; font-size: 20px; }
+.render-meta-card p { font-size: 13px; line-height: 1.5; color: #4e4465; margin: 0; }
+.render-details-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.render-chip { font-size: 11px; font-weight: 700; padding: 5px 10px; border: 1px solid var(--ink); border-radius: 8px; background: var(--paper); color: var(--ink); }
+
+@media (max-width: 900px) {
+  .render-viewer-frame { grid-template-columns: 1fr; gap: 18px; }
+  .renders-header { flex-direction: column; align-items: flex-start; }
+}
+
 /* Pricing tile & filament estimation */
 .cloud-pricing { margin-top: 32px; padding: 28px; border: 2px solid var(--ink); border-radius: 24px; background: var(--mint); box-shadow: 4px 5px 0 #9ed4bc; box-sizing: border-box; }
 .pricing-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 24px; }

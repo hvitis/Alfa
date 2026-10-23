@@ -1,0 +1,640 @@
+{
+  "name": "alfa-pi3-shield",
+  "revision": "A",
+  "status": "engineering prototype; not released for production",
+  "controller": "Raspberry Pi 3 Model B",
+  "dimensions_mm": [
+    65,
+    56,
+    1.6
+  ],
+  "mount_hole_pitch_mm": [
+    58,
+    49
+  ],
+  "mount_drill_mm": 2.75,
+  "components": [
+    {
+      "ref": "J1",
+      "value": "Pi 3 underside socket",
+      "footprint": "Alfa:Pi_40_Underside",
+      "xy": [
+        0,
+        0
+      ],
+      "pins": {
+        "1": "+3V3",
+        "2": "+5V",
+        "3": "I2C_SDA",
+        "4": "+5V",
+        "5": "I2C_SCL",
+        "6": "GND",
+        "7": null,
+        "8": null,
+        "9": "GND",
+        "10": null,
+        "11": null,
+        "12": "I2S_BCLK",
+        "13": "LCD_RST",
+        "14": "GND",
+        "15": null,
+        "16": "AMP_ENABLE",
+        "17": "+3V3",
+        "18": "LCD_BL",
+        "19": "LCD_MOSI",
+        "20": "GND",
+        "21": null,
+        "22": "LCD_DC",
+        "23": "LCD_SCK",
+        "24": "LCD_CS",
+        "25": "GND",
+        "26": null,
+        "27": null,
+        "28": null,
+        "29": null,
+        "30": "GND",
+        "31": null,
+        "32": null,
+        "33": null,
+        "34": "GND",
+        "35": "I2S_LRCLK",
+        "36": null,
+        "37": null,
+        "38": null,
+        "39": "GND",
+        "40": "I2S_DIN"
+      },
+      "names": {
+        "1": "3V3",
+        "2": "5V",
+        "3": "GPIO2/SDA",
+        "4": "5V",
+        "5": "GPIO3/SCL",
+        "6": "GND",
+        "7": "GPIO4",
+        "8": "GPIO14",
+        "9": "GND",
+        "10": "GPIO15",
+        "11": "GPIO17",
+        "12": "GPIO18/BCLK",
+        "13": "GPIO27/RST",
+        "14": "GND",
+        "15": "GPIO22",
+        "16": "GPIO23/ENABLE",
+        "17": "3V3",
+        "18": "GPIO24/BL",
+        "19": "GPIO10/MOSI",
+        "20": "GND",
+        "21": "GPIO9",
+        "22": "GPIO25/DC",
+        "23": "GPIO11/SCK",
+        "24": "GPIO8/CE0",
+        "25": "GND",
+        "26": "GPIO7",
+        "27": "ID_SD/RESERVED",
+        "28": "ID_SC/RESERVED",
+        "29": "GPIO5",
+        "30": "GND",
+        "31": "GPIO6",
+        "32": "GPIO12",
+        "33": "GPIO13",
+        "34": "GND",
+        "35": "GPIO19/LRCLK",
+        "36": "GPIO16",
+        "37": "GPIO26",
+        "38": "GPIO20",
+        "39": "GND",
+        "40": "GPIO21/DIN"
+      },
+      "mpn": "SSQ-120-01-G-D",
+      "maker": "Samtec",
+      "angle": 0,
+      "side": "bottom",
+      "note": "2x20 female, 2.54 mm; select socket/standoff heights as a matched pair.",
+      "schematic": [
+        45,
+        75
+      ]
+    },
+    {
+      "ref": "U1",
+      "value": "ADS1115IDGSR",
+      "footprint": "Package_SO:VSSOP-10_3x3mm_P0.5mm",
+      "xy": [
+        27,
+        29
+      ],
+      "pins": {
+        "1": "GND",
+        "2": null,
+        "3": "GND",
+        "4": "KEY_SENSE",
+        "5": "GND",
+        "6": "GND",
+        "7": "GND",
+        "8": "+3V3",
+        "9": "I2C_SDA",
+        "10": "I2C_SCL"
+      },
+      "names": {
+        "1": "ADDR",
+        "2": "ALERT/RDY",
+        "3": "GND",
+        "4": "AIN0",
+        "5": "AIN1",
+        "6": "AIN2",
+        "7": "AIN3",
+        "8": "VDD",
+        "9": "SDA",
+        "10": "SCL"
+      },
+      "mpn": "ADS1115IDGSR",
+      "maker": "Texas Instruments",
+      "angle": 0,
+      "side": "top",
+      "note": "16-bit ADC; address 0x48; A0 keypad input. Replaces ADS breakout.",
+      "schematic": [
+        115,
+        48
+      ]
+    },
+    {
+      "ref": "U2",
+      "value": "MAX98357AETE+T",
+      "footprint": "Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm",
+      "xy": [
+        47,
+        29
+      ],
+      "pins": {
+        "1": "I2S_DIN",
+        "2": null,
+        "3": "GND",
+        "4": "AMP_SD",
+        "5": null,
+        "6": null,
+        "7": "+5V",
+        "8": "+5V",
+        "9": "SPK_P",
+        "10": "SPK_N",
+        "11": "GND",
+        "12": null,
+        "13": null,
+        "14": "I2S_LRCLK",
+        "15": "GND",
+        "16": "I2S_BCLK",
+        "17": "GND"
+      },
+      "names": {
+        "1": "DIN",
+        "2": "GAIN_SLOT",
+        "3": "GND",
+        "4": "SD_MODE",
+        "5": "NC",
+        "6": "NC",
+        "7": "VDD",
+        "8": "VDD",
+        "9": "OUTP",
+        "10": "OUTN",
+        "11": "GND",
+        "12": "NC",
+        "13": "NC",
+        "14": "LRCLK",
+        "15": "GND",
+        "16": "BCLK",
+        "17": "EP"
+      },
+      "mpn": "MAX98357AETE+T",
+      "maker": "Analog Devices",
+      "angle": 0,
+      "side": "top",
+      "note": "I2S A variant, 16-pin TQFN, gain pin open = 9 dB; left channel.",
+      "schematic": [
+        195,
+        58
+      ]
+    },
+    {
+      "ref": "J2",
+      "value": "JST PH 8",
+      "footprint": "Connector_JST:JST_PH_B8B-PH-K_1x08_P2.00mm_Vertical",
+      "xy": [
+        10,
+        46
+      ],
+      "pins": {
+        "1": "+3V3",
+        "2": "GND",
+        "3": "LCD_MOSI",
+        "4": "LCD_SCK",
+        "5": "LCD_CS",
+        "6": "LCD_DC",
+        "7": "LCD_RST",
+        "8": "LCD_BL"
+      },
+      "names": {
+        "1": "VCC",
+        "2": "GND",
+        "3": "DIN",
+        "4": "CLK",
+        "5": "CS",
+        "6": "DC",
+        "7": "RST",
+        "8": "BL"
+      },
+      "mpn": "B8B-PH-K-S(LF)(SN)",
+      "maker": "JST",
+      "angle": 0,
+      "side": "top",
+      "note": "Through-hole; supplier can hand-assemble. Harness pin order is defined by this PCB.",
+      "schematic": [
+        115,
+        105
+      ]
+    },
+    {
+      "ref": "J3",
+      "value": "JST PH 2",
+      "footprint": "Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical",
+      "xy": [
+        51,
+        46
+      ],
+      "pins": {
+        "1": "SPK_P",
+        "2": "SPK_N"
+      },
+      "names": {
+        "1": "SPK+",
+        "2": "SPK-"
+      },
+      "mpn": "B2B-PH-K-S(LF)(SN)",
+      "maker": "JST",
+      "angle": 0,
+      "side": "top",
+      "note": "Through-hole; supplier can hand-assemble. Harness pin order is defined by this PCB.",
+      "schematic": [
+        255,
+        48
+      ]
+    },
+    {
+      "ref": "J4",
+      "value": "JST PH 3",
+      "footprint": "Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical",
+      "xy": [
+        34,
+        46
+      ],
+      "pins": {
+        "1": "KEY_OUT",
+        "2": "+5V",
+        "3": "GND"
+      },
+      "names": {
+        "1": "OUT",
+        "2": "5V",
+        "3": "GND"
+      },
+      "mpn": "B3B-PH-K-S(LF)(SN)",
+      "maker": "JST",
+      "angle": 0,
+      "side": "top",
+      "note": "Through-hole; supplier can hand-assemble. Harness pin order is defined by this PCB.",
+      "schematic": [
+        255,
+        103
+      ]
+    },
+    {
+      "ref": "R1",
+      "value": "10k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "xy": [
+        28,
+        37
+      ],
+      "pins": {
+        "1": "KEY_OUT",
+        "2": "KEY_SENSE"
+      },
+      "names": {
+        "1": "1",
+        "2": "2"
+      },
+      "mpn": "RC0805FR-0710KL",
+      "maker": "Yageo",
+      "angle": 0,
+      "side": "top",
+      "note": "",
+      "schematic": [
+        115,
+        147
+      ]
+    },
+    {
+      "ref": "R2",
+      "value": "10k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "xy": [
+        33,
+        37
+      ],
+      "pins": {
+        "1": "KEY_SENSE",
+        "2": "GND"
+      },
+      "names": {
+        "1": "1",
+        "2": "2"
+      },
+      "mpn": "RC0805FR-0710KL",
+      "maker": "Yageo",
+      "angle": 0,
+      "side": "top",
+      "note": "",
+      "schematic": [
+        145,
+        147
+      ]
+    },
+    {
+      "ref": "R3",
+      "value": "1k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "xy": [
+        40,
+        24
+      ],
+      "pins": {
+        "1": "AMP_ENABLE",
+        "2": "AMP_SD"
+      },
+      "names": {
+        "1": "1",
+        "2": "2"
+      },
+      "mpn": "RC0805FR-071KL",
+      "maker": "Yageo",
+      "angle": 0,
+      "side": "top",
+      "note": "",
+      "schematic": [
+        195,
+        120
+      ]
+    },
+    {
+      "ref": "R4",
+      "value": "100k 1%",
+      "footprint": "Resistor_SMD:R_0805_2012Metric",
+      "xy": [
+        40,
+        29
+      ],
+      "pins": {
+        "1": "AMP_SD",
+        "2": "GND"
+      },
+      "names": {
+        "1": "1",
+        "2": "2"
+      },
+      "mpn": "RC0805FR-07100KL",
+      "maker": "Yageo",
+      "angle": 0,
+      "side": "top",
+      "note": "",
+      "schematic": [
+        225,
+        120
+      ]
+    },
+    {
+      "ref": "C1",
+      "value": "100nF 50V X7R",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "xy": [
+        32.5,
+        29
+      ],
+      "pins": {
+        "1": "+3V3",
+        "2": "GND"
+      },
+      "names": {
+        "1": "1",
+        "2": "2"
+      },
+      "mpn": "GRM21BR71H104KA01L",
+      "maker": "Murata",
+      "angle": 0,
+      "side": "top",
+      "note": "",
+      "schematic": [
+        115,
+        171
+      ]
+    },
+    {
+      "ref": "C2",
+      "value": "100nF 50V X7R",
+      "footprint": "Capacitor_SMD:C_0805_2012Metric",
+      "xy": [
+        46,
+        34
+      ],
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {
+        "1": "1",
+        "2": "2"
+      },
+      "mpn": "GRM21BR71H104KA01L",
+      "maker": "Murata",
+      "angle": 0,
+      "side": "top",
+      "note": "",
+      "schematic": [
+        175,
+        171
+      ]
+    },
+    {
+      "ref": "C3",
+      "value": "10uF 10V X7R",
+      "footprint": "Capacitor_SMD:C_1206_3216Metric",
+      "xy": [
+        50.5,
+        34
+      ],
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {
+        "1": "1",
+        "2": "2"
+      },
+      "mpn": "GRM31CR71A106KA01L",
+      "maker": "Murata",
+      "angle": 0,
+      "side": "top",
+      "note": "",
+      "schematic": [
+        205,
+        171
+      ]
+    },
+    {
+      "ref": "C4",
+      "value": "47uF 10V X5R",
+      "footprint": "Capacitor_SMD:C_1210_3225Metric",
+      "xy": [
+        56,
+        34
+      ],
+      "pins": {
+        "1": "+5V",
+        "2": "GND"
+      },
+      "names": {
+        "1": "1",
+        "2": "2"
+      },
+      "mpn": "GRM32ER61A476KE20L",
+      "maker": "Murata",
+      "angle": 0,
+      "side": "top",
+      "note": "",
+      "schematic": [
+        235,
+        171
+      ]
+    },
+    {
+      "ref": "TP1",
+      "value": "+5V",
+      "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+      "xy": [
+        57,
+        15
+      ],
+      "pins": {
+        "1": "+5V"
+      },
+      "names": {
+        "1": "1"
+      },
+      "mpn": "",
+      "maker": "",
+      "angle": 0,
+      "side": "top",
+      "note": "Bare copper test pad; no component to purchase.",
+      "schematic": [
+        35,
+        147
+      ]
+    },
+    {
+      "ref": "TP2",
+      "value": "+3V3",
+      "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+      "xy": [
+        12,
+        15
+      ],
+      "pins": {
+        "1": "+3V3"
+      },
+      "names": {
+        "1": "1"
+      },
+      "mpn": "",
+      "maker": "",
+      "angle": 0,
+      "side": "top",
+      "note": "Bare copper test pad; no component to purchase.",
+      "schematic": [
+        55,
+        147
+      ]
+    },
+    {
+      "ref": "TP3",
+      "value": "GND",
+      "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+      "xy": [
+        17,
+        15
+      ],
+      "pins": {
+        "1": "GND"
+      },
+      "names": {
+        "1": "1"
+      },
+      "mpn": "",
+      "maker": "",
+      "angle": 0,
+      "side": "top",
+      "note": "Bare copper test pad; no component to purchase.",
+      "schematic": [
+        35,
+        171
+      ]
+    },
+    {
+      "ref": "TP4",
+      "value": "KEY_SENSE",
+      "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+      "xy": [
+        23,
+        37
+      ],
+      "pins": {
+        "1": "KEY_SENSE"
+      },
+      "names": {
+        "1": "1"
+      },
+      "mpn": "",
+      "maker": "",
+      "angle": 0,
+      "side": "top",
+      "note": "Bare copper test pad; no component to purchase.",
+      "schematic": [
+        55,
+        171
+      ]
+    }
+  ],
+  "pi_nets": {
+    "1": "+3V3",
+    "2": "+5V",
+    "3": "I2C_SDA",
+    "4": "+5V",
+    "5": "I2C_SCL",
+    "6": "GND",
+    "9": "GND",
+    "12": "I2S_BCLK",
+    "13": "LCD_RST",
+    "14": "GND",
+    "16": "AMP_ENABLE",
+    "17": "+3V3",
+    "18": "LCD_BL",
+    "19": "LCD_MOSI",
+    "20": "GND",
+    "22": "LCD_DC",
+    "23": "LCD_SCK",
+    "24": "LCD_CS",
+    "25": "GND",
+    "30": "GND",
+    "34": "GND",
+    "35": "I2S_LRCLK",
+    "39": "GND",
+    "40": "I2S_DIN"
+  }
+}

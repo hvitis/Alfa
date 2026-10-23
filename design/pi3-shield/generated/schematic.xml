@@ -1,0 +1,807 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>/tmp/alfa-kicad-39whjl5v/alfa-pi3-shield.kicad_sch</source>
+    <date>2026-10-18T18:17:23+0000</date>
+    <tool>Eeschema 9.0.9</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>Alfa Raspberry Pi 3 shield</title>
+        <company/>
+        <rev>A</rev>
+        <date/>
+        <source>alfa-pi3-shield.kicad_sch</source>
+        <comment number="1" value="Engineering prototype - hardware validation pending"/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="C1">
+      <value>100nF 50V X7R</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric</footprint>
+      <fields>
+        <field name="MPN">GRM21BR71H104KA01L</field>
+        <field name="Footprint">Capacitor_SMD:C_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="C1" description=""/>
+      <property name="MPN" value="GRM21BR71H104KA01L"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>42b1123d-0722-523d-b0ab-682c3d51f26e</tstamps>
+    </comp>
+    <comp ref="C2">
+      <value>100nF 50V X7R</value>
+      <footprint>Capacitor_SMD:C_0805_2012Metric</footprint>
+      <fields>
+        <field name="MPN">GRM21BR71H104KA01L</field>
+        <field name="Footprint">Capacitor_SMD:C_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="C2" description=""/>
+      <property name="MPN" value="GRM21BR71H104KA01L"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7f31b676-bb3f-51f5-ae91-01dff8ea4734</tstamps>
+    </comp>
+    <comp ref="C3">
+      <value>10uF 10V X7R</value>
+      <footprint>Capacitor_SMD:C_1206_3216Metric</footprint>
+      <fields>
+        <field name="MPN">GRM31CR71A106KA01L</field>
+        <field name="Footprint">Capacitor_SMD:C_1206_3216Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="C3" description=""/>
+      <property name="MPN" value="GRM31CR71A106KA01L"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>646204ed-3c68-51fd-8536-10880e6c4f2b</tstamps>
+    </comp>
+    <comp ref="C4">
+      <value>47uF 10V X5R</value>
+      <footprint>Capacitor_SMD:C_1210_3225Metric</footprint>
+      <fields>
+        <field name="MPN">GRM32ER61A476KE20L</field>
+        <field name="Footprint">Capacitor_SMD:C_1210_3225Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="C4" description=""/>
+      <property name="MPN" value="GRM32ER61A476KE20L"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>cc6f7d97-cd89-588f-86d6-befbfe124dfb</tstamps>
+    </comp>
+    <comp ref="J1">
+      <value>Pi 3 underside socket</value>
+      <footprint>Alfa:Pi_40_Underside</footprint>
+      <fields>
+        <field name="MPN">SSQ-120-01-G-D</field>
+        <field name="Footprint">Alfa:Pi_40_Underside</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="J1" description=""/>
+      <property name="MPN" value="SSQ-120-01-G-D"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6498a32c-3a07-55b4-a073-4009bb49efe5</tstamps>
+    </comp>
+    <comp ref="J2">
+      <value>JST PH 8</value>
+      <footprint>Connector_JST:JST_PH_B8B-PH-K_1x08_P2.00mm_Vertical</footprint>
+      <fields>
+        <field name="MPN">B8B-PH-K-S(LF)(SN)</field>
+        <field name="Footprint">Connector_JST:JST_PH_B8B-PH-K_1x08_P2.00mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="J2" description=""/>
+      <property name="MPN" value="B8B-PH-K-S(LF)(SN)"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b4868133-10e0-55c0-a6e0-9be07a317262</tstamps>
+    </comp>
+    <comp ref="J3">
+      <value>JST PH 2</value>
+      <footprint>Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical</footprint>
+      <fields>
+        <field name="MPN">B2B-PH-K-S(LF)(SN)</field>
+        <field name="Footprint">Connector_JST:JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="J3" description=""/>
+      <property name="MPN" value="B2B-PH-K-S(LF)(SN)"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>5425ec94-17d9-5e8f-81bf-2a45634ef9f0</tstamps>
+    </comp>
+    <comp ref="J4">
+      <value>JST PH 3</value>
+      <footprint>Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical</footprint>
+      <fields>
+        <field name="MPN">B3B-PH-K-S(LF)(SN)</field>
+        <field name="Footprint">Connector_JST:JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="J4" description=""/>
+      <property name="MPN" value="B3B-PH-K-S(LF)(SN)"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>cbc0d69b-55ed-518a-b078-f410139e3486</tstamps>
+    </comp>
+    <comp ref="R1">
+      <value>10k 1%</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="MPN">RC0805FR-0710KL</field>
+        <field name="Footprint">Resistor_SMD:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="R1" description=""/>
+      <property name="MPN" value="RC0805FR-0710KL"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>94a491fd-4df1-5d72-a540-0e325f1bc1df</tstamps>
+    </comp>
+    <comp ref="R2">
+      <value>10k 1%</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="MPN">RC0805FR-0710KL</field>
+        <field name="Footprint">Resistor_SMD:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="R2" description=""/>
+      <property name="MPN" value="RC0805FR-0710KL"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>7ae44b8d-95ff-5baf-b8dd-eb85ea806ce6</tstamps>
+    </comp>
+    <comp ref="R3">
+      <value>1k 1%</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="MPN">RC0805FR-071KL</field>
+        <field name="Footprint">Resistor_SMD:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="R3" description=""/>
+      <property name="MPN" value="RC0805FR-071KL"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>82f85d55-3cee-569f-a3db-4802e7edd9f1</tstamps>
+    </comp>
+    <comp ref="R4">
+      <value>100k 1%</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="MPN">RC0805FR-07100KL</field>
+        <field name="Footprint">Resistor_SMD:R_0805_2012Metric</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="R4" description=""/>
+      <property name="MPN" value="RC0805FR-07100KL"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>8f7984dd-a9c7-529e-9635-18bda69cded7</tstamps>
+    </comp>
+    <comp ref="TP1">
+      <value>+5V</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="MPN"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="TP1" description=""/>
+      <property name="MPN" value=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>db404f76-604c-5829-99d4-2fb3e594274f</tstamps>
+    </comp>
+    <comp ref="TP2">
+      <value>+3V3</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="MPN"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="TP2" description=""/>
+      <property name="MPN" value=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>42e68304-b7e9-55b6-9bf6-f0b3042ca68e</tstamps>
+    </comp>
+    <comp ref="TP3">
+      <value>GND</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="MPN"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="TP3" description=""/>
+      <property name="MPN" value=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>f6de7376-0a5b-5be1-9c8d-0868d987fb9a</tstamps>
+    </comp>
+    <comp ref="TP4">
+      <value>KEY_SENSE</value>
+      <footprint>TestPoint:TestPoint_Pad_D1.5mm</footprint>
+      <fields>
+        <field name="MPN"/>
+        <field name="Footprint">TestPoint:TestPoint_Pad_D1.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="TP4" description=""/>
+      <property name="MPN" value=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>84bde0f8-6379-5962-9e4f-e0ae1b2439ca</tstamps>
+    </comp>
+    <comp ref="U1">
+      <value>ADS1115IDGSR</value>
+      <footprint>Package_SO:VSSOP-10_3x3mm_P0.5mm</footprint>
+      <fields>
+        <field name="MPN">ADS1115IDGSR</field>
+        <field name="Footprint">Package_SO:VSSOP-10_3x3mm_P0.5mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="U1" description=""/>
+      <property name="MPN" value="ADS1115IDGSR"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>6605ec98-65cd-57e8-8ac7-5cf3378ac5d0</tstamps>
+    </comp>
+    <comp ref="U2">
+      <value>MAX98357AETE+T</value>
+      <footprint>Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm</footprint>
+      <fields>
+        <field name="MPN">MAX98357AETE+T</field>
+        <field name="Footprint">Package_DFN_QFN:TQFN-16-1EP_3x3mm_P0.5mm_EP1.23x1.23mm</field>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="Alfa" part="U2" description=""/>
+      <property name="MPN" value="MAX98357AETE+T"/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="alfa-pi3-shield.kicad_sch"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>85407d12-8091-5ed9-ba55-3f206916c975</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Alfa" part="C1">
+      <fields>
+        <field name="Reference">C1</field>
+        <field name="Value">100nF 50V X7R</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="C2">
+      <fields>
+        <field name="Reference">C2</field>
+        <field name="Value">100nF 50V X7R</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="C3">
+      <fields>
+        <field name="Reference">C3</field>
+        <field name="Value">10uF 10V X7R</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="C4">
+      <fields>
+        <field name="Reference">C4</field>
+        <field name="Value">47uF 10V X5R</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="J1">
+      <fields>
+        <field name="Reference">J1</field>
+        <field name="Value">Pi 3 underside socket</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="3V3" type="power_out"/>
+        <pin num="2" name="5V" type="power_out"/>
+        <pin num="3" name="GPIO2/SDA" type="passive"/>
+        <pin num="4" name="5V" type="passive"/>
+        <pin num="5" name="GPIO3/SCL" type="passive"/>
+        <pin num="6" name="GND" type="power_out"/>
+        <pin num="7" name="GPIO4" type="passive"/>
+        <pin num="8" name="GPIO14" type="passive"/>
+        <pin num="9" name="GND" type="passive"/>
+        <pin num="10" name="GPIO15" type="passive"/>
+        <pin num="11" name="GPIO17" type="passive"/>
+        <pin num="12" name="GPIO18/BCLK" type="passive"/>
+        <pin num="13" name="GPIO27/RST" type="passive"/>
+        <pin num="14" name="GND" type="passive"/>
+        <pin num="15" name="GPIO22" type="passive"/>
+        <pin num="16" name="GPIO23/ENABLE" type="passive"/>
+        <pin num="17" name="3V3" type="passive"/>
+        <pin num="18" name="GPIO24/BL" type="passive"/>
+        <pin num="19" name="GPIO10/MOSI" type="passive"/>
+        <pin num="20" name="GND" type="passive"/>
+        <pin num="21" name="GPIO9" type="passive"/>
+        <pin num="22" name="GPIO25/DC" type="passive"/>
+        <pin num="23" name="GPIO11/SCK" type="passive"/>
+        <pin num="24" name="GPIO8/CE0" type="passive"/>
+        <pin num="25" name="GND" type="passive"/>
+        <pin num="26" name="GPIO7" type="passive"/>
+        <pin num="27" name="ID_SD/RESERVED" type="passive"/>
+        <pin num="28" name="ID_SC/RESERVED" type="passive"/>
+        <pin num="29" name="GPIO5" type="passive"/>
+        <pin num="30" name="GND" type="passive"/>
+        <pin num="31" name="GPIO6" type="passive"/>
+        <pin num="32" name="GPIO12" type="passive"/>
+        <pin num="33" name="GPIO13" type="passive"/>
+        <pin num="34" name="GND" type="passive"/>
+        <pin num="35" name="GPIO19/LRCLK" type="passive"/>
+        <pin num="36" name="GPIO16" type="passive"/>
+        <pin num="37" name="GPIO26" type="passive"/>
+        <pin num="38" name="GPIO20" type="passive"/>
+        <pin num="39" name="GND" type="passive"/>
+        <pin num="40" name="GPIO21/DIN" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="J2">
+      <fields>
+        <field name="Reference">J2</field>
+        <field name="Value">JST PH 8</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="VCC" type="passive"/>
+        <pin num="2" name="GND" type="passive"/>
+        <pin num="3" name="DIN" type="passive"/>
+        <pin num="4" name="CLK" type="passive"/>
+        <pin num="5" name="CS" type="passive"/>
+        <pin num="6" name="DC" type="passive"/>
+        <pin num="7" name="RST" type="passive"/>
+        <pin num="8" name="BL" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="J3">
+      <fields>
+        <field name="Reference">J3</field>
+        <field name="Value">JST PH 2</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="SPK+" type="passive"/>
+        <pin num="2" name="SPK-" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="J4">
+      <fields>
+        <field name="Reference">J4</field>
+        <field name="Value">JST PH 3</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="OUT" type="passive"/>
+        <pin num="2" name="5V" type="passive"/>
+        <pin num="3" name="GND" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="R1">
+      <fields>
+        <field name="Reference">R1</field>
+        <field name="Value">10k 1%</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="R2">
+      <fields>
+        <field name="Reference">R2</field>
+        <field name="Value">10k 1%</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="R3">
+      <fields>
+        <field name="Reference">R3</field>
+        <field name="Value">1k 1%</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="R4">
+      <fields>
+        <field name="Reference">R4</field>
+        <field name="Value">100k 1%</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+        <pin num="2" name="2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="TP1">
+      <fields>
+        <field name="Reference">TP1</field>
+        <field name="Value">+5V</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="TP2">
+      <fields>
+        <field name="Reference">TP2</field>
+        <field name="Value">+3V3</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="TP3">
+      <fields>
+        <field name="Reference">TP3</field>
+        <field name="Value">GND</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="TP4">
+      <fields>
+        <field name="Reference">TP4</field>
+        <field name="Value">KEY_SENSE</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="U1">
+      <fields>
+        <field name="Reference">U1</field>
+        <field name="Value">ADS1115IDGSR</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="ADDR" type="input"/>
+        <pin num="2" name="ALERT/RDY" type="open_collector"/>
+        <pin num="3" name="GND" type="power_in"/>
+        <pin num="4" name="AIN0" type="input"/>
+        <pin num="5" name="AIN1" type="input"/>
+        <pin num="6" name="AIN2" type="input"/>
+        <pin num="7" name="AIN3" type="input"/>
+        <pin num="8" name="VDD" type="power_in"/>
+        <pin num="9" name="SDA" type="bidirectional"/>
+        <pin num="10" name="SCL" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="Alfa" part="U2">
+      <fields>
+        <field name="Reference">U2</field>
+        <field name="Value">MAX98357AETE+T</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="DIN" type="input"/>
+        <pin num="2" name="GAIN_SLOT" type="input"/>
+        <pin num="3" name="GND" type="power_in"/>
+        <pin num="4" name="SD_MODE" type="input"/>
+        <pin num="5" name="NC" type="no_connect"/>
+        <pin num="6" name="NC" type="no_connect"/>
+        <pin num="7" name="VDD" type="power_in"/>
+        <pin num="8" name="VDD" type="power_in"/>
+        <pin num="9" name="OUTP" type="output"/>
+        <pin num="10" name="OUTN" type="output"/>
+        <pin num="11" name="GND" type="power_in"/>
+        <pin num="12" name="NC" type="no_connect"/>
+        <pin num="13" name="NC" type="no_connect"/>
+        <pin num="14" name="LRCLK" type="input"/>
+        <pin num="15" name="GND" type="power_in"/>
+        <pin num="16" name="BCLK" type="input"/>
+        <pin num="17" name="EP" type="power_in"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Alfa">
+      <uri>/tmp/alfa-kicad-39whjl5v/Alfa.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="/+3V3" class="Default">
+      <node ref="C1" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J1" pin="1" pinfunction="3V3" pintype="power_out"/>
+      <node ref="J1" pin="17" pinfunction="3V3" pintype="passive"/>
+      <node ref="J2" pin="1" pinfunction="VCC" pintype="passive"/>
+      <node ref="TP2" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U1" pin="8" pinfunction="VDD" pintype="power_in"/>
+    </net>
+    <net code="2" name="/+5V" class="Default">
+      <node ref="C2" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="C3" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="C4" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="J1" pin="2" pinfunction="5V" pintype="power_out"/>
+      <node ref="J1" pin="4" pinfunction="5V" pintype="passive"/>
+      <node ref="J4" pin="2" pinfunction="5V" pintype="passive"/>
+      <node ref="TP1" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U2" pin="7" pinfunction="VDD" pintype="power_in"/>
+      <node ref="U2" pin="8" pinfunction="VDD" pintype="power_in"/>
+    </net>
+    <net code="3" name="/AMP_ENABLE" class="Default">
+      <node ref="J1" pin="16" pinfunction="GPIO23/ENABLE" pintype="passive"/>
+      <node ref="R3" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="4" name="/AMP_SD" class="Default">
+      <node ref="R3" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="R4" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U2" pin="4" pinfunction="SD_MODE" pintype="input"/>
+    </net>
+    <net code="5" name="/GND" class="Default">
+      <node ref="C1" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="C2" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="C3" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="C4" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="J1" pin="14" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="20" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="25" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="30" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="34" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="39" pinfunction="GND" pintype="passive"/>
+      <node ref="J1" pin="6" pinfunction="GND" pintype="power_out"/>
+      <node ref="J1" pin="9" pinfunction="GND" pintype="passive"/>
+      <node ref="J2" pin="2" pinfunction="GND" pintype="passive"/>
+      <node ref="J4" pin="3" pinfunction="GND" pintype="passive"/>
+      <node ref="R2" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="R4" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="TP3" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U1" pin="1" pinfunction="ADDR" pintype="input"/>
+      <node ref="U1" pin="3" pinfunction="GND" pintype="power_in"/>
+      <node ref="U1" pin="5" pinfunction="AIN1" pintype="input"/>
+      <node ref="U1" pin="6" pinfunction="AIN2" pintype="input"/>
+      <node ref="U1" pin="7" pinfunction="AIN3" pintype="input"/>
+      <node ref="U2" pin="11" pinfunction="GND" pintype="power_in"/>
+      <node ref="U2" pin="15" pinfunction="GND" pintype="power_in"/>
+      <node ref="U2" pin="17" pinfunction="EP" pintype="power_in"/>
+      <node ref="U2" pin="3" pinfunction="GND" pintype="power_in"/>
+    </net>
+    <net code="6" name="/I2C_SCL" class="Default">
+      <node ref="J1" pin="5" pinfunction="GPIO3/SCL" pintype="passive"/>
+      <node ref="U1" pin="10" pinfunction="SCL" pintype="input"/>
+    </net>
+    <net code="7" name="/I2C_SDA" class="Default">
+      <node ref="J1" pin="3" pinfunction="GPIO2/SDA" pintype="passive"/>
+      <node ref="U1" pin="9" pinfunction="SDA" pintype="bidirectional"/>
+    </net>
+    <net code="8" name="/I2S_BCLK" class="Default">
+      <node ref="J1" pin="12" pinfunction="GPIO18/BCLK" pintype="passive"/>
+      <node ref="U2" pin="16" pinfunction="BCLK" pintype="input"/>
+    </net>
+    <net code="9" name="/I2S_DIN" class="Default">
+      <node ref="J1" pin="40" pinfunction="GPIO21/DIN" pintype="passive"/>
+      <node ref="U2" pin="1" pinfunction="DIN" pintype="input"/>
+    </net>
+    <net code="10" name="/I2S_LRCLK" class="Default">
+      <node ref="J1" pin="35" pinfunction="GPIO19/LRCLK" pintype="passive"/>
+      <node ref="U2" pin="14" pinfunction="LRCLK" pintype="input"/>
+    </net>
+    <net code="11" name="/KEY_OUT" class="Default">
+      <node ref="J4" pin="1" pinfunction="OUT" pintype="passive"/>
+      <node ref="R1" pin="1" pinfunction="1" pintype="passive"/>
+    </net>
+    <net code="12" name="/KEY_SENSE" class="Default">
+      <node ref="R1" pin="2" pinfunction="2" pintype="passive"/>
+      <node ref="R2" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="TP4" pin="1" pinfunction="1" pintype="passive"/>
+      <node ref="U1" pin="4" pinfunction="AIN0" pintype="input"/>
+    </net>
+    <net code="13" name="/LCD_BL" class="Default">
+      <node ref="J1" pin="18" pinfunction="GPIO24/BL" pintype="passive"/>
+      <node ref="J2" pin="8" pinfunction="BL" pintype="passive"/>
+    </net>
+    <net code="14" name="/LCD_CS" class="Default">
+      <node ref="J1" pin="24" pinfunction="GPIO8/CE0" pintype="passive"/>
+      <node ref="J2" pin="5" pinfunction="CS" pintype="passive"/>
+    </net>
+    <net code="15" name="/LCD_DC" class="Default">
+      <node ref="J1" pin="22" pinfunction="GPIO25/DC" pintype="passive"/>
+      <node ref="J2" pin="6" pinfunction="DC" pintype="passive"/>
+    </net>
+    <net code="16" name="/LCD_MOSI" class="Default">
+      <node ref="J1" pin="19" pinfunction="GPIO10/MOSI" pintype="passive"/>
+      <node ref="J2" pin="3" pinfunction="DIN" pintype="passive"/>
+    </net>
+    <net code="17" name="/LCD_RST" class="Default">
+      <node ref="J1" pin="13" pinfunction="GPIO27/RST" pintype="passive"/>
+      <node ref="J2" pin="7" pinfunction="RST" pintype="passive"/>
+    </net>
+    <net code="18" name="/LCD_SCK" class="Default">
+      <node ref="J1" pin="23" pinfunction="GPIO11/SCK" pintype="passive"/>
+      <node ref="J2" pin="4" pinfunction="CLK" pintype="passive"/>
+    </net>
+    <net code="19" name="/SPK_N" class="Default">
+      <node ref="J3" pin="2" pinfunction="SPK-" pintype="passive"/>
+      <node ref="U2" pin="10" pinfunction="OUTN" pintype="output"/>
+    </net>
+    <net code="20" name="/SPK_P" class="Default">
+      <node ref="J3" pin="1" pinfunction="SPK+" pintype="passive"/>
+      <node ref="U2" pin="9" pinfunction="OUTP" pintype="output"/>
+    </net>
+    <net code="21" name="unconnected-(J1-GPIO4-Pad7)" class="Default">
+      <node ref="J1" pin="7" pinfunction="GPIO4" pintype="passive+no_connect"/>
+    </net>
+    <net code="22" name="unconnected-(J1-GPIO5-Pad29)" class="Default">
+      <node ref="J1" pin="29" pinfunction="GPIO5" pintype="passive+no_connect"/>
+    </net>
+    <net code="23" name="unconnected-(J1-GPIO6-Pad31)" class="Default">
+      <node ref="J1" pin="31" pinfunction="GPIO6" pintype="passive+no_connect"/>
+    </net>
+    <net code="24" name="unconnected-(J1-GPIO7-Pad26)" class="Default">
+      <node ref="J1" pin="26" pinfunction="GPIO7" pintype="passive+no_connect"/>
+    </net>
+    <net code="25" name="unconnected-(J1-GPIO9-Pad21)" class="Default">
+      <node ref="J1" pin="21" pinfunction="GPIO9" pintype="passive+no_connect"/>
+    </net>
+    <net code="26" name="unconnected-(J1-GPIO12-Pad32)" class="Default">
+      <node ref="J1" pin="32" pinfunction="GPIO12" pintype="passive+no_connect"/>
+    </net>
+    <net code="27" name="unconnected-(J1-GPIO13-Pad33)" class="Default">
+      <node ref="J1" pin="33" pinfunction="GPIO13" pintype="passive+no_connect"/>
+    </net>
+    <net code="28" name="unconnected-(J1-GPIO14-Pad8)" class="Default">
+      <node ref="J1" pin="8" pinfunction="GPIO14" pintype="passive+no_connect"/>
+    </net>
+    <net code="29" name="unconnected-(J1-GPIO15-Pad10)" class="Default">
+      <node ref="J1" pin="10" pinfunction="GPIO15" pintype="passive+no_connect"/>
+    </net>
+    <net code="30" name="unconnected-(J1-GPIO16-Pad36)" class="Default">
+      <node ref="J1" pin="36" pinfunction="GPIO16" pintype="passive+no_connect"/>
+    </net>
+    <net code="31" name="unconnected-(J1-GPIO17-Pad11)" class="Default">
+      <node ref="J1" pin="11" pinfunction="GPIO17" pintype="passive+no_connect"/>
+    </net>
+    <net code="32" name="unconnected-(J1-GPIO20-Pad38)" class="Default">
+      <node ref="J1" pin="38" pinfunction="GPIO20" pintype="passive+no_connect"/>
+    </net>
+    <net code="33" name="unconnected-(J1-GPIO22-Pad15)" class="Default">
+      <node ref="J1" pin="15" pinfunction="GPIO22" pintype="passive+no_connect"/>
+    </net>
+    <net code="34" name="unconnected-(J1-GPIO26-Pad37)" class="Default">
+      <node ref="J1" pin="37" pinfunction="GPIO26" pintype="passive+no_connect"/>
+    </net>
+    <net code="35" name="unconnected-(J1-ID_SC/RESERVED-Pad28)" class="Default">
+      <node ref="J1" pin="28" pinfunction="ID_SC/RESERVED" pintype="passive+no_connect"/>
+    </net>
+    <net code="36" name="unconnected-(J1-ID_SD/RESERVED-Pad27)" class="Default">
+      <node ref="J1" pin="27" pinfunction="ID_SD/RESERVED" pintype="passive+no_connect"/>
+    </net>
+    <net code="37" name="unconnected-(U1-ALERT/RDY-Pad2)" class="Default">
+      <node ref="U1" pin="2" pinfunction="ALERT/RDY" pintype="open_collector+no_connect"/>
+    </net>
+    <net code="38" name="unconnected-(U2-GAIN_SLOT-Pad2)" class="Default">
+      <node ref="U2" pin="2" pinfunction="GAIN_SLOT" pintype="input+no_connect"/>
+    </net>
+    <net code="39" name="unconnected-(U2-NC-Pad5)" class="Default">
+      <node ref="U2" pin="5" pinfunction="NC" pintype="no_connect"/>
+    </net>
+    <net code="40" name="unconnected-(U2-NC-Pad6)" class="Default">
+      <node ref="U2" pin="6" pinfunction="NC" pintype="no_connect"/>
+    </net>
+    <net code="41" name="unconnected-(U2-NC-Pad12)" class="Default">
+      <node ref="U2" pin="12" pinfunction="NC" pintype="no_connect"/>
+    </net>
+    <net code="42" name="unconnected-(U2-NC-Pad13)" class="Default">
+      <node ref="U2" pin="13" pinfunction="NC" pintype="no_connect"/>
+    </net>
+  </nets>
+</export>

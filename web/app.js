@@ -406,6 +406,146 @@ async function activate(name, updateHash = true) {
   }
 }
 
+function initCaseRenderGallery() {
+  const data = {
+    assembled: {
+      src: './assets/renders/cloud-assembled.png',
+      alt: t('gallery.alt.assembled'),
+      badge: t('gallery.badge.assembled'),
+      title: t('gallery.title.assembled'),
+      desc: t('gallery.desc.assembled'),
+      chips: ['PETG', '72 mm', '5 × Arcade 24 mm', 'Raspberry Pi 3']
+    },
+    inside: {
+      src: './assets/renders/inside-back-case.png',
+      alt: t('gallery.alt.inside'),
+      badge: t('gallery.badge.inside'),
+      title: t('gallery.title.inside'),
+      desc: t('gallery.desc.inside'),
+      chips: [t('gallery.badge.inside'), 'Raspberry Pi 3', 'ST7789', 'PETG']
+    },
+    roentgen: {
+      src: './assets/renders/roentgen-look.png',
+      alt: t('gallery.alt.roentgen'),
+      badge: t('gallery.badge.roentgen'),
+      title: t('gallery.title.roentgen'),
+      desc: t('gallery.desc.roentgen'),
+      chips: ['X-Ray Roentgen', 'ST7789', 'MAX98357A', 'Arcade 24 mm']
+    },
+    exploded: {
+      src: './assets/renders/cloud-exploded.png',
+      alt: t('gallery.alt.exploded'),
+      badge: t('gallery.badge.exploded'),
+      title: t('gallery.title.exploded'),
+      desc: t('gallery.desc.exploded'),
+      chips: [t('download.front'), t('download.rear'), t('download.door')]
+    },
+    rear: {
+      src: './assets/renders/cloud-rear.png',
+      alt: t('gallery.alt.rear'),
+      badge: t('gallery.badge.rear'),
+      title: t('gallery.title.rear'),
+      desc: t('gallery.desc.rear'),
+      chips: ['7 × Sound vents', 'Power switch', 'USB cutout', 'PETG']
+    },
+    side: {
+      src: './assets/renders/cloud-side.png',
+      alt: t('gallery.alt.side'),
+      badge: t('gallery.badge.side'),
+      title: t('gallery.title.side'),
+      desc: t('gallery.desc.side'),
+      chips: ['72 mm Profile', t('download.door'), 'PETG', 'Arcade']
+    }
+  };
+
+  const tabs = document.querySelectorAll('[data-render]');
+  const img = document.getElementById('render-main-img');
+  const badge = document.getElementById('render-badge');
+  const title = document.getElementById('render-title');
+  const desc = document.getElementById('render-desc');
+  const chips = document.getElementById('render-chips');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.render;
+      if (!data[key]) return;
+      tabs.forEach(t => {
+        const active = t === tab;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', String(active));
+      });
+      if (img) {
+        img.src = data[key].src;
+        img.alt = data[key].alt;
+      }
+      if (badge) badge.textContent = data[key].badge;
+      if (title) title.textContent = data[key].title;
+      if (desc) desc.textContent = data[key].desc;
+      if (chips) {
+        chips.innerHTML = data[key].chips.map(c => `<span class="render-chip">${c}</span>`).join('');
+      }
+    });
+  });
+}
+
+function initWoodenRenderGallery() {
+  const data = {
+    enclosure: {
+      src: './assets/wooden-case/enclosure.png',
+      alt: t('plywood.alt.enclosure'),
+      badge: t('plywood.badge.enclosure'),
+      title: t('plywood.title.enclosure'),
+      desc: t('plywood.desc.enclosure')
+    },
+    internals: {
+      src: './assets/wooden-case/internals.png',
+      alt: t('plywood.alt.internals'),
+      badge: t('plywood.badge.internals'),
+      title: t('plywood.title.internals'),
+      desc: t('plywood.desc.internals')
+    },
+    exploded: {
+      src: './assets/wooden-case/exploded.png',
+      alt: t('plywood.alt.exploded'),
+      badge: t('plywood.badge.exploded'),
+      title: t('plywood.title.exploded'),
+      desc: t('plywood.desc.exploded')
+    },
+    sheets: {
+      src: './assets/wooden-case/a4_sheet_1.png',
+      alt: t('plywood.alt.sheets'),
+      badge: t('plywood.badge.sheets'),
+      title: t('plywood.title.sheets'),
+      desc: t('plywood.desc.sheets')
+    }
+  };
+
+  const tabs = document.querySelectorAll('[data-wood-render]');
+  const img = document.getElementById('wood-render-main-img');
+  const badge = document.getElementById('wood-render-badge');
+  const title = document.getElementById('wood-render-title');
+  const desc = document.getElementById('wood-render-desc');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const key = tab.dataset.woodRender;
+      if (!data[key]) return;
+      tabs.forEach(t => {
+        const active = t === tab;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', String(active));
+      });
+      if (img) {
+        img.src = data[key].src;
+        img.alt = data[key].alt;
+      }
+      if (badge) badge.textContent = data[key].badge;
+      if (title) title.textContent = data[key].title;
+      if (desc) desc.textContent = data[key].desc;
+    });
+  });
+}
+
 async function start() {
   const response = await fetch('./data/manifest.json');
   const manifest = await response.json();
@@ -534,6 +674,8 @@ async function start() {
     stlViewer = createStlViewer(stlContainer, { initialColors: cloudColorControls.getColors() });
   }
   initPricing($('#cloud-pricing'));
+  initCaseRenderGallery();
+  initWoodenRenderGallery();
 
   const initialRoute = restoreRoute();
   await activate(initialRoute.tab, false);
