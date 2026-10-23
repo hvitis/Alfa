@@ -1,14 +1,14 @@
 {
-  "revision": "prototype-v3-even-split-thin-78mm",
+  "revision": "prototype-v4-side-battery-flat-back-72mm",
   "outer_mm": [
-    210.0,
-    215.0,
-    78
+    206.0,
+    211.0,
+    72
   ],
   "core_mm": [
-    210,
-    215,
-    78
+    206,
+    211,
+    72
   ],
   "side_relief": {
     "enabled": false,
@@ -26,8 +26,8 @@
       ],
       "origin": [
         -14,
-        149,
-        25
+        145,
+        10.5
       ],
       "axis": "y",
       "diameter_mm": 28,
@@ -49,7 +49,7 @@
       "origin": [
         -14,
         0,
-        25
+        10.5
       ],
       "axis": "y",
       "diameter_mm": 28,
@@ -69,9 +69,9 @@
         28
       ],
       "origin": [
-        39,
+        37,
         124,
-        25
+        10.5
       ],
       "axis": "x",
       "diameter_mm": 28,
@@ -91,9 +91,9 @@
         28
       ],
       "origin": [
-        -105,
+        -103,
         124,
-        25
+        10.5
       ],
       "axis": "x",
       "diameter_mm": 28,
@@ -113,9 +113,9 @@
         28
       ],
       "origin": [
-        -105,
+        -103,
         36,
-        25
+        10.5
       ],
       "axis": "x",
       "diameter_mm": 28,
@@ -135,37 +135,37 @@
       "title": "Baseus 5000 mAh",
       "size": [
         106,
-        14,
-        69
+        69,
+        14
       ],
       "origin": [
         -53,
-        82,
-        3.2
+        86,
+        51
       ],
       "uncertain": false,
-      "source": "User-confirmed 69 x 106 x 14 bank, rotated horizontally; USB-C centred on right 69 x 14 end face",
+      "source": "User-confirmed 106 x 69 x 14 mm; USB-C on leading +X end",
       "color": "#d9e4e5",
       "rotation_deg": 0,
-      "orientation": "horizontal XZ, 14 mm thickness in Y"
+      "orientation": "XY parallel to rear lid; slides toward +X"
     },
     {
       "id": "pi",
       "title": "Raspberry Pi 3 B",
       "size": [
         85,
-        1.6,
-        56
+        56,
+        1.6
       ],
       "origin": [
         -42.5,
-        104,
-        16
+        18,
+        64.4
       ],
       "uncertain": false,
       "source": "https://datasheets.raspberrypi.com/rpi3/raspberry-pi-3-b-mechanical-drawing.pdf",
       "color": "#287557",
-      "orientation": "horizontal XZ, populated face up +Y"
+      "orientation": "XY parallel to rear lid; populated face toward front (-Z)"
     },
     {
       "id": "lcd",
@@ -177,7 +177,7 @@
       ],
       "origin": [
         -17.5,
-        126,
+        83,
         6
       ],
       "uncertain": false,
@@ -194,8 +194,8 @@
       ],
       "origin": [
         -14,
-        149,
-        25
+        145,
+        10.5
       ],
       "axis": "y",
       "diameter_mm": 28,
@@ -217,7 +217,7 @@
       "origin": [
         -14,
         0,
-        25
+        10.5
       ],
       "axis": "y",
       "diameter_mm": 28,
@@ -237,9 +237,9 @@
         28
       ],
       "origin": [
-        39,
+        37,
         124,
-        25
+        10.5
       ],
       "axis": "x",
       "diameter_mm": 28,
@@ -259,9 +259,9 @@
         28
       ],
       "origin": [
-        -105,
+        -103,
         124,
-        25
+        10.5
       ],
       "axis": "x",
       "diameter_mm": 28,
@@ -281,9 +281,9 @@
         28
       ],
       "origin": [
-        -105,
+        -103,
         36,
-        25
+        10.5
       ],
       "axis": "x",
       "diameter_mm": 28,
@@ -320,9 +320,9 @@
         12
       ],
       "origin": [
-        65,
-        140,
-        56
+        32,
+        160,
+        57
       ],
       "uncertain": false,
       "source": "QUARKZMAN B0H1JMNHQT; manufacturer housing drawing unavailable",
@@ -338,8 +338,8 @@
         20
       ],
       "origin": [
-        -65,
-        155,
+        -63,
+        153,
         6
       ],
       "uncertain": false,
@@ -352,13 +352,13 @@
       "title": "Pi connectors",
       "origin": [
         -42.5,
-        105.6,
-        16
+        18,
+        48.4
       ],
       "size": [
         85,
-        14,
-        56
+        56,
+        16
       ],
       "uncertain": false,
       "parent": "pi"
@@ -368,46 +368,47 @@
       "title": "Connected GPIO sockets \u00b7 provisional",
       "origin": [
         -35.5,
-        105.6,
-        64
+        66,
+        44.4
       ],
       "size": [
         53,
-        20,
-        8
+        8,
+        20
       ],
       "uncertain": true,
       "parent": "pi",
-      "fixed_bottom_y": 105.6
+      "fixed_back_z": 64.4
     },
     {
       "id": "pi_power",
       "title": "Angled micro-USB plug \u00b7 provisional",
       "origin": [
-        -49,
-        107.6,
-        17
+        -41.9,
+        6,
+        54.4
       ],
       "size": [
         20,
-        10,
-        12
+        14,
+        10
       ],
       "uncertain": true,
-      "parent": "pi"
+      "parent": "pi",
+      "fixed_back_z": 64.4
     },
     {
       "id": "bank_plug",
       "title": "Battery USB-C plug \u00b7 provisional",
       "origin": [
         53,
-        85.75,
-        36.5
+        114.5,
+        54.75
       ],
       "size": [
         22,
-        6.5,
-        12
+        12,
+        6.5
       ],
       "uncertain": true,
       "parent": "battery"
@@ -417,7 +418,7 @@
       "title": "LCD connector \u00b7 provisional",
       "origin": [
         -12.5,
-        126,
+        83,
         16
       ],
       "size": [
@@ -433,8 +434,8 @@
       "title": "Provisional nut clearance: button_top",
       "origin": [
         -21,
-        209,
-        18
+        202,
+        3.5
       ],
       "size": [
         42,
@@ -452,12 +453,12 @@
       "title": "Provisional wires clearance: button_top",
       "origin": [
         -5,
-        139,
-        34
+        133,
+        19.5
       ],
       "size": [
         10,
-        10,
+        12,
         10
       ],
       "parent": "button_top",
@@ -469,8 +470,8 @@
       "title": "Provisional nut clearance: button_bottom",
       "origin": [
         -21,
-        0,
-        18
+        3,
+        3.5
       ],
       "size": [
         42,
@@ -489,11 +490,11 @@
       "origin": [
         -5,
         66,
-        34
+        19.5
       ],
       "size": [
         10,
-        10,
+        12,
         10
       ],
       "parent": "button_bottom",
@@ -504,9 +505,9 @@
       "id": "button_left_nut",
       "title": "Provisional nut clearance: button_left",
       "origin": [
-        99,
+        94,
         117,
-        18
+        3.5
       ],
       "size": [
         6,
@@ -523,12 +524,12 @@
       "id": "button_left_wires",
       "title": "Provisional wires clearance: button_left",
       "origin": [
-        29,
+        25,
         133,
-        34
+        19.5
       ],
       "size": [
-        10,
+        12,
         10,
         10
       ],
@@ -540,9 +541,9 @@
       "id": "button_right_nut",
       "title": "Provisional nut clearance: button_right",
       "origin": [
-        -105,
+        -100,
         117,
-        18
+        3.5
       ],
       "size": [
         6,
@@ -559,12 +560,12 @@
       "id": "button_right_wires",
       "title": "Provisional wires clearance: button_right",
       "origin": [
-        -39,
+        -37,
         133,
-        34
+        19.5
       ],
       "size": [
-        10,
+        12,
         10,
         10
       ],
@@ -576,9 +577,9 @@
       "id": "button_right_lower_nut",
       "title": "Provisional nut clearance: button_right_lower",
       "origin": [
-        -105,
+        -100,
         29,
-        18
+        3.5
       ],
       "size": [
         6,
@@ -595,12 +596,12 @@
       "id": "button_right_lower_wires",
       "title": "Provisional wires clearance: button_right_lower",
       "origin": [
-        -39,
+        -37,
         45,
-        34
+        19.5
       ],
       "size": [
-        10,
+        12,
         10,
         10
       ],
@@ -620,13 +621,98 @@
     "release_travel_mm": 1.1,
     "pivot_y_mm": 0
   },
-  "shelf": {
-    "battery_ceiling_y": 99,
-    "thickness": 3,
-    "pi_board_bottom_y": 104,
-    "front_z": 18,
-    "width": 124,
-    "battery_removal": "toward front after front shell and battery strap are removed"
+  "battery_bay": {
+    "clearance_mm": 0.6,
+    "rail_wall_mm": 2.4,
+    "rail_front_z": 49.2,
+    "rail_back_z": 69,
+    "stop_x": -56,
+    "rail_x_end": 97,
+    "opening_origin": [
+      94,
+      84,
+      49
+    ],
+    "opening_size": [
+      12,
+      73,
+      18
+    ],
+    "extraction_direction": [
+      1,
+      0,
+      0
+    ],
+    "pull_ribbon_width_mm": 12
+  },
+  "battery_door": {
+    "origin": [
+      100.6,
+      76,
+      47.3
+    ],
+    "size": [
+      2.4,
+      89,
+      21.4
+    ],
+    "clearance_mm": 0.3,
+    "screw_y": [
+      79.5,
+      161.5
+    ],
+    "screw_z": 58,
+    "screw_hole_mm": 2.9,
+    "hardware": "2 x M2.5 x 8 screws; 2 x M2.5 heat-set inserts, 3.5 mm OD x 4 mm long; tune 3.3 mm pilot to actual insert",
+    "opening": "Remove two side screws; lift lid toward +X; disconnect USB-C; slide bank toward +X using ribbon",
+    "insert_outer_diameter_mm": 3.5,
+    "insert_pilot_mm": 3.3,
+    "insert_length_mm": 4,
+    "insert_face_x": 100.3,
+    "retainer_x": 53.6,
+    "retainer_y": [
+      90,
+      147
+    ],
+    "retainer_z": 54,
+    "retainer_width_mm": 4,
+    "retainer_height_mm": 8
+  },
+  "speaker_grille": {
+    "style": "cloud-shaped apertures",
+    "centers_mm": [
+      [
+        -10,
+        -7
+      ],
+      [
+        0,
+        -7
+      ],
+      [
+        10,
+        -7
+      ],
+      [
+        -10,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        0,
+        11
+      ]
+    ],
+    "width_mm": 8,
+    "height_mm": 6,
+    "min_web_mm": 2
   },
   "print_bed_mm": [
     220,
@@ -635,26 +721,30 @@
   "fasteners": {
     "enclosure": "None: bottom locating tongues and five integral release snaps",
     "lcd": "4 x M2.5 x 6 thread-forming screws; verify actual PCB holes",
-    "pi": "4 x M2.5 x 6 internal PCB screws on shelf posts; no screws join the shells",
+    "pi": "4 x M2.5 x 6 thread-forming PCB screws in rear-facing posts; verify pilot and actual board",
     "arcade_buttons": "5 x original button retaining nuts; 28.4 mm printed holes for nominal 28 mm barrels; verify nut clearance",
-    "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README"
+    "other_boards": "M2.5 bolts, washers, nuts through adjustable slots; insulating spacers and cable ties as described in README",
+    "battery_door": "2 x M2.5 x 8 screws; 2 x M2.5 heat-set inserts, 3.5 mm OD x 4 mm long; tune 3.3 mm pilot to actual insert"
   },
-  "checks_count": 456,
+  "checks_count": 535,
   "passed": true,
   "files": [
     "front.stl",
     "rear.stl",
+    "battery_door.stl",
     "cloud-radio.brep",
     "cloud-radio.zip",
     "front.3mf",
     "rear.3mf",
+    "battery_door.3mf",
     "button-fit-coupon.stl",
     "print-settings.json",
     "cloud-ender.scad"
   ],
   "print_parts": [
     "front",
-    "rear"
+    "rear",
+    "battery_door"
   ],
   "frame_features": [
     {
@@ -662,9 +752,9 @@
       "title": "Snap hook",
       "part": "front",
       "origin": [
-        100.2,
-        60.0,
-        24.0
+        98.2,
+        40.0,
+        29.5
       ],
       "size": [
         4.0,
@@ -677,9 +767,9 @@
       "title": "Snap hook",
       "part": "front",
       "origin": [
-        100.2,
-        80.0,
-        24.0
+        98.2,
+        60.0,
+        29.5
       ],
       "size": [
         4.0,
@@ -692,9 +782,9 @@
       "title": "Snap hook",
       "part": "front",
       "origin": [
-        100.2,
-        100.0,
-        24.0
+        -102.2,
+        71.0,
+        29.5
       ],
       "size": [
         4.0,
@@ -707,9 +797,9 @@
       "title": "Snap hook",
       "part": "front",
       "origin": [
-        -104.2,
-        75.0,
-        24.0
+        -102.2,
+        91.0,
+        29.5
       ],
       "size": [
         4.0,
@@ -722,9 +812,9 @@
       "title": "Snap hook",
       "part": "front",
       "origin": [
-        -104.2,
-        95.0,
-        24.0
+        -102.2,
+        107.0,
+        29.5
       ],
       "size": [
         4.0,
@@ -739,7 +829,7 @@
       "origin": [
         -76.0,
         1.5,
-        37.0
+        41.5
       ],
       "size": [
         12.0,
@@ -754,7 +844,7 @@
       "origin": [
         -78.0,
         0.0,
-        39.3
+        43.8
       ],
       "size": [
         16.0,
@@ -769,7 +859,7 @@
       "origin": [
         64.0,
         1.5,
-        37.0
+        41.5
       ],
       "size": [
         12.0,
@@ -784,7 +874,7 @@
       "origin": [
         62.0,
         0.0,
-        39.3
+        43.8
       ],
       "size": [
         16.0,
@@ -798,7 +888,7 @@
       "part": "front",
       "origin": [
         -17.4,
-        126.1,
+        83.1,
         3.0
       ],
       "size": [
@@ -813,7 +903,7 @@
       "part": "front",
       "origin": [
         -17.4,
-        179.1,
+        136.1,
         3.0
       ],
       "size": [
@@ -828,7 +918,7 @@
       "part": "front",
       "origin": [
         12.6,
-        126.1,
+        83.1,
         3.0
       ],
       "size": [
@@ -843,7 +933,7 @@
       "part": "front",
       "origin": [
         12.6,
-        179.1,
+        136.1,
         3.0
       ],
       "size": [
@@ -858,8 +948,8 @@
       "part": "front",
       "origin": [
         -14.2,
-        132.0,
-        24.8
+        128.0,
+        10.3
       ],
       "size": [
         28.4,
@@ -874,12 +964,27 @@
       "origin": [
         -14.2,
         -17.0,
-        24.8
+        10.3
       ],
       "size": [
         28.4,
         100.0,
         28.4
+      ]
+    },
+    {
+      "id": "F-BSEAT03",
+      "title": "Complete flat arcade mounting seat",
+      "part": "front",
+      "origin": [
+        97.0,
+        120.0,
+        6.5
+      ],
+      "size": [
+        6.0,
+        36.0,
+        36.0
       ]
     },
     {
@@ -887,14 +992,29 @@
       "title": "Arcade mounting hole 28.4 mm",
       "part": "front",
       "origin": [
-        22.0,
+        20.0,
         123.8,
-        24.8
+        10.3
       ],
       "size": [
         100.0,
         28.4,
         28.4
+      ]
+    },
+    {
+      "id": "F-BSEAT04",
+      "title": "Complete flat arcade mounting seat",
+      "part": "front",
+      "origin": [
+        -103.0,
+        120.0,
+        6.5
+      ],
+      "size": [
+        6.0,
+        36.0,
+        36.0
       ]
     },
     {
@@ -902,14 +1022,29 @@
       "title": "Arcade mounting hole 28.4 mm",
       "part": "front",
       "origin": [
-        -122.0,
+        -120.0,
         123.8,
-        24.8
+        10.3
       ],
       "size": [
         100.0,
         28.4,
         28.4
+      ]
+    },
+    {
+      "id": "F-BSEAT05",
+      "title": "Complete flat arcade mounting seat",
+      "part": "front",
+      "origin": [
+        -103.0,
+        32.0,
+        6.5
+      ],
+      "size": [
+        6.0,
+        36.0,
+        36.0
       ]
     },
     {
@@ -917,9 +1052,9 @@
       "title": "Arcade mounting hole 28.4 mm",
       "part": "front",
       "origin": [
-        -122.0,
+        -120.0,
         35.8,
-        24.8
+        10.3
       ],
       "size": [
         100.0,
@@ -928,12 +1063,117 @@
       ]
     },
     {
-      "id": "F-SP01",
-      "title": "Speaker mounting slot",
+      "id": "F-G01",
+      "title": "Cloud speaker aperture",
       "part": "front",
       "origin": [
-        -67.318,
-        154.182,
+        -57.0,
+        163.0,
+        -1.0
+      ],
+      "size": [
+        8.0,
+        6.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-G02",
+      "title": "Cloud speaker aperture",
+      "part": "front",
+      "origin": [
+        -47.0,
+        163.0,
+        -1.0
+      ],
+      "size": [
+        8.0,
+        6.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-G03",
+      "title": "Cloud speaker aperture",
+      "part": "front",
+      "origin": [
+        -37.0,
+        163.0,
+        -1.0
+      ],
+      "size": [
+        8.0,
+        6.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-G04",
+      "title": "Cloud speaker aperture",
+      "part": "front",
+      "origin": [
+        -57.0,
+        172.0,
+        -1.0
+      ],
+      "size": [
+        8.0,
+        6.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-G05",
+      "title": "Cloud speaker aperture",
+      "part": "front",
+      "origin": [
+        -47.0,
+        172.0,
+        -1.0
+      ],
+      "size": [
+        8.0,
+        6.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-G06",
+      "title": "Cloud speaker aperture",
+      "part": "front",
+      "origin": [
+        -37.0,
+        172.0,
+        -1.0
+      ],
+      "size": [
+        8.0,
+        6.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-G07",
+      "title": "Cloud speaker aperture",
+      "part": "front",
+      "origin": [
+        -47.0,
+        181.0,
+        -1.0
+      ],
+      "size": [
+        8.0,
+        6.0,
+        5.0
+      ]
+    },
+    {
+      "id": "F-SP01",
+      "title": "Speaker mounting pad",
+      "part": "front",
+      "origin": [
+        -65.318,
+        152.182,
         3.0
       ],
       "size": [
@@ -944,11 +1184,11 @@
     },
     {
       "id": "F-SP02",
-      "title": "Speaker mounting slot",
+      "title": "Speaker mounting pad",
       "part": "front",
       "origin": [
-        -67.318,
-        187.818,
+        -65.318,
+        185.818,
         3.0
       ],
       "size": [
@@ -959,11 +1199,11 @@
     },
     {
       "id": "F-SP03",
-      "title": "Speaker mounting slot",
+      "title": "Speaker mounting pad",
       "part": "front",
       "origin": [
-        -33.682,
-        154.182,
+        -31.682,
+        152.182,
         3.0
       ],
       "size": [
@@ -974,11 +1214,11 @@
     },
     {
       "id": "F-SP04",
-      "title": "Speaker mounting slot",
+      "title": "Speaker mounting pad",
       "part": "front",
       "origin": [
-        -33.682,
-        187.818,
+        -31.682,
+        185.818,
         3.0
       ],
       "size": [
@@ -989,7 +1229,7 @@
     },
     {
       "id": "F-AMP01",
-      "title": "Amplifier support slot",
+      "title": "Amplifier support pad",
       "part": "front",
       "origin": [
         49.5,
@@ -1004,7 +1244,7 @@
     },
     {
       "id": "F-AMP02",
-      "title": "Amplifier support slot",
+      "title": "Amplifier support pad",
       "part": "front",
       "origin": [
         49.5,
@@ -1018,138 +1258,213 @@
       ]
     },
     {
-      "id": "R-B01",
-      "title": "Horizontal battery ceiling and Pi shelf",
+      "id": "R-BR01",
+      "title": "Side-loading battery guide rail",
       "part": "rear",
       "origin": [
-        -45.0,
-        99.0,
-        18.0
+        -56.0,
+        83.0,
+        49.2
       ],
       "size": [
-        90.0,
-        3.0,
-        57.6
-      ]
-    },
-    {
-      "id": "R-BF01",
-      "title": "Battery side rail and strap slot",
-      "part": "rear",
-      "origin": [
-        -60.0,
-        76.0,
-        18.0
-      ],
-      "size": [
-        4.0,
-        26.0,
-        57.6
+        153.0,
+        4.2,
+        20.0
       ]
     },
     {
       "id": "R-BS01",
-      "title": "Battery floor foam seat",
+      "title": "Battery back support",
       "part": "rear",
       "origin": [
-        -56.0,
-        76.5,
-        18.0
+        -53.0,
+        88.0,
+        65.6
       ],
       "size": [
-        8.0,
-        1.0,
-        57.6
+        106.0,
+        2.0,
+        3.6
       ]
     },
     {
-      "id": "R-BF02",
-      "title": "Battery side rail and strap slot",
+      "id": "R-BR02",
+      "title": "Side-loading battery guide rail",
       "part": "rear",
       "origin": [
-        56.0,
-        76.0,
-        18.0
+        -56.0,
+        153.8,
+        49.2
       ],
       "size": [
-        4.0,
-        26.0,
-        57.6
+        153.0,
+        4.2,
+        20.0
       ]
     },
     {
       "id": "R-BS02",
-      "title": "Battery floor foam seat",
+      "title": "Battery back support",
       "part": "rear",
       "origin": [
-        48.0,
-        76.5,
-        18.0
+        -53.0,
+        151.0,
+        65.6
       ],
       "size": [
-        8.0,
-        1.0,
-        57.6
+        106.0,
+        2.0,
+        3.6
+      ]
+    },
+    {
+      "id": "R-BSTOP",
+      "title": "Battery insertion stop",
+      "part": "rear",
+      "origin": [
+        -56.0,
+        83.0,
+        49.2
+      ],
+      "size": [
+        2.4,
+        75.0,
+        20.0
       ]
     },
     {
       "id": "R-P01",
-      "title": "Horizontal Pi shelf post",
+      "title": "Rear-lid Pi mounting post",
       "part": "rear",
       "origin": [
         -41.8,
-        102.0,
-        16.7
+        18.7,
+        66.0
       ],
       "size": [
         5.6,
-        2.0,
-        5.6
+        5.6,
+        3.2
       ]
     },
     {
       "id": "R-P02",
-      "title": "Horizontal Pi shelf post",
+      "title": "Rear-lid Pi mounting post",
       "part": "rear",
       "origin": [
         -41.8,
-        102.0,
-        65.7
+        67.7,
+        66.0
       ],
       "size": [
         5.6,
-        2.0,
-        5.6
+        5.6,
+        3.2
       ]
     },
     {
       "id": "R-P03",
-      "title": "Horizontal Pi shelf post",
+      "title": "Rear-lid Pi mounting post",
       "part": "rear",
       "origin": [
         16.2,
-        102.0,
-        16.7
+        18.7,
+        66.0
       ],
       "size": [
         5.6,
-        2.0,
-        5.6
+        5.6,
+        3.2
       ]
     },
     {
       "id": "R-P04",
-      "title": "Horizontal Pi shelf post",
+      "title": "Rear-lid Pi mounting post",
       "part": "rear",
       "origin": [
         16.2,
-        102.0,
-        65.7
+        67.7,
+        66.0
       ],
       "size": [
         5.6,
-        2.0,
-        5.6
+        5.6,
+        3.2
+      ]
+    },
+    {
+      "id": "R-HFRAME",
+      "title": "Battery hatch reinforcing frame",
+      "part": "rear",
+      "origin": [
+        94.0,
+        75.0,
+        47.0
+      ],
+      "size": [
+        9.0,
+        91.0,
+        25.0
+      ]
+    },
+    {
+      "id": "R-HI01",
+      "title": "Battery lid heat-set insert seat",
+      "part": "rear",
+      "origin": [
+        96.3,
+        77.85,
+        56.35
+      ],
+      "size": [
+        4.1,
+        3.3,
+        3.3
+      ]
+    },
+    {
+      "id": "R-HI02",
+      "title": "Battery lid heat-set insert seat",
+      "part": "rear",
+      "origin": [
+        96.3,
+        159.85,
+        56.35
+      ],
+      "size": [
+        4.1,
+        3.3,
+        3.3
+      ]
+    },
+    {
+      "id": "B-STOP01",
+      "title": "Lid battery retaining arm",
+      "part": "battery_door",
+      "origin": [
+        53.6,
+        90.0,
+        54.0
+      ],
+      "size": [
+        47.2,
+        4.0,
+        8.0
+      ]
+    },
+    {
+      "id": "B-STOP02",
+      "title": "Lid battery retaining arm",
+      "part": "battery_door",
+      "origin": [
+        53.6,
+        147.0,
+        54.0
+      ],
+      "size": [
+        47.2,
+        4.0,
+        8.0
       ]
     },
     {
@@ -1157,14 +1472,14 @@
       "title": "Switch retaining slot",
       "part": "rear",
       "origin": [
-        59.0,
-        141.0,
-        64.0
+        26.0,
+        161.0,
+        65.0
       ],
       "size": [
         6.0,
         8.0,
-        11.0
+        4.0
       ]
     },
     {
@@ -1172,14 +1487,14 @@
       "title": "Switch retaining slot",
       "part": "rear",
       "origin": [
-        59.0,
-        171.0,
-        64.0
+        26.0,
+        191.0,
+        65.0
       ],
       "size": [
         6.0,
         8.0,
-        11.0
+        4.0
       ]
     }
   ],
@@ -1193,6 +1508,11 @@
       "id": "R-00",
       "name": "rear",
       "title": "Rear shell"
+    },
+    {
+      "id": "B-00",
+      "name": "battery_door",
+      "title": "Side battery lid"
     }
   ],
   "limits": [
@@ -1213,6 +1533,7 @@
     "wire_allowance_mm": 12,
     "nut_diameter_allowance_mm": 42,
     "nut_depth_allowance_mm": 6,
-    "side_axis_depth_mm": 30
+    "side_axis_depth_mm": 24.5,
+    "front_bridge_mm": 4.8
   }
 }

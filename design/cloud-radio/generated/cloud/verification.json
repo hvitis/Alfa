@@ -1,39 +1,39 @@
 {
-  "revision": "prototype-v3-even-split-thin-78mm",
+  "revision": "prototype-v4-side-battery-flat-back-72mm",
   "checks": [
     {
       "check": "front: valid connected solid",
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 195231.56
+        "volume_mm3": 198982.88
       }
     },
     {
       "check": "front: retains full lower frame",
       "pass": true,
       "detail": [
-        210.0,
-        215.0,
-        46.0
+        206.0,
+        211.0,
+        50.5
       ]
     },
     {
       "check": "front: fits configured print field",
       "pass": true,
       "detail": [
-        210.0,
-        215.0,
-        46.0
+        206.0,
+        211.0,
+        50.5
       ]
     },
     {
       "check": "front: fits build height",
       "pass": true,
       "detail": [
-        210.0,
-        215.0,
-        46.0
+        206.0,
+        211.0,
+        50.5
       ]
     },
     {
@@ -41,8 +41,8 @@
       "pass": true,
       "detail": {
         "part_mm": [
-          210.0,
-          215.0
+          206.0,
+          211.0
         ],
         "brim_mm": 2,
         "usable_xy_mm": [
@@ -56,34 +56,34 @@
       "pass": true,
       "detail": {
         "solids": 1,
-        "volume_mm3": 219791.68
+        "volume_mm3": 190648.03
       }
     },
     {
       "check": "rear: retains full lower frame",
       "pass": true,
       "detail": [
-        210.0,
-        215.0,
-        61.3
+        206.0,
+        211.0,
+        28.2
       ]
     },
     {
       "check": "rear: fits configured print field",
       "pass": true,
       "detail": [
-        210.0,
-        215.0,
-        61.3
+        206.0,
+        211.0,
+        28.2
       ]
     },
     {
       "check": "rear: fits build height",
       "pass": true,
       "detail": [
-        210.0,
-        215.0,
-        61.3
+        206.0,
+        211.0,
+        28.2
       ]
     },
     {
@@ -91,8 +91,49 @@
       "pass": true,
       "detail": {
         "part_mm": [
-          210.0,
-          215.0
+          206.0,
+          211.0
+        ],
+        "brim_mm": 2,
+        "usable_xy_mm": [
+          220,
+          220
+        ]
+      }
+    },
+    {
+      "check": "battery_door: valid connected solid",
+      "pass": true,
+      "detail": {
+        "solids": 1,
+        "volume_mm3": 7399.5
+      }
+    },
+    {
+      "check": "battery_door: fits configured print field",
+      "pass": true,
+      "detail": [
+        49.4,
+        89.0,
+        21.4
+      ]
+    },
+    {
+      "check": "battery_door: fits build height",
+      "pass": true,
+      "detail": [
+        49.4,
+        89.0,
+        21.4
+      ]
+    },
+    {
+      "check": "battery_door: fits Ender usable travel with brim",
+      "pass": true,
+      "detail": {
+        "part_mm": [
+          49.4,
+          89.0
         ],
         "brim_mm": 2,
         "usable_xy_mm": [
@@ -107,12 +148,27 @@
       "detail": 0.0
     },
     {
+      "check": "Assembled shells: front / battery_door do not interfere",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Assembled shells: rear / battery_door do not interfere",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Nominal fit: battery / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: battery / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: battery / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -127,12 +183,22 @@
       "detail": 0.0
     },
     {
+      "check": "Nominal fit: pi / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Nominal fit: lcd / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: lcd / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: lcd / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -147,12 +213,22 @@
       "detail": 0.0
     },
     {
+      "check": "Nominal fit: button_top / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Nominal fit: button_bottom / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: button_bottom / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_bottom / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -167,12 +243,22 @@
       "detail": 0.0
     },
     {
+      "check": "Nominal fit: button_left / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Nominal fit: button_right / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: button_right / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: button_right / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -187,12 +273,22 @@
       "detail": 0.0
     },
     {
+      "check": "Nominal fit: button_right_lower / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Nominal fit: amp / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: amp / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: amp / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -207,12 +303,22 @@
       "detail": 0.0
     },
     {
+      "check": "Nominal fit: switch / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Nominal fit: speaker / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Nominal fit: speaker / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Nominal fit: speaker / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -1867,12 +1973,22 @@
       "detail": 0.0
     },
     {
+      "check": "Connector clearance: pi_ports / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Connector clearance: gpio / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Connector clearance: gpio / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: gpio / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -1887,12 +2003,22 @@
       "detail": 0.0
     },
     {
+      "check": "Connector clearance: pi_power / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Connector clearance: bank_plug / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Connector clearance: bank_plug / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: bank_plug / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -1907,14 +2033,24 @@
       "detail": 0.0
     },
     {
+      "check": "Connector clearance: lcd_cable / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Connector clearance: button_top_nut / front",
       "pass": true,
-      "detail": 0.0005
+      "detail": 0.0
     },
     {
       "check": "Connector clearance: button_top_nut / rear",
       "pass": true,
-      "detail": 0.0005
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_top_nut / battery_door",
+      "pass": true,
+      "detail": 0.0
     },
     {
       "check": "Connector clearance: button_top_wires / front",
@@ -1927,14 +2063,24 @@
       "detail": 0.0
     },
     {
+      "check": "Connector clearance: button_top_wires / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Connector clearance: button_bottom_nut / front",
       "pass": true,
-      "detail": 0.0005
+      "detail": 0.0
     },
     {
       "check": "Connector clearance: button_bottom_nut / rear",
       "pass": true,
-      "detail": 0.0005
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_bottom_nut / battery_door",
+      "pass": true,
+      "detail": 0.0
     },
     {
       "check": "Connector clearance: button_bottom_wires / front",
@@ -1943,6 +2089,11 @@
     },
     {
       "check": "Connector clearance: button_bottom_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_bottom_wires / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -1957,12 +2108,22 @@
       "detail": 0.0
     },
     {
+      "check": "Connector clearance: button_left_nut / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Connector clearance: button_left_wires / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Connector clearance: button_left_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_left_wires / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -1977,12 +2138,22 @@
       "detail": 0.0
     },
     {
+      "check": "Connector clearance: button_right_nut / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Connector clearance: button_right_wires / front",
       "pass": true,
       "detail": 0.0
     },
     {
       "check": "Connector clearance: button_right_wires / rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Connector clearance: button_right_wires / battery_door",
       "pass": true,
       "detail": 0.0
     },
@@ -1997,6 +2168,11 @@
       "detail": 0.0
     },
     {
+      "check": "Connector clearance: button_right_lower_nut / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
       "check": "Connector clearance: button_right_lower_wires / front",
       "pass": true,
       "detail": 0.0
@@ -2007,7 +2183,117 @@
       "detail": 0.0
     },
     {
-      "check": "Bank slides forward below shelf after front removal",
+      "check": "Connector clearance: button_right_lower_wires / battery_door",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Side battery extraction with main case closed: front",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Side battery extraction with main case closed: rear",
+      "pass": true,
+      "detail": 0.0
+    },
+    {
+      "check": "Battery sweep clears pi",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears lcd",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears button_top",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears button_bottom",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears button_left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears button_right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears button_right_lower",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears amp",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears switch",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Battery sweep clears speaker",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Side lid lift 0 mm / front",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Side lid lift 0 mm / rear",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Side lid lift 5 mm / front",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Side lid lift 5 mm / rear",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Side lid lift 30 mm / front",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Side lid lift 30 mm / rear",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Closed side lid blocks battery escape",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Lid stops battery within 1 mm of installed position",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Lid screws engage full insert length",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Cloud grille has >= 2 mm horizontal webs",
       "pass": true,
       "detail": null
     },
@@ -2020,12 +2306,12 @@
       }
     },
     {
-      "check": "Exactly two printed shell parts",
+      "check": "Two shells and independent battery lid",
       "pass": true,
       "detail": null
     },
     {
-      "check": "No shell screws or battery door",
+      "check": "Main shells retain screwless closure",
       "pass": true,
       "detail": null
     },
@@ -2145,29 +2431,144 @@
       "detail": null
     },
     {
-      "check": "Battery hatch replaced by continuous rear cover",
+      "check": "Battery parallel to rear lid",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Battery lies flat along XZ",
+      "check": "Pi parallel to rear lid",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Pi lies flat along XZ",
+      "check": "Battery and Pi do not stack in depth",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Pi shelf above bank",
+      "check": "Depth reduced by at least 6 mm",
       "pass": true,
       "detail": null
     },
     {
-      "check": "Depth below previous 110 mm",
+      "check": "Width and height each reduced by at least 4 mm",
       "pass": true,
       "detail": null
+    },
+    {
+      "check": "Cloud speaker apertures present",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Speaker mount 1 hidden behind solid front skin",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Speaker mount 2 hidden behind solid front skin",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Speaker mount 3 hidden behind solid front skin",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Speaker mount 4 hidden behind solid front skin",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Amplifier mount 1 hidden behind solid front skin",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Amplifier mount 2 hidden behind solid front skin",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Power cable hidden from visual assembly",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Continuous front plastic behind button: button_top",
+      "pass": true,
+      "detail": 4.8
+    },
+    {
+      "check": "Button hole stays clear of rear seam: button_top",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Front material surrounds entire button: button_top",
+      "pass": true,
+      "detail": 1.0
+    },
+    {
+      "check": "Continuous front plastic behind button: button_bottom",
+      "pass": true,
+      "detail": 4.8
+    },
+    {
+      "check": "Button hole stays clear of rear seam: button_bottom",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Front material surrounds entire button: button_bottom",
+      "pass": true,
+      "detail": 1.0
+    },
+    {
+      "check": "Continuous front plastic behind button: button_left",
+      "pass": true,
+      "detail": 4.8
+    },
+    {
+      "check": "Button hole stays clear of rear seam: button_left",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Front material surrounds entire button: button_left",
+      "pass": true,
+      "detail": 1.0
+    },
+    {
+      "check": "Continuous front plastic behind button: button_right",
+      "pass": true,
+      "detail": 4.8
+    },
+    {
+      "check": "Button hole stays clear of rear seam: button_right",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Front material surrounds entire button: button_right",
+      "pass": true,
+      "detail": 1.0
+    },
+    {
+      "check": "Continuous front plastic behind button: button_right_lower",
+      "pass": true,
+      "detail": 4.8
+    },
+    {
+      "check": "Button hole stays clear of rear seam: button_right_lower",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Front material surrounds entire button: button_right_lower",
+      "pass": true,
+      "detail": 1.0
     },
     {
       "check": "Five arcade buttons present",
@@ -2293,19 +2694,19 @@
       "check": "front: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 16440,
+        "triangles": 19196,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 194136.91,
+        "volume_mm3": 197976.48,
         "print_bounds_mm": [
-          210.0,
-          215.0,
-          46.0
+          206.0,
+          211.0,
+          50.5
         ],
-        "removed_degenerate_triangles": 0,
+        "removed_degenerate_triangles": 5,
         "container_3mf": {
           "unit": "millimeter",
-          "triangles": 16440,
+          "triangles": 19196,
           "matches_stl": true,
           "bed_centered": true
         }
@@ -2315,19 +2716,63 @@
       "check": "rear: saved STL manifold and outward winding",
       "pass": true,
       "detail": {
-        "triangles": 11688,
+        "triangles": 12566,
         "watertight": true,
         "consistent_winding": true,
-        "volume_mm3": 218755.84,
+        "volume_mm3": 190078.82,
         "print_bounds_mm": [
-          210.0,
-          215.0,
-          61.3
+          206.0,
+          211.0,
+          28.2
+        ],
+        "removed_degenerate_triangles": 1,
+        "container_3mf": {
+          "unit": "millimeter",
+          "triangles": 12566,
+          "matches_stl": true,
+          "bed_centered": true
+        }
+      }
+    },
+    {
+      "check": "battery_door: saved STL manifold and outward winding",
+      "pass": true,
+      "detail": {
+        "triangles": 740,
+        "watertight": true,
+        "consistent_winding": true,
+        "volume_mm3": 7399.52,
+        "print_bounds_mm": [
+          21.4,
+          89.0,
+          49.4
         ],
         "removed_degenerate_triangles": 0,
         "container_3mf": {
           "unit": "millimeter",
-          "triangles": 11688,
+          "triangles": 740,
+          "matches_stl": true,
+          "bed_centered": true
+        }
+      }
+    },
+    {
+      "check": "insert-fit-coupon: saved STL manifold and outward winding",
+      "pass": true,
+      "detail": {
+        "triangles": 2040,
+        "watertight": true,
+        "consistent_winding": true,
+        "volume_mm3": 3578.43,
+        "print_bounds_mm": [
+          10.0,
+          38.0,
+          10.0
+        ],
+        "removed_degenerate_triangles": 0,
+        "container_3mf": {
+          "unit": "millimeter",
+          "triangles": 2040,
           "matches_stl": true,
           "bed_centered": true
         }
@@ -2425,15 +2870,15 @@
       "check": "Saved BREP preserves every assembly solid",
       "pass": true,
       "detail": {
-        "source_solids": 39,
-        "saved_solids": 39
+        "source_solids": 38,
+        "saved_solids": 38
       }
     },
     {
       "check": "front: saved BREP preserves shell volume and bounds",
       "pass": true,
       "detail": {
-        "source_volume_mm3": 195231.5583999767,
+        "source_volume_mm3": 198982.87926679675,
         "matching_saved_solids": 1
       }
     },
@@ -2441,7 +2886,15 @@
       "check": "rear: saved BREP preserves shell volume and bounds",
       "pass": true,
       "detail": {
-        "source_volume_mm3": 219791.67979061947,
+        "source_volume_mm3": 190648.0321505285,
+        "matching_saved_solids": 1
+      }
+    },
+    {
+      "check": "battery_door: saved BREP preserves shell volume and bounds",
+      "pass": true,
+      "detail": {
+        "source_volume_mm3": 7399.495046939977,
         "matching_saved_solids": 1
       }
     }
@@ -2456,37 +2909,73 @@
   ],
   "meshes": {
     "front": {
-      "triangles": 16440,
+      "triangles": 19196,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 194136.91,
+      "volume_mm3": 197976.48,
       "print_bounds_mm": [
-        210.0,
-        215.0,
-        46.0
+        206.0,
+        211.0,
+        50.5
       ],
-      "removed_degenerate_triangles": 0,
+      "removed_degenerate_triangles": 5,
       "container_3mf": {
         "unit": "millimeter",
-        "triangles": 16440,
+        "triangles": 19196,
         "matches_stl": true,
         "bed_centered": true
       }
     },
     "rear": {
-      "triangles": 11688,
+      "triangles": 12566,
       "watertight": true,
       "consistent_winding": true,
-      "volume_mm3": 218755.84,
+      "volume_mm3": 190078.82,
       "print_bounds_mm": [
-        210.0,
-        215.0,
-        61.3
+        206.0,
+        211.0,
+        28.2
+      ],
+      "removed_degenerate_triangles": 1,
+      "container_3mf": {
+        "unit": "millimeter",
+        "triangles": 12566,
+        "matches_stl": true,
+        "bed_centered": true
+      }
+    },
+    "battery_door": {
+      "triangles": 740,
+      "watertight": true,
+      "consistent_winding": true,
+      "volume_mm3": 7399.52,
+      "print_bounds_mm": [
+        21.4,
+        89.0,
+        49.4
       ],
       "removed_degenerate_triangles": 0,
       "container_3mf": {
         "unit": "millimeter",
-        "triangles": 11688,
+        "triangles": 740,
+        "matches_stl": true,
+        "bed_centered": true
+      }
+    },
+    "insert-fit-coupon": {
+      "triangles": 2040,
+      "watertight": true,
+      "consistent_winding": true,
+      "volume_mm3": 3578.43,
+      "print_bounds_mm": [
+        10.0,
+        38.0,
+        10.0
+      ],
+      "removed_degenerate_triangles": 0,
+      "container_3mf": {
+        "unit": "millimeter",
+        "triangles": 2040,
         "matches_stl": true,
         "bed_centered": true
       }
@@ -2564,5 +3053,5 @@
       }
     }
   },
-  "checks_count": 456
+  "checks_count": 535
 }

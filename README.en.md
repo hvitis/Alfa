@@ -64,7 +64,7 @@ The [CAD folders](design/) contain the enclosure sources. The website includes t
 - <!-- feature:hardware-simulation --> **Hardware simulation:** Save display previews on your computer without GPIO, SPI, or I²C devices.
 - <!-- feature:static-showcase --> **Static showcase:** Explore Plywood, 3DPrint, Hardware, and Software tabs, with 3D models, controller wiring, an ADR, and rendered Mermaid.
 - <!-- feature:verified-distribution --> **Verified distribution:** Build a runtime kit with a neutral demo card, checksums, validation reports, and an electronics BOM.
-- <!-- feature:enclosure-research --> **Enclosure research:** Inspect the printable cloud and both plywood projects. The cloud uses two shells that join without screws, with a flat battery at the bottom and a horizontal Pi on the shelf above. It is 86 mm deep and 215 mm tall. Downloads include STL, 3MF, BREP, snap coupons and the assembly guide; the conservative Ender travel area is 220 × 220 mm.
+- <!-- feature:enclosure-research --> **Enclosure research:** Inspect the printable cloud and both plywood projects. The cloud is 206 × 211 × 72 mm, with a side battery lid, rear-parallel battery and Pi, retained front-shell buttons and cloud-shaped speaker holes. STL, 3MF, BREP and fit coupons are included; a 2 mm brim fits the conservative 220 × 220 mm Ender area. See [design notes](design/cloud-radio/README.md) and [30 improvements](design/cloud-radio/IMPROVEMENTS.md).
 
 ## Quick start
 

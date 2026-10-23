@@ -14,20 +14,30 @@ export function createCloudScene() {
   const labels = new THREE.Group(), clearances = new THREE.Group();
   root.add(labels, clearances);
   const pickables = [], shells = {}, data = { components: [] }, labelAnchors = [], portOutlines = [];
-  const partMaterials = {}, colors = {front:'#86bfea',rear:'#70acd9'};
+  const partMaterials = {}, colors = {front:'#86bfea',rear:'#70acd9',battery_door:'#70acd9'};
+  const hardwareNodes = [];
   function applyColors() { for(const [part,materials] of Object.entries(partMaterials)) for(const material of materials) material.color.set(colors[part]); }
   let mode = 'assembled', showLabels = false, showClearances = false, request = 0;
   function apply() {
     for (const [name, node] of Object.entries(shells)) {
       node.position.copy(node.userData.home);
       node.visible = mode !== 'inside';
-      if (mode === 'exploded') node.position.z += name === 'front' ? -85 : 45;
-      if (mode === 'battery_open' && name === 'front') node.position.z -= 115;
+      if (mode === 'exploded') {
+        if (name === 'battery_door') node.position.x += 70;
+        else node.position.z += name === 'front' ? -85 : 45;
+      }
+      if (mode === 'battery_open' && name === 'battery_door') node.position.x += 120;
     }
-    for (const {label, home, part} of labelAnchors) {
+    for (const {node, home, part, id} of hardwareNodes) {
+      node.position.copy(home);
+      if (mode === 'exploded') node.position.add(shells[part].position).sub(shells[part].userData.home);
+      if (mode === 'battery_open' && id === 'battery') node.position.x += 90;
+    }
+    for (const {label, home, part, hardwareId} of labelAnchors) {
       label.position.copy(home);
-      if (part && shells[part]) label.position.add(shells[part].position).sub(shells[part].userData.home);
-      label.visible = !part || mode !== 'inside';
+      if (part && shells[part] && (!hardwareId || mode === 'exploded')) label.position.add(shells[part].position).sub(shells[part].userData.home);
+      if (mode === 'battery_open' && hardwareId === 'battery') label.position.x += 90;
+      label.visible = !!hardwareId || !part || mode !== 'inside';
     }
     labels.visible = showLabels;
     clearances.visible = showClearances;
@@ -61,6 +71,18 @@ export function createCloudScene() {
       partMaterials[name]=[...clones.values()];
     }
     applyColors();
+    // Hardware follows its actual mounting shell when showing disassembly.
+    for (const item of [...data.components, ...data.keepouts]) {
+      if (['pi_power', 'bank_plug'].includes(item.id)) continue;
+      const id = item.parent || item.id;
+      const part = ['battery','pi','switch'].includes(id) ? 'rear' : 'front';
+      for (const prefix of ['component_', 'connector_', 'bezel_', 'cap_']) {
+        const node = model.getObjectByName(prefix+item.id);
+        if (node) { root.attach(node); hardwareNodes.push({node,home:node.position.clone(),part,id:item.id}); }
+      }
+    }
+    const screen = model.getObjectByName('screen');
+    if (screen) {root.attach(screen);hardwareNodes.push({node:screen,home:screen.position.clone(),part:'front',id:'lcd'});}
     const hardware = new Map([...data.components, ...data.keepouts].map(item => [item.id, item]));
     root.traverse(object => {
       if (!object.isMesh) return;
@@ -94,14 +116,15 @@ export function createCloudScene() {
         node = node.parent;
       }
     });
-    function addLabel(text, position, part) {
+    function addLabel(text, position, part, hardwareId) {
       const element = document.createElement('span');
       element.className = 'annotation'; element.textContent = text;
       const label = new CSS2DObject(element), home = new THREE.Vector3(...position);
-      label.position.copy(home); labels.add(label); labelAnchors.push({label, home, part});
+      label.position.copy(home); labels.add(label); labelAnchors.push({label, home, part, hardwareId});
     }
     for (const item of data.components) {
-      addLabel(tr(item.title), item.origin.map((value,axis) => value + item.size[axis]/2));
+      addLabel(tr(item.title), item.origin.map((value,axis) => value + item.size[axis]/2),
+        ['battery','pi','switch'].includes(item.id) ? 'rear' : 'front', item.id);
     }
     for (const item of data.frame_parts || []) {
       const bounds = new THREE.Box3().setFromObject(shells[item.name]);
@@ -134,6 +157,7 @@ export function createCloudScene() {
     },
     setPartColors(values) {
       for(const part of Object.keys(colors)) if(/^#[\da-f]{6}$/i.test(values[part])) colors[part]=values[part].toLowerCase();
+      if (values.rear && !values.battery_door) colors.battery_door=colors.rear;
       applyColors();
     },
     getColors:()=>({...colors}),

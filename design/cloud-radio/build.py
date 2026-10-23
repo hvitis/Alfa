@@ -21,7 +21,7 @@ from cadgen import build123d as b
 
 ROOT = Path(__file__).resolve().parent
 OUTPUT = ROOT / "generated" / "cloud"
-COLORS = {"front": "#86bfea", "rear": "#70acd9"}
+COLORS = {"front": "#86bfea", "rear": "#70acd9", "battery_door": "#70acd9"}
 
 
 def box(x, y, z, w, h, d):
@@ -78,7 +78,10 @@ def expanded(item, allowance):
     if item.get("shape")=="cylinder":
         center=[v+s/2 for v,s in zip(origin,size)]
         axis=item.get("axis","z")
-        return b.Pos(*center)*b.Rot(0,90 if axis=="x" else 0,0)*b.Cylinder(size[1]/2,size[0] if axis=="x" else size[2])
+        rotation = {"x": (0,90,0), "y": (90,0,0), "z": (0,0,0)}[axis]
+        axial = "xyz".index(axis)
+        radial = 1 if axis == "x" else 0
+        return b.Pos(*center)*b.Rot(*rotation)*b.Cylinder(size[radial]/2,size[axial])
     return box(*origin, *size)
 
 
@@ -126,12 +129,12 @@ def fairing_profile(profile, inset, width, height):
 
 def smooth_skin(profile, surface_z, c, direction=1):
     inset=c["skin_inset_mm"];run=c["skin_blend_depth_mm"];ef=c["bed_chamfer_mm"]
-    face=fairing_profile(profile,inset,210,c["height_mm"])
+    face=fairing_profile(profile,inset,c["width_mm"],c["height_mm"])
     skin=bed_chamfer(face,surface_z,ef,direction)
     sections=[]
     for i in range(9):
         u=i/8
-        section=fairing_profile(profile,inset*(1-u)**2,210,c["height_mm"])
+        section=fairing_profile(profile,inset*(1-u)**2,c["width_mm"],c["height_mm"])
         sections.append(b.Pos(0,0,surface_z+direction*(ef+run*u))*section)
     return skin+b.loft(sections)
 
@@ -145,12 +148,33 @@ def cylinder_y(x,y,z,r,height):
     return b.Pos(x,y,z)*b.Rot(-90,0,0)*b.Cylinder(r,height,align=(b.Align.CENTER,b.Align.CENTER,b.Align.MIN))
 
 
-def slotted_pad(cx, cy, top, axis="x"):
-    pad = box(cx - 5.5, cy - 4, 3, 11, 8, top - 3)
+def cylinder_x(x,y,z,r,length):
+    return b.Pos(x,y,z)*b.Rot(0,90,0)*b.Cylinder(r,length,align=(b.Align.CENTER,b.Align.CENTER,b.Align.MIN))
+
+
+def cloud_aperture(x, y, width, height):
+    """Three rounded lobes and a flat base, all dimensions from grille settings."""
+    profile = rr(x-width/2, y-height/2, width, height*.58, height*.25)
+    for dx, dy, radius in ((-.28,-.02,.22),(0,.18,.32),(.28,-.02,.22)):
+        profile += b.Pos(x+dx*width,y+dy*height)*b.Circle(radius*height)
+    return profile
+
+
+def slotted_hole(cx, cy, top, axis="x", z_min=3):
     profile = rr(cx - 4, cy - 1.5, 8, 3, 1.49)
     if axis == "y":
         profile = b.Pos(cx, cy) * b.Rot(0, 0, 90) * rr(-4, -1.5, 8, 3, 1.49)
-    return pad - slab(profile, -1, top + 2)
+    return slab(profile, z_min, top + 2 - z_min)
+
+
+def slotted_pad(cx, cy, top, axis="x", t=3):
+    """Internal blind mounting pad with screw slot; front face remains solid and clean."""
+    pad = box(cx - 5.5, cy - 4, t, 11, 8, top - t)
+    profile = rr(cx - 4, cy - 1.5, 8, 3, 1.49)
+    if axis == "y":
+        profile = b.Pos(cx, cy) * b.Rot(0, 0, 90) * rr(-4, -1.5, 8, 3, 1.49)
+    slot = slab(profile, t, top - t + 1)
+    return pad - slot
 
 
 def make(p):
@@ -198,6 +222,10 @@ def make(p):
         front += record(place_snap(stem + root + hook + pad, site),f"F-N{index:02}","Snap hook","front")
         rear -= place_snap(box(-sn["width"]/2-.4,-1,z0-.3,sn["width"]+.8,7,2.8),site)
         rear -= place_snap(box(-6,-1,z0-2.3,12,2.3,7),site)
+        # A constant-width channel clears the beam even along curved walls;
+        # retain the outer ledge that engages its undercut.
+        rear -= place_snap(box(-sn["width"]/2-.3,t+gap-.15,split-.01,
+                               sn["width"]+.6,4,sn["root_z"]+sn["length"]-split+1),site)
     lip_clear=b.offset(outer,amount=-t)-b.offset(outer,amount=-t-1.5-gap)
     rear-=slab(lip_clear,split,3+gap)
     # Insert the two bottom tongues, pivot the front closed, then press snaps.
@@ -224,47 +252,95 @@ def make(p):
     # refill the side openings. All six axes come from component parameters.
     buttons=[item for item in p["components"] if item["id"].startswith("button_")]
     for index,item in enumerate(buttons,1):
+        # Curved walls otherwise leave gaps beneath a flat arcade bezel.
+        # These seats stay inside the 206 mm bounding width and provide a
+        # continuous planar mounting surface around the complete bore.
+        if item["axis"] == "x":
+            seat_size = p["buttons"]["bezel_mm"]+3
+            seat_depth = p["case"]["wall"]+3
+            xx = c["width_mm"]/2-seat_depth if item["id"]=="button_left" else -c["width_mm"]/2
+            yy = item["origin"][1]+item["size"][1]/2-seat_size/2
+            zz = p["buttons"]["side_axis_depth_mm"]-seat_size/2
+            front += record(box(xx,yy,zz,seat_depth,seat_size,seat_size),
+                            f"F-BSEAT{index:02}", "Complete flat arcade mounting seat", "front")
         front -= record(button_hole(item,p),f"F-BTN{index:02}",
                         f"Arcade mounting hole {p['buttons']['mount_hole_mm']} mm","front")
 
     diagonal = 4.5 / math.sqrt(2)
     speaker = items["speaker"]
     sx, sy, sz = speaker["origin"]
-    for dx in range(-12, 13, 6):
-        for dy in range(-12, 13, 6):
-            if math.hypot(dx, dy) <= 13:
-                front -= cylinder(sx+20+dx, sy+20+dy, -1, 1.8, t+2)
+    grille = p["speaker_grille"]
+    for index, (dx, dy) in enumerate(grille["centers_mm"], 1):
+        aperture = slab(cloud_aperture(sx+20+dx, sy+20+dy,
+                        grille["width_mm"], grille["height_mm"]), -1, t+2)
+        front -= record(aperture, f"F-G{index:02}", "Cloud speaker aperture", "front")
     for index,(x,y) in enumerate(((x,y) for x in (sx+diagonal,sx+40-diagonal) for y in (sy+diagonal,sy+40-diagonal)),1):
-        front += record(slotted_pad(x,y,sz),f"F-SP{index:02}","Speaker mounting slot","front")
+        front += record(slotted_pad(x, y, sz, "x", t), f"F-SP{index:02}", "Speaker mounting pad", "front")
 
     amp = items["amp"]
     ax, ay, az = amp["origin"]
     aw, ah, _ = amp["size"]
     for index,yy in enumerate((ay-4,ay+ah+4),1):
-        front += record(slotted_pad(ax+aw/2,yy,az),f"F-AMP{index:02}","Amplifier support slot","front")
+        front += record(slotted_pad(ax+aw/2, yy, az, "x", t), f"F-AMP{index:02}", "Amplifier support pad", "front")
 
-    # Shelf and battery cradle in rear shell.
-    # The battery lies flat below the horizontal Pi shelf.
-    shelf = p["shelf"]
-    sy = shelf["battery_ceiling_y"]
-    shelf_roof = box(-45, sy, 18, 90, shelf["thickness"], depth - 18 - t + 0.6)
-    rear += record(shelf_roof, "R-B01", "Horizontal battery ceiling and Pi shelf", "rear")
-    for index, side in enumerate((-1, 1), 1):
-        rx = -60 if side < 0 else 56
-        rail = box(rx, 76, 18, 4, sy + 3 - 76, depth - 18 - t + 0.6)
-        if side > 0:
-            rail -= box(50, 81, 33, 14, 16, 20)
-        rear += record(rail, f"R-BF{index:02}", "Battery side rail and strap slot", "rear")
-        seat = box(-56 if side < 0 else 48, 76.5, 18, 8, 1, depth - 18 - t + 0.6)
-        rear += record(seat, f"R-BS{index:02}", "Battery floor foam seat", "rear")
+    # XY battery bay, open at +X. Lips retain the bank when the front is off.
+    bay = p["battery_bay"]
+    bx, by, bz = items["battery"]["origin"]
+    bw, bh, bd = items["battery"]["size"]
+    clearance, rail = bay["clearance_mm"], bay["rail_wall_mm"]
+    for index, yy in enumerate((by-clearance-rail, by+bh+clearance), 1):
+        support = box(bay["stop_x"], yy, bay["rail_front_z"],
+                      bay["rail_x_end"]-bay["stop_x"], rail,
+                      depth-t-bay["rail_front_z"]+.2)
+        lip_y = yy if index == 1 else yy-1.8
+        support += box(bay["stop_x"], lip_y, bay["rail_front_z"],
+                       bay["rail_x_end"]-bay["stop_x"], rail+1.8, 1.2)
+        rear += record(support, f"R-BR{index:02}", "Side-loading battery guide rail", "rear")
+        seat_y = by+2 if index == 1 else by+bh-4
+        rear += record(box(bx, seat_y, bz+bd+clearance, bw, 2, depth-t-bz-bd-clearance+.2),
+                       f"R-BS{index:02}", "Battery back support", "rear")
+    rear += record(box(bay["stop_x"], by-clearance-rail, bay["rail_front_z"],
+                       rail, bh+2*(clearance+rail), depth-t-bay["rail_front_z"]+.2),
+                   "R-BSTOP", "Battery insertion stop", "rear")
+    # Ribbon lies behind the bank between the back supports; ends at hatch.
     px, py, pz = items["pi"]["origin"]
-    for index, (x, z) in enumerate(((x, z) for x in (px + 3.5, px + 61.5) for z in (pz + 3.5, pz + 52.5)), 1):
-        post = cylinder_y(x, sy + shelf["thickness"], z, 2.8, py - (sy + shelf["thickness"]))
-        rear += record(post, f"R-P{index:02}", "Horizontal Pi shelf post", "rear")
-        rear -= cylinder_y(x, sy + 0.8, z, 1.1, py - sy + 0.2)
+    pcb_back = pz+items["pi"]["size"][2]
+    for index, (x, y) in enumerate(((x, y) for x in (px+3.5, px+61.5) for y in (py+3.5, py+52.5)), 1):
+        post = cylinder(x, y, pcb_back, 2.8, depth-t-pcb_back+.2)
+        rear += record(post, f"R-P{index:02}", "Rear-lid Pi mounting post", "rear")
+        rear -= cylinder(x, y, pcb_back-.2, 1.1, depth-t-pcb_back+1.4)
+
+    # Flush side hatch within the original 206 mm overall width.
+    door_spec = p["battery_door"]
+    dx, dy, dz = door_spec["origin"]; dw, dh, dd = door_spec["size"]
+    margin = door_spec["clearance_mm"]
+    frame = box(94, dy-1, dz-margin, 9, dh+2, depth-dz+margin)
+    rear += record(frame, "R-HFRAME", "Battery hatch reinforcing frame", "rear")
+    rear -= box(*bay["opening_origin"], *bay["opening_size"])
+    rear -= box(dx-margin, dy-margin, dz-margin, dw+2*margin+1, dh+2*margin, dd+2*margin)
+    door = box(dx,dy,dz,dw,dh,dd)
+    for index, yy in enumerate(door_spec["screw_y"], 1):
+        bore = cylinder_x(93, yy, door_spec["screw_z"], door_spec["screw_hole_mm"]/2, 12)
+        rear -= bore
+        door -= bore
+        # Heat-set insert loads from the exposed outer seat before the lid is
+        # installed. It cannot fall inside when a service screw is removed.
+        pilot = cylinder_x(door_spec["insert_face_x"]-door_spec["insert_length_mm"],
+                           yy, door_spec["screw_z"],door_spec["insert_pilot_mm"]/2,
+                           door_spec["insert_length_mm"]+.1)
+        rear -= record(pilot, f"R-HI{index:02}", "Battery lid heat-set insert seat", "rear")
+    # Two compression arms stop the bank at its intended position, leaving
+    # the central USB-C plug and ribbon accessible. They print upward from
+    # the outer lid face and move entirely with the removed lid.
+    for index, yy in enumerate(door_spec["retainer_y"],1):
+        arm = box(door_spec["retainer_x"],yy,door_spec["retainer_z"],
+                  dx-door_spec["retainer_x"]+.2,door_spec["retainer_width_mm"],door_spec["retainer_height_mm"])
+        door += record(arm,f"B-STOP{index:02}","Lid battery retaining arm","battery_door")
+    # Shallow grip recess leaves 1.6 mm material beneath it.
+    door -= box(dx+dw-.8, dy+dh/2-6, dz+3, 1, 12, dd-6)
     # The switch stays near the back, above the bottom module.
     wx, wy, wz = items["switch"]["origin"]
-    rear -= slab(rr(wx + 1, wy + 8, 16, 24, 5), wz - 1, t + 2)
+    rear -= slab(rr(wx + 1, wy + 8, 16, 24, 5), depth-t-1, t + 2)
     for index, yy in enumerate((wy + 5, wy + 35), 1):
         lug = box(wx - 6, yy - 4, wz + 8, 6, 8, depth - t - wz - 8)
         lug -= box(wx - 4.5, yy - 2.5, wz + 7, 3, 5, 4)
@@ -289,7 +365,7 @@ def make(p):
                 relief = b.Pos(x + w / 2, y + h / 2, z + d / 2) * b.Rot(0, 90, 0) * b.Cylinder(h / 2 + 0.2, w + 0.8)
             front -= relief
             rear -= relief
-    parts = {"front": front, "rear": rear}
+    parts = {"front": front, "rear": rear, "battery_door": door}
     for name, shape in parts.items():
         color(shape, name, COLORS[name])
 
@@ -300,10 +376,41 @@ def make(p):
         x, y, z = item["origin"]
         w, h, d = item["size"]
         if item["id"] == "pi":
-            shape=box(x,y,z,w,h,d)
-            for hx in (x+3.5,x+61.5):
-                for hz in (z+3.5,z+52.5):
-                    shape-=cylinder_y(hx,y-1,hz,1.375,h+2)
+            # Official Raspberry Pi 3 Model B mechanical geometry
+            pcb = box(x, y, z, w, h, d)
+            for hx in (x+3.5, x+61.5):
+                for hy in (y+3.5, y+52.5):
+                    pcb -= cylinder(hx, hy, z-1, 1.375, d+2)
+            # Micro-USB power receptacle on the bottom edge (Y=18, X=px+10.6)
+            pwr_socket = box(x + 10.6 - 3.8, y - 0.8, z - 3.0, 7.6, 5.6, 3.0)
+            pwr_socket -= box(x + 10.6 - 3.2, y - 1.0, z - 2.5, 6.4, 3.8, 2.0)
+            # HDMI port on the bottom edge (Y=18, X=px+32.0)
+            hdmi = box(x + 32.0 - 7.5, y - 0.8, z - 6.5, 15.0, 11.2, 6.5)
+            hdmi -= box(x + 32.0 - 6.8, y - 1.0, z - 5.8, 13.6, 7.0, 5.0)
+            # 3.5mm 4-pole audio/composite jack (Y=18, X=px+53.5)
+            audio = box(x + 53.5 - 3.5, y, z - 6.0, 7.0, 14.5, 6.0)
+            audio += cylinder_y(x + 53.5, y, z - 3.0, 3.0, 2.5)
+            audio -= cylinder_y(x + 53.5, y - 2.6, z - 3.0, 1.8, 8.0)
+            # 2x Dual stacked USB Type-A ports on the right edge (+X)
+            usb1 = box(x + w - 15.2, y + 9.5, z - 16.0, 17.0, 13.5, 16.0)
+            usb1 -= box(x + w + .2, y + 10.5, z - 15.0, 2.0, 11.5, 6.2)
+            usb1 -= box(x + w + .2, y + 10.5, z - 7.6, 2.0, 11.5, 6.2)
+            usb2 = box(x + w - 15.2, y + 27.5, z - 16.0, 17.0, 13.5, 16.0)
+            usb2 -= box(x + w + .2, y + 28.5, z - 15.0, 2.0, 11.5, 6.2)
+            usb2 -= box(x + w + .2, y + 28.5, z - 7.6, 2.0, 11.5, 6.2)
+            # Ethernet RJ45 jack on the right edge (+X)
+            eth = box(x + w - 19.5, y + 43.5, z - 13.5, 21.5, 15.5, 13.5)
+            eth -= box(x + w + .2, y + 45.0, z - 12.0, 2.0, 12.5, 10.5)
+            # 40-pin GPIO header along the top edge (Y=74)
+            gpio = box(x + 7.5, y + h - 5.0, z - 8.5, 51.0, 5.0, 8.5)
+            # Broadcom BCM2837 SoC processor in the center
+            soc = box(x + 28.0, y + 17.0, z - 1.5, 14.0, 14.0, 1.5)
+            # DSI display and CSI camera flat-flex connectors
+            dsi = box(x + 3.5, y + 15.0, z - 5.5, 3.2, 22.0, 5.5)
+            csi = box(x + 44.5, y + 3.0, z - 5.5, 3.2, 22.0, 5.5)
+            # Micro-SD card slot on the underside (Z > 66.0)
+            sd = box(x - 1.5, y + 21.0, z + d, 14.0, 12.0, 1.2)
+            shape = pcb + pwr_socket + hdmi + audio + usb1 + usb2 + eth + gpio + soc + dsi + csi + sd
         elif item["id"] == "lcd":
             shape = box(x, y, z, w, h, 1.6)
             for hx in (x+2.5, x+w-2.5):
@@ -339,19 +446,23 @@ def make(p):
         axis = btn.get("axis", "y" if btn["id"] in ("button_top", "button_bottom") else "x")
         if axis == "y":
             if "top" in btn["id"]:
-                extras[f"bezel_{btn['id']}"] = color(b.Pos(cx, 216.5, cz) * b.Rot(90, 0, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
-                extras[f"cap_{btn['id']}"] = color(b.Pos(cx, 218, cz) * b.Rot(90, 0, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
+                extras[f"bezel_{btn['id']}"] = color(b.Pos(cx, c["height_mm"]+1.5, cz) * b.Rot(90, 0, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
+                extras[f"cap_{btn['id']}"] = color(b.Pos(cx, c["height_mm"]+3, cz) * b.Rot(90, 0, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
             else:
                 extras[f"bezel_{btn['id']}"] = color(b.Pos(cx, -1.5, cz) * b.Rot(90, 0, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
                 extras[f"cap_{btn['id']}"] = color(b.Pos(cx, -3, cz) * b.Rot(90, 0, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
         elif "left" in btn["id"]:
-            extras[f"bezel_{btn['id']}"] = color(b.Pos(107.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
-            extras[f"cap_{btn['id']}"] = color(b.Pos(109, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
+            extras[f"bezel_{btn['id']}"] = color(b.Pos(c["width_mm"]/2+1.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
+            extras[f"cap_{btn['id']}"] = color(b.Pos(c["width_mm"]/2+3, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
         else:
-            extras[f"bezel_{btn['id']}"] = color(b.Pos(-107.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
-            extras[f"cap_{btn['id']}"] = color(b.Pos(-109, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
+            extras[f"bezel_{btn['id']}"] = color(b.Pos(-c["width_mm"]/2-1.5, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(16.5, 3), f"bezel_{btn['id']}", "#1e293b")
+            extras[f"cap_{btn['id']}"] = color(b.Pos(-c["width_mm"]/2-3, cy, cz) * b.Rot(0, 90, 0) * b.Cylinder(12, 2.5), f"cap_{btn['id']}", btn["color"])
     for item in p["keepouts"]:
-        extras[item["id"]] = color(expanded({**item,"uncertain":False},0), "connector_"+item["id"], "#5b6670")
+        if item["id"] in ("pi_power", "bank_plug"):
+            # Power cable and plug are hidden from visual assembly
+            continue
+        else:
+            extras[item["id"]] = color(expanded({**item, "uncertain": False}, 0), "connector_" + item["id"], "#5b6670")
 
     return parts, electronics, extras, outer, features
 
@@ -452,7 +563,8 @@ def export_print_3mf(stl, destination, bed):
     return {"unit":"millimeter","triangles":len(fs),"matches_stl":True,"bed_centered":True}
 
 
-def verify(p, parts, electronics, outer, features):
+def verify(p, parts, electronics, outer, features, extras=None):
+    extras = extras or {}
     checks = []
     def check(name, ok, detail=None):
         checks.append({"check": name, "pass": bool(ok), "detail": detail})
@@ -465,7 +577,7 @@ def verify(p, parts, electronics, outer, features):
             print("Disconnected solids",name,[(round(v.volume,3),list(v.bounding_box().min),list(v.bounding_box().max)) for v in shape.solids()],flush=True)
         bb = shape.bounding_box()
         if name in ("front","rear"):
-            check(name+": retains full lower frame",bb.min.Y<.01 and bb.min.X < -104.9 and bb.max.X>104.9,
+            check(name+": retains full lower frame",bb.min.Y<.01 and bb.min.X < -p["case"]["width_mm"]/2+.01 and bb.max.X>p["case"]["width_mm"]/2-.01,
                   [round(v,3) for v in bb.size])
         check(name+": fits configured print field", bb.size.X <= p["case"]["print_limit"][0]+.01 and bb.size.Y <= p["case"]["print_limit"][1]+.01,
               [round(v,3) for v in bb.size])
@@ -475,6 +587,8 @@ def verify(p, parts, electronics, outer, features):
     for (na,a),(nc,c) in combinations(parts.items(),2):
         vol = overlap(a,c)
         check(f"Assembled shells: {na} / {nc} do not interfere", vol < .01, round(vol,5))
+        if vol > .01:
+            print("CLASH",na,nc,[(list(s.bounding_box().min),list(s.bounding_box().max),s.volume) for s in (a & c).solids()],flush=True)
     for item in p["components"]:
         for name, shape in parts.items():
             # Contact with cradle/PCB seats is allowed at surfaces, not volume.
@@ -515,13 +629,32 @@ def verify(p, parts, electronics, outer, features):
 
     bank=next(v for v in p["components"] if v["id"]=="battery")
     x,y,z=bank["origin"];w,h,d=bank["size"]
-    sweep=box(x-2.5,y-2.5,-40,w+5,h+5,z+d+42.5)
-    check("Bank slides forward below shelf after front removal",overlap(parts["rear"],sweep)<.02)
+    fit = p["battery_bay"]["clearance_mm"]
+    sweep=box(x-fit,y-fit,z-fit,p["case"]["width_mm"]+w,h+2*fit,d+2*fit)
+    for name in ("front", "rear"):
+        check("Side battery extraction with main case closed: "+name,overlap(parts[name],sweep)<.02,round(overlap(parts[name],sweep),4))
+    if overlap(parts["rear"],sweep)>.02:
+        print("SWEEP CLASH",[(list(s.bounding_box().min),list(s.bounding_box().max),s.volume) for s in (parts["rear"] & sweep).solids()],flush=True)
+    for item in p["components"]:
+        if item["id"] != "battery":
+            check("Battery sweep clears "+item["id"],overlap(electronics[item["id"]],sweep)<.02)
+    for travel in (0, 5, 30):
+        moved = b.Pos(travel,0,0)*parts["battery_door"]
+        for name in ("front", "rear"):
+            check(f"Side lid lift {travel} mm / {name}",overlap(moved,parts[name])<.02)
+    check("Closed side lid blocks battery escape",overlap(parts["battery_door"],sweep)>10)
+    check("Lid stops battery within 1 mm of installed position",
+          overlap(parts["battery_door"],b.Pos(1,0,0)*electronics["battery"])>1)
+    insert=p["battery_door"]
+    screw_tip=insert["origin"][0]+insert["size"][0]-8
+    check("Lid screws engage full insert length",screw_tip<=insert["insert_face_x"]-insert["insert_length_mm"])
+    check("Cloud grille has >= 2 mm horizontal webs",p["speaker_grille"]["width_mm"]<=8)
+
     sn=p["snap"]
     strain=1.5*sn["thickness"]*max(p["closure"]["release_travel_mm"],sn["engagement"]+p["case"]["fit_clearance"])/sn["length"]**2
     check("Snap elastic-strain screening <= 2%",strain<=.02,{"estimated_strain":round(strain,5),"assumed_limit":.02})
-    check("Exactly two printed shell parts",set(parts)=={"front","rear"})
-    check("No shell screws or battery door",p["closure"]["shell_screws"]==0 and "exterior_screws" not in p and "battery_door" not in p)
+    check("Two shells and independent battery lid",set(parts)=={"front","rear","battery_door"})
+    check("Main shells retain screwless closure",p["closure"]["shell_screws"]==0)
     check("Five snaps and two locating tongues",len(sn["sites"])==5 and len(p["closure"]["tongue_x"])==2)
     z0=sn["root_z"]+sn["length"]-2.2
     inner=p["case"]["wall"]+p["case"]["seam_gap"]
@@ -541,14 +674,51 @@ def verify(p, parts, electronics, outer, features):
     for angle in (10,20):
         pivoted=b.Pos(0,p["closure"]["pivot_y_mm"],p["case"]["split"])*b.Rot(-angle,0,0)*b.Pos(0,-p["closure"]["pivot_y_mm"],-p["case"]["split"])*parts["front"]
         check(f"Complete front shell pivot clearance at {angle} degrees",overlap(parts["rear"],pivoted)<.02)
-    back_probe=box(-50,5,p["case"]["depth"]-p["case"]["wall"],100,18,p["case"]["wall"])
-    check("Battery hatch replaced by continuous rear cover",overlap(parts["rear"],back_probe)>=back_probe.volume-.02)
+        if overlap(parts["rear"],pivoted)>.02:
+            print("PIVOT CLASH",angle,[(list(s.bounding_box().min),list(s.bounding_box().max),s.volume) for s in (parts["rear"] & pivoted).solids()],flush=True)
     items={item["id"]:item for item in p["components"]}
     pi=items["pi"]
-    check("Battery lies flat along XZ",bank["size"]==[106,14,69])
-    check("Pi lies flat along XZ",pi["size"]==[85,1.6,56])
-    check("Pi shelf above bank",bank["origin"][1]+bank["size"][1]<p["shelf"]["battery_ceiling_y"]<pi["origin"][1])
-    check("Depth below previous 110 mm",p["case"]["depth"]<110)
+    check("Battery parallel to rear lid",bank["size"]==[106,69,14])
+    check("Pi parallel to rear lid",pi["size"]==[85,56,1.6])
+    check("Battery and Pi do not stack in depth",pi["origin"][1]+pi["size"][1]<bank["origin"][1])
+    check("Depth reduced by at least 6 mm",p["case"]["depth"]<=78-6)
+    check("Width and height each reduced by at least 4 mm",outer.bounding_box().size.X<=206.01 and outer.bounding_box().size.Y<=211.01)
+    check("Cloud speaker apertures present",len([f for f in features if f["id"].startswith("F-G")])==7)
+    # Speaker and amplifier screw holes are hidden: front skin remains 100% solid
+    sp_diag = 4.5 / math.sqrt(2)
+    sp_x, sp_y, _ = items["speaker"]["origin"]
+    for s_idx, (sx, sy) in enumerate(((sp_x+sp_diag, sp_y+sp_diag), (sp_x+40-sp_diag, sp_y+sp_diag), (sp_x+sp_diag, sp_y+40-sp_diag), (sp_x+40-sp_diag, sp_y+40-sp_diag)), 1):
+        probe = box(sx - 1.5, sy - 1.0, 0.2, 3.0, 2.0, 1.2)
+        check(f"Speaker mount {s_idx} hidden behind solid front skin", overlap(parts["front"], probe) > 0.99 * probe.volume)
+    amp_x, amp_y, _ = items["amp"]["origin"]
+    amp_w, amp_h, _ = items["amp"]["size"]
+    for a_idx, ay in enumerate((amp_y - 4, amp_y + amp_h + 4), 1):
+        probe = box(amp_x + amp_w/2 - 1.5, ay - 1.0, 0.2, 3.0, 2.0, 1.2)
+        check(f"Amplifier mount {a_idx} hidden behind solid front skin", overlap(parts["front"], probe) > 0.99 * probe.volume)
+    check("Power cable hidden from visual assembly", "pi_power" not in extras)
+    for item in p["components"]:
+        if not item["id"].startswith("button_"): continue
+        center_z=item["origin"][2]+item["size"][2]/2
+        bridge=p["case"]["split"]-center_z-p["buttons"]["mount_hole_mm"]/2
+        check("Continuous front plastic behind button: "+item["id"],bridge>=4.79,round(bridge,3))
+        check("Button hole stays clear of rear seam: "+item["id"],overlap(parts["rear"],button_hole(item,p))<.02)
+        # Sample actual material around each mounting bore at the outer panel,
+        # catching counterbores or other cuts which could sever its surround.
+        cx, cy = [item["origin"][a]+item["size"][a]/2 for a in (0,1)]
+        radius = p["buttons"]["mount_hole_mm"]/2 + 1.2
+        material = []
+        for angle in range(0,360,30):
+            u, v = radius*math.cos(math.radians(angle)), radius*math.sin(math.radians(angle))
+            if item["axis"] == "y":
+                yy = p["case"]["height_mm"]-1.5 if item["id"]=="button_top" else 1.5
+                point = (cx+u, yy, center_z+v)
+            else:
+                xx = (p["case"]["width_mm"]/2-1.5)*(1 if item["id"]=="button_left" else -1)
+                point = (xx, cy+u, center_z+v)
+            probe=box(*(q-.15 for q in point),.3,.3,.3)
+            material.append(overlap(parts["front"],probe)/probe.volume)
+        check("Front material surrounds entire button: "+item["id"],min(material)>.99,round(min(material),4))
+
     check("Five arcade buttons present",sum(v["id"].startswith("button_") for v in p["components"])==5)
     check("LCD centered horizontally",abs(items["lcd"]["origin"][0]+items["lcd"]["size"][0]/2)<.1)
     check("Handle absent","handle" not in p)
@@ -559,11 +729,11 @@ def verify(p, parts, electronics, outer, features):
     check("Structural shell wall >= 2.4 mm",p["case"]["wall"]>=2.4)
     c=p["case"]
     u=(c["wall"]-c["bed_chamfer_mm"])/c["skin_blend_depth_mm"]
-    mouth=fairing_profile(outer,c["skin_inset_mm"]*(1-u)**2,210,c["height_mm"])
+    mouth=fairing_profile(outer,c["skin_inset_mm"]*(1-u)**2,c["width_mm"],c["height_mm"])
     inner_profile=b.offset(outer,amount=-c["wall"]).faces()[0]
     mouth_wall=mouth.outer_wire().distance_to(inner_profile.outer_wire())
     check("Shoulder profile at cavity mouth >= 2.4 mm",mouth_wall>=2.4,round(mouth_wall,4))
-    check("Fairing preserves flat bottom sole",all(abs(fairing_profile(outer,c["skin_inset_mm"]*(1-v)**2,210,c["height_mm"]).bounding_box().min.Y)<.001 for v in (0,.5,1)))
+    check("Fairing preserves flat bottom sole",all(abs(fairing_profile(outer,c["skin_inset_mm"]*(1-v)**2,c["width_mm"],c["height_mm"]).bounding_box().min.Y)<.001 for v in (0,.5,1)))
     for item in p["components"]:
         if not item["id"].startswith("button_"):continue
         axis = 1 if item.get("axis") == "y" or item["id"] in ("button_top", "button_bottom") else 0
@@ -583,6 +753,11 @@ def verify(p, parts, electronics, outer, features):
 
 def coupons(p):
     out={}
+    insert_plate=box(0,0,0,10,38,10)
+    for yy, bore in ((7,3.1),(19,p["battery_door"]["insert_pilot_mm"]),(31,3.5)):
+        insert_plate-=cylinder_x(-1,yy,5,p["battery_door"]["screw_hole_mm"]/2,12)
+        insert_plate-=cylinder_x(6,yy,5,bore/2,5)
+    out["insert-fit-coupon"]=insert_plate
     plate=box(0,0,0,110,40,p["case"]["wall"])
     for x,dia in ((20,28),(55,p["buttons"]["mount_hole_mm"]),(90,28.8)):
         plate-=cylinder(x,20,-1,dia/2,p["case"]["wall"]+2)
@@ -602,7 +777,7 @@ def coupons(p):
 
 
 def build(check_only=False):
-    source_names=("parameters.json","README.md","build.py","run-cad.sh","print-settings.json","cloud-ender.scad")
+    source_names=("parameters.json","README.md","IMPROVEMENTS.md","build.py","run-cad.sh","print-settings.json","cloud-ender.scad")
     source_snapshot={name:(ROOT/name).read_bytes() for name in source_names}
     p=json.loads(source_snapshot["parameters.json"])
     assert p["uncertain_dimension_allowance_mm"]==5, "This prototype specifies 5 mm total allowance"
@@ -610,7 +785,7 @@ def build(check_only=False):
     print("Building native cloud CAD…",flush=True)
     parts,electronics,extras,outer,features=make(p)
     print("Checking solids, fit allowances, and extraction paths…",flush=True)
-    report=verify(p,parts,electronics,outer,features)
+    report=verify(p,parts,electronics,outer,features,extras)
     if check_only:
         print(json.dumps(report,indent=2))
         return report["passed"]
@@ -628,6 +803,8 @@ def build(check_only=False):
             printable=shape
             if name=="rear":
                 printable=b.Rot(180,0,0)*shape
+            elif name=="battery_door":
+                printable=b.Rot(0,90,0)*shape
             bb=printable.bounding_box()
             printable= b.Pos(0,0,-bb.min.Z)*printable
             path=staging/f"{name}.stl"
@@ -661,14 +838,14 @@ def build(check_only=False):
             print("Verification failed; last good published files retained.",flush=True)
             return False
         manifest={"revision":p["revision"],"outer_mm":[round(v,2) for v in parts["front"].bounding_box().size][:2]+[p["case"]["depth"]],
-                  "core_mm":[210,p["case"]["height_mm"],p["case"]["depth"]],"side_relief":p["side_relief"],"arcade_buttons":[c for c in p["components"] if c["id"].startswith("button_")],
-                  "allowance_mm":5,"material":p["material"],"components":p["components"],"keepouts":p["keepouts"],"closure":p["closure"],"shelf":p["shelf"],"print_bed_mm":p["case"]["bed"],
-                  "fasteners":p["fasteners"],"checks_count":len(report["checks"]),"passed":True,"files":["front.stl","rear.stl","cloud-radio.brep","cloud-radio.zip"],
+                  "core_mm":[p["case"]["width_mm"],p["case"]["height_mm"],p["case"]["depth"]],"side_relief":p["side_relief"],"arcade_buttons":[c for c in p["components"] if c["id"].startswith("button_")],
+                  "allowance_mm":5,"material":p["material"],"components":p["components"],"keepouts":p["keepouts"],"closure":p["closure"],"battery_bay":p["battery_bay"],"battery_door":p["battery_door"],"speaker_grille":p["speaker_grille"],"print_bed_mm":p["case"]["bed"],
+                  "fasteners":p["fasteners"],"checks_count":len(report["checks"]),"passed":True,"files":["front.stl","rear.stl","battery_door.stl","cloud-radio.brep","cloud-radio.zip"],
                   "print_parts":list(parts),"frame_features":features,
-                  "frame_parts":[{"id":"F-00","name":"front","title":"Front shell"},{"id":"R-00","name":"rear","title":"Rear shell"}],"limits":report["limitations"]}
+                  "frame_parts":[{"id":"F-00","name":"front","title":"Front shell"},{"id":"R-00","name":"rear","title":"Rear shell"},{"id":"B-00","name":"battery_door","title":"Side battery lid"}],"limits":report["limitations"]}
         (staging/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
         manifest["buttons"]=p["buttons"]
-        manifest["files"] += ["front.3mf","rear.3mf","button-fit-coupon.stl","print-settings.json","cloud-ender.scad"]
+        manifest["files"] += ["front.3mf","rear.3mf","battery_door.3mf","button-fit-coupon.stl","print-settings.json","cloud-ender.scad"]
         (staging/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
         for name,contents in source_snapshot.items():
             # The inspection wrapper lives beside the meshes in the ZIP.

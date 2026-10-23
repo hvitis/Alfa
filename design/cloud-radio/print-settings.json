@@ -16,8 +16,8 @@
   "infill_percent": 25,
   "infill_pattern": "gyroid",
   "brim_width_mm": 2,
-  "supports": "Local support needed at horizontal side-button bores, short horizontal Pi posts and selected snap undersides. Inspect layer preview. Block snap flex gaps, release recesses, battery corridor and PCB pilot holes; avoid filling the full interior.",
-  "orientation": "All STL and 3MF files have their outside face on the bed and Z minimum at zero. Load one enclosure part per plate.",
+  "supports": "Local supports at horizontal side-button bores, selected snap undersides and the 73 mm side-hatch bridge. Rear Pi posts grow vertically. Keep nut pockets, PCB pilots and snap gaps clear; inspect every layer.",
+  "orientation": "Front/rear outside faces down; side lid outer face down. Exported STL/3MF Z minimum is zero; one main shell per plate.",
   "temperatures": {
     "nozzle_celsius_start": 235,
     "bed_celsius_start": 75,

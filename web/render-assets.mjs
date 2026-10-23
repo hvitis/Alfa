@@ -32,7 +32,7 @@ try {
   for (const { view, width, height, path } of extraViews) {
     await page.setViewportSize({ width, height });
     report[view] = await page.evaluate(options => window.renderCloud(options), { view, width, height });
-    if(view==='case_inside'&&(report[view].scene!=='cloud'||report[view].visibleParts.join(',')!=='rear'))throw new Error('Inside-back render must show the rear shell with the horizontal battery and Pi shelves');
+    if(view==='case_inside'&&(report[view].scene!=='cloud'||report[view].visibleParts.join(',')!=='rear'))throw new Error('Inside-back render must show the rear shell with the flat battery and rear Pi mounts');
     if(view==='roentgen'&&report[view].scene!=='cloud')throw new Error('X-ray render must use the current cloud CAD');
     await page.evaluate(() => { document.body.style.background = '#fff2c6'; });
     await page.locator('canvas').screenshot({ path: resolve(root, path) });

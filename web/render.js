@@ -26,7 +26,7 @@ const shellMaterials=new Map();
 document.body.append(renderer.domElement);
 window.renderCloud=async({view='assembled',width=1400,height=1200}={})=>{
   await cloud.readyPromise;
-  for(const name of ['front','rear']) cloud.root.getObjectByName(name).traverse(mesh=>{
+  for(const name of cloud.data.print_parts) cloud.root.getObjectByName(name).traverse(mesh=>{
     if(!mesh.isMesh)return;
     if(!shellMaterials.has(mesh))shellMaterials.set(mesh,mesh.material);
     if(mesh.material!==shellMaterials.get(mesh)){
@@ -55,10 +55,11 @@ window.renderCloud=async({view='assembled',width=1400,height=1200}={})=>{
       const front = cloud.root.getObjectByName('front');
       const rear = cloud.root.getObjectByName('rear');
       if (front) front.visible = false;
+      cloud.root.getObjectByName('battery_door').visible = false;
       if (rear) rear.visible = true;
       direction = new THREE.Vector3(.55, .40, -1).normalize();
     } else if (view === 'roentgen') {
-      for (const name of ['front', 'rear']) {
+      for (const name of cloud.data.print_parts) {
         const node = cloud.root.getObjectByName(name);
         if (node) {
           node.visible = true;
@@ -81,10 +82,6 @@ window.renderCloud=async({view='assembled',width=1400,height=1200}={})=>{
     } else {
       // Restore normal shell colors & visibility
       cloud.setPartColors(cloud.getColors());
-      if(view==='exploded'){
-        cloud.root.getObjectByName('front').position.x+=170;
-        cloud.root.getObjectByName('rear').position.x-=140;
-      }
       direction = (view==='rear'?new THREE.Vector3(-.6,.3,1):view==='side'?new THREE.Vector3(1,.22,-.68):view==='exploded'?new THREE.Vector3(.5,.25,-1):new THREE.Vector3(.44,.28,-1)).normalize();
     }
   }

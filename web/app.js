@@ -264,7 +264,7 @@ async function showScene() {
 function fillCloud(data) {
   $('#cloud-revision').textContent = t('cloud.revision', { revision: data.revision.replace('prototype-', 'PROTOTYPE ') });
   $('#cloud-facts').replaceChildren();
-  for (const [label, value] of [[t('facts.width'), `${data.outer_mm[0]} mm`], [t('facts.height'), `${data.outer_mm[1]} mm`], [t('facts.depth'), `${data.outer_mm[2]} mm`], [t('facts.material'), data.material], ...(data.shelf ? [[t('facts.battery'), t('facts.batteryHorizontal')], ['Raspberry Pi', t('facts.batteryHorizontal')]] : [])]) {
+  for (const [label, value] of [[t('facts.width'), `${data.outer_mm[0]} mm`], [t('facts.height'), `${data.outer_mm[1]} mm`], [t('facts.depth'), `${data.outer_mm[2]} mm`], [t('facts.material'), data.material], ...(data.battery_bay ? [[t('facts.battery'), t('facts.batteryHorizontal')], ['Raspberry Pi', t('facts.batteryHorizontal')]] : [])]) {
     const item = document.createElement('div'), term = document.createElement('dt'), detail = document.createElement('dd');
     term.textContent = label; detail.textContent = value; item.append(term, detail); $('#cloud-facts').append(item);
   }

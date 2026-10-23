@@ -22,26 +22,30 @@ class CloudPrintTests(unittest.TestCase):
             self.assertGreaterEqual(button['size'][axis], 66)
             wire = next(v for v in p['keepouts'] if v['id'] == button['id'] + '_wires')
             self.assertGreaterEqual(wire['size'][axis], 10)
-        self.assertEqual(p['case']['depth'], 78)
-        self.assertEqual(p['case']['split'], 39)
-        self.assertEqual(p['case']['height_mm'], 215)
+        self.assertLessEqual(p['case']['depth'], 72)
+        self.assertEqual(p['case']['split'], 43.5)
+        self.assertLessEqual(p['case']['height_mm'], 211)
+        self.assertLessEqual(p['case']['width_mm'], 206)
         self.assertEqual(p['case']['bed'], [220, 220])
         self.assertEqual(p['printer']['physical_bed_mm'], [235, 235])
         self.assertNotIn('handle', p)
-        self.assertNotIn('battery_door', p)
+        self.assertIn('battery_door', p)
         self.assertEqual(p['closure']['shell_screws'], 0)
         manifest = json.loads((CLOUD / 'manifest.json').read_text())
-        self.assertEqual(manifest['print_parts'], ['front', 'rear'])
+        self.assertEqual(manifest['print_parts'], ['front', 'rear', 'battery_door'])
         for suffix in ('stl', '3mf'):
-            self.assertFalse((CLOUD / f'battery_door.{suffix}').exists())
+            self.assertTrue((CLOUD / f'battery_door.{suffix}').exists())
         items = {v['id']: v for v in p['components']}
-        self.assertEqual(items['battery']['size'], [106, 14, 69])
-        self.assertEqual(items['pi']['size'], [85, 1.6, 56])
-        self.assertGreater(items['pi']['origin'][1], p['shelf']['battery_ceiling_y'])
+        self.assertEqual(items['battery']['size'], [106, 69, 14])
+        self.assertEqual(items['pi']['size'], [85, 56, 1.6])
+        self.assertLess(items['pi']['origin'][1] + 56, items['battery']['origin'][1])
+        for button in buttons:
+            back_of_hole = button['origin'][2] + button['size'][2] / 2 + p['buttons']['mount_hole_mm'] / 2
+            self.assertGreaterEqual(p['case']['split'] - back_of_hole, 4.79)
         self.assertEqual(p['material'], 'PETG')
 
     def test_each_3mf_preserves_stl_scale_topology_and_print_orientation(self):
-        for name in ('front', 'rear', 'button-fit-coupon'):
+        for name in ('front', 'rear', 'battery_door', 'button-fit-coupon', 'insert-fit-coupon'):
             with self.subTest(part=name), zipfile.ZipFile(CLOUD / f'{name}.3mf') as archive:
                 model = ET.fromstring(archive.read('3D/3dmodel.model'))
                 self.assertEqual(model.attrib['unit'], 'millimeter')
@@ -69,7 +73,7 @@ class CloudPrintTests(unittest.TestCase):
         self.assertTrue(report['passed'])
         self.assertFalse([v for v in report['checks'] if not v['pass']])
         brep = [v for v in report['checks'] if 'BREP' in v['check']]
-        self.assertEqual(len(brep), 3, 'Native CAD must pass solid and shell readback checks')
+        self.assertEqual(len(brep), 4, 'Native CAD must pass solid and shell readback checks')
         self.assertTrue((CLOUD / 'cloud-radio.brep').is_file())
         self.assertFalse((CLOUD / 'cloud-radio.step').exists(), 'Do not publish the incomplete STEP export')
         for name, mesh in report['meshes'].items():
@@ -86,7 +90,7 @@ class CloudPrintTests(unittest.TestCase):
             self.assertEqual(renders[name]['revision'], revision)
             self.assertEqual(len([v for v in renders[name]['hardware'] if v.startswith('button_')]), 5)
         self.assertEqual(renders['case_inside']['visibleParts'], ['rear'])
-        self.assertEqual(set(renders['roentgen']['visibleParts']), {'front', 'rear'})
+        self.assertEqual(set(renders['roentgen']['visibleParts']), {'front', 'rear', 'battery_door'})
 
 
 if __name__ == '__main__':

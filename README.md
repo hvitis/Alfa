@@ -66,7 +66,7 @@ Tabela używa tych samych nazw co wersja angielska, aby automatycznie wykrywać 
 - <!-- feature:hardware-simulation --> **Symulacja sprzętu:** Komputer zapisuje podgląd ekranu bez urządzeń GPIO, SPI i I²C.
 - <!-- feature:static-showcase --> **Prezentacja statyczna:** Zakładki Plywood, 3DPrint, Hardware i Software zawierają modele 3D, połączenia kontrolerów, ilustrowany PDF ADR i diagram Mermaid.
 - <!-- feature:verified-distribution --> **Sprawdzany pakiet:** Pakiet zawiera neutralny obraz demonstracyjny, sumy kontrolne, raporty walidacji i zestawienie elektroniki.
-- <!-- feature:enclosure-research --> **Projekty obudów:** Prezentacja obejmuje drukowaną chmurkę i oba projekty ze sklejki. Chmurka ma dwie skorupy łączone bez śrub, poziomą baterię na dole i Pi na półce nad nią. Ma 86 mm głębokości i 215 mm wysokości. Pliki zawierają STL, 3MF, BREP, próbki zatrzasków i instrukcję; użyteczne pole Endera to 220 × 220 mm.
+- <!-- feature:enclosure-research --> **Projekty obudów:** Prezentacja obejmuje drukowaną chmurkę i oba projekty ze sklejki. Chmurka ma 206 × 211 × 72 mm, boczną pokrywę baterii, baterię i Pi równoległe do tyłu oraz przyciski zamocowane w przedniej skorupie. Otwory głośnika mają kształt chmur. Pliki STL, 3MF, BREP i kupony pasowania są dołączone; skorupa z brimem 2 mm mieści się w polu Endera 220 × 220 mm. [Opis konstrukcji](design/cloud-radio/README.md) · [30 usprawnień](design/cloud-radio/IMPROVEMENTS.md).
 
 ## Szybki start
 

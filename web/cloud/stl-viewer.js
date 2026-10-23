@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { t } from '../i18n.js';
 
 export const STL_PARTS = {
+  battery_door: { id: 'battery_door', file: 'battery_door.stl', name: 'Side battery lid', defaultColor: '#70acd9' },
   front: { id: 'front', file: 'front.stl', name: 'Front shell', defaultColor: '#86bfea' },
   rear: { id: 'rear', file: 'rear.stl', name: 'Rear shell', defaultColor: '#70acd9' },
 };

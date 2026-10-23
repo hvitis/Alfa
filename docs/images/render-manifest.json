@@ -4,15 +4,17 @@
     "assembled": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9"
+        "rear": "#70acd9",
+        "battery_door": "#70acd9"
       },
-      "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 456,
+      "revision": "prototype-v4-side-battery-flat-back-72mm",
+      "checks": 535,
       "scene": "cloud",
       "view": "assembled",
       "visibleParts": [
         "front",
-        "rear"
+        "rear",
+        "battery_door"
       ],
       "hardware": [
         "battery",
@@ -31,15 +33,17 @@
     "exploded": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9"
+        "rear": "#70acd9",
+        "battery_door": "#70acd9"
       },
-      "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 456,
+      "revision": "prototype-v4-side-battery-flat-back-72mm",
+      "checks": 535,
       "scene": "cloud",
       "view": "exploded",
       "visibleParts": [
         "front",
-        "rear"
+        "rear",
+        "battery_door"
       ],
       "hardware": [
         "battery",
@@ -58,15 +62,17 @@
     "rear": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9"
+        "rear": "#70acd9",
+        "battery_door": "#70acd9"
       },
-      "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 456,
+      "revision": "prototype-v4-side-battery-flat-back-72mm",
+      "checks": 535,
       "scene": "cloud",
       "view": "rear",
       "visibleParts": [
         "front",
-        "rear"
+        "rear",
+        "battery_door"
       ],
       "hardware": [
         "battery",
@@ -85,15 +91,17 @@
     "side": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9"
+        "rear": "#70acd9",
+        "battery_door": "#70acd9"
       },
-      "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 456,
+      "revision": "prototype-v4-side-battery-flat-back-72mm",
+      "checks": 535,
       "scene": "cloud",
       "view": "side",
       "visibleParts": [
         "front",
-        "rear"
+        "rear",
+        "battery_door"
       ],
       "hardware": [
         "battery",
@@ -112,10 +120,11 @@
     "connections": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9"
+        "rear": "#70acd9",
+        "battery_door": "#70acd9"
       },
-      "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 456,
+      "revision": "prototype-v4-side-battery-flat-back-72mm",
+      "checks": 535,
       "scene": "complete-setup",
       "view": "connections",
       "visibleParts": [],
@@ -130,10 +139,11 @@
     "case_inside": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9"
+        "rear": "#70acd9",
+        "battery_door": "#70acd9"
       },
-      "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 456,
+      "revision": "prototype-v4-side-battery-flat-back-72mm",
+      "checks": 535,
       "scene": "cloud",
       "view": "inside_back",
       "visibleParts": [
@@ -156,15 +166,17 @@
     "roentgen": {
       "colors": {
         "front": "#86bfea",
-        "rear": "#70acd9"
+        "rear": "#70acd9",
+        "battery_door": "#70acd9"
       },
-      "revision": "prototype-v3-even-split-thin-78mm",
-      "checks": 456,
+      "revision": "prototype-v4-side-battery-flat-back-72mm",
+      "checks": 535,
       "scene": "cloud",
       "view": "roentgen",
       "visibleParts": [
         "front",
-        "rear"
+        "rear",
+        "battery_door"
       ],
       "hardware": [
         "battery",

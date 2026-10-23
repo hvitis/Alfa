@@ -91,8 +91,8 @@ try {
       await scene('cloud', 'assembled');
       if (prefix === '/' && viewport.width === 1440 && process.env.SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.SMOKE_SCREENSHOT, fullPage: true });
       assert((await page.locator('#cloud-facts').textContent()).includes('PETG'));
-      assert((await page.locator('#cloud-facts').textContent()).includes('78 mm'));
-      assert.equal(await page.locator('.cloud-downloads a[href$=".3mf"]').count(),2);
+      assert((await page.locator('#cloud-facts').textContent()).includes('72 mm'));
+      assert.equal(await page.locator('.cloud-downloads a[href$=".3mf"]').count(),3);
       const enderTab=page.locator('#print-tab-ender'),bambuTab=page.locator('#print-tab-bambu');
       assert(await page.locator('#print-roadmap').evaluate(element=>parseFloat(getComputedStyle(element).marginTop)>=24),'Roadmap has space above it');
       assert.equal(await enderTab.getAttribute('aria-selected'),'true','Ender is the default printing roadmap');
@@ -110,7 +110,7 @@ try {
       }
       await page.locator('#cloud-labels').check(); await page.locator('#cloud-labels').uncheck();
       await page.locator('#cloud-clearances').check(); await page.locator('#cloud-clearances').uncheck();
-      for (const asset of ['front.stl', 'rear.stl', 'front.3mf', 'rear.3mf', 'button-fit-coupon.stl', 'print-settings.json', 'cloud-radio.brep', 'cloud-radio.zip', 'README.md', 'verification.json']) {
+      for (const asset of ['front.stl', 'rear.stl', 'battery_door.stl', 'front.3mf', 'rear.3mf', 'battery_door.3mf', 'button-fit-coupon.stl', 'print-settings.json', 'cloud-radio.brep', 'cloud-radio.zip', 'README.md', 'verification.json']) {
         const response = await page.request.get(`${origin}${prefix}cloud/${asset}`);
         assert(response.ok(), asset); assert((await response.body()).length > 100, asset);
         if(asset.endsWith('.3mf'))assert.equal((await response.body()).readUInt32LE(0),0x04034b50,'3MF download must be a ZIP container');

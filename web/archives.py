@@ -9,11 +9,11 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 CLOUD = ROOT / "design/cloud-radio/generated/cloud"
 MEMBERS = (
-    "README.md", "build.py", "run-cad.sh", "parameters.json", "manifest.json", "verification.json", "cloud-ender.scad",
-    "front.stl", "rear.stl", "cloud-radio.brep", "cloud-radio.glb",
+    "README.md", "IMPROVEMENTS.md", "build.py", "run-cad.sh", "parameters.json", "manifest.json", "verification.json", "cloud-ender.scad",
+    "front.stl", "rear.stl", "battery_door.stl", "cloud-radio.brep", "cloud-radio.glb",
     "snap-coupon-0.2.stl", "snap-coupon-0.3.stl", "snap-coupon-0.4.stl",
-    "front.3mf", "rear.3mf", "button-fit-coupon.stl",
-    "button-fit-coupon.3mf", "print-settings.json",
+    "front.3mf", "rear.3mf", "battery_door.3mf", "button-fit-coupon.stl",
+    "button-fit-coupon.3mf", "insert-fit-coupon.stl", "insert-fit-coupon.3mf", "print-settings.json",
     "snap-coupon-0.2.3mf", "snap-coupon-0.3.3mf", "snap-coupon-0.4.3mf",
     "plywood-assembly-guide.pdf",
 )

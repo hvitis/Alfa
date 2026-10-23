@@ -218,11 +218,11 @@ export const MATERIAL_SPECS = {
   '3d-print': {
     sectionNumber: 'PRINT PREPARATION',
     title: 'Two PETG shells',
-    badge: 'PETG · 78 mm deep',
-    desc: 'The rear includes the battery cradle and horizontal Pi shelf. Final filament mass and supports depend on your slicer profile.',
+    badge: 'PETG · 72 mm deep',
+    desc: 'The rear has flat battery guides, Pi posts and a separate side battery lid. Final filament mass and supports depend on your slicer profile.',
     stats: [
       { dt: 'Front shell (F-00)', dd: '1 part', small: 'Five snaps and two locating tongues' },
-      { dt: 'Rear shell (R-00)', dd: '1 part', small: 'Integral cradle and Pi shelf' },
+      { dt: 'Rear shell (R-00)', dd: '1 part', small: 'Battery guides and rear Pi posts' },
       { dt: 'Case joint', dd: 'No screws', small: 'Insert lower tabs, pivot and snap closed' },
       { dt: 'Build plate', dd: '220 × 220 mm', small: 'Ender 235 mm plate; 2 mm brim included' },
       { dt: 'Filament and supports', dd: 'Check slicer', small: 'PETG, 0.2 mm layers; slice before printing', isTotal: true }
